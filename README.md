@@ -55,6 +55,8 @@ docker compose exec jobs task --list
 This will output a list of tasks:
 ```
 task: Available tasks for this project:
+* default:            Runs the entire pipeline
+* example-task:       Example task
 ```
 
 To run a specific task type `task` followed by the task name, e.g.:
