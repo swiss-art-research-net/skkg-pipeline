@@ -1,0 +1,3 @@
+[submodule "services/platform/apps/skkg"]
+	path = services/platform/apps/skkg
+	url = git@github.com:swiss-art-research-net/skkg-app.git
