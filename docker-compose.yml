@@ -1,0 +1,68 @@
+version: "3"
+services:
+
+  blazegraph:
+    image: robcast/researchspace-blazegraph:2.2.0-20160908
+    container_name: ${PROJECT_NAME}_blazegraph
+    restart: unless-stopped
+    environment:
+      - JAVA_OPTS=-Xmx4g
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "10"
+    volumes:
+      - blazegraph-data:/blazegraph-data
+      - ./data:/data
+
+  blazegraph-secondary:
+    image: robcast/researchspace-blazegraph:2.2.0-20160908
+    container_name: ${PROJECT_NAME}_blazegraph_secondary
+    restart: unless-stopped
+    environment:
+      - JAVA_OPTS=-Xmx1g
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "10"
+    volumes:
+      - blazegraph-data-secondary:/blazegraph-data
+      - ./data:/data
+
+  jobs:
+    build: ./services/jobs
+    container_name: ${PROJECT_NAME}_jobs
+    image: swissartresearx/itten-jobs:1.0.2
+    restart: unless-stopped
+    environment:
+      - HOST_LOCATION=${HOST_NAME}
+    volumes:
+      - ./data:/data
+      - ./mapping:/mapping
+      - ./scripts:/scripts
+      - ./services/platform/apps:/apps
+
+  platform:
+    image: swissartresearx/researchspace:develop
+    container_name: ${PROJECT_NAME}_platform
+    restart: unless-stopped
+    depends_on:
+      - blazegraph
+    environment:
+      - JAVA_OPTS=-Xmx1g
+    logging:
+      driver: json-file
+      options:
+        max-size: "200k"
+        max-file: "10"
+    volumes:
+      - platform-data:/runtime-data
+      - ./services/platform/apps:/apps
+        
+volumes:
+  blazegraph-data:
+  blazegraph-data-secondary:
+  platform-data:
+  
