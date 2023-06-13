@@ -43,6 +43,7 @@ services:
       - ./mapping:/mapping
       - ./scripts:/scripts
       - ./services/platform/apps:/apps
+      - .env:/.env
 
   platform:
     image: swissartresearx/researchspace:develop
