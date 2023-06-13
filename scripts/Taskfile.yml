@@ -14,13 +14,18 @@ tasks:
 
   default:
     desc: Runs the entire pipeline
-    silent: true
     cmds:
-      - task: example-task
+      - task: download-source-items
 
   
-  example-task:
-    desc: Example task
-    silent: true
+  download-source-items:
+    desc: Download the item records from MuseumPlus
+    source: 
+      - scripts/downloadItems.py
+    generates:
+      - /data/source/*.xml
+    vars:
+      OUTPUT_FOLDER: /data/source
+      DOTENV: /.env
     cmds:
-      - echo "Hello world"
+      - python /scripts/downloadItems.py --outputFolder {{.OUTPUT_FOLDER}} --dotenv {{.DOTENV}}
