@@ -26,6 +26,5 @@ tasks:
       - /data/source/*.xml
     vars:
       OUTPUT_FOLDER: /data/source
-      UUID_MAP: /data/verification/uuid-map.csv
     cmds:
-      - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --uuidMap {{.UUID_MAP}} --outputFolder {{.OUTPUT_FOLDER}} {{.CLI_ARGS}}
+      - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --outputFolder {{.OUTPUT_FOLDER}} {{.CLI_ARGS}}
