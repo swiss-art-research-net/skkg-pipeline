@@ -28,4 +28,4 @@ tasks:
       OUTPUT_FOLDER: /data/source
       DOTENV: /.env
     cmds:
-      - python /scripts/downloadItems.py --outputFolder {{.OUTPUT_FOLDER}} --dotenv {{.DOTENV}}
+      - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --outputFolder {{.OUTPUT_FOLDER}} {{.CLI_ARGS}}

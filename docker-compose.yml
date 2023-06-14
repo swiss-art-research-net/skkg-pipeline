@@ -38,12 +38,14 @@ services:
     restart: unless-stopped
     environment:
       - HOST_LOCATION=${HOST_NAME}
+      - MUSEUMPLUS_URL=${MUSEUMPLUS_URL}
+      - MUSEUMPLUS_USERNAME=${MUSEUMPLUS_USERNAME}
+      - MUSEUMPLUS_PASSWORD=${MUSEUMPLUS_PASSWORD}
     volumes:
       - ./data:/data
       - ./mapping:/mapping
       - ./scripts:/scripts
       - ./services/platform/apps:/apps
-      - .env:/.env
 
   platform:
     image: swissartresearx/researchspace:develop
