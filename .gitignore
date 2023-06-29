@@ -3,8 +3,13 @@
 
 # Folder structure
 data/source/*.*
+data/temp/*.*
+!data/temp/.gitkeep
 !data/source/.gitkeep
 
 # Python Specific
 __pycache__
 .ipynb_checkpoints
+
+# Local
+*.zip
