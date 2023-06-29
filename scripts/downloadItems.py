@@ -2,12 +2,13 @@ import argparse
 import csv
 import sys
 from lxml import etree
-from os.path import join, exists
+from os import listdir, remove as removeFile
+from os.path import join, exists, isfile
 from tqdm import tqdm
 
 from lib.MuseumPlusConnector import MPWrapper
 
-def downloadItems(*, host, username, password, outputFolder, filenamePrefix = 'item-', limit = None, offset = None):          
+def downloadItems(*, host, username, password, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
 
     # Log the downloaded files
@@ -25,7 +26,7 @@ def downloadItems(*, host, username, password, outputFolder, filenamePrefix = 'i
         offset = 0
 
     for i in tqdm(range(offset, offset+limit)):
-        filename = join(outputFolder, filenamePrefix + str(i) + ".xml")
+        filename = join(tempFolder, filenamePrefix + str(i).zfill(6) + ".xml")
         # Check if the file already exists
         if not exists(filename):
             item = client.getObjectByOffset(i)
@@ -36,8 +37,28 @@ def downloadItems(*, host, username, password, outputFolder, filenamePrefix = 'i
         else:
             log['existing'].append(filename)
 
+    renameItemsBasedOnIds(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix)
     print(f"Downloaded {len(log['downloaded'])} items.")
     print(f"Skipped {len(log['existing'])} items that already existed.")
+
+def renameItemsBasedOnIds(*, inputFolder, outputFolder, filenamePrefix):
+    # Read all XML files in the input folder
+    files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
+    for file in tqdm(files):
+        # Retrieve the id and uuid attributes from the moduleItem element
+        tree = etree.parse(join(inputFolder, file))
+        id = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('id')
+        #uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
+        # Rename the file
+        newFilename = join(outputFolder, filenamePrefix + id.zfill(6) + ".xml")
+        if not exists(newFilename):
+            with open(newFilename, 'wb') as f:
+                f.write(etree.tostring(tree, pretty_print=True))
+        else:
+            print(f"File {newFilename} already exists. Skipping.")
+        # Remove the old file
+        if exists(join(inputFolder, file)):
+            removeFile(join(inputFolder, file))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -47,6 +68,7 @@ if __name__ == "__main__":
     parser.add_argument('--username', required= True, help='Username to use for authentication')
     parser.add_argument('--password', required= True, help='Password to use for authentication')
     parser.add_argument('--outputFolder', required= True, help='Folder to save the XML files to')
+    parser.add_argument('--tempFolder', required= True, help='Folder to temporarily save the XML during download')
     parser.add_argument('--filenamePrefix', required= False, help='Prefix to use for the filenames of the XML files. Defaults to "item-"')
     parser.add_argument('--limit', required= False, help='Limit the number of items to download')
     parser.add_argument('--offset', required= False, help='Offset to start downloading items from')
@@ -58,4 +80,4 @@ if __name__ == "__main__":
     if args.offset:
         args.offset = int(args.offset)
 
-    downloadItems(host=args.url, username=args.username, password=args.password, outputFolder=args.outputFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+    downloadItems(host=args.url, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)

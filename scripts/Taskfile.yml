@@ -26,5 +26,6 @@ tasks:
       - /data/source/*.xml
     vars:
       OUTPUT_FOLDER: /data/source
+      TEMP_FOLDER: /data/temp
     cmds:
-      - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --outputFolder {{.OUTPUT_FOLDER}} {{.CLI_ARGS}}
+      - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} {{.CLI_ARGS}}
