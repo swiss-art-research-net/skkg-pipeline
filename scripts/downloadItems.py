@@ -21,7 +21,7 @@ def downloadItems(*, host, username, password, outputFolder, tempFolder, filenam
     print(f"Last updated date of existing files: {lastUpdated}")
     
     # Get the number of objects
-    numObjects = client.getNumberOfObjects()
+    numObjects = client.getNumberOfObjects(lastUpdated=lastUpdated)
 
     if not limit:
         limit = numObjects
@@ -32,8 +32,7 @@ def downloadItems(*, host, username, password, outputFolder, tempFolder, filenam
         filename = join(tempFolder, filenamePrefix + str(i).zfill(6) + ".xml")
         # Check if the file already exists
         if not exists(filename):
-            item = client.getObjectByOffset(i)
-            id = item.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('id')
+            item = client.getObjectByOffset(i, lastUpdated=lastUpdated)
             with open(filename, 'wb') as f:
                 f.write(etree.tostring(item, pretty_print=True))
                 log['downloaded'].append(filename)
@@ -69,11 +68,8 @@ def renameItemsBasedOnIds(*, inputFolder, outputFolder, filenamePrefix):
         #uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
         # Rename the file
         newFilename = join(outputFolder, filenamePrefix + id.zfill(6) + ".xml")
-        if not exists(newFilename):
-            with open(newFilename, 'wb') as f:
-                f.write(etree.tostring(tree, pretty_print=True))
-        else:
-            print(f"File {newFilename} already exists. Skipping.")
+        with open(newFilename, 'wb') as f:
+            f.write(etree.tostring(tree, pretty_print=True))
         # Remove the old file
         if exists(join(inputFolder, file)):
             removeFile(join(inputFolder, file))
