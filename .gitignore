@@ -1,1 +1,4 @@
 .env
+data/source/*.*
+!data/source/.gitkeep
+__pycache__

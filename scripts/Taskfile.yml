@@ -14,13 +14,17 @@ tasks:
 
   default:
     desc: Runs the entire pipeline
-    silent: true
     cmds:
-      - task: example-task
+      - task: download-source-items
 
   
-  example-task:
-    desc: Example task
-    silent: true
+  download-source-items:
+    desc: Download the item records from MuseumPlus
+    source: 
+      - scripts/downloadItems.py
+    generates:
+      - /data/source/*.xml
+    vars:
+      OUTPUT_FOLDER: /data/source
     cmds:
-      - echo "Hello world"
+      - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --outputFolder {{.OUTPUT_FOLDER}} {{.CLI_ARGS}}
