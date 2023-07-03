@@ -48,13 +48,13 @@ def getLastUpdatedFromItemFiles(inputFolder):
     files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
     
     # Set lastUpdated to a Date object with the lowest possible value
-    lastUpdate = datetime.min
+    lastUpdated = datetime.min
 
     for file in tqdm(files):
         tree = etree.parse(join(inputFolder, file))
         lastUpdatedString= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
         lastUpdatedItem = datetime.strptime(lastUpdatedString, '%Y-%m-%d %H:%M:%S.%f')
-        if lastUpdatedItem > lastUpdate:
+        if lastUpdatedItem > lastUpdated:
             lastUpdated = lastUpdatedItem
     return lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
