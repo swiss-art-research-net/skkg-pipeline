@@ -20,8 +20,6 @@ tasks:
   
   download-source-items:
     desc: Download the item records from MuseumPlus
-    source: 
-      - scripts/downloadItems.py
     generates:
       - /data/source/*.xml
     vars:

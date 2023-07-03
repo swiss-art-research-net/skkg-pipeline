@@ -1,6 +1,5 @@
 import argparse
-import csv
-import sys
+from datetime import datetime
 from lxml import etree
 from os import listdir, remove as removeFile
 from os.path import join, exists, isfile
@@ -16,9 +15,13 @@ def downloadItems(*, host, username, password, outputFolder, tempFolder, filenam
         'downloaded': [],
         'existing': []
     }
+
+    # Get the last updated date from the existing files
+    lastUpdated  = getLastUpdatedFromItemFiles(outputFolder)
+    print(f"Last updated date of existing files: {lastUpdated}")
     
     # Get the number of objects
-    numObjects = client.getNumberOfObjects()
+    numObjects = client.getNumberOfObjects(lastUpdated=lastUpdated)
 
     if not limit:
         limit = numObjects
@@ -29,8 +32,7 @@ def downloadItems(*, host, username, password, outputFolder, tempFolder, filenam
         filename = join(tempFolder, filenamePrefix + str(i).zfill(6) + ".xml")
         # Check if the file already exists
         if not exists(filename):
-            item = client.getObjectByOffset(i)
-            id = item.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('id')
+            item = client.getObjectByOffset(i, lastUpdated=lastUpdated)
             with open(filename, 'wb') as f:
                 f.write(etree.tostring(item, pretty_print=True))
                 log['downloaded'].append(filename)
@@ -40,6 +42,21 @@ def downloadItems(*, host, username, password, outputFolder, tempFolder, filenam
     renameItemsBasedOnIds(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix)
     print(f"Downloaded {len(log['downloaded'])} items.")
     print(f"Skipped {len(log['existing'])} items that already existed.")
+
+def getLastUpdatedFromItemFiles(inputFolder):
+    # Read all XML files in the input folder
+    files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
+    
+    # Set lastUpdated to a Date object with the lowest possible value
+    lastUpdated = datetime.min
+
+    for file in tqdm(files):
+        tree = etree.parse(join(inputFolder, file))
+        lastUpdatedString= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
+        lastUpdatedItem = datetime.strptime(lastUpdatedString, '%Y-%m-%d %H:%M:%S.%f')
+        if lastUpdatedItem > lastUpdated:
+            lastUpdated = lastUpdatedItem
+    return lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
 def renameItemsBasedOnIds(*, inputFolder, outputFolder, filenamePrefix):
     # Read all XML files in the input folder
@@ -51,11 +68,8 @@ def renameItemsBasedOnIds(*, inputFolder, outputFolder, filenamePrefix):
         #uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
         # Rename the file
         newFilename = join(outputFolder, filenamePrefix + id.zfill(6) + ".xml")
-        if not exists(newFilename):
-            with open(newFilename, 'wb') as f:
-                f.write(etree.tostring(tree, pretty_print=True))
-        else:
-            print(f"File {newFilename} already exists. Skipping.")
+        with open(newFilename, 'wb') as f:
+            f.write(etree.tostring(tree, pretty_print=True))
         # Remove the old file
         if exists(join(inputFolder, file)):
             removeFile(join(inputFolder, file))

@@ -26,7 +26,7 @@ class MPWrapper:
         r.raise_for_status()
         return r
     
-    def _getAllObjectsQuery(self, *, limit: int = False, offset: int = False):
+    def _getAllObjectsQuery(self, *, limit: int = False, offset: int = False, lastUpdated: str = None):
         query = etree.fromstring(self.BASE_XML_SEARCH)
         modules = etree.SubElement(query, 'modules')
         objectModule = etree.SubElement(modules, 'module')
@@ -36,6 +36,12 @@ class MPWrapper:
             search.set('limit', str(limit))
         if offset:
             search.set('offset', str(offset))
+        if lastUpdated:
+            expert = etree.SubElement(search, 'expert')
+            betweenIncl = etree.SubElement(expert, 'betweenIncl')
+            betweenIncl.set('fieldPath', '__lastModified')
+            betweenIncl.set('operand1', lastUpdated)
+            betweenIncl.set('operand2', '2100-01-01T00:00:00Z')
         fulltext = etree.SubElement(search, 'fulltext')
         fulltext.text = "*"
         return query
@@ -44,18 +50,17 @@ class MPWrapper:
         return f"{self.url}/module/Object/search"
     
     
-    def getNumberOfObjects(self):
-        query = self._getAllObjectsQuery(limit=1, offset=0)
+    def getNumberOfObjects(self, *, lastUpdated = None):
+        query = self._getAllObjectsQuery(limit=1, offset=0, lastUpdated=lastUpdated)
         url = self._getObjectsSearchUrl()
         response = self._post(url, query)
         tree = etree.fromstring(response.content)
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size
         
-        
-    def getObjectByOffset(self, offset):
+    def getObjectByOffset(self, offset, *, lastUpdated = None):
         url = self._getObjectsSearchUrl()
-        query = self._getAllObjectsQuery(limit=1, offset=offset)
+        query = self._getAllObjectsQuery(limit=1, offset=offset, lastUpdated=lastUpdated)
         response = self._post(url, query)
         item = etree.fromstring(response.content)
         return item
