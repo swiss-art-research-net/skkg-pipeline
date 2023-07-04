@@ -2,7 +2,7 @@
 .env
 
 # Folder structure
-data/source/*.*
+data/source/*/*.*
 data/temp/*.*
 !data/temp/.gitkeep
 !data/source/.gitkeep
