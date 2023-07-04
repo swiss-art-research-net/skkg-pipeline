@@ -57,7 +57,21 @@ tasks:
       - task: _download-items-from-museumplus
         vars:
           MODULE: Object
-          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"   
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+
+  download-person-items:
+    desc: Download the person item records from MuseumPlus
+    generates:
+      - /data/source/persons/*.xml
+    vars:
+      OUTPUT_FOLDER: /data/source/persons
+    cmds:
+      - echo "Downloading person items from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - task: _download-items-from-museumplus
+        vars:
+          MODULE: Person
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
 
   _download-items-from-museumplus:
     vars:
