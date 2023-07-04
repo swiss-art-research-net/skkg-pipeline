@@ -17,6 +17,20 @@ tasks:
     cmds:
       - task: download-object-items
 
+  download-address-items:
+    desc: Download the address item records from MuseumPlus
+    generates:
+      - /data/source/addresses/*.xml
+    vars:
+      OUTPUT_FOLDER: /data/source/addresses
+    cmds:
+      - echo "Downloading address items from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - task: _download-items-from-museumplus
+        vars:
+          MODULE: Address
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+
   download-object-items:
     desc: Download the object item records from MuseumPlus
     generates:
