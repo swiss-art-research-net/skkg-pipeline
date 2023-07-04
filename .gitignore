@@ -3,7 +3,7 @@
 
 # Folder structure
 data/source/*/*.*
-data/temp/*.*
+data/temp/*/*.*
 !data/temp/.gitkeep
 !data/source/.gitkeep
 
