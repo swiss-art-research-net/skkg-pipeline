@@ -13,7 +13,8 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     # Log the downloaded files
     log = {
         'downloaded': [],
-        'existing': []
+        'existing': [],
+        'omitted': []
     }
 
     # Get the last updated date from the existing files
@@ -36,7 +37,11 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         filename = join(tempFolder, filenamePrefix + str(i).zfill(6) + ".xml")
         # Check if the file already exists
         if not exists(filename):
-            item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated)
+            try:
+                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated)
+            except:
+                log['omitted'].append(filename)
+                continue
             with open(filename, 'wb') as f:
                 f.write(etree.tostring(item, pretty_print=True))
                 log['downloaded'].append(filename)
@@ -46,6 +51,12 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     renameItemsBasedOnIds(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix)
     print(f"Downloaded {len(log['downloaded'])} items.")
     print(f"Skipped {len(log['existing'])} items that already existed.")
+    if len(log['omitted']) > 0:
+        print(f"Omitted {len(log['omitted'])} items that could not be downloaded.")
+        # List omitted files
+        print("Omitted files:")
+        for file in log['omitted']:
+            print(file)
 
 def getLastUpdatedFromItemFiles(inputFolder):
     # Read all XML files in the input folder

@@ -20,7 +20,7 @@ class MPWrapper:
         })
         self.session = session
         
-    def _post(self, url, query, *, timeout=10) -> requests.Request:
+    def _post(self, url, query, *, timeout=30) -> requests.Request:
         """
         Sends a POST request to the given URL with the given query
 
@@ -29,7 +29,10 @@ class MPWrapper:
             query (etree.Element): The XML query to send
         """
         data = etree.tostring(query)
-        r = self.session.post(url, data=data, timeout=(None, timeout))
+        try:
+            r = self.session.post(url, data=data, timeout=(None, timeout))
+        except requests.exceptions.Timeout as e:
+            raise e
         r.raise_for_status()
         return r
     
@@ -97,6 +100,9 @@ class MPWrapper:
         """
         url = self._getModuleSearchUrl(module)
         query = self._getAllItemsQuery(module=module, limit=1, offset=offset, lastUpdated=lastUpdated)
-        response = self._post(url, query)
+        try:
+            response = self._post(url, query)
+        except requests.exceptions.HTTPError as e:
+            raise e
         item = etree.fromstring(response.content)
         return item
