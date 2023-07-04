@@ -26,12 +26,12 @@ class MPWrapper:
         r.raise_for_status()
         return r
     
-    def _getAllObjectsQuery(self, *, limit: int = False, offset: int = False, lastUpdated: str = None):
+    def _getAllItemsQuery(self, *, module: str, limit: int = False, offset: int = False, lastUpdated: str = None):
         query = etree.fromstring(self.BASE_XML_SEARCH)
         modules = etree.SubElement(query, 'modules')
-        objectModule = etree.SubElement(modules, 'module')
-        objectModule.set('name', 'Object')
-        search = etree.SubElement(objectModule, 'search')
+        requestedModule = etree.SubElement(modules, 'module')
+        requestedModule.set('name', module)
+        search = etree.SubElement(requestedModule, 'search')
         if limit:
             search.set('limit', str(limit))
         if offset:
@@ -46,21 +46,20 @@ class MPWrapper:
         fulltext.text = "*"
         return query
     
-    def _getObjectsSearchUrl(self):
-        return f"{self.url}/module/Object/search"
+    def _getModuleSearchUrl(self, module):
+        return f"{self.url}/module/{module}/search"
     
-    
-    def getNumberOfObjects(self, *, lastUpdated = None):
-        query = self._getAllObjectsQuery(limit=1, offset=0, lastUpdated=lastUpdated)
-        url = self._getObjectsSearchUrl()
+    def getNumberOfItems(self, *, module, lastUpdated = None):
+        query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
+        url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
         tree = etree.fromstring(response.content)
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size
         
-    def getObjectByOffset(self, offset, *, lastUpdated = None):
-        url = self._getObjectsSearchUrl()
-        query = self._getAllObjectsQuery(limit=1, offset=offset, lastUpdated=lastUpdated)
+    def getItemByOffset(self, offset, *, module, lastUpdated = None):
+        url = self._getModuleSearchUrl(module)
+        query = self._getAllItemsQuery(module=module, limit=1, offset=offset, lastUpdated=lastUpdated)
         response = self._post(url, query)
         item = etree.fromstring(response.content)
         return item
