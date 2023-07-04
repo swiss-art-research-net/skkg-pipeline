@@ -31,6 +31,20 @@ tasks:
           MODULE: Address
           OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
 
+  download-literature-items:
+    desc: Download the literature item records from MuseumPlus
+    generates:
+      - /data/source/literature/*.xml
+    vars:
+      OUTPUT_FOLDER: /data/source/literature
+    cmds:
+      - echo "Downloading literature items from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - task: _download-items-from-museumplus
+        vars:
+          MODULE: Literature
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+
   download-object-items:
     desc: Download the object item records from MuseumPlus
     generates:
