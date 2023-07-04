@@ -21,12 +21,28 @@ class MPWrapper:
         self.session = session
         
     def _post(self, url, query) -> requests.Request:
+        """
+        Sends a POST request to the given URL with the given query
+
+        Args:
+            url (str): The URL to send the request to
+            query (etree.Element): The XML query to send
+        """
         data = etree.tostring(query)
         r = self.session.post(url, data=data)
         r.raise_for_status()
         return r
     
     def _getAllItemsQuery(self, *, module: str, limit: int = False, offset: int = False, lastUpdated: str = None):
+        """
+        Returns the XML query for getting all items of a module
+
+        Args:
+            module (str): The module name
+            limit (int, optional): The limit of items to return. Defaults to False.
+            offset (int, optional): The offset of the items to return. Defaults to False.
+            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.
+        """
         query = etree.fromstring(self.BASE_XML_SEARCH)
         modules = etree.SubElement(query, 'modules')
         requestedModule = etree.SubElement(modules, 'module')
@@ -47,9 +63,22 @@ class MPWrapper:
         return query
     
     def _getModuleSearchUrl(self, module):
+        """
+        Returns the search URL for the given module
+
+        Args:
+            module (str): The module name
+        """
         return f"{self.url}/module/{module}/search"
     
     def getNumberOfItems(self, *, module, lastUpdated = None):
+        """
+        Returns the number of items in the module
+
+        Args:
+            module (str): The module name
+            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.            
+        """
         query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
         url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
@@ -58,6 +87,14 @@ class MPWrapper:
         return size
         
     def getItemByOffset(self, offset, *, module, lastUpdated = None):
+        """
+        Returns the item at the given offset
+
+        Args:
+            offset (int): The offset of the item
+            module (str): The module name
+            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.
+        """
         url = self._getModuleSearchUrl(module)
         query = self._getAllItemsQuery(module=module, limit=1, offset=offset, lastUpdated=lastUpdated)
         response = self._post(url, query)
