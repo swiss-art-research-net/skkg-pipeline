@@ -20,11 +20,11 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     lastUpdated  = getLastUpdatedFromItemFiles(outputFolder)
     print(f"Last updated date of existing files: {lastUpdated}")
     
-    # Get the number of objects
-    numObjects = client.getNumberOfObjects(lastUpdated=lastUpdated)
+    # Get the number of items
+    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
 
     if not limit:
-        limit = numObjects
+        limit = numItems
     if not offset:
         offset = 0
 
@@ -32,7 +32,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         filename = join(tempFolder, filenamePrefix + str(i).zfill(6) + ".xml")
         # Check if the file already exists
         if not exists(filename):
-            item = client.getObjectByOffset(i, lastUpdated=lastUpdated)
+            item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated)
             with open(filename, 'wb') as f:
                 f.write(etree.tostring(item, pretty_print=True))
                 log['downloaded'].append(filename)
