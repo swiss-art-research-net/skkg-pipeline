@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from lib.MuseumPlusConnector import MPWrapper
 
-def downloadItems(*, host, username, password, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
+def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
 
     # Log the downloaded files
@@ -79,6 +79,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description = 'Download all Object Items from MuseumPlus and save them to individual XML files')
     parser.add_argument('--url', required= True, help='URL of the MuseumPlus instance')
+    parser.add_argument('--module', required= True, help='Name of the module to download items from')
     parser.add_argument('--username', required= True, help='Username to use for authentication')
     parser.add_argument('--password', required= True, help='Password to use for authentication')
     parser.add_argument('--outputFolder', required= True, help='Folder to save the XML files to')
@@ -94,4 +95,4 @@ if __name__ == "__main__":
     if args.offset:
         args.offset = int(args.offset)
 
-    downloadItems(host=args.url, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+    downloadItems(host=args.url, module=args.module, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
