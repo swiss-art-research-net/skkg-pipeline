@@ -25,6 +25,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     
     # Get the number of items
     numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
+    print(f"Retrieving {numItems} items for module {module}")
 
     if not limit:
         limit = numItems
