@@ -15,15 +15,67 @@ tasks:
   default:
     desc: Runs the entire pipeline
     cmds:
-      - task: download-source-items
+      - task: download-object-items
 
-  
-  download-source-items:
-    desc: Download the item records from MuseumPlus
+  download-address-items:
+    desc: Download the address item records from MuseumPlus
     generates:
-      - /data/source/*.xml
+      - /data/source/addresses/*.xml
     vars:
-      OUTPUT_FOLDER: /data/source
-      TEMP_FOLDER: /data/temp
+      OUTPUT_FOLDER: /data/source/addresses
     cmds:
-      - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} {{.CLI_ARGS}}
+      - echo "Downloading address items from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - task: _download-items-from-museumplus
+        vars:
+          MODULE: Address
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+
+  download-literature-items:
+    desc: Download the literature item records from MuseumPlus
+    generates:
+      - /data/source/literature/*.xml
+    vars:
+      OUTPUT_FOLDER: /data/source/literature
+    cmds:
+      - echo "Downloading literature items from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - task: _download-items-from-museumplus
+        vars:
+          MODULE: Literature
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+
+  download-object-items:
+    desc: Download the object item records from MuseumPlus
+    generates:
+      - /data/source/objects/*.xml
+    vars:
+      OUTPUT_FOLDER: /data/source/objects
+    cmds:
+      - echo "Downloading object items from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - task: _download-items-from-museumplus
+        vars:
+          MODULE: Object
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+
+  download-person-items:
+    desc: Download the person item records from MuseumPlus
+    generates:
+      - /data/source/persons/*.xml
+    vars:
+      OUTPUT_FOLDER: /data/source/persons
+    cmds:
+      - echo "Downloading person items from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - task: _download-items-from-museumplus
+        vars:
+          MODULE: Person
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+
+  _download-items-from-museumplus:
+    vars:
+      TEMP_FOLDER: /data/temp/temp_{{.MODULE}}
+    cmds:
+      - mkdir -p {{.TEMP_FOLDER}}
+      - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} {{.CLI_ARGS}}

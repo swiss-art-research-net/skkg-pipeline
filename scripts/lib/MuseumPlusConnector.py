@@ -20,18 +20,37 @@ class MPWrapper:
         })
         self.session = session
         
-    def _post(self, url, query) -> requests.Request:
+    def _post(self, url, query, *, timeout=30) -> requests.Request:
+        """
+        Sends a POST request to the given URL with the given query
+
+        Args:
+            url (str): The URL to send the request to
+            query (etree.Element): The XML query to send
+        """
         data = etree.tostring(query)
-        r = self.session.post(url, data=data)
+        try:
+            r = self.session.post(url, data=data, timeout=(None, timeout))
+        except requests.exceptions.Timeout as e:
+            raise e
         r.raise_for_status()
         return r
     
-    def _getAllObjectsQuery(self, *, limit: int = False, offset: int = False, lastUpdated: str = None):
+    def _getAllItemsQuery(self, *, module: str, limit: int = False, offset: int = False, lastUpdated: str = None):
+        """
+        Returns the XML query for getting all items of a module
+
+        Args:
+            module (str): The module name
+            limit (int, optional): The limit of items to return. Defaults to False.
+            offset (int, optional): The offset of the items to return. Defaults to False.
+            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.
+        """
         query = etree.fromstring(self.BASE_XML_SEARCH)
         modules = etree.SubElement(query, 'modules')
-        objectModule = etree.SubElement(modules, 'module')
-        objectModule.set('name', 'Object')
-        search = etree.SubElement(objectModule, 'search')
+        requestedModule = etree.SubElement(modules, 'module')
+        requestedModule.set('name', module)
+        search = etree.SubElement(requestedModule, 'search')
         if limit:
             search.set('limit', str(limit))
         if offset:
@@ -46,21 +65,44 @@ class MPWrapper:
         fulltext.text = "*"
         return query
     
-    def _getObjectsSearchUrl(self):
-        return f"{self.url}/module/Object/search"
+    def _getModuleSearchUrl(self, module):
+        """
+        Returns the search URL for the given module
+
+        Args:
+            module (str): The module name
+        """
+        return f"{self.url}/module/{module}/search"
     
-    
-    def getNumberOfObjects(self, *, lastUpdated = None):
-        query = self._getAllObjectsQuery(limit=1, offset=0, lastUpdated=lastUpdated)
-        url = self._getObjectsSearchUrl()
+    def getNumberOfItems(self, *, module, lastUpdated = None):
+        """
+        Returns the number of items in the module
+
+        Args:
+            module (str): The module name
+            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.            
+        """
+        query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
+        url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
         tree = etree.fromstring(response.content)
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size
         
-    def getObjectByOffset(self, offset, *, lastUpdated = None):
-        url = self._getObjectsSearchUrl()
-        query = self._getAllObjectsQuery(limit=1, offset=offset, lastUpdated=lastUpdated)
-        response = self._post(url, query)
+    def getItemByOffset(self, offset, *, module, lastUpdated = None):
+        """
+        Returns the item at the given offset
+
+        Args:
+            offset (int): The offset of the item
+            module (str): The module name
+            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.
+        """
+        url = self._getModuleSearchUrl(module)
+        query = self._getAllItemsQuery(module=module, limit=1, offset=offset, lastUpdated=lastUpdated)
+        try:
+            response = self._post(url, query)
+        except requests.exceptions.HTTPError as e:
+            raise e
         item = etree.fromstring(response.content)
         return item

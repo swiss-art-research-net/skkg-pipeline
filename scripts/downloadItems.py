@@ -7,24 +7,29 @@ from tqdm import tqdm
 
 from lib.MuseumPlusConnector import MPWrapper
 
-def downloadItems(*, host, username, password, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
+def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
 
     # Log the downloaded files
     log = {
         'downloaded': [],
-        'existing': []
+        'existing': [],
+        'omitted': []
     }
 
     # Get the last updated date from the existing files
     lastUpdated  = getLastUpdatedFromItemFiles(outputFolder)
-    print(f"Last updated date of existing files: {lastUpdated}")
+    if lastUpdated is not None:
+        print(f"Last updated date of existing files: {lastUpdated}")
+    else:
+        print("No existing files found.")
     
-    # Get the number of objects
-    numObjects = client.getNumberOfObjects(lastUpdated=lastUpdated)
+    # Get the number of items
+    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
+    print(f"Retrieving {numItems} items for module {module}")
 
     if not limit:
-        limit = numObjects
+        limit = numItems
     if not offset:
         offset = 0
 
@@ -32,7 +37,11 @@ def downloadItems(*, host, username, password, outputFolder, tempFolder, filenam
         filename = join(tempFolder, filenamePrefix + str(i).zfill(6) + ".xml")
         # Check if the file already exists
         if not exists(filename):
-            item = client.getObjectByOffset(i, lastUpdated=lastUpdated)
+            try:
+                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated)
+            except:
+                log['omitted'].append(filename)
+                continue
             with open(filename, 'wb') as f:
                 f.write(etree.tostring(item, pretty_print=True))
                 log['downloaded'].append(filename)
@@ -42,11 +51,21 @@ def downloadItems(*, host, username, password, outputFolder, tempFolder, filenam
     renameItemsBasedOnIds(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix)
     print(f"Downloaded {len(log['downloaded'])} items.")
     print(f"Skipped {len(log['existing'])} items that already existed.")
+    if len(log['omitted']) > 0:
+        print(f"Omitted {len(log['omitted'])} items that could not be downloaded.")
+        # List omitted files
+        print("Omitted files:")
+        for file in log['omitted']:
+            print(file)
 
 def getLastUpdatedFromItemFiles(inputFolder):
     # Read all XML files in the input folder
     files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
     
+    # If no files exist yet, return None
+    if len(files) == 0:
+        return None
+
     # Set lastUpdated to a Date object with the lowest possible value
     lastUpdated = datetime.min
 
@@ -79,6 +98,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description = 'Download all Object Items from MuseumPlus and save them to individual XML files')
     parser.add_argument('--url', required= True, help='URL of the MuseumPlus instance')
+    parser.add_argument('--module', required= True, help='Name of the module to download items from')
     parser.add_argument('--username', required= True, help='Username to use for authentication')
     parser.add_argument('--password', required= True, help='Password to use for authentication')
     parser.add_argument('--outputFolder', required= True, help='Folder to save the XML files to')
@@ -94,4 +114,4 @@ if __name__ == "__main__":
     if args.offset:
         args.offset = int(args.offset)
 
-    downloadItems(host=args.url, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+    downloadItems(host=args.url, module=args.module, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
