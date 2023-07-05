@@ -29,7 +29,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
     if numItems > 0:
         if lastUpdated is not None:
-            print(f"Retrieving {numItems} items for module {module} updated since {lastUpdated}")
+            print(f"Retrieving {numItems} items for module {module} (updated after {datetime.strptime(lastUpdated, '%Y-%m-%dT%H:%M:%S.%f').strftime('%d.%m.%Y %H:%M:%S')})")
         else:
             print(f"Retrieving all {numItems} items for module {module}")
     else:
