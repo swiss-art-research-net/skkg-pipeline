@@ -54,7 +54,6 @@ tasks:
           MODULE: Person
 
   _download-module-items-from-museumplus:
-    desc: Download the module item records from MuseumPlus
     vars:
       OUTPUT_FOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
