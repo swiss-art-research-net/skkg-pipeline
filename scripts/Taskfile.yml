@@ -15,7 +15,15 @@ tasks:
   default:
     desc: Runs the entire pipeline
     cmds:
-      - task: download-object-items
+      - task: download-source-items
+
+  download-source-items:
+    desc: Downloads all item records from MuseumPlus
+    deps:
+      - download-address-items
+      - download-literature-items
+      - download-object-items
+      - download-person-items
 
   download-address-items:
     desc: Download the address item records from MuseumPlus
