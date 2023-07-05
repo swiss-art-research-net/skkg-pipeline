@@ -21,18 +21,21 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     }
 
     lastUpdated = getLastUpdatedDate(outputFolder);
-        
-    if lastUpdated is not None:
-        print(f"Last updated date of existing files: {lastUpdated}")
-    else:
-        print("No existing files found.")
 
     # Store the current datetime
     downloadStarted = datetime.now()
     
     # Get the number of items
     numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
-    print(f"Retrieving {numItems} items for module {module}")
+    if numItems > 0:
+        if lastUpdated is not None:
+            print(f"Retrieving {numItems} items for module {module} updated since {lastUpdated}")
+        else:
+            print(f"Retrieving all {numItems} items for module {module}")
+    else:
+        print(f"No new items found for module {module}")
+        setLastUpdated(outputFolder, downloadStarted)
+        return
 
     if not limit:
         limit = numItems
