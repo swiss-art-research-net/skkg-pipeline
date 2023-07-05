@@ -1,4 +1,5 @@
 import argparse
+import json
 from datetime import datetime
 from lxml import etree
 from os import listdir, remove as removeFile
@@ -17,12 +18,29 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         'omitted': []
     }
 
-    # Get the last updated date from the existing files
-    lastUpdated  = getLastUpdatedFromItemFiles(outputFolder)
+    # Look for metadata file in the output folder
+    metadataFilename = join(outputFolder, 'metadata.json')
+    if exists(metadataFilename):
+        # Read the metadata file
+        with open(metadataFilename, 'r') as f:
+            metadata = json.load(f)
+        # Get last updated date from metadata
+        lastUpdated = metadata['lastUpdated']
+    else:
+        # Get the last updated date from the existing files
+        lastUpdated  = getLastUpdatedFromItemFiles(outputFolder)
+        if lastUpdated:
+            # Save the last updated date in a metadata file
+            with open(metadataFilename, 'w') as f:
+                json.dump({'lastUpdated': lastUpdated}, f)
+        
     if lastUpdated is not None:
         print(f"Last updated date of existing files: {lastUpdated}")
     else:
         print("No existing files found.")
+
+    # Store the current datetime
+    downloadStarted = datetime.now()
     
     # Get the number of items
     numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
@@ -49,6 +67,11 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
             log['existing'].append(filename)
 
     renameItemsBasedOnIds(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix)
+
+    # Store the datetime when the download started as last updated date in the metadata file
+    with open(metadataFilename, 'w') as f:
+        json.dump({'lastUpdated': downloadStarted.strftime('%Y-%m-%dT%H:%M:%S.%f')}, f)
+
     print(f"Downloaded {len(log['downloaded'])} items.")
     print(f"Skipped {len(log['existing'])} items that already existed.")
     if len(log['omitted']) > 0:
