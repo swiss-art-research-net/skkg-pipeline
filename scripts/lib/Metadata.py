@@ -79,7 +79,7 @@ class ItemMetadata:
         else:
             return {}
 
-    def setLastUpdated(self, lastUpdated):
+    def setLastUpdated(self, lastUpdated, *, write=True):
         """
         Set the last updated date for the module.
         Adds the key 'lastUpdated' to the metadata if it does not exist yet and
@@ -92,9 +92,10 @@ class ItemMetadata:
             self.metadata['lastUpdated'] = lastUpdated
         elif isinstance(lastUpdated, datetime):
             self.metadata['lastUpdated'] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
-        self.writeMetadata()
+        if write:
+            self.writeMetadata()
 
-    def setLastUpdatedForFile(self, filename, lastUpdated):
+    def setLastUpdatedForFile(self, filename, lastUpdated, *, write=True):
         """
         Set the last updated date for a specific file.
         Adds the key 'files' to the metadata if it does not exist yet.
@@ -112,10 +113,12 @@ class ItemMetadata:
             self.metadata['files'][filename]['lastUpdated'] = lastUpdated
         elif isinstance(lastUpdated, datetime):
             self.metadata['files'][filename] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        if write:
+            self.writeMetadata()
 
     def writeMetadata(self):
         """
         Writes the metadata to the metadata file.
         """
         with open(self.metadataFile, 'w') as f:
-            json.dump(self.metadata, f)
+            json.dump(self.metadata, f, indent=4)
