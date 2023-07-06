@@ -85,6 +85,8 @@ class MPWrapper:
         query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
         url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
+        if not response.content:
+            return 0
         tree = etree.fromstring(response.content)
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size

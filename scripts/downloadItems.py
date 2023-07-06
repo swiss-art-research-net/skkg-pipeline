@@ -1,17 +1,16 @@
 import argparse
-import json
 from datetime import datetime
 from lxml import etree
 from os import listdir, remove as removeFile
 from os.path import join, exists, isfile
 from tqdm import tqdm
 
+from lib.Metadata import ItemMetadata
 from lib.MuseumPlusConnector import MPWrapper
-
-METADATA_FILENAME = 'metadata.json'
 
 def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
+    metadata = ItemMetadata(outputFolder)
 
     # Log the downloaded files
     log = {
@@ -20,7 +19,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         'omitted': []
     }
 
-    lastUpdated = getLastUpdatedDate(outputFolder);
+    lastUpdated = metadata.getLastUpdatedDate();
 
     # Store the current datetime
     downloadStarted = datetime.now()
@@ -34,7 +33,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
             print(f"Retrieving all {numItems} items for module {module}")
     else:
         print(f"No new items found for module {module}")
-        setLastUpdated(outputFolder, downloadStarted)
+        metadata.setLastUpdated(downloadStarted)
         return
 
     if not limit:
@@ -57,9 +56,9 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         else:
             log['existing'].append(filename)
 
-    renameItemsBasedOnIds(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix)
+    storeAndRenameItems(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix, metadata=metadata)
 
-    setLastUpdated(outputFolder, downloadStarted)
+    metadata.setLastUpdated(downloadStarted)
 
     print(f"Downloaded {len(log['downloaded'])} items.")
     print(f"Skipped {len(log['existing'])} items that already existed.")
@@ -70,64 +69,25 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         for file in log['omitted']:
             print(file)
 
-def getLastUpdatedDate(outputFolder):
-    # Look for metadata file in the output folder
-    metadataFilename = join(outputFolder, METADATA_FILENAME)
-    if exists(metadataFilename):
-        # Read the metadata file
-        with open(metadataFilename, 'r') as f:
-            metadata = json.load(f)
-        # Get last updated date from metadata
-        lastUpdated = metadata['lastUpdated']
-    else:
-        # Get the last updated date from the existing files
-        lastUpdated  = getLastUpdatedFromItemFiles(outputFolder)
-        if lastUpdated:
-            # Save the last updated date in a metadata file
-            with open(metadataFilename, 'w') as f:
-                json.dump({'lastUpdated': lastUpdated}, f)
-    return lastUpdated
-
-def getLastUpdatedFromItemFiles(inputFolder):
-    # Read all XML files in the input folder
-    files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
-    
-    # If no files exist yet, return None
-    if len(files) == 0:
-        return None
-
-    # Set lastUpdated to a Date object with the lowest possible value
-    lastUpdated = datetime.min
-
-    for file in tqdm(files):
-        tree = etree.parse(join(inputFolder, file))
-        lastUpdatedString= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
-        lastUpdatedItem = datetime.strptime(lastUpdatedString, '%Y-%m-%d %H:%M:%S.%f')
-        if lastUpdatedItem > lastUpdated:
-            lastUpdated = lastUpdatedItem
-    return lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
-
-def renameItemsBasedOnIds(*, inputFolder, outputFolder, filenamePrefix):
+def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
     # Read all XML files in the input folder
     files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
     for file in tqdm(files):
-        # Retrieve the id and uuid attributes from the moduleItem element
+        # Retrieve the id and last modified attributes from the moduleItem element
         tree = etree.parse(join(inputFolder, file))
         id = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('id')
-        #uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
+        lastModified= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
         # Rename the file
-        newFilename = join(outputFolder, filenamePrefix + id.zfill(6) + ".xml")
-        with open(newFilename, 'wb') as f:
+        filename = filenamePrefix + id.zfill(6) + ".xml"
+        newFile = join(outputFolder, filename)
+        with open(newFile, 'wb') as f:
             f.write(etree.tostring(tree, pretty_print=True))
         # Remove the old file
         if exists(join(inputFolder, file)):
             removeFile(join(inputFolder, file))
-
-def setLastUpdated(outputFolder, lastUpdated):
-    metadataFilename = join(outputFolder, METADATA_FILENAME)
-    with open(metadataFilename, 'w') as f:
-        json.dump({'lastUpdated': lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')}, f)
-
+        # Update last modified for file
+            metadata.setLastUpdatedForFile(filename, lastModified)
+        
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
