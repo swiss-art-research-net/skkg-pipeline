@@ -9,7 +9,7 @@ class MPWrapper:
     """
     
     
-    def __init__(self, *, url, username, password):
+    def __init__(self, *, url: str, username: str, password: str):
         self.url = join(url, 'ria-ws/application')
         session = requests.Session()
         session.auth = (username, password)
@@ -36,7 +36,7 @@ class MPWrapper:
         r.raise_for_status()
         return r
     
-    def _getAllItemsQuery(self, *, module: str, limit: int = False, offset: int = False, lastUpdated: str = None):
+    def _getAllItemsQuery(self, *, module: str, limit: int = False, offset: int = False, lastUpdated: str = None) -> etree.Element:
         """
         Returns the XML query for getting all items of a module
 
@@ -65,7 +65,7 @@ class MPWrapper:
         fulltext.text = "*"
         return query
     
-    def _getModuleSearchUrl(self, module):
+    def _getModuleSearchUrl(self, module: str) -> str:
         """
         Returns the search URL for the given module
 
@@ -74,7 +74,7 @@ class MPWrapper:
         """
         return f"{self.url}/module/{module}/search"
     
-    def getNumberOfItems(self, *, module, lastUpdated = None):
+    def getNumberOfItems(self, *, module: str, lastUpdated = None) -> int:
         """
         Returns the number of items in the module
 
@@ -91,7 +91,7 @@ class MPWrapper:
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size
         
-    def getItemByOffset(self, offset, *, module, lastUpdated = None):
+    def getItemByOffset(self, offset: int, *, module: str, lastUpdated = None) -> etree.Element:
         """
         Returns the item at the given offset
 
