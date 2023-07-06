@@ -3,6 +3,7 @@ from datetime import datetime
 from os import listdir, remove as removeFile
 from os.path import join, exists, isfile
 from tqdm import tqdm
+from lxml import etree
 
 from lib.MuseumPlusConnector import MPWrapper
 from lib.Metadata import ItemMetadata
