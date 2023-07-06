@@ -69,6 +69,25 @@ class ItemMetadata:
             self.metadata['lastUpdated'] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
         self.writeMetadata()
 
+    def setLastUpdatedForFile(self, filename, lastUpdated):
+        """
+        Set the last updated date for a specific file.
+        Adds the key 'files' to the metadata if it does not exist yet.
+        Adds the key 'filename' to the 'files' key if it does not exist yet.
+
+        args:
+            filename (str): The filename of the file to set the last updated date for
+            lastUpdated (str or datetime): The last updated date to set   
+        """
+        if not 'files' in self.metadata:
+            self.metadata['files'] = {}
+        if not filename in self.metadata['files']:
+            self.metadata['files'][filename] = {}
+        if isinstance(lastUpdated, str):
+            self.metadata['files'][filename]['lastUpdated'] = lastUpdated
+        elif isinstance(lastUpdated, datetime):
+            self.metadata['files'][filename] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
+
     def writeMetadata(self):
         with open(self.metadataFile, 'w') as f:
             json.dump(self.metadata, f)
