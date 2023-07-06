@@ -83,6 +83,10 @@ class MPWrapper:
             lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.            
         """
         query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
+        search = query.find('.//search')
+        select = etree.SubElement(search, 'select')
+        field = etree.SubElement(select, 'field')
+        field.set('fieldPath', '__id')
         url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
         if not response.content:
