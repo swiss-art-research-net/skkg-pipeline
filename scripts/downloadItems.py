@@ -1,12 +1,12 @@
 import argparse
 from datetime import datetime
+from lxml import etree
 from os import listdir, remove as removeFile
 from os.path import join, exists, isfile
 from tqdm import tqdm
-from lxml import etree
 
-from lib.MuseumPlusConnector import MPWrapper
 from lib.Metadata import ItemMetadata
+from lib.MuseumPlusConnector import MPWrapper
 
 def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
