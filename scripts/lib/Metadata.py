@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from os.path import join, exists, isfile
 from lxml import etree
 
@@ -11,23 +12,17 @@ class ItemMetadata:
     def __init__(self, directory):
         self.directory = directory
         self.metadataFile = join(directory, self.METADATA_FILENAME)
+        self.metadata = self.loadMetadata()
 
     def getLastUpdatedDate(self):
-        # Look for metadata file in the output folder
-        if exists(self.metadataFile):
-            # Read the metadata file
-            with open(self.metadataFile, 'r') as f:
-                metadata = json.load(f)
-            # Get last updated date from metadata
-            lastUpdated = metadata['lastUpdated']
+        if self.metadata['lastUpdated']:
+            return self.metadata['lastUpdated']
         else:
             # Get the last updated date from the existing files
             lastUpdated  = self.getLastUpdatedFromItemFiles(self.directory)
             if lastUpdated:
-                # Save the last updated date in a metadata file
-                with open(self.metadataFile, 'w') as f:
-                    json.dump({'lastUpdated': lastUpdated}, f)
-        return lastUpdated
+                self.setLastUpdated(lastUpdated)
+                return lastUpdated
     
     def getLastUpdatedFromItemFiles(self):
         # Read all XML files in the input folder
@@ -48,17 +43,17 @@ class ItemMetadata:
                 lastUpdated = lastUpdatedItem
         return lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
-    def setLastUpdated(self, lastUpdated):
-        self.metadataFile = join(self.directory, self.METADATA_FILENAME)
-        with open(self.metadataFile, 'w') as f:
-            json.dump({'lastUpdated': lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')}, f)
+    def loadMetadata(self):
+        if exists(self.metadataFile):
+            with open(self.metadataFile, 'r') as f:
+                return json.load(f)
+        else:
+            return {}
 
-    def setLastUpdatedForFile(self, filename, lastUpdated):
-        self.metadataFile = join(self.directory, self.METADATA_FILENAME)
-        with open(self.metadataFile, 'r') as f:
-            metadata = json.load(f)
-        if not 'files' in metadata:
-            metadata['files'] = {}
-        metadata['files'][filename] = lastUpdated
+    def setLastUpdated(self, lastUpdated: datetime):
+        self.metadata['lastUpdated'] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        self.writeMetadata()
+
+    def writeMetadata(self):
         with open(self.metadataFile, 'w') as f:
-            json.dump(metadata, f)
+            json.dump(self.metadata, f)
