@@ -20,7 +20,7 @@ class MPWrapper:
         })
         self.session = session
         
-    def _post(self, url, query, *, timeout=30) -> requests.Request:
+    def _post(self, url: str, query: etree.Element, *, timeout=300) -> requests.Request:
         """
         Sends a POST request to the given URL with the given query
 
