@@ -6,16 +6,17 @@ class ItemMetadata:
     METADATA_FILENAME = 'metadata.json'
 
     directory = None
+    metadataFile = None
 
     def __init__(self, directory):
         self.directory = directory
+        self.metadataFile = join(directory, self.METADATA_FILENAME)
 
     def getLastUpdatedDate(self):
         # Look for metadata file in the output folder
-        metadataFilename = join(self.directory, self.METADATA_FILENAME)
-        if exists(metadataFilename):
+        if exists(self.metadataFile):
             # Read the metadata file
-            with open(metadataFilename, 'r') as f:
+            with open(self.metadataFile, 'r') as f:
                 metadata = json.load(f)
             # Get last updated date from metadata
             lastUpdated = metadata['lastUpdated']
@@ -24,7 +25,7 @@ class ItemMetadata:
             lastUpdated  = self.getLastUpdatedFromItemFiles(self.directory)
             if lastUpdated:
                 # Save the last updated date in a metadata file
-                with open(metadataFilename, 'w') as f:
+                with open(self.metadataFile, 'w') as f:
                     json.dump({'lastUpdated': lastUpdated}, f)
         return lastUpdated
     
@@ -48,6 +49,6 @@ class ItemMetadata:
         return lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
     def setLastUpdated(self, lastUpdated):
-        metadataFilename = join(self.directory, self.METADATA_FILENAME)
-        with open(metadataFilename, 'w') as f:
+        self.metadataFile = join(self.directory, self.METADATA_FILENAME)
+        with open(self.metadataFile, 'w') as f:
             json.dump({'lastUpdated': lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')}, f)
