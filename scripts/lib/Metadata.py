@@ -5,6 +5,17 @@ from os.path import join, exists, isfile
 from lxml import etree
 
 class ItemMetadata:
+    """
+    Class for storing and retrieving metadata about the downloaded items
+
+    Usage:
+    >>> # Create a new instance of the class based on the folder where the items are stored
+    >>> metadata = ItemMetadata(folder)
+    >>> # Get the last updated date
+    >>> lastUpdated = metadata.getLastUpdatedDate()
+    >>> # Set the last updated date
+    >>> metadata.setLastUpdated(datetime.now())
+    """
     METADATA_FILENAME = 'metadata.json'
 
     directory = None
