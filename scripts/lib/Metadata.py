@@ -22,11 +22,21 @@ class ItemMetadata:
     metadataFile = None
 
     def __init__(self, directory):
+        """
+        Initialize the class
+        
+        args:
+            directory (str): The directory where the items are stored
+        """
         self.directory = directory
         self.metadataFile = join(directory, self.METADATA_FILENAME)
         self.metadata = self.loadMetadata()
 
     def getLastUpdatedDate(self):
+        """
+        Get the last updated date from the metadata file.
+        The last updated date is stored in the key 'lastUpdated' in the metadata file.
+        """
         if 'lastUpdated' in self.metadata and self.metadata['lastUpdated'] is not None:
             return self.metadata['lastUpdated']
         else:
@@ -37,6 +47,10 @@ class ItemMetadata:
                 return lastUpdated
     
     def getLastUpdatedFromItemFiles(self):
+        """
+        Determines the last updated date by reading the __lastModified field from
+        all XML files in the input folder and returning the highest value.
+        """
         # Read all XML files in the input folder
         files = [f for f in listdir(self.directory) if isfile(join(self.directory, f)) and f.endswith('.xml')]
         
@@ -56,6 +70,9 @@ class ItemMetadata:
         return lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
     def loadMetadata(self):
+        """
+        Reads the metadata file and returns the contents as a dictionary.
+        """
         if exists(self.metadataFile):
             with open(self.metadataFile, 'r') as f:
                 return json.load(f)
@@ -63,6 +80,14 @@ class ItemMetadata:
             return {}
 
     def setLastUpdated(self, lastUpdated):
+        """
+        Set the last updated date for the module.
+        Adds the key 'lastUpdated' to the metadata if it does not exist yet and
+        sets the value to the given lastUpdated date.
+
+        args:
+            lastUpdated (str or datetime): The last updated date to set
+        """
         if isinstance(lastUpdated, str):
             self.metadata['lastUpdated'] = lastUpdated
         elif isinstance(lastUpdated, datetime):
@@ -89,5 +114,8 @@ class ItemMetadata:
             self.metadata['files'][filename] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
 
     def writeMetadata(self):
+        """
+        Writes the metadata to the metadata file.
+        """
         with open(self.metadataFile, 'w') as f:
             json.dump(self.metadata, f)
