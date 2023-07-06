@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from os import listdir
 from os.path import join, exists, isfile
 from lxml import etree
 
@@ -15,11 +16,11 @@ class ItemMetadata:
         self.metadata = self.loadMetadata()
 
     def getLastUpdatedDate(self):
-        if self.metadata['lastUpdated']:
+        if 'lastUpdated' in self.metadata and self.metadata['lastUpdated'] is not None:
             return self.metadata['lastUpdated']
         else:
             # Get the last updated date from the existing files
-            lastUpdated  = self.getLastUpdatedFromItemFiles(self.directory)
+            lastUpdated  = self.getLastUpdatedFromItemFiles()
             if lastUpdated:
                 self.setLastUpdated(lastUpdated)
                 return lastUpdated
@@ -50,8 +51,11 @@ class ItemMetadata:
         else:
             return {}
 
-    def setLastUpdated(self, lastUpdated: datetime):
-        self.metadata['lastUpdated'] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
+    def setLastUpdated(self, lastUpdated):
+        if isinstance(lastUpdated, str):
+            self.metadata['lastUpdated'] = lastUpdated
+        elif isinstance(lastUpdated, datetime):
+            self.metadata['lastUpdated'] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
         self.writeMetadata()
 
     def writeMetadata(self):
