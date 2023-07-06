@@ -40,12 +40,6 @@ The pipeline can be controlled by the Task runner. To run the entire pipeline, r
 docker compose exec jobs task
 ```
 
-To limit the pipeline to a subset of records use the `--limit` parameter.
-
-```sh
-docker compose exec jobs task -- --limit 20
-```
-
 To list available tasks, run:
 
 ```sh
@@ -55,24 +49,28 @@ docker compose exec jobs task --list
 This will output a list of tasks:
 ```
 task: Available tasks for this project:
-* default:                     Runs the entire pipeline
-* download-source-items:       Download the item records from MuseumPlus
+* default:                         Runs the entire pipeline
+* download-address-items:          Download the address item records from MuseumPlus
+* download-literature-items:       Download the literature item records from MuseumPlus
+* download-object-items:           Download the object item records from MuseumPlus
+* download-person-items:           Download the person item records from MuseumPlus
+* download-source-items:           Downloads all item records from MuseumPlus
 ```
 
 To run a specific task type `task` followed by the task name, e.g.:
 
 ```sh
-docker compose exec jobs task example-task
+docker compose exec jobs task download-object-items
 ```
 
 If the task is already up to date, it will not run. To force a task to run, type the command followed by `--force`
 
 ```sh
-docker compose exec jobs task example-task --force
+docker compose exec jobs task download-object-items --force
 ```
 
 To add additional arguments to the task itself, enter the arguments after a `--` sign, e.g.:
 
 ```sh
-docker compose exec jobs task example-task -- --limit 100
+docker compose exec jobs task download-object-items -- --limit 100
 ```

@@ -1,4 +1,5 @@
 import argparse
+import json
 from datetime import datetime
 from lxml import etree
 from os import listdir, remove as removeFile
@@ -6,6 +7,8 @@ from os.path import join, exists, isfile
 from tqdm import tqdm
 
 from lib.MuseumPlusConnector import MPWrapper
+
+METADATA_FILENAME = 'metadata.json'
 
 def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
@@ -17,16 +20,22 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         'omitted': []
     }
 
-    # Get the last updated date from the existing files
-    lastUpdated  = getLastUpdatedFromItemFiles(outputFolder)
-    if lastUpdated is not None:
-        print(f"Last updated date of existing files: {lastUpdated}")
-    else:
-        print("No existing files found.")
+    lastUpdated = getLastUpdatedDate(outputFolder);
+
+    # Store the current datetime
+    downloadStarted = datetime.now()
     
     # Get the number of items
     numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
-    print(f"Retrieving {numItems} items for module {module}")
+    if numItems > 0:
+        if lastUpdated is not None:
+            print(f"Retrieving {numItems} items for module {module} (updated after {datetime.strptime(lastUpdated, '%Y-%m-%dT%H:%M:%S.%f').strftime('%d.%m.%Y %H:%M:%S')})")
+        else:
+            print(f"Retrieving all {numItems} items for module {module}")
+    else:
+        print(f"No new items found for module {module}")
+        setLastUpdated(outputFolder, downloadStarted)
+        return
 
     if not limit:
         limit = numItems
@@ -49,6 +58,9 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
             log['existing'].append(filename)
 
     renameItemsBasedOnIds(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix)
+
+    setLastUpdated(outputFolder, downloadStarted)
+
     print(f"Downloaded {len(log['downloaded'])} items.")
     print(f"Skipped {len(log['existing'])} items that already existed.")
     if len(log['omitted']) > 0:
@@ -57,6 +69,24 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         print("Omitted files:")
         for file in log['omitted']:
             print(file)
+
+def getLastUpdatedDate(outputFolder):
+    # Look for metadata file in the output folder
+    metadataFilename = join(outputFolder, METADATA_FILENAME)
+    if exists(metadataFilename):
+        # Read the metadata file
+        with open(metadataFilename, 'r') as f:
+            metadata = json.load(f)
+        # Get last updated date from metadata
+        lastUpdated = metadata['lastUpdated']
+    else:
+        # Get the last updated date from the existing files
+        lastUpdated  = getLastUpdatedFromItemFiles(outputFolder)
+        if lastUpdated:
+            # Save the last updated date in a metadata file
+            with open(metadataFilename, 'w') as f:
+                json.dump({'lastUpdated': lastUpdated}, f)
+    return lastUpdated
 
 def getLastUpdatedFromItemFiles(inputFolder):
     # Read all XML files in the input folder
@@ -92,6 +122,11 @@ def renameItemsBasedOnIds(*, inputFolder, outputFolder, filenamePrefix):
         # Remove the old file
         if exists(join(inputFolder, file)):
             removeFile(join(inputFolder, file))
+
+def setLastUpdated(outputFolder, lastUpdated):
+    metadataFilename = join(outputFolder, METADATA_FILENAME)
+    with open(metadataFilename, 'w') as f:
+        json.dump({'lastUpdated': lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')}, f)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
