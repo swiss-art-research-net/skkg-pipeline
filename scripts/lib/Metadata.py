@@ -52,3 +52,13 @@ class ItemMetadata:
         self.metadataFile = join(self.directory, self.METADATA_FILENAME)
         with open(self.metadataFile, 'w') as f:
             json.dump({'lastUpdated': lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')}, f)
+
+    def setLastUpdatedForFile(self, filename, lastUpdated):
+        self.metadataFile = join(self.directory, self.METADATA_FILENAME)
+        with open(self.metadataFile, 'r') as f:
+            metadata = json.load(f)
+        if not 'files' in metadata:
+            metadata['files'] = {}
+        metadata['files'][filename] = lastUpdated
+        with open(self.metadataFile, 'w') as f:
+            json.dump(metadata, f)
