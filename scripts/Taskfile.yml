@@ -60,17 +60,23 @@ tasks:
 
   _synchronise-module-items-from-museumplus:
     vars:
-      OUTPUT_FOLDER:
+      FOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       FILENAMEPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
     cmds:
       - echo "Downloading {{.MODULE}} items from MuseumPlus"
-      - mkdir -p {{.OUTPUT_FOLDER}}
+      - mkdir -p {{.FOLDER}}
       - task: _download-items-from-museumplus
         vars:
           MODULE: "{{.MODULE}}"
-          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+          OUTPUT_FOLDER: "{{.FOLDER}}"
+          FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
+      - echo "Checking for deleted items"
+      - task: _process-items-deleted-from-museumplus
+        vars:
+          MODULE: "{{.MODULE}}"
+          INPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _download-items-from-museumplus:
@@ -79,3 +85,7 @@ tasks:
     cmds:
       - mkdir -p {{.TEMP_FOLDER}}
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
+
+  _process-items-deleted-from-museumplus:
+    cmds:
+      - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}}
