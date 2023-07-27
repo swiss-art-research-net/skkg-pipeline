@@ -4,6 +4,8 @@ This script checks if any items have been deleted in MuseumPlus and, if so, remo
 """
 
 import argparse
+from os import remove as removeFile
+from os.path import join
 
 from lib.Metadata import ItemMetadata
 from lib.MuseumPlusConnector import MPWrapper
@@ -11,7 +13,14 @@ from lib.MuseumPlusConnector import MPWrapper
 def synchroniseItems(*, host, username, password, module, inputFolder, filenamePrefix = 'item-'):
     client = MPWrapper(url=host, username=username, password=password)
     metadata = ItemMetadata(inputFolder)
-    print("ok")
+    files = metadata.listFiles()
+    for file in files:
+        identifier = int(file.replace(filenamePrefix, '').replace('.xml', ''))
+        if not client.existsItem(module=module, id=identifier):
+            print(f"Item {identifier} in module {module} has been deleted in MuseumPlus. Deleting local copy.")
+            filepath = join(inputFolder, file)
+            removeFile(filepath)
+            metadata.removeFile(file)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
