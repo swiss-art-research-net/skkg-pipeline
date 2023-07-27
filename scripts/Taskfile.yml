@@ -28,28 +28,28 @@ tasks:
   download-address-items:
     desc: Download the address item records from MuseumPlus
     cmds:
-      - task: _download-module-items-from-museumplus
+      - task: _synchronise-module-items-from-museumplus
         vars:
           MODULE: Address
 
   download-literature-items:
     desc: Download the literature item records from MuseumPlus
     cmds:
-      - task: _download-module-items-from-museumplus
+      - task: _synchronise-module-items-from-museumplus
         vars:
           MODULE: Literature
 
   download-object-items:
     desc: Download the object item records from MuseumPlus
     cmds:
-      - task: _download-module-items-from-museumplus
+      - task: _synchronise-module-items-from-museumplus
         vars:
           MODULE: Object
 
   download-person-items:
     desc: Download the person item records from MuseumPlus
     cmds:
-      - task: _download-module-items-from-museumplus
+      - task: _synchronise-module-items-from-museumplus
         vars:
           MODULE: Person
 
@@ -58,7 +58,7 @@ tasks:
     cmds:
       - python /scripts/updateMetadata.py --folder /data/source/{{.CLI_ARGS}}
 
-  _download-module-items-from-museumplus:
+  _synchronise-module-items-from-museumplus:
     vars:
       OUTPUT_FOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
