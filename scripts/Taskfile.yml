@@ -28,28 +28,28 @@ tasks:
   download-address-items:
     desc: Download the address item records from MuseumPlus
     cmds:
-      - task: _synchronise-module-items-from-museumplus
+      - task: _download-module-items-from-museumplus
         vars:
           MODULE: Address
 
   download-literature-items:
     desc: Download the literature item records from MuseumPlus
     cmds:
-      - task: _synchronise-module-items-from-museumplus
+      - task: _download-module-items-from-museumplus
         vars:
           MODULE: Literature
 
   download-object-items:
     desc: Download the object item records from MuseumPlus
     cmds:
-      - task: _synchronise-module-items-from-museumplus
+      - task: _download-module-items-from-museumplus
         vars:
           MODULE: Object
 
   download-person-items:
     desc: Download the person item records from MuseumPlus
     cmds:
-      - task: _synchronise-module-items-from-museumplus
+      - task: _download-module-items-from-museumplus
         vars:
           MODULE: Person
 
@@ -58,7 +58,43 @@ tasks:
     cmds:
       - python /scripts/updateMetadata.py --folder /data/source/{{.CLI_ARGS}}
 
-  _synchronise-module-items-from-museumplus:
+  remove-deleted-address-items:
+    desc: Removes address item records that have been deleted from MuseumPlus
+    cmds:
+      - task: _remove-deleted-module-items
+        vars:
+          MODULE: Address
+
+  remove-deleted-literature-items:
+    desc: Removes literature item records that have been deleted from MuseumPlus
+    cmds:
+      - task: _remove-deleted-module-items
+        vars:
+          MODULE: Literature
+
+  remove-deleted-object-items:
+    desc: Removes object item records that have been deleted from MuseumPlus
+    cmds:
+      - task: _remove-deleted-module-items
+        vars:
+          MODULE: Object
+
+  remove-deleted-person-items:
+    desc: Removes person item records that have been deleted from MuseumPlus
+    cmds:
+      - task: _remove-deleted-module-items
+        vars:
+          MODULE: Person
+
+  remove-deleted-source-items:
+    desc: Removes item records that have been deleted from MuseumPlus
+    deps:
+      - remove-deleted-address-items
+      - remove-deleted-literature-items
+      - remove-deleted-object-items
+      - remove-deleted-person-items
+
+  _download-module-items-from-museumplus:
     vars:
       FOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -89,3 +125,17 @@ tasks:
   _process-items-deleted-from-museumplus:
     cmds:
       - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}}
+
+  _remove-deleted-module-items:
+    vars:
+      FOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      FILENAMEPREFIX:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+    cmds:
+      - echo "Checking for deleted items in {{.MODULE}}"
+      - task: _process-items-deleted-from-museumplus
+        vars:
+          MODULE: "{{.MODULE}}"
+          INPUT_FOLDER: "{{.FOLDER}}"
+          FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
