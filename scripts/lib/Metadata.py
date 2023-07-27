@@ -75,7 +75,11 @@ class ItemMetadata:
         """
         if exists(self.metadataFile):
             with open(self.metadataFile, 'r') as f:
-                return json.load(f)
+                try:
+                    metadata = json.load(f)
+                except:
+                    raise Exception(f"Could not read metadata file {self.metadataFile}")
+                return metadata
         else:
             return {}
         
