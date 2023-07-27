@@ -65,6 +65,18 @@ class MPWrapper:
         fulltext.text = "*"
         return query
     
+    def _getItemQueryById(self, *, module: str, id: int) -> etree.Element:
+        query = etree.fromstring(self.BASE_XML_SEARCH)
+        modules = etree.SubElement(query, 'modules')
+        requestedModule = etree.SubElement(modules, 'module')
+        requestedModule.set('name', module)
+        search = etree.SubElement(requestedModule, 'search')
+        expert = etree.SubElement(search, 'expert')
+        equalsField = etree.SubElement(expert, 'equalsField')
+        equalsField.set('fieldPath', '__id')
+        equalsField.set('operand', str(id))
+        return query
+
     def _getModuleSearchUrl(self, module: str) -> str:
         """
         Returns the search URL for the given module
@@ -73,6 +85,20 @@ class MPWrapper:
             module (str): The module name
         """
         return f"{self.url}/module/{module}/search"
+    
+    def existsItem(self, *, module: str, id: int) -> bool:
+        query = self._getItemQueryById(module=module, id=id)
+        search = query.find('.//search')
+        select = etree.SubElement(search, 'select')
+        field = etree.SubElement(select, 'field')
+        field.set('fieldPath', '__id')
+        url = self._getModuleSearchUrl(module)
+        response = self._post(url, query)
+        if not response.content:
+            return False
+        tree = etree.fromstring(response.content)
+        size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
+        return size > 0
     
     def getNumberOfItems(self, *, module: str, lastUpdated = None) -> int:
         """
