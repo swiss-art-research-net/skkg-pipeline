@@ -108,12 +108,6 @@ tasks:
           MODULE: "{{.MODULE}}"
           OUTPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
-      - echo "Checking for deleted items"
-      - task: _process-items-deleted-from-museumplus
-        vars:
-          MODULE: "{{.MODULE}}"
-          INPUT_FOLDER: "{{.FOLDER}}"
-          FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _download-items-from-museumplus:
     vars:
