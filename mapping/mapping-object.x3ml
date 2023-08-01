@@ -1,0 +1,29 @@
+
+<x3ml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" source_type="xpath" version="1.0" xsi:noNamespaceSchemaLocation="x3ml_v1.4.xsd" editor="3MEditor v3.3">
+    <namespaces>
+        <namespace prefix="skkg" uri="https://data.skkg.ch/"/>
+        <namespace prefix="aat" uri="http://vocab.getty.edu/aat/" />
+        <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+        <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
+        <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
+        <namespace prefix="dcterms" uri="http://purl.org/dc/terms/" />
+        <namespace prefix="frbroo" uri="http://iflastandards.info/ns/fr/frbr/frbroo/" />
+        <namespace prefix="gnd" uri="https://d-nb.info/gnd/"/>
+        <namespace prefix="la" uri="https://linked.art/ns/terms/"/>
+        <namespace prefix="loc" uri="http://id.loc.gov/vocabulary/relators/"/>
+        <namespace prefix="mets" uri="http://www.loc.gov/METS/"/>
+        <namespace prefix="mods" uri="http://www.loc.gov/mods/v3"/>
+        <namespace prefix="oai" uri="http://www.openarchives.org/OAI/2.0/"/>
+        <namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+        <namespace prefix="rso" uri="http://www.researchspace.org/ontology/" />
+        <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
+        <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/"/>
+        <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
+        <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
+        <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
+        <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
+        <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+    </namespaces>
+    <mappings>
+    </mappings>
+</x3ml>
