@@ -49,12 +49,18 @@ docker compose exec jobs task --list
 This will output a list of tasks:
 ```
 task: Available tasks for this project:
-* default:                         Runs the entire pipeline
-* download-address-items:          Download the address item records from MuseumPlus
-* download-literature-items:       Download the literature item records from MuseumPlus
-* download-object-items:           Download the object item records from MuseumPlus
-* download-person-items:           Download the person item records from MuseumPlus
-* download-source-items:           Downloads all item records from MuseumPlus
+* default:                               Runs the entire pipeline
+* download-address-items:                Download the address item records from MuseumPlus
+* download-literature-items:             Download the literature item records from MuseumPlus
+* download-object-items:                 Download the object item records from MuseumPlus
+* download-person-items:                 Download the person item records from MuseumPlus
+* download-source-items:                 Downloads all item records from MuseumPlus
+* recreate-folder-metadata:              Recreate the metadata for a specific folder. The folder name should be passed as an argument.
+* remove-deleted-address-items:          Removes address item records that have been deleted from MuseumPlus
+* remove-deleted-literature-items:       Removes literature item records that have been deleted from MuseumPlus
+* remove-deleted-object-items:           Removes object item records that have been deleted from MuseumPlus
+* remove-deleted-person-items:           Removes person item records that have been deleted from MuseumPlus
+* remove-deleted-source-items:           Removes item records that have been deleted from MuseumPlus
 ```
 
 To run a specific task type `task` followed by the task name, e.g.:

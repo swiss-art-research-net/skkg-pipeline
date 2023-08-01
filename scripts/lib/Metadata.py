@@ -75,9 +75,30 @@ class ItemMetadata:
         """
         if exists(self.metadataFile):
             with open(self.metadataFile, 'r') as f:
-                return json.load(f)
+                try:
+                    metadata = json.load(f)
+                except:
+                    raise Exception(f"Could not read metadata file {self.metadataFile}")
+                return metadata
         else:
             return {}
+        
+    def listFiles(self):
+        files = [d for d in self.metadata['files']]
+        return files
+    
+    def removeFile(self, filename, *, write=True):
+        """
+        Removes the given file from the metadata.
+
+        args:
+            filename (str): The filename to remove
+            write (bool, optional): Whether to write the metadata to the metadata file. Defaults to True.
+        """
+        if 'files' in self.metadata and filename in self.metadata['files']:
+            del self.metadata['files'][filename]
+        if write:
+            self.writeMetadata()
 
     def setLastUpdated(self, lastUpdated, *, write=True):
         """
@@ -87,6 +108,7 @@ class ItemMetadata:
 
         args:
             lastUpdated (str or datetime): The last updated date to set
+            write (bool, optional): Whether to write the metadata to the metadata file. Defaults to True.
         """
         if isinstance(lastUpdated, str):
             self.metadata['lastUpdated'] = lastUpdated
