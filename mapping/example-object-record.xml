@@ -1,0 +1,921 @@
+<application>
+  <modules>
+    <module name="Object" totalSize="88018">
+      <moduleItem hasAttachments="true" id="1" uuid="1155">
+        <systemField dataType="Long" name="__id">
+          <value>1</value>
+        </systemField>
+        <systemField dataType="Varchar" name="__lastModifiedUser">
+          <value>Myrtha Steiner</value>
+        </systemField>
+        <systemField dataType="Timestamp" name="__lastModified">
+          <value>2022-08-04 08:39:17.824</value>
+          <formattedValue language="de">04.08.2022 08:39</formattedValue>
+        </systemField>
+        <systemField dataType="Varchar" name="__createdUser">
+          <value>ZET_D&#220;</value>
+        </systemField>
+        <systemField dataType="Timestamp" name="__created">
+          <value>2019-10-11 13:55:50.09</value>
+          <formattedValue language="de">11.10.2019 13:55</formattedValue>
+        </systemField>
+        <systemField dataType="Varchar" name="__orgUnit">
+          <value>ObjectOrgUnit</value>
+        </systemField>
+        <systemField name="__uuid">
+          <value>1155</value>
+        </systemField>
+        <dataField dataType="Long" name="ObjQRCodeLnu">
+          <value>1155</value>
+          <formattedValue language="de">1.155</formattedValue>
+        </dataField>
+        <dataField dataType="Varchar" name="ObjAcquisitionNumberTxt">
+          <value>7</value>
+        </dataField>
+        <dataField dataType="Varchar" name="ObjDataTransferTxt">
+          <value>1155</value>
+        </dataField>
+        <dataField dataType="Clob" name="ObjFramingClb">
+          <value>unverglast</value>
+        </dataField>
+        <dataField dataType="Varchar" name="ObjRecordCreatedByTxt">
+          <value>KA</value>
+        </dataField>
+        <dataField dataType="Date" name="ObjRecordCreatedDateDat">
+          <value>2004-09-07</value>
+          <formattedValue language="de">07.09.2004</formattedValue>
+        </dataField>
+        <dataField dataType="Clob" name="ObjMaterialTechniqueClb">
+          <value>&#214;l auf Holztafel</value>
+        </dataField>
+        <dataField dataType="Date" name="ObjAcquisitionDateDat">
+          <value>2002-11-08</value>
+          <formattedValue language="de">08.11.2002</formattedValue>
+        </dataField>
+        <dataField dataType="Clob" name="ObjAcquisitionNotesClb">
+          <value>Dobiaschofsky Auktionen AG, Bern, 8.11.2002, Auktionsnr. 95, Objektnr. 7</value>
+        </dataField>
+        <dataField dataType="Varchar" name="ObjNumberObjectsTxt">
+          <value>1</value>
+        </dataField>
+        <vocabularyReference name="ObjDocumentationStatusVoc" id="45152" instanceName="ObjDocumentationStatusVgr">
+          <vocabularyReferenceItem id="198965">
+            <formattedValue language="de">Redaktion Projekt KGS</formattedValue>
+          </vocabularyReferenceItem>
+        </vocabularyReference>
+        <vocabularyReference name="ObjCategoryVoc" id="21087" instanceName="ObjCategoryVgr">
+          <vocabularyReferenceItem id="140350" name="Bildende Kunst##Malerei##Gem&#228;lde">
+            <formattedValue language="de">&#214;lmalerei</formattedValue>
+          </vocabularyReferenceItem>
+        </vocabularyReference>
+        <virtualField name="ObjDimensionOnlineVrt">
+          <value>Bildmass : 36.0 x 51.0 cm; Rahmenmass : 49.2 x 63.3 x 6.3 cm</value>
+        </virtualField>
+        <virtualField name="ObjObjectNumberVrt">
+          <value>1022
+          </value>
+        </virtualField>
+        <virtualField name="ObjObjectNumberSortedVrt">
+          <value>01022
+          </value>
+        </virtualField>
+        <virtualField name="ObjNormalLocationVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjExhibitionPositiveVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjPerAssociationSortedVrt">
+          <value>Calame, Jean Baptiste Arthur</value>
+        </virtualField>
+        <virtualField name="ObjDimDefaultVrt">
+          <value>Bildmass : 36.0 x 51.0 x 0.0 cm; Rahmenmass : 49.2 x 63.3 x 6.3 cm</value>
+        </virtualField>
+        <virtualField name="ObjDimensionVrt">
+          <value>Bildmass : 36.0 x 51.0 x 0.0 cm; Rahmenmass : 49.2 x 63.3 x 6.3 cm</value>
+        </virtualField>
+        <virtualField name="ObjIconographyVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjObjectOnlineVrt">
+          <value>&lt;span class="objPer"&gt;Jean Baptiste Arthur Calame (1843&#8211;1919)&lt;/span&gt;&lt;span class="objTitle"&gt;La mare aux nymph&#233;as, 1883&lt;/span&gt;</value>
+        </virtualField>
+        <virtualField name="ObjMaterialTechniqueVrt">
+          <value>&#214;l; Holz</value>
+        </virtualField>
+        <virtualField name="ObjObjectVrt">
+          <value>1022
+, Jean Baptiste Arthur Calame (1843&#8211;1919), La mare aux nymph&#233;as, 1883</value>
+        </virtualField>
+        <virtualField name="ObjPerAssociationVrt">
+          <value>Jean Baptiste Arthur Calame (1843&#8211;1919)</value>
+        </virtualField>
+        <virtualField name="ObjObjectTitleFirstVrt">
+          <value>La mare aux nymph&#233;as</value>
+        </virtualField>
+        <virtualField name="ObjObjectTitleVrt">
+          <value>La mare aux nymph&#233;as</value>
+        </virtualField>
+        <virtualField name="ObjOwnerVrt">
+          <value>Stiftung f&#252;r Kunst, Kultur und Geschichte, Winterthur</value>
+        </virtualField>
+        <virtualField name="ObjCurrentLocationVrt">
+          <value>Tower.-3.10.A.11.2</value>
+        </virtualField>
+        <virtualField name="ObjDateVrt">
+          <value>1883</value>
+        </virtualField>
+        <virtualField name="ObjAcquisitionAddressVrt">
+          <value>Dobiaschofsky Auktionen AG, Bern</value>
+        </virtualField>
+        <virtualField name="ObjDepositVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjCreditlineVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjBarcodeVrt">
+          <value>Obj.1</value>
+        </virtualField>
+        <repeatableGroup name="ObjObjectTitleGrp" size="1">
+          <repeatableGroupItem id="71498" uuid="f6df6f37-71bf-4d7d-8018-aefa84f7978e">
+            <dataField dataType="Clob" name="TitleClb">
+              <value>La mare aux nymph&#233;as</value>
+            </dataField>
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <vocabularyReference name="TypeVoc" id="32089" instanceName="ObjObjectTitleTypeVgr">
+              <vocabularyReferenceItem id="43500" name="Titel Original">
+                <formattedValue language="de">Titel Original</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="LanguageVoc" id="20040" instanceName="GenLanguageVgr">
+              <vocabularyReferenceItem id="20296" name="de">
+                <formattedValue language="de">DE</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="SourceVoc" id="42149" instanceName="ObjObjectTitleSourceVgr">
+              <vocabularyReferenceItem id="154049">
+                <formattedValue language="de">Auktionshaus</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjDocumentationStatusGrp" size="2">
+          <repeatableGroupItem id="1532336" uuid="94878f45-cae7-4db1-815c-605383f61c0f">
+            <dataField dataType="Date" name="DateDat">
+              <value>2022-06-20</value>
+              <formattedValue language="de">20.06.2022</formattedValue>
+            </dataField>
+            <vocabularyReference name="StatusVoc" id="45152" instanceName="ObjDocumentationStatusVgr">
+              <vocabularyReferenceItem id="198964">
+                <formattedValue language="de">Erfassung Projekt KGS</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <moduleReference name="UserRef" targetModule="User" multiplicity="N:1" size="1">
+              <moduleReferenceItem moduleItemId="64024" uuid="f80bfc89-09bc-4b67-b577-579c8b53f6e1"/>
+            </moduleReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="1532494" uuid="34bfddfb-8e7d-4ae8-877c-62f6e98a4321">
+            <dataField dataType="Date" name="DateDat">
+              <value>2022-06-20</value>
+              <formattedValue language="de">20.06.2022</formattedValue>
+            </dataField>
+            <vocabularyReference name="StatusVoc" id="45152" instanceName="ObjDocumentationStatusVgr">
+              <vocabularyReferenceItem id="198965">
+                <formattedValue language="de">Redaktion Projekt KGS</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <moduleReference name="UserRef" targetModule="User" multiplicity="N:1" size="1">
+              <moduleReferenceItem moduleItemId="54023" uuid="93601489-b89f-4be3-807f-b84f87f729bc">
+                <formattedValue language="de">Balthasar Zimmermann</formattedValue>
+              </moduleReferenceItem>
+            </moduleReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjInscriptionGrp" size="1">
+          <repeatableGroupItem id="86548" uuid="0f12e25b-3c10-4b8f-9293-7bf181eeea26">
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <dataField dataType="Clob" name="TransliterationClb">
+              <value>u.l. sig. u. dat.</value>
+            </dataField>
+            <vocabularyReference name="DialogTypeVoc" id="42154" instanceName="ObjInscriptionDialogTypeVgr">
+              <vocabularyReferenceItem id="131250" name="Art">
+                <formattedValue language="de">Kunst</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjConditionGrp" size="2">
+          <repeatableGroupItem id="94650" uuid="1395377b-5f67-4116-8f07-3d6f1636a852">
+            <vocabularyReference name="ConditionVoc" id="25086" instanceName="ObjConditionShortVgr">
+              <vocabularyReferenceItem id="43466" name="Gut">
+                <formattedValue language="de">Gut</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="1532327" uuid="16d663f3-0236-40ca-b210-f473ec710304">
+            <dataField dataType="Date" name="FromDat">
+              <value>2022-06-20</value>
+              <formattedValue language="de">20.06.2022</formattedValue>
+            </dataField>
+            <dataField dataType="Clob" name="ConditionClb">
+              <value>Oberfl&#228;che trocken gereinigt. Reinigungsprojekt KGS 2022</value>
+            </dataField>
+            <vocabularyReference name="ConditionVoc" id="25086" instanceName="ObjConditionShortVgr">
+              <vocabularyReferenceItem id="43466" name="Gut">
+                <formattedValue language="de">Gut</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjDateGrp" size="1">
+          <repeatableGroupItem id="139642" uuid="7f68bb47-a6c8-41b5-9a98-603f1838d879">
+            <dataField dataType="Long" name="DateFromLnu">
+              <value>1883</value>
+              <formattedValue language="de">1883</formattedValue>
+            </dataField>
+            <dataField dataType="Boolean" name="InternetBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+            <virtualField name="PreviewVrt">
+              <value>1883</value>
+            </virtualField>
+            <vocabularyReference name="SourceVoc" id="42152" instanceName="ObjDateSourceVgr">
+              <vocabularyReferenceItem id="185001">
+                <formattedValue language="de">datiert</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjAcquisitionValueGrp" size="1">
+          <repeatableGroupItem id="182879" uuid="9a45a177-0a48-4bb9-9c4e-f82f2ff9450f">
+            <dataField dataType="Numeric" name="ValueNum">
+              <value>3200</value>
+              <formattedValue language="de">3.200</formattedValue>
+            </dataField>
+            <vocabularyReference name="CurrencyVoc" id="20033" instanceName="GenCurrencyVgr">
+              <vocabularyReferenceItem id="136689" name="CHF">
+                <formattedValue language="de">CHF</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjCurrentLocationGrp" size="2">
+          <repeatableGroupItem id="104489" uuid="bf460b43-a925-4b65-aa23-8ce519909577">
+            <dataField dataType="Date" name="DateFromDat">
+              <value>2004-09-07</value>
+              <formattedValue language="de">07.09.2004</formattedValue>
+            </dataField>
+            <dataField dataType="Date" name="DateToDat">
+              <value>2022-08-04</value>
+              <formattedValue language="de">04.08.2022</formattedValue>
+            </dataField>
+            <dataField dataType="Boolean" name="NormalLocationBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+            <vocabularyReference name="ReasonVoc" id="20044" instanceName="GenMoveReasonVgr">
+              <vocabularyReferenceItem id="134717" name="Standort">
+                <formattedValue language="de">Standort</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="LocationVoc" id="20042" instanceName="GenLocationVgr">
+              <vocabularyReferenceItem id="139951" name="Tower##KGS##Depot 1C">
+                <formattedValue language="de">Depot 1C</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="StatusVoc" id="20045" instanceName="GenMoveStatusVgr">
+              <vocabularyReferenceItem id="20388" name="historic">
+                <formattedValue language="de">Historisch</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="1547070" uuid="c3056fc7-f601-4d64-ab67-22b8f939f18d">
+            <dataField dataType="Date" name="DateFromDat">
+              <value>2022-08-04</value>
+              <formattedValue language="de">04.08.2022</formattedValue>
+            </dataField>
+            <dataField dataType="Boolean" name="NormalLocationBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+            <vocabularyReference name="LocationVoc" id="20042" instanceName="GenLocationVgr">
+              <vocabularyReferenceItem id="204008">
+                <formattedValue language="de">2</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="StatusVoc" id="20045" instanceName="GenMoveStatusVgr">
+              <vocabularyReferenceItem id="20391" name="current">
+                <formattedValue language="de">Aktuell</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjDim3DGrp" size="2">
+          <repeatableGroupItem id="121139" uuid="7fc11ac2-5e99-4aef-b8b9-124988f8a7d2">
+            <dataField dataType="Numeric" name="FirstNum">
+              <value>36</value>
+              <formattedValue language="de">36</formattedValue>
+            </dataField>
+            <dataField dataType="Numeric" name="SecondNum">
+              <value>51</value>
+              <formattedValue language="de">51</formattedValue>
+            </dataField>
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <vocabularyReference name="UnitVoc" id="20036" instanceName="GenDimSizeUnitVgr">
+              <vocabularyReferenceItem id="20282" name="cm">
+                <formattedValue language="de">cm</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="TypeVoc" id="21095" instanceName="ObjDim3DTypeVgr">
+              <vocabularyReferenceItem id="134723" name="Bildmass">
+                <formattedValue language="de">Bildmass</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="121140" uuid="a0cc6403-b78e-4d10-aa04-bb86fd11a56c">
+            <dataField dataType="Numeric" name="FirstNum">
+              <value>49.2</value>
+              <formattedValue language="de">49,2</formattedValue>
+            </dataField>
+            <dataField dataType="Numeric" name="SecondNum">
+              <value>63.3</value>
+              <formattedValue language="de">63,3</formattedValue>
+            </dataField>
+            <dataField dataType="Long" name="SortLnu">
+              <value>2</value>
+              <formattedValue language="de">2</formattedValue>
+            </dataField>
+            <dataField dataType="Numeric" name="ThirdNum">
+              <value>6.3</value>
+              <formattedValue language="de">6,3</formattedValue>
+            </dataField>
+            <vocabularyReference name="UnitVoc" id="20036" instanceName="GenDimSizeUnitVgr">
+              <vocabularyReferenceItem id="20282" name="cm">
+                <formattedValue language="de">cm</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="TypeVoc" id="21095" instanceName="ObjDim3DTypeVgr">
+              <vocabularyReferenceItem id="134758" name="Rahmenmass">
+                <formattedValue language="de">Rahmenmass</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjMaterialTechniqueGrp" size="2">
+          <repeatableGroupItem id="1532328" uuid="abbbec67-5dba-4d50-b0fa-fce1b729d882">
+            <vocabularyReference name="MaterialVoc" id="22086" instanceName="ObjMaterialTechniqueVgr">
+              <vocabularyReferenceItem id="176990">
+                <formattedValue language="de">&#214;l</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="TypeVoc" id="42158" instanceName="ObjMaterialTechniqueTypeVgr">
+              <vocabularyReferenceItem id="131248" name="Art">
+                <formattedValue language="de">Kunst</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="1532329" uuid="bd004e31-b83e-4d41-9427-f3638487ebe9">
+            <vocabularyReference name="MaterialVoc" id="22086" instanceName="ObjMaterialTechniqueVgr">
+              <vocabularyReferenceItem id="153998">
+                <formattedValue language="de">Holz</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="TypeVoc" id="42158" instanceName="ObjMaterialTechniqueTypeVgr">
+              <vocabularyReferenceItem id="131248" name="Art">
+                <formattedValue language="de">Kunst</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjObjectNumberGrp" size="1">
+          <repeatableGroupItem id="53213" uuid="224fc243-a9de-4fce-9166-e1613cea09ed">
+            <dataField dataType="Varchar" name="Part1Txt">
+              <value>1022</value>
+            </dataField>
+            <virtualField name="NumberSortedVrt">
+              <value>01022
+              </value>
+            </virtualField>
+            <virtualField name="NumberVrt">
+              <value>1022
+              </value>
+            </virtualField>
+            <moduleReference name="OnuNumberSchemeRef" targetModule="ObjectNumber" multiplicity="N:1" size="1">
+              <moduleReferenceItem moduleItemId="1" uuid="3c73587e-9998-406e-ab80-67fc59d471ec"/>
+            </moduleReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <moduleReference name="ObjAcquisitionAddressRef" targetModule="Address" multiplicity="N:1" size="1">
+          <moduleReferenceItem moduleItemId="71" uuid="18">
+            <formattedValue language="de">Dobiaschofsky Auktionen AG, Bern</formattedValue>
+          </moduleReferenceItem>
+        </moduleReference>
+        <moduleReference name="ObjMultimediaRef" targetModule="Multimedia" multiplicity="M:N" size="4">
+          <moduleReferenceItem moduleItemId="1859" uuid="2958" seqNo="0">
+            <formattedValue language="de">Bild, 1022.jpg</formattedValue>
+            <dataField dataType="Boolean" name="ThumbnailBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+          </moduleReferenceItem>
+          <moduleReferenceItem moduleItemId="320498" uuid="420d4512-04cf-4b9c-8133-9c590aee4e2a" seqNo="1">
+            <formattedValue language="de">Dokument, 1022_20220620_0001.pdf</formattedValue>
+            <dataField dataType="Boolean" name="ThumbnailBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+          </moduleReferenceItem>
+          <moduleReferenceItem moduleItemId="320499" uuid="33d4c4e0-f060-4514-9515-19beeab8fcd9" seqNo="2">
+            <formattedValue language="de">Bild, 1022_0.jpg</formattedValue>
+            <dataField dataType="Boolean" name="ThumbnailBoo">
+              <value>true</value>
+              <formattedValue language="de">yes</formattedValue>
+            </dataField>
+          </moduleReferenceItem>
+          <moduleReferenceItem moduleItemId="320500" uuid="a410de7f-8d13-491d-8206-42a6b908f61d" seqNo="3">
+            <formattedValue language="de">Bild, 1022_0_1.jpg</formattedValue>
+            <dataField dataType="Boolean" name="ThumbnailBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+          </moduleReferenceItem>
+        </moduleReference>
+        <moduleReference name="ObjObjectGroupsRef" targetModule="ObjectGroup" multiplicity="M:N" size="1">
+          <moduleReferenceItem moduleItemId="10020" uuid="eedb54a7-481f-43f2-a917-c056ddfd5c94" seqNo="0">
+            <formattedValue language="de">Objekte GL</formattedValue>
+          </moduleReferenceItem>
+        </moduleReference>
+        <moduleReference name="ObjOwnerRef" targetModule="Address" multiplicity="N:1" size="1">
+          <moduleReferenceItem moduleItemId="23" uuid="1">
+            <formattedValue language="de">Stiftung f&#252;r Kunst, Kultur und Geschichte, Winterthur</formattedValue>
+          </moduleReferenceItem>
+        </moduleReference>
+        <moduleReference name="ObjPerAssociationRef" targetModule="Person" multiplicity="M:N" size="1">
+          <moduleReferenceItem moduleItemId="605" uuid="477" seqNo="0">
+            <formattedValue language="de">Jean Baptiste Arthur Calame (1843&#8211;1919), K&#252;nstler/-in</formattedValue>
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
+              <vocabularyReferenceItem id="183989">
+                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </moduleReferenceItem>
+        </moduleReference>
+      </moduleItem>
+    </module>
+
+
+
+
+    <module name="Object" totalSize="88018">
+      <moduleItem hasAttachments="true" id="2" uuid="2270">
+        <systemField dataType="Long" name="__id">
+          <value>2</value>
+        </systemField>
+        <systemField dataType="Varchar" name="__lastModifiedUser">
+          <value>Elisabeth Gertsch</value>
+        </systemField>
+        <systemField dataType="Timestamp" name="__lastModified">
+          <value>2023-05-24 13:26:55.182</value>
+          <formattedValue language="de">24.05.2023 13:26</formattedValue>
+        </systemField>
+        <systemField dataType="Varchar" name="__createdUser">
+          <value>ZET_D&#220;</value>
+        </systemField>
+        <systemField dataType="Timestamp" name="__created">
+          <value>2019-10-11 13:55:50.09</value>
+          <formattedValue language="de">11.10.2019 13:55</formattedValue>
+        </systemField>
+        <systemField dataType="Varchar" name="__orgUnit">
+          <value>ObjectOrgUnit</value>
+        </systemField>
+        <systemField name="__uuid">
+          <value>2270</value>
+        </systemField>
+        <dataField dataType="Long" name="ObjQRCodeLnu">
+          <value>2270</value>
+          <formattedValue language="de">2.270</formattedValue>
+        </dataField>
+        <dataField dataType="Varchar" name="ObjDataTransferTxt">
+          <value>2270</value>
+        </dataField>
+        <dataField dataType="Varchar" name="ObjRecordCreatedByTxt">
+          <value>KA</value>
+        </dataField>
+        <dataField dataType="Date" name="ObjRecordCreatedDateDat">
+          <value>2004-11-02</value>
+          <formattedValue language="de">02.11.2004</formattedValue>
+        </dataField>
+        <dataField dataType="Clob" name="ObjMaterialTechniqueClb">
+          <value>&#214;l auf Leinwand</value>
+        </dataField>
+        <dataField dataType="Date" name="ObjAcquisitionDateDat">
+          <value>1984-11-01</value>
+          <formattedValue language="de">01.11.1984</formattedValue>
+        </dataField>
+        <dataField dataType="Clob" name="ObjAcquisitionNotesClb">
+          <value>Auktionshaus Kurt Huber, Z&#252;rich, November 1984, Objektnr. 230</value>
+        </dataField>
+        <vocabularyReference name="ObjCategoryVoc" id="21087" instanceName="ObjCategoryVgr">
+          <vocabularyReferenceItem id="140350" name="Bildende Kunst##Malerei##Gem&#228;lde">
+            <formattedValue language="de">&#214;lmalerei</formattedValue>
+          </vocabularyReferenceItem>
+        </vocabularyReference>
+        <virtualField name="ObjDimensionOnlineVrt">
+          <value>Bildmass : 61.0 x 50.0 cm; Rahmenmass : 84.0 x 73.0 x 5.0 cm</value>
+        </virtualField>
+        <virtualField name="ObjObjectNumberVrt">
+          <value>2078
+          </value>
+        </virtualField>
+        <virtualField name="ObjObjectNumberSortedVrt">
+          <value>02078
+          </value>
+        </virtualField>
+        <virtualField name="ObjNormalLocationVrt">
+          <value>MT Depot.4.5.G2.26.3</value>
+        </virtualField>
+        <virtualField name="ObjExhibitionPositiveVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjPerAssociationSortedVrt">
+          <value>Herbst, Adolf</value>
+        </virtualField>
+        <virtualField name="ObjDimDefaultVrt">
+          <value>Bildmass : 61.0 x 50.0 x 0.0 cm; Rahmenmass : 84.0 x 73.0 x 5.0 cm</value>
+        </virtualField>
+        <virtualField name="ObjDimensionVrt">
+          <value>Bildmass : 61.0 x 50.0 x 0.0 cm; Rahmenmass : 84.0 x 73.0 x 5.0 cm</value>
+        </virtualField>
+        <virtualField name="ObjIconographyVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjObjectOnlineVrt">
+          <value>&lt;span class="objPer"&gt;Adolf Herbst (1909&#8211;1983)&lt;/span&gt;&lt;span class="objTitle"&gt;Portrait Harlekin&lt;/span&gt;</value>
+        </virtualField>
+        <virtualField name="ObjMaterialTechniqueVrt">
+          <value>&#214;l; Leinwand</value>
+        </virtualField>
+        <virtualField name="ObjObjectVrt">
+          <value>2078
+, Adolf Herbst (1909&#8211;1983), Portrait Harlekin</value>
+        </virtualField>
+        <virtualField name="ObjPerAssociationVrt">
+          <value>Adolf Herbst (1909&#8211;1983)</value>
+        </virtualField>
+        <virtualField name="ObjObjectTitleFirstVrt">
+          <value>Portrait Harlekin</value>
+        </virtualField>
+        <virtualField name="ObjObjectTitleVrt">
+          <value>Portrait Harlekin</value>
+        </virtualField>
+        <virtualField name="ObjOwnerVrt">
+          <value>Stiftung f&#252;r Kunst, Kultur und Geschichte, Winterthur</value>
+        </virtualField>
+        <virtualField name="ObjCurrentLocationVrt">
+          <value>MT Depot.4.5.G2.26.2</value>
+        </virtualField>
+        <virtualField name="ObjDateVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjAcquisitionAddressVrt">
+          <value>Auktionshaus Kurt Huber, Z&#252;rich</value>
+        </virtualField>
+        <virtualField name="ObjDepositVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjCreditlineVrt">
+          <value/>
+        </virtualField>
+        <virtualField name="ObjBarcodeVrt">
+          <value>Obj.2</value>
+        </virtualField>
+        <repeatableGroup name="ObjObjectTitleGrp" size="1">
+          <repeatableGroupItem id="71499" uuid="d568cca8-ae03-49ec-b043-43857cb841b8">
+            <dataField dataType="Clob" name="TitleClb">
+              <value>Portrait Harlekin</value>
+            </dataField>
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <vocabularyReference name="TypeVoc" id="32089" instanceName="ObjObjectTitleTypeVgr">
+              <vocabularyReferenceItem id="43500" name="Titel Original">
+                <formattedValue language="de">Titel Original</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjInscriptionGrp" size="1">
+          <repeatableGroupItem id="86549" uuid="8070d8b7-4eda-48c3-b036-93d8d95020e8">
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <dataField dataType="Clob" name="TransliterationClb">
+              <value>o.l. mgr.</value>
+            </dataField>
+            <vocabularyReference name="DialogTypeVoc" id="42154" instanceName="ObjInscriptionDialogTypeVgr">
+              <vocabularyReferenceItem id="131250" name="Art">
+                <formattedValue language="de">Kunst</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjConditionGrp" size="2">
+          <repeatableGroupItem id="94651" uuid="3f82dfc7-6fea-4234-95de-f09a66331b49">
+            <dataField dataType="Clob" name="ConditionClb">
+              <value>Schimmel</value>
+            </dataField>
+            <vocabularyReference name="ConditionVoc" id="25086" instanceName="ObjConditionShortVgr">
+              <vocabularyReferenceItem id="133712" name="Gut-m&#228;ssig">
+                <formattedValue language="de">Gut-m&#228;ssig</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="242949" uuid="ad96d3d9-7a82-47b7-a235-501789bbc5da">
+            <dataField dataType="Date" name="FromDat">
+              <value>2020-05-06</value>
+              <formattedValue language="de">06.05.2020</formattedValue>
+            </dataField>
+            <dataField dataType="Clob" name="ConditionClb">
+              <value>Schimmel
+Objekt von bafob freigemessen (Asbestbelastung) und Oberfl&#228;che trocken gereinigt (Schimmelsporen). Reinigungsprojekt 2020.</value>
+            </dataField>
+            <vocabularyReference name="ConditionVoc" id="25086" instanceName="ObjConditionShortVgr">
+              <vocabularyReferenceItem id="133740" name="Instabil">
+                <formattedValue language="de">Instabil</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjDateGrp" size="1">
+          <repeatableGroupItem id="139643" uuid="7863f6dc-6a6a-4d74-ac14-c8c947a9fd5b">
+            <dataField dataType="Boolean" name="InternetBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+            <virtualField name="PreviewVrt">
+              <value/>
+            </virtualField>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjAcquisitionValueGrp" size="1">
+          <repeatableGroupItem id="182880" uuid="fb22bed1-10b0-44f5-ad5c-e850e1edf16d">
+            <dataField dataType="Numeric" name="ValueNum">
+              <value>13000</value>
+              <formattedValue language="de">13.000</formattedValue>
+            </dataField>
+            <vocabularyReference name="CurrencyVoc" id="20033" instanceName="GenCurrencyVgr">
+              <vocabularyReferenceItem id="136689" name="CHF">
+                <formattedValue language="de">CHF</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjCurrentLocationGrp" size="3">
+          <repeatableGroupItem id="104490" uuid="818af0e9-8a7e-41c3-ad3b-63a82a2faa62">
+            <dataField dataType="Date" name="DateFromDat">
+              <value>2004-11-02</value>
+              <formattedValue language="de">02.11.2004</formattedValue>
+            </dataField>
+            <dataField dataType="Date" name="DateToDat">
+              <value>2020-06-17</value>
+              <formattedValue language="de">17.06.2020</formattedValue>
+            </dataField>
+            <dataField dataType="Boolean" name="NormalLocationBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+            <vocabularyReference name="ReasonVoc" id="20044" instanceName="GenMoveReasonVgr">
+              <vocabularyReferenceItem id="134717" name="Standort">
+                <formattedValue language="de">Standort</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="LocationVoc" id="20042" instanceName="GenLocationVgr">
+              <vocabularyReferenceItem id="139950" name="Tower##KGS##Depot 1B">
+                <formattedValue language="de">Depot 1B</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="StatusVoc" id="20045" instanceName="GenMoveStatusVgr">
+              <vocabularyReferenceItem id="20388" name="historic">
+                <formattedValue language="de">Historisch</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="268616" uuid="0ac9bff9-a81f-4475-b6fa-e51e1f51e4b2">
+            <dataField dataType="Date" name="DateFromDat">
+              <value>2020-06-10</value>
+              <formattedValue language="de">10.06.2020</formattedValue>
+            </dataField>
+            <dataField dataType="Date" name="DateToDat">
+              <value>2020-11-20</value>
+              <formattedValue language="de">20.11.2020</formattedValue>
+            </dataField>
+            <dataField dataType="Boolean" name="NormalLocationBoo">
+              <value>true</value>
+              <formattedValue language="de">yes</formattedValue>
+            </dataField>
+            <vocabularyReference name="LocationVoc" id="20042" instanceName="GenLocationVgr">
+              <vocabularyReferenceItem id="162087">
+                <formattedValue language="de">3</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="StatusVoc" id="20045" instanceName="GenMoveStatusVgr">
+              <vocabularyReferenceItem id="20388" name="historic">
+                <formattedValue language="de">Historisch</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="333126" uuid="de07a374-9d04-4fed-a129-aa33aa1fc87e">
+            <dataField dataType="Date" name="DateFromDat">
+              <value>2020-11-20</value>
+              <formattedValue language="de">20.11.2020</formattedValue>
+            </dataField>
+            <dataField dataType="Boolean" name="NormalLocationBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+            <vocabularyReference name="LocationVoc" id="20042" instanceName="GenLocationVgr">
+              <vocabularyReferenceItem id="162086">
+                <formattedValue language="de">2</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="StatusVoc" id="20045" instanceName="GenMoveStatusVgr">
+              <vocabularyReferenceItem id="20391" name="current">
+                <formattedValue language="de">Aktuell</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjDim3DGrp" size="2">
+          <repeatableGroupItem id="121141" uuid="2a804d60-e73c-4d51-9831-f3644f78050c">
+            <dataField dataType="Numeric" name="FirstNum">
+              <value>61</value>
+              <formattedValue language="de">61</formattedValue>
+            </dataField>
+            <dataField dataType="Numeric" name="SecondNum">
+              <value>50</value>
+              <formattedValue language="de">50</formattedValue>
+            </dataField>
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <vocabularyReference name="UnitVoc" id="20036" instanceName="GenDimSizeUnitVgr">
+              <vocabularyReferenceItem id="20282" name="cm">
+                <formattedValue language="de">cm</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="TypeVoc" id="21095" instanceName="ObjDim3DTypeVgr">
+              <vocabularyReferenceItem id="134723" name="Bildmass">
+                <formattedValue language="de">Bildmass</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="121142" uuid="48b489b7-663c-4844-ba55-8e38223aac45">
+            <dataField dataType="Numeric" name="FirstNum">
+              <value>84</value>
+              <formattedValue language="de">84</formattedValue>
+            </dataField>
+            <dataField dataType="Numeric" name="SecondNum">
+              <value>73</value>
+              <formattedValue language="de">73</formattedValue>
+            </dataField>
+            <dataField dataType="Long" name="SortLnu">
+              <value>2</value>
+              <formattedValue language="de">2</formattedValue>
+            </dataField>
+            <dataField dataType="Numeric" name="ThirdNum">
+              <value>5</value>
+              <formattedValue language="de">5</formattedValue>
+            </dataField>
+            <vocabularyReference name="UnitVoc" id="20036" instanceName="GenDimSizeUnitVgr">
+              <vocabularyReferenceItem id="20282" name="cm">
+                <formattedValue language="de">cm</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="TypeVoc" id="21095" instanceName="ObjDim3DTypeVgr">
+              <vocabularyReferenceItem id="134758" name="Rahmenmass">
+                <formattedValue language="de">Rahmenmass</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjMaterialTechniqueGrp" size="2">
+          <repeatableGroupItem id="1584611" uuid="757779f3-5774-4e53-a90e-25c4b1d9b7a6">
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <vocabularyReference name="MaterialVoc" id="22086" instanceName="ObjMaterialTechniqueVgr">
+              <vocabularyReferenceItem id="176990">
+                <formattedValue language="de">&#214;l</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="TypeVoc" id="42158" instanceName="ObjMaterialTechniqueTypeVgr">
+              <vocabularyReferenceItem id="131248" name="Art">
+                <formattedValue language="de">Kunst</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="1584612" uuid="87400064-aea1-4cb2-8254-55b5e30c4303">
+            <dataField dataType="Long" name="SortLnu">
+              <value>2</value>
+              <formattedValue language="de">2</formattedValue>
+            </dataField>
+            <vocabularyReference name="MaterialVoc" id="22086" instanceName="ObjMaterialTechniqueVgr">
+              <vocabularyReferenceItem id="176999">
+                <formattedValue language="de">Leinwand</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+            <vocabularyReference name="TypeVoc" id="42158" instanceName="ObjMaterialTechniqueTypeVgr">
+              <vocabularyReferenceItem id="131248" name="Art">
+                <formattedValue language="de">Kunst</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <repeatableGroup name="ObjObjectNumberGrp" size="1">
+          <repeatableGroupItem id="53214" uuid="00b999d0-9e40-4ee2-a748-8ecbedbd0a6f">
+            <dataField dataType="Varchar" name="Part1Txt">
+              <value>2078</value>
+            </dataField>
+            <virtualField name="NumberSortedVrt">
+              <value>02078
+              </value>
+            </virtualField>
+            <virtualField name="NumberVrt">
+              <value>2078
+              </value>
+            </virtualField>
+            <moduleReference name="OnuNumberSchemeRef" targetModule="ObjectNumber" multiplicity="N:1" size="1">
+              <moduleReferenceItem moduleItemId="1" uuid="3c73587e-9998-406e-ab80-67fc59d471ec"/>
+            </moduleReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
+        <moduleReference name="ObjAcquisitionAddressRef" targetModule="Address" multiplicity="N:1" size="1">
+          <moduleReferenceItem moduleItemId="56" uuid="31">
+            <formattedValue language="de">Auktionshaus Kurt Huber, Z&#252;rich</formattedValue>
+          </moduleReferenceItem>
+        </moduleReference>
+        <moduleReference name="ObjMultimediaRef" targetModule="Multimedia" multiplicity="M:N" size="3">
+          <moduleReferenceItem moduleItemId="3860" uuid="4065" seqNo="0">
+            <formattedValue language="de">Bild, 2078.jpg</formattedValue>
+            <dataField dataType="Boolean" name="ThumbnailBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+          </moduleReferenceItem>
+          <moduleReferenceItem moduleItemId="44476" uuid="72e74694-b1c0-40e6-a31b-d460c5763296" seqNo="1">
+            <formattedValue language="de">Bild, 2078.0.jpg</formattedValue>
+            <dataField dataType="Boolean" name="ThumbnailBoo">
+              <value>true</value>
+              <formattedValue language="de">yes</formattedValue>
+            </dataField>
+          </moduleReferenceItem>
+          <moduleReferenceItem moduleItemId="44477" uuid="7b276b26-984f-42bc-97c9-1e7d3fc3ac3f" seqNo="2">
+            <formattedValue language="de">Bild, 2078.1.jpg</formattedValue>
+            <dataField dataType="Boolean" name="ThumbnailBoo">
+              <value>false</value>
+              <formattedValue language="de">no</formattedValue>
+            </dataField>
+          </moduleReferenceItem>
+        </moduleReference>
+        <moduleReference name="ObjOwnerRef" targetModule="Address" multiplicity="N:1" size="1">
+          <moduleReferenceItem moduleItemId="23" uuid="1">
+            <formattedValue language="de">Stiftung f&#252;r Kunst, Kultur und Geschichte, Winterthur</formattedValue>
+          </moduleReferenceItem>
+        </moduleReference>
+        <moduleReference name="ObjPerAssociationRef" targetModule="Person" multiplicity="M:N" size="1">
+          <moduleReferenceItem moduleItemId="1034" uuid="96" seqNo="0">
+            <formattedValue language="de">Adolf Herbst (1909&#8211;1983), K&#252;nstler/-in</formattedValue>
+            <dataField dataType="Long" name="SortLnu">
+              <value>1</value>
+              <formattedValue language="de">1</formattedValue>
+            </dataField>
+            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
+              <vocabularyReferenceItem id="183989">
+                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </moduleReferenceItem>
+        </moduleReference>
+      </moduleItem>
+    </module>
+  </modules>
+</application>
