@@ -73,12 +73,27 @@ tasks:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           INPUTFILES: /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
   
+  prepare-and-perform-mapping:
+    desc: Prepares and performs the mapping for all modules
+    cmds:
+      - task: prepare-mapping-for-object-items
+      - task: prepare-mapping-for-person-items
+      - task: perform-mapping-for-object-items
+      - task: perform-mapping-for-person-items
+
   perform-mapping-for-object-items:
     desc: Performs the mapping for the object items
     cmds:
       - task: _perform-mapping-for-module-items
         vars:
           MODULE: Object
+  
+  perform-mapping-for-person-items:
+    desc: Performs the mapping for the person items
+    cmds:
+      - task: _perform-mapping-for-module-items
+        vars:
+          MODULE: Person
   
   prepare-mapping-for-address-items:
     desc: Prepares the mapping for the object items
@@ -93,6 +108,13 @@ tasks:
       - task: _prepare-mapping-for-module-items
         vars:
           MODULE: Object
+
+  prepare-mapping-for-person-items:
+    desc: Prepares the mapping for the person items
+    cmds:
+      - task: _prepare-mapping-for-module-items
+        vars:
+          MODULE: Person
 
   recreate-folder-metadata:
     desc: Recreate the metadata for a specific folder. The folder name should be passed as an argument.
