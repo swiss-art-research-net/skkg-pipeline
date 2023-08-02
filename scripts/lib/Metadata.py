@@ -158,6 +158,21 @@ class ItemMetadata:
         if write:
             self.writeMetadata()
 
+    def setKeyValueForFile(self, filename, key, value, *, write=True):
+        """
+        Set a metadata key for a specific file to a given value.
+        The key for the specific file must exist already:
+
+        args:
+            filename (str): The filename of the file to set the last updated date for
+            key (str): The key to set
+            value (str): The value to set
+            write (bool, optional): Whether to write the metadata to the metadata file. Defaults to True.
+        """
+        self.metadata['files'][filename][key] = value
+        if write:
+            self.writeMetadata()
+
     def writeMetadata(self):
         """
         Writes the metadata to the metadata file.
