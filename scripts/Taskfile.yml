@@ -182,6 +182,14 @@ tasks:
       - mkdir -p {{.OUTPUTFOLDER}}
       - rm -f {{.OUTPUTFOLDER}}/*.ttl
       - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
+      - sleep 5s # Wait for the mapping to finish
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "{{.MODULE}}"
+          KEY: lastMapped
+          VALUE:
+            sh: date -u "+%Y-%m-%d %H:%M:%S.000"
+          SOURCEFOLDER: "{{.INPUTFOLDER}}"
 
   _prepare-mapping-for-module-items:
     vars:
@@ -212,3 +220,13 @@ tasks:
           MODULE: "{{.MODULE}}"
           INPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
+
+  _update-metadata-for-module:
+    vars:
+      METADATAFOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      SOURCEFOLDER: "{{.SOURCEFOLDER}}"
+      KEY: "{{.KEY}}"
+      VALUE: "{{.VALUE}}"
+    cmds:
+      - python /scripts/updateMetadataValueForFiles.py --metadataFolder {{.METADATAFOLDER}} --inputFolder {{.SOURCEFOLDER}} --key {{.KEY}} --value "{{.VALUE}}"
