@@ -27,12 +27,12 @@ done
 shift $((OPTIND-1))
 
 echo "Mapping Records"
-numfiles=$(ls -l $RECORDSINPUTFOLDER/*.xml | wc -l)
+numfiles=$(find $RECORDSINPUTFOLDER -type f -name '*.xml' | wc -l)
 count=1
 echo "Found $numfiles record XML files"
 
 (
-for f in $(ls -1 $RECORDSINPUTFOLDER/*.xml); do
+for f in $(find $RECORDSINPUTFOLDER -type f -name '*.xml' ); do
   ((i=i%BATCHSIZE)); ((i++==0)) && wait
   echo "Mapping record $count of $numfiles ($f)"
   o=${f/.xml/.ttl}
