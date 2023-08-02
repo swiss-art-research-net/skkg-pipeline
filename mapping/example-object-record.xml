@@ -1,5 +1,6 @@
-<application>
-  <modules>
+<application><modules>
+
+  
     <module name="Object" totalSize="88018">
       <moduleItem hasAttachments="true" id="1" uuid="1155">
         <systemField dataType="Long" name="__id">
@@ -73,11 +74,11 @@
         </virtualField>
         <virtualField name="ObjObjectNumberVrt">
           <value>1022
-          </value>
+</value>
         </virtualField>
         <virtualField name="ObjObjectNumberSortedVrt">
           <value>01022
-          </value>
+</value>
         </virtualField>
         <virtualField name="ObjNormalLocationVrt">
           <value/>
@@ -405,11 +406,11 @@
             </dataField>
             <virtualField name="NumberSortedVrt">
               <value>01022
-              </value>
+</value>
             </virtualField>
             <virtualField name="NumberVrt">
               <value>1022
-              </value>
+</value>
             </virtualField>
             <moduleReference name="OnuNumberSchemeRef" targetModule="ObjectNumber" multiplicity="N:1" size="1">
               <moduleReferenceItem moduleItemId="1" uuid="3c73587e-9998-406e-ab80-67fc59d471ec"/>
@@ -477,10 +478,10 @@
         </moduleReference>
       </moduleItem>
     </module>
+  
 
 
-
-
+  
     <module name="Object" totalSize="88018">
       <moduleItem hasAttachments="true" id="2" uuid="2270">
         <systemField dataType="Long" name="__id">
@@ -540,11 +541,11 @@
         </virtualField>
         <virtualField name="ObjObjectNumberVrt">
           <value>2078
-          </value>
+</value>
         </virtualField>
         <virtualField name="ObjObjectNumberSortedVrt">
           <value>02078
-          </value>
+</value>
         </virtualField>
         <virtualField name="ObjNormalLocationVrt">
           <value>MT Depot.4.5.G2.26.3</value>
@@ -857,11 +858,11 @@ Objekt von bafob freigemessen (Asbestbelastung) und Oberfl&#228;che trocken gere
             </dataField>
             <virtualField name="NumberSortedVrt">
               <value>02078
-              </value>
+</value>
             </virtualField>
             <virtualField name="NumberVrt">
               <value>2078
-              </value>
+</value>
             </virtualField>
             <moduleReference name="OnuNumberSchemeRef" targetModule="ObjectNumber" multiplicity="N:1" size="1">
               <moduleReferenceItem moduleItemId="1" uuid="3c73587e-9998-406e-ab80-67fc59d471ec"/>
@@ -917,5 +918,6 @@ Objekt von bafob freigemessen (Asbestbelastung) und Oberfl&#228;che trocken gere
         </moduleReference>
       </moduleItem>
     </module>
-  </modules>
-</application>
+  
+
+</modules></application>
