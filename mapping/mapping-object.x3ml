@@ -25,5 +25,23 @@
         <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
     </namespaces>
     <mappings>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem</source_node>
+                <target_node>
+                    <entity>
+                        <type>crm:E22_Human-Made_Object</type>
+                        <instance_generator name="URIwithTypeAndId">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">@id</arg>
+                        </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="xpath">virtualField[@name='ObjObjectTitleFirstVrt']/value/text()</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
+                    </entity>
+                </target_node>
+            </domain>
+        </mapping>
     </mappings>
 </x3ml>
