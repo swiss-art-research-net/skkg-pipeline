@@ -4,6 +4,7 @@
 # Folder structure
 data/source/*/*.*
 data/temp/*/*.*
+data/mapping/**/*
 !data/temp/.gitkeep
 !data/source/.gitkeep
 
