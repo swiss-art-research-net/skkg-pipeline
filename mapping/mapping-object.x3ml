@@ -36,7 +36,7 @@
                             <arg name="id" type="xpath">@uuid</arg>
                         </instance_generator>
                         <label_generator name="Literal">
-                            <arg name="text" type="xpath">virtualField[@name='ObjObjectTitleFirstVrt']/value/text()</arg>
+                            <arg name="text" type="xpath">if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@id)</arg>
                             <arg name="language" type="constant"/>
                         </label_generator>
                     </entity>
