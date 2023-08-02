@@ -73,12 +73,12 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
     # Read all XML files in the input folder
     files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
     for file in tqdm(files):
-        # Retrieve the id and last modified attributes from the moduleItem element
+        # Retrieve the uuid and last modified attributes from the moduleItem element
         tree = etree.parse(join(inputFolder, file))
-        id = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('id')
+        uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
         lastModified= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
         # Rename the file
-        filename = filenamePrefix + id.zfill(6) + ".xml"
+        filename = filenamePrefix + uuid + ".xml"
         newFile = join(outputFolder, filename)
         with open(newFile, 'wb') as f:
             f.write(etree.tostring(tree, pretty_print=True))
