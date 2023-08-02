@@ -71,7 +71,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/person/person-item-000001.xml /data/source/person/person-item-000002.xml
+          INPUTFILES: /data/source/person/person-item-000605.xml /data/source/person/person-item-000002.xml
   
   recreate-folder-metadata:
     desc: Recreate the metadata for a specific folder. The folder name should be passed as an argument.
