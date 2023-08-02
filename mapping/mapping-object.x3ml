@@ -33,7 +33,7 @@
                         <type>crm:E22_Human-Made_Object</type>
                         <instance_generator name="URIwithTypeAndId">
                             <arg name="type" type="constant">object</arg>
-                            <arg name="id" type="xpath">@id</arg>
+                            <arg name="id" type="xpath">@uuid</arg>
                         </instance_generator>
                         <label_generator name="Literal">
                             <arg name="text" type="xpath">virtualField[@name='ObjObjectTitleFirstVrt']/value/text()</arg>
