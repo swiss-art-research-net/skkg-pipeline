@@ -30,10 +30,14 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, limit=None, offs
         print(f"Prepared {len(filesToMap)} files for mapping")
 
 def prepareFileForMapping(*, file, inputFolder, outputFolder):
-    # Copy file from inputFolder to outputFolder
+    # TODO: This function currently only copies the file from the input folder to the output folder,
+    # removing the XML namespace for compatibility with the X3ML mapping.
+    # Later on this function will also take care of preprocessing the data for mapping.
     with open(join(inputFolder, file), 'r') as f:
         with open(join(outputFolder, file), 'w') as g:
-            g.write(f.read())
+            contents = f.read()
+            contents = contents.replace('xmlns="http://www.zetcom.com/ria/ws/module"', '')
+            g.write(contents)
 
 def shouldBeMapped(*, file, metadata):
     lastMapped = metadata.getLastMappedDateForFile(file)
