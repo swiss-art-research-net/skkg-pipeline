@@ -73,6 +73,13 @@ tasks:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           INPUTFILES: /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
   
+  perform-mapping-for-object-items:
+    desc: Performs the mapping for the object items
+    cmds:
+      - task: _perform-mapping-for-module-items
+        vars:
+          MODULE: Object
+  
   prepare-mapping-for-address-items:
     desc: Prepares the mapping for the object items
     cmds:
@@ -162,6 +169,19 @@ tasks:
       - sed -i 's/<\/modules>//g' {{.OUTPUTFILE}}
       - sed -i 's/<\/application>//g' {{.OUTPUTFILE}}
       - echo '<application><modules>' | cat - {{.OUTPUTFILE}} > temp && mv temp {{.OUTPUTFILE}}; echo '</modules></application>' >> {{.OUTPUTFILE}}
+
+  _perform-mapping-for-module-items:
+    vars:
+      INPUTFOLDER:
+        sh: echo "/data/mapping/input/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      OUTPUTFOLDER:
+        sh: echo "/data/mapping/output/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      MAPPINGFILE:
+        sh: echo "/mapping/mapping-$(echo "{{.MODULE}}" | awk '{print tolower($0)}').x3ml"
+    cmds:
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - rm -f {{.OUTPUTFOLDER}}/*.ttl
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
 
   _prepare-mapping-for-module-items:
     vars:
