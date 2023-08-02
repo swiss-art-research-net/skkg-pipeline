@@ -2,7 +2,7 @@ import argparse
 from datetime import datetime
 from lxml import etree
 from os import listdir
-from os.path import join, exists, isfile
+from os.path import join, isfile
 from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
