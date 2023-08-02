@@ -32,6 +32,26 @@ class ItemMetadata:
         self.metadataFile = join(directory, self.METADATA_FILENAME)
         self.metadata = self.loadMetadata()
 
+    def getLastMappedDateForFile(self, filename):
+        """
+        Get the last mapped date from the metadata file for a specific filename.
+        The last mapped date is stored in the key 'lastMapped' in the for the given filename in the 'files' key.
+        """
+        if 'files' in self.metadata and filename in self.metadata['files'] and 'lastMapped' in self.metadata['files'][filename]:
+            return self.metadata['files'][filename]['lastMapped']
+        else:
+            return None
+        
+    def getLastUpdatedDateForFile(self, filename):
+        """
+        Get the last updated date from the metadata file for a specific filename.
+        The last updated date is stored in the key 'lastUpdated' in the for the given filename in the 'files' key.
+        """
+        if 'files' in self.metadata and filename in self.metadata['files'] and 'lastUpdated' in self.metadata['files'][filename]:
+            return self.metadata['files'][filename]['lastUpdated']
+        else:
+            return None
+
     def getLastUpdatedDate(self):
         """
         Get the last updated date from the metadata file.
