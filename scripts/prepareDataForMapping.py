@@ -24,8 +24,10 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, limit=None, offs
         if shouldBeMapped(file=file, metadata=metadata):
             filesToMap.append(file)
             prepareFileForMapping(file=file, inputFolder=inputFolder, outputFolder=outputFolder)
-
-    print(f"Prepared {len(filesToMap)} files for mapping")
+    if len(filesToMap) < limit:
+        print(f"Prepared {len(filesToMap)} files for mapping. {limit - len(filesToMap)} files do not need to be mapped.")
+    else:
+        print(f"Prepared {len(filesToMap)} files for mapping")
 
 def prepareFileForMapping(*, file, inputFolder, outputFolder):
     # Copy file from inputFolder to outputFolder
@@ -36,14 +38,11 @@ def prepareFileForMapping(*, file, inputFolder, outputFolder):
 def shouldBeMapped(*, file, metadata):
     lastMapped = metadata.getLastMappedDateForFile(file)
     if lastMapped is None:
-        print(f"No date for {file}. File should be mapped")
         return True
     lastUpdated = metadata.getLastUpdatedDateForFile(file)
     # Check if lastUpdated is later than lastMapped
     if lastUpdated is not None and datetime.strptime(lastUpdated, '%Y-%m-%d %H:%M:%S.%f') > datetime.strptime(lastMapped, '%Y-%m-%d %H:%M:%S.%f'):
-        print(f"File {file} was updated since last map. File should be mapped")
         return True
-    print(f"File {file} does not need to be mapped")
     return False
 
 if __name__ == "__main__":
