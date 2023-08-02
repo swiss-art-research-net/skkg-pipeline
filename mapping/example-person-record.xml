@@ -2,49 +2,46 @@
 
   
     <module name="Person" totalSize="2391">
-      <moduleItem hasAttachments="false" id="605" uuid="477">
+      <moduleItem hasAttachments="false" id="45777" uuid="0d2611a7-961e-420a-8b04-dc628c3f70fb">
         <systemField dataType="Long" name="__id">
-          <value>605</value>
+          <value>45777</value>
         </systemField>
         <systemField dataType="Varchar" name="__lastModifiedUser">
-          <value>Joris Burla</value>
+          <value>Sonja Gasser</value>
         </systemField>
         <systemField dataType="Timestamp" name="__lastModified">
-          <value>2022-09-01 15:02:47.069</value>
-          <formattedValue language="de">01.09.2022 15:02</formattedValue>
+          <value>2023-01-20 14:37:55.023</value>
+          <formattedValue language="de">20.01.2023 14:37</formattedValue>
         </systemField>
         <systemField dataType="Varchar" name="__createdUser">
-          <value>ZET_D&#220;</value>
+          <value>Joris Burla</value>
         </systemField>
         <systemField dataType="Timestamp" name="__created">
-          <value>2019-10-11 13:52:51.306</value>
-          <formattedValue language="de">11.10.2019 13:52</formattedValue>
+          <value>2022-04-21 10:12:52.557</value>
+          <formattedValue language="de">21.04.2022 10:12</formattedValue>
         </systemField>
         <systemField dataType="Varchar" name="__orgUnit">
           <value>SKKGOrgUnit</value>
         </systemField>
         <systemField name="__uuid">
-          <value>477</value>
+          <value>0d2611a7-961e-420a-8b04-dc628c3f70fb</value>
         </systemField>
         <dataField dataType="Long" name="PerDateToLnu">
-          <value>1919</value>
-          <formattedValue language="de">1.919</formattedValue>
-        </dataField>
-        <dataField dataType="Clob" name="PerBiographyClb">
-          <value>Kurzbiografie: Paysagiste. Fils d'Alexandre Calame (SIK)</value>
+          <value>1972</value>
+          <formattedValue language="de">1.972</formattedValue>
         </dataField>
         <dataField dataType="Varchar" name="PerFirstNameTxt">
-          <value>Jean Baptiste Arthur</value>
+          <value>Hans</value>
         </dataField>
         <dataField dataType="Varchar" name="PerFunctionTxt">
-          <value>Maler, Druckgrafiker, Zeichner</value>
+          <value>Maler, Grafiker, Zeichner</value>
         </dataField>
         <dataField dataType="Varchar" name="PerLastNameTxt">
-          <value>Calame</value>
+          <value>Comiotto</value>
         </dataField>
         <dataField dataType="Long" name="PerDateFromLnu">
-          <value>1843</value>
-          <formattedValue language="de">1.843</formattedValue>
+          <value>1906</value>
+          <formattedValue language="de">1.906</formattedValue>
         </dataField>
         <vocabularyReference name="PerCitizenshipVoc" id="20007" instanceName="AdrCountryVgr">
           <vocabularyReferenceItem id="20047" name="Schweiz">
@@ -62,52 +59,69 @@
           </vocabularyReferenceItem>
         </vocabularyReference>
         <vocabularyReference name="PerReferenceGNDVoc" id="35087" instanceName="PerReferenceGNDVgr">
-          <vocabularyReferenceItem id="182059" name="https://d-nb.info/gnd/1089399707">
-            <formattedValue language="de">Calame, Arthur</formattedValue>
+          <vocabularyReferenceItem id="198969" name="https://d-nb.info/gnd/1089358865">
+            <formattedValue language="de">Comiotto, Hans</formattedValue>
           </vocabularyReferenceItem>
         </vocabularyReference>
         <virtualField name="PerPersonVrt">
-          <value>Jean Baptiste Arthur Calame (1843&#8211;1919)</value>
+          <value>Hans Comiotto (1906&#8211;1972)</value>
         </virtualField>
+        <repeatableGroup name="PerURLGrp" size="2">
+          <repeatableGroupItem id="54872" uuid="c6793fd4-6a02-441a-8ee0-e089a40bf6a8">
+            <dataField dataType="Varchar" name="AddressTxt">
+              <value>Q109809364</value>
+            </dataField>
+            <vocabularyReference name="TypeVoc" id="21101" instanceName="PerUrlTypeVgr">
+              <vocabularyReferenceItem id="194006" name="wikidata_identifier">
+                <formattedValue language="de">Wikidata Identifier</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+          <repeatableGroupItem id="54873" uuid="bd6731d1-5eb9-4303-839c-d68bbe08a806">
+            <dataField dataType="Varchar" name="AddressTxt">
+              <value>http://www.sikart.ch/KuenstlerInnen.aspx?id=4024531&amp;lng=en</value>
+            </dataField>
+            <vocabularyReference name="TypeVoc" id="21101" instanceName="PerUrlTypeVgr">
+              <vocabularyReferenceItem id="191972" name="sik-isea">
+                <formattedValue language="de">SIK-ISEA</formattedValue>
+              </vocabularyReferenceItem>
+            </vocabularyReference>
+          </repeatableGroupItem>
+        </repeatableGroup>
         <repeatableGroup name="PerDateGrp" size="2">
-          <repeatableGroupItem id="4090" uuid="31330954-a40f-46d0-a6d5-f98c6a8d0dcd">
+          <repeatableGroupItem id="54866" uuid="2ad81c62-ee39-46af-b6e7-ad7f67ec4152">
             <dataField dataType="Date" name="DateFromEndDat">
-              <value>1843-10-07</value>
-              <formattedValue language="de">07.10.1843</formattedValue>
+              <value>1906-07-07</value>
+              <formattedValue language="de">07.07.1906</formattedValue>
             </dataField>
             <dataField dataType="Date" name="DateFromBeginDat">
-              <value>1843-10-07</value>
-              <formattedValue language="de">07.10.1843</formattedValue>
+              <value>1906-07-07</value>
+              <formattedValue language="de">07.07.1906</formattedValue>
             </dataField>
             <dataField dataType="Long" name="DatestampFromLnu">
-              <value>767015</value>
-              <formattedValue language="de">767.015</formattedValue>
+              <value>793127</value>
+              <formattedValue language="de">793.127</formattedValue>
             </dataField>
             <dataField dataType="Long" name="DatestampToLnu">
-              <value>767015</value>
-              <formattedValue language="de">767.015</formattedValue>
+              <value>793127</value>
+              <formattedValue language="de">793.127</formattedValue>
             </dataField>
             <dataField dataType="Varchar" name="DateFromTxt">
-              <value>07.10.1843</value>
+              <value>07.07.1906</value>
             </dataField>
             <dataField dataType="Varchar" name="PlaceTxt">
-              <value>Genf</value>
+              <value>Haslen</value>
             </dataField>
             <dataField dataType="Long" name="SortingLnu">
               <value>1</value>
               <formattedValue language="de">1</formattedValue>
             </dataField>
             <virtualField name="PreviewVrt">
-              <value>07.10.1843</value>
+              <value>07.07.1906</value>
             </virtualField>
             <vocabularyReference name="CountryVoc" id="20007" instanceName="AdrCountryVgr">
               <vocabularyReferenceItem id="20047" name="Schweiz">
                 <formattedValue language="de">CH</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-            <vocabularyReference name="DatingTxt" id="42161" instanceName="PerDateDatingVgr">
-              <vocabularyReferenceItem id="133543" name="7.10.1843 &#8211; 24.2.1919">
-                <formattedValue language="de">7.10.1843 &#8211; 24.2.1919</formattedValue>
               </vocabularyReferenceItem>
             </vocabularyReference>
             <vocabularyReference name="TypeVoc" id="42163" instanceName="PerDateTypeVgr">
@@ -116,44 +130,39 @@
               </vocabularyReferenceItem>
             </vocabularyReference>
           </repeatableGroupItem>
-          <repeatableGroupItem id="7246" uuid="7f47d845-6e5e-4e1e-a07a-cb44be0cef33">
+          <repeatableGroupItem id="54867" uuid="5d0dc4e6-ecd9-401e-af03-1061d43157cf">
             <dataField dataType="Date" name="DateToEndDat">
-              <value>1919-02-24</value>
-              <formattedValue language="de">24.02.1919</formattedValue>
+              <value>1972-08-14</value>
+              <formattedValue language="de">14.08.1972</formattedValue>
             </dataField>
             <dataField dataType="Date" name="DateToBeginDat">
-              <value>1919-02-24</value>
-              <formattedValue language="de">24.02.1919</formattedValue>
+              <value>1972-08-14</value>
+              <formattedValue language="de">14.08.1972</formattedValue>
             </dataField>
             <dataField dataType="Long" name="DatestampFromLnu">
-              <value>798392</value>
-              <formattedValue language="de">798.392</formattedValue>
+              <value>820622</value>
+              <formattedValue language="de">820.622</formattedValue>
             </dataField>
             <dataField dataType="Long" name="DatestampToLnu">
-              <value>798392</value>
-              <formattedValue language="de">798.392</formattedValue>
+              <value>820622</value>
+              <formattedValue language="de">820.622</formattedValue>
             </dataField>
             <dataField dataType="Varchar" name="DateToTxt">
-              <value>24.02.1919</value>
+              <value>14.08.1972</value>
             </dataField>
             <dataField dataType="Varchar" name="PlaceTxt">
-              <value>Genf</value>
+              <value>Schwanden</value>
             </dataField>
             <dataField dataType="Long" name="SortingLnu">
               <value>2</value>
               <formattedValue language="de">2</formattedValue>
             </dataField>
             <virtualField name="PreviewVrt">
-              <value>24.02.1919</value>
+              <value>14.08.1972</value>
             </virtualField>
             <vocabularyReference name="CountryVoc" id="20007" instanceName="AdrCountryVgr">
               <vocabularyReferenceItem id="20047" name="Schweiz">
                 <formattedValue language="de">CH</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-            <vocabularyReference name="DatingTxt" id="42161" instanceName="PerDateDatingVgr">
-              <vocabularyReferenceItem id="133543" name="7.10.1843 &#8211; 24.2.1919">
-                <formattedValue language="de">7.10.1843 &#8211; 24.2.1919</formattedValue>
               </vocabularyReferenceItem>
             </vocabularyReference>
             <vocabularyReference name="TypeVoc" id="42163" instanceName="PerDateTypeVgr">
@@ -163,130 +172,10 @@
             </vocabularyReference>
           </repeatableGroupItem>
         </repeatableGroup>
-        <moduleReference name="PerObjectRef" targetModule="Object" multiplicity="M:N" size="11">
-          <moduleReferenceItem moduleItemId="1" uuid="1155" seqNo="0">
-            <formattedValue language="de">1022
-, Jean Baptiste Arthur Calame (1843&#8211;1919), La mare aux nymph&#233;as, 1883</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="1087" uuid="3133" seqNo="1">
-            <formattedValue language="de">2888
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Mondschein, 1896</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="1142" uuid="6856" seqNo="2">
-            <formattedValue language="de">6115
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Studie: Beim F&#252;ttern der Tauben, Ohne Angaben</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="1515" uuid="2374" seqNo="3">
-            <formattedValue language="de">2179
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Italienische Landschaft, ohne Datierung; 19./20. Jh.</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="1800" uuid="1160" seqNo="4">
-            <formattedValue language="de">1027
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Prozession vor der Kirche San Mich&#232;le auf Capri, San Michele &#224; Capri, ohne Datierung; 19./20. Jh.</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="1930" uuid="3862" seqNo="5">
-            <formattedValue language="de">3556
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Offenes Meer, Meer</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="3049" uuid="6853" seqNo="6">
-            <formattedValue language="de">6112
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Studie im Wald, 1858</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="3539" uuid="1296" seqNo="7">
-            <formattedValue language="de">1160
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Wolkenstimmung [Studie], ohne Datierung; 19./20. Jh. (?)</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="3594" uuid="6308" seqNo="8">
-            <formattedValue language="de">5595
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Bord du lac, ohne Datierung; 19./20. Jh.</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="3971" uuid="3254" seqNo="9">
-            <formattedValue language="de">3006
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Mondschein, ohne Datierung; 19./20. Jh.</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="77725" uuid="0253ebdf-a075-42ae-9690-9d4374d22fcd" seqNo="10">
-            <formattedValue language="de">38995
-, Jean Baptiste Arthur Calame (1843&#8211;1919), Souvenir de Sorrento, Golfe de Naples, ohne Datierung</formattedValue>
+        <moduleReference name="PerObjectRef" targetModule="Object" multiplicity="M:N" size="1">
+          <moduleReferenceItem moduleItemId="26972" uuid="37b59df4-b5e3-4f47-8693-dc3b769e8652" seqNo="0">
+            <formattedValue language="de">13478
+, Hans Comiotto (1906&#8211;1972), Portrait von Augusto Giacometti, ohne Datierung; 20. Jh. (?)</formattedValue>
             <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
               <vocabularyReferenceItem id="183989">
                 <formattedValue language="de">K&#252;nstler/-in</formattedValue>
@@ -301,45 +190,43 @@
 
   
     <module name="Person" totalSize="2391">
-      <moduleItem hasAttachments="false" id="2" uuid="1392">
+      <moduleItem hasAttachments="false" id="11771" uuid="f447a4d2-7be1-4d7c-8dcb-64381b20a9bc">
         <systemField dataType="Long" name="__id">
-          <value>2</value>
+          <value>11771</value>
         </systemField>
         <systemField dataType="Varchar" name="__lastModifiedUser">
-          <value>Joris Burla</value>
+          <value>Sandra Thorens</value>
         </systemField>
         <systemField dataType="Timestamp" name="__lastModified">
-          <value>2022-09-01 15:01:34.917</value>
-          <formattedValue language="de">01.09.2022 15:01</formattedValue>
+          <value>2021-06-08 09:24:41.15</value>
+          <formattedValue language="de">08.06.2021 09:24</formattedValue>
         </systemField>
         <systemField dataType="Varchar" name="__createdUser">
-          <value>ZET_D&#220;</value>
+          <value>Balthasar Zimmermann</value>
         </systemField>
         <systemField dataType="Timestamp" name="__created">
-          <value>2019-10-11 13:52:51.306</value>
-          <formattedValue language="de">11.10.2019 13:52</formattedValue>
+          <value>2020-06-08 08:53:53.951</value>
+          <formattedValue language="de">08.06.2020 08:53</formattedValue>
         </systemField>
         <systemField dataType="Varchar" name="__orgUnit">
           <value>SKKGOrgUnit</value>
         </systemField>
         <systemField name="__uuid">
-          <value>1392</value>
+          <value>f447a4d2-7be1-4d7c-8dcb-64381b20a9bc</value>
         </systemField>
-        <dataField dataType="Clob" name="PerBiographyClb">
-          <value>Kurzbiografie: Peintre et graveur. D&#232;s 1811 actif &#224; Berne. Fils de Rodolphe M&#252;ller</value>
+        <dataField dataType="Long" name="PerDateToLnu">
+          <value>1999</value>
+          <formattedValue language="de">1.999</formattedValue>
         </dataField>
         <dataField dataType="Varchar" name="PerFirstNameTxt">
-          <value>Fran&#231;ois Aloys</value>
-        </dataField>
-        <dataField dataType="Varchar" name="PerFunctionTxt">
-          <value>Maler, Stecher</value>
+          <value>Paul</value>
         </dataField>
         <dataField dataType="Varchar" name="PerLastNameTxt">
-          <value>M&#252;ller</value>
+          <value>Oetterli</value>
         </dataField>
         <dataField dataType="Long" name="PerDateFromLnu">
-          <value>1811</value>
-          <formattedValue language="de">1.811</formattedValue>
+          <value>1914</value>
+          <formattedValue language="de">1.914</formattedValue>
         </dataField>
         <vocabularyReference name="PerCitizenshipVoc" id="20007" instanceName="AdrCountryVgr">
           <vocabularyReferenceItem id="20047" name="Schweiz">
@@ -357,150 +244,87 @@
           </vocabularyReferenceItem>
         </vocabularyReference>
         <virtualField name="PerPersonVrt">
-          <value>Fran&#231;ois Aloys M&#252;ller (1811)</value>
+          <value>Paul Oetterli (1914&#8211;1999)</value>
         </virtualField>
         <repeatableGroup name="PerURLGrp" size="1">
-          <repeatableGroupItem id="38001" uuid="628babe5-84a3-45d2-8cfe-eacf0e3d1358">
+          <repeatableGroupItem id="38018" uuid="503df332-78b5-4836-9c75-d5eab430cef8">
             <dataField dataType="Varchar" name="AddressTxt">
-              <value>http://www.sikart.ch/KuenstlerInnen.aspx?id=4031796&amp;lng=de</value>
+              <value>http://www.dorfmuseum-langnau-mehlsecken.ch</value>
             </dataField>
-            <vocabularyReference name="TypeVoc" id="21101" instanceName="PerUrlTypeVgr">
-              <vocabularyReferenceItem id="191972" name="sik-isea">
-                <formattedValue language="de">SIK-ISEA</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
           </repeatableGroupItem>
         </repeatableGroup>
         <repeatableGroup name="PerDateGrp" size="2">
-          <repeatableGroupItem id="3552" uuid="7bac549e-bb73-4fa3-9cb2-abb506c44a17">
+          <repeatableGroupItem id="20815" uuid="9f2eee7b-2c0a-4329-ae56-350213f7f073">
             <dataField dataType="Date" name="DateFromEndDat">
-              <value>1774-05-23</value>
-              <formattedValue language="de">23.05.1774</formattedValue>
+              <value>1914-12-31</value>
+              <formattedValue language="de">31.12.1914</formattedValue>
             </dataField>
             <dataField dataType="Date" name="DateFromBeginDat">
-              <value>1774-05-23</value>
-              <formattedValue language="de">23.05.1774</formattedValue>
+              <value>1914-01-01</value>
+              <formattedValue language="de">01.01.1914</formattedValue>
             </dataField>
             <dataField dataType="Long" name="DatestampFromLnu">
-              <value>738167</value>
-              <formattedValue language="de">738.167</formattedValue>
+              <value>796257</value>
+              <formattedValue language="de">796.257</formattedValue>
             </dataField>
             <dataField dataType="Long" name="DatestampToLnu">
-              <value>738167</value>
-              <formattedValue language="de">738.167</formattedValue>
+              <value>796639</value>
+              <formattedValue language="de">796.639</formattedValue>
             </dataField>
             <dataField dataType="Varchar" name="DateFromTxt">
-              <value>23.05.1774</value>
-            </dataField>
-            <dataField dataType="Clob" name="NotesClb">
-              <value>Taufdatum</value>
-            </dataField>
-            <dataField dataType="Varchar" name="PlaceTxt">
-              <value>Freiburg</value>
+              <value>1914</value>
             </dataField>
             <dataField dataType="Long" name="SortingLnu">
               <value>1</value>
               <formattedValue language="de">1</formattedValue>
             </dataField>
             <virtualField name="PreviewVrt">
-              <value>23.05.1774</value>
+              <value>1914</value>
             </virtualField>
-            <vocabularyReference name="CountryVoc" id="20007" instanceName="AdrCountryVgr">
-              <vocabularyReferenceItem id="20047" name="Schweiz">
-                <formattedValue language="de">CH</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-            <vocabularyReference name="DatingTxt" id="42161" instanceName="PerDateDatingVgr">
-              <vocabularyReferenceItem id="133263" name="23.5.1774 (get.) &#8211; ?">
-                <formattedValue language="de">23.5.1774 (get.) &#8211; ?</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
             <vocabularyReference name="TypeVoc" id="42163" instanceName="PerDateTypeVgr">
               <vocabularyReferenceItem id="143906" name="BirthDate">
                 <formattedValue language="de">Geburtsdatum</formattedValue>
               </vocabularyReferenceItem>
             </vocabularyReference>
           </repeatableGroupItem>
-          <repeatableGroupItem id="50020" uuid="1773238d-ce6d-4e11-b77c-ebc899179e53">
-            <dataField dataType="Date" name="DateFromEndDat">
-              <value>1811-12-31</value>
-              <formattedValue language="de">31.12.1811</formattedValue>
+          <repeatableGroupItem id="20819" uuid="7343d78b-adca-4c90-b717-1dd8fdbc9766">
+            <dataField dataType="Date" name="DateToEndDat">
+              <value>1999-12-31</value>
+              <formattedValue language="de">31.12.1999</formattedValue>
             </dataField>
-            <dataField dataType="Date" name="DateFromBeginDat">
-              <value>1811-01-01</value>
-              <formattedValue language="de">01.01.1811</formattedValue>
+            <dataField dataType="Date" name="DateToBeginDat">
+              <value>1999-01-01</value>
+              <formattedValue language="de">01.01.1999</formattedValue>
             </dataField>
             <dataField dataType="Long" name="DatestampFromLnu">
-              <value>753409</value>
-              <formattedValue language="de">753.409</formattedValue>
+              <value>831617</value>
+              <formattedValue language="de">831.617</formattedValue>
             </dataField>
             <dataField dataType="Long" name="DatestampToLnu">
-              <value>753791</value>
-              <formattedValue language="de">753.791</formattedValue>
+              <value>831999</value>
+              <formattedValue language="de">831.999</formattedValue>
             </dataField>
-            <dataField dataType="Varchar" name="DateFromTxt">
-              <value>1811</value>
-            </dataField>
-            <dataField dataType="Varchar" name="PlaceTxt">
-              <value>Bern</value>
+            <dataField dataType="Varchar" name="DateToTxt">
+              <value>1999</value>
             </dataField>
             <dataField dataType="Long" name="SortingLnu">
-              <value>100</value>
-              <formattedValue language="de">100</formattedValue>
+              <value>2</value>
+              <formattedValue language="de">2</formattedValue>
             </dataField>
             <virtualField name="PreviewVrt">
-              <value>1811</value>
+              <value>1999</value>
             </virtualField>
-            <vocabularyReference name="CountryVoc" id="20007" instanceName="AdrCountryVgr">
-              <vocabularyReferenceItem id="20047" name="Schweiz">
-                <formattedValue language="de">CH</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
             <vocabularyReference name="TypeVoc" id="42163" instanceName="PerDateTypeVgr">
-              <vocabularyReferenceItem id="194028">
-                <formattedValue language="de">aktiv ab</formattedValue>
+              <vocabularyReferenceItem id="143911" name="DeathDate">
+                <formattedValue language="de">Todesdatum</formattedValue>
               </vocabularyReferenceItem>
             </vocabularyReference>
           </repeatableGroupItem>
         </repeatableGroup>
-        <moduleReference name="PerObjectRef" targetModule="Object" multiplicity="M:N" size="4">
-          <moduleReferenceItem moduleItemId="6946" uuid="4688" seqNo="0">
-            <formattedValue language="de">4381
-, Fran&#231;ois Aloys M&#252;ller (1811), Das Gefecht im Grauholz im M&#228;rz 1798</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="7504" uuid="4690" seqNo="1">
-            <formattedValue language="de">4383
-, Fran&#231;ois Aloys M&#252;ller (1811), Der &#220;bergang bei Neuenegg den 5. M&#228;rz 1798</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-            <vocabularyReference name="RoleVoc" id="21118" instanceName="ObjPerAssociationRoleVgr">
-              <vocabularyReferenceItem id="183989">
-                <formattedValue language="de">K&#252;nstler/-in</formattedValue>
-              </vocabularyReferenceItem>
-            </vocabularyReference>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="9066" uuid="4689" seqNo="2">
-            <formattedValue language="de">4382
-, Fran&#231;ois Aloys M&#252;ller (1811), Der &#220;bergang bei Fraubrunnen im M&#228;rz 1798</formattedValue>
-            <dataField dataType="Long" name="SortLnu">
-              <value>1</value>
-              <formattedValue language="de">1</formattedValue>
-            </dataField>
-          </moduleReferenceItem>
-          <moduleReferenceItem moduleItemId="26837" uuid="2e69a5cd-aa74-4a86-8144-7e6c3d1d3c78" seqNo="3">
-            <formattedValue language="de">13351
-, Fran&#231;ois Aloys M&#252;ller (1811), Fraubrunnen Schlacht (1798)</formattedValue>
+        <moduleReference name="PerObjectRef" targetModule="Object" multiplicity="M:N" size="1">
+          <moduleReferenceItem moduleItemId="28605" uuid="cabddd48-75df-4365-a792-38c38339fa25" seqNo="0">
+            <formattedValue language="de">13646
+, Paul Oetterli (1914&#8211;1999), Der Riese von Reiden</formattedValue>
           </moduleReferenceItem>
         </moduleReference>
       </moduleItem>
