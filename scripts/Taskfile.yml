@@ -222,7 +222,7 @@ tasks:
         sh: echo "/data/mapping/input/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
     cmds:
       - mkdir -p {{.OUTPUTFOLDER}}
-      - rm -f {{.OUTPUTFOLDER}}/*.xml
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.xml" -delete
       - python /scripts/prepareDataForMapping.py --module {{.MODULE}} --inputFolder {{.INPUTFOLDER}} --outputFolder {{.OUTPUTFOLDER}} {{.CLI_ARGS}}
 
   _process-items-deleted-from-museumplus:
