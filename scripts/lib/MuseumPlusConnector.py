@@ -1,3 +1,16 @@
+"""
+Class for connecting to MuseumPlus via the REST API
+
+Usage:
+    client = MPWrapper(url=<url>, username=<username>, password=<password>)
+
+Arguments:
+    url: URL of the MuseumPlus instance
+    username: Username to use for authentication
+    password: Password to use for authentication
+"""
+
+
 import requests
 from lxml import etree
 from os.path import join

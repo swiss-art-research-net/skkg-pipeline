@@ -3,11 +3,14 @@ Update the metadata value for a given key for all the files in a given folder.
 The folder that is used to retrieve the list of the file can be different from 
 the folder that is used to store the metadata file.
 
-Args:
-    metadataFolder (str): The folder where the metadata file is stored
-    inputFolder (str): The folder where the XML files are stored whose metadata should be updated
-    key (str): The key to update
-    value (str): The value to set for the given key
+Usage:
+    python updateMetadataValueForFiles.py --metadataFolder <metadataFolder> --inputFolder <inputFolder> --key <key> --value <value>
+
+Arguments:
+    --metadataFolder: The folder where the metadata file is stored
+    --inputFolder: The folder where the XML files are stored whose metadata should be updated
+    --key: The key to update
+    --value: The value to set for the given key
 """
 
 
