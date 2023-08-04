@@ -1,3 +1,25 @@
+"""
+Script to download all items from a module in MuseumPlus and save them to individual XML files.
+The script will only download items that have been updated since the last download.
+Downloaded files are stored in a temporary folder and renamed based on the UUID after the download is complete. 
+This ensures that the script can be interrupted and restarted without having to download all items again.
+
+Usage:
+    python downloadItems.py --url <url> --module <module> --username <username> --password <password> --outputFolder <outputFolder> --tempFolder <tempFolder> [--filenamePrefix <filenamePrefix>] [--limit <limit>] [--offset <offset>]
+
+Arguments:
+    --url: URL of the MuseumPlus instance
+    --module: Name of the module to download items from
+    --username: Username to use for authentication
+    --password: Password to use for authentication
+    --outputFolder: Folder to save the XML files to
+    --tempFolder: Folder to temporarily save the XML during download
+    --filenamePrefix: Prefix to use for the filenames of the XML files. Defaults to "item-"
+    --limit: Limit the number of items to download
+    --offset: Offset to start downloading items from
+"""
+
+
 import argparse
 from datetime import datetime
 from lxml import etree
