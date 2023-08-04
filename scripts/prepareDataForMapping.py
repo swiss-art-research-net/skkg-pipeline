@@ -1,3 +1,18 @@
+"""
+Script to prepare data for mapping.
+This script will take the XML files from the input folder and copy them to the output folder.
+The script will only copy files that have been updated since the last mapping.
+
+Usage:
+    python prepareDataForMapping.py --module <module> --inputFolder <inputFolder> --outputFolder <outputFolder> [--limit <limit>] [--offset <offset>]
+
+Arguments:
+    --module: Name of the module to process the data form
+    --inputFolder: Folder where the XML files are stored.
+    --outputFolder: Folder to put the XML files that should be mapped.
+    --limit: Limit the number of items to process.
+    --offset: Offset the items to process.
+"""
 
 import argparse
 from datetime import datetime
