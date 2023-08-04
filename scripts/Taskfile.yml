@@ -202,7 +202,7 @@ tasks:
         sh: echo "/mapping/mapping-$(echo "{{.MODULE}}" | awk '{print tolower($0)}').x3ml"
     cmds:
       - mkdir -p {{.OUTPUTFOLDER}}
-      - rm -f {{.OUTPUTFOLDER}}/*.ttl
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
       - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
       - sleep 5s # Wait for the mapping to finish
       - task: _update-metadata-for-module
