@@ -4,9 +4,10 @@
 # Folder structure
 data/source/*/*.*
 data/temp/*/*.*
-data/mapping/**/*
 !data/temp/.gitkeep
 !data/source/.gitkeep
+mapping/input/*/*.*
+mapping/output/*/*.*
 
 # Python Specific
 __pycache__
