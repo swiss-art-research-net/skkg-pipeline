@@ -18,6 +18,7 @@ tasks:
     cmds:
       - task: download-source-items
       - task: prepare-and-perform-mapping
+      - task: ingest-items
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus
@@ -74,14 +75,12 @@ tasks:
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           INPUTFILES: /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
-  
-  prepare-and-perform-mapping:
-    desc: Prepares and performs the mapping for all modules
+
+  ingest-items:
+    desc: Ingest items for all modules
     cmds:
-      - task: prepare-mapping-for-object-items
-      - task: prepare-mapping-for-person-items
-      - task: perform-mapping-for-object-items
-      - task: perform-mapping-for-person-items
+      - task: ingest-object-items
+      - task: ingest-person-items
 
   ingest-object-items:
     desc: Ingests the object items into the triplestore
@@ -89,6 +88,21 @@ tasks:
       - task: _ingest_module_items
         vars:
           MODULE: Object
+
+  ingest-person-items:
+    desc: Ingests the person items into the triplestore
+    cmds:
+      - task: _ingest_module_items
+        vars:
+          MODULE: Person
+
+  prepare-and-perform-mapping:
+    desc: Prepares and performs the mapping for all modules
+    cmds:
+      - task: prepare-mapping-for-object-items
+      - task: prepare-mapping-for-person-items
+      - task: perform-mapping-for-object-items
+      - task: perform-mapping-for-person-items
 
   perform-mapping-for-object-items:
     desc: Performs the mapping for the object items
