@@ -175,7 +175,7 @@ tasks:
 
   _download-items-from-museumplus:
     vars:
-      TEMP_FOLDER: /data/temp/temp_{{.MODULE}}
+      TEMP_FOLDER: /data/temp/download/temp_{{.MODULE}}
     cmds:
       - mkdir -p {{.TEMP_FOLDER}}
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
