@@ -32,6 +32,16 @@ class ItemMetadata:
         self.metadataFile = join(directory, self.METADATA_FILENAME)
         self.metadata = self.loadMetadata()
 
+    def getLastIngestedDateForFile(self, filename):
+        """
+        Get the last ingested date from the metadata file for a specific filename.
+        The last ingested date is stored in the key 'lastIngested' in the for the given filename in the 'files' key.
+        """
+        if 'files' in self.metadata and filename in self.metadata['files'] and 'lastIngested' in self.metadata['files'][filename]:
+            return self.metadata['files'][filename]['lastIngested']
+        else:
+            return None
+
     def getLastMappedDateForFile(self, filename):
         """
         Get the last mapped date from the metadata file for a specific filename.
