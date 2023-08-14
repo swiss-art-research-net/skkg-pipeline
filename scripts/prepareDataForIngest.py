@@ -33,10 +33,11 @@ def prepareFileForIngest(*, file, inputFolder, outputFolder):
             g.write(contents)
 
 def shouldBeIngested(*, file, metadata):
-    lastIngested = metadata.getLastIngestedDateForFile(file)
+    fileKey = file.replace('.ttl', '.xml')
+    lastIngested = metadata.getLastIngestedDateForFile(fileKey)
     if lastIngested is None:
         return True
-    lastMapped = metadata.getLastMappedDateForFile(file)
+    lastMapped = metadata.getLastMappedDateForFile(fileKey)
     # Check if the file has been mapped after the last ingest
     if lastMapped is not None and datetime.strptime(lastMapped, '%Y-%m-%d %H:%M:%S.%f') > datetime.strptime(lastIngested, '%Y-%m-%d %H:%M:%S.%f'):
         return True

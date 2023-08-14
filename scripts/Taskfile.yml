@@ -237,6 +237,14 @@ tasks:
           curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
           count=$((count+1)) 
         done
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "{{.MODULE}}"
+          KEY: lastIngested
+          VALUE:
+            sh: date -u "+%Y-%m-%d %H:%M:%S.000"
+          SOURCEFOLDER: "{{.TEMPFOLDER}}"
+          FILEEXTENSION: .ttl
       - rm -f {{.TEMPFOLDER}}/*.ttl
 
   _perform-mapping-for-module-items:
@@ -261,6 +269,7 @@ tasks:
           VALUE:
             sh: date -u "+%Y-%m-%d %H:%M:%S.000"
           SOURCEFOLDER: "{{.INPUTFOLDER}}"
+          FILEEXTENSION: .xml
       - mkdir -p {{.DESTINATIONFOLDER}}
       - mv {{.OUTPUTFOLDER}}/*.ttl {{.DESTINATIONFOLDER}}
 
@@ -302,5 +311,6 @@ tasks:
       SOURCEFOLDER: "{{.SOURCEFOLDER}}"
       KEY: "{{.KEY}}"
       VALUE: "{{.VALUE}}"
+      FILEEXTENSION: "{{.FILEEXTENSION}}"
     cmds:
-      - python /scripts/updateMetadataValueForFiles.py --metadataFolder {{.METADATAFOLDER}} --inputFolder {{.SOURCEFOLDER}} --key {{.KEY}} --value "{{.VALUE}}"
+      - python /scripts/updateMetadataValueForFiles.py --metadataFolder {{.METADATAFOLDER}} --inputFolder {{.SOURCEFOLDER}} --key {{.KEY}} --value "{{.VALUE}}" --fileExtension {{.FILEEXTENSION}}
