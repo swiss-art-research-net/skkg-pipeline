@@ -7,6 +7,7 @@ vars:
   BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
   GENERATOR_POLICY: /mapping/generator-policy.xml
   MAPPING_BATCH_SIZE: 10
+  NAMESPACE: https://data.skkg.ch/
 
 output: 'prefixed'
 
@@ -208,9 +209,19 @@ tasks:
         sh: echo "/data/temp/ingest/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       XMLFOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      FILENAMEPREFIX:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+      NAMEDGRAPHBASE: "{{.NAMESPACE}}/graph/"
     cmds:
       - mkdir -p {{.TEMPFOLDER}}
       - python prepareDataForIngest.py  --inputFolder {{.INPUTFOLDER}} --outputFolder {{.TEMPFOLDER}} --xmlFolder {{.XMLFOLDER}}
+      - |
+        numfiles=$(find {{.TEMPFOLDER}} -type f -name '*.ttl' | wc -l)
+        for f in $(find {{.TEMPFOLDER}}  -type f -name '*.ttl' ); do
+          identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\.ttl//")
+          echo "Ingesting file $count of $numfiles ($f) with identifier $identifier"
+          count=$((count+1)) 
+        done
 
   _perform-mapping-for-module-items:
     vars:
