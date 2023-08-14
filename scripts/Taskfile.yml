@@ -88,6 +88,25 @@ tasks:
       - task: _ingest_module_items
         vars:
           MODULE: Object
+  
+  ingest-ontologies:
+    desc: Ingests the ontologies into individual named Graphs
+    sources:
+      - /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
+      - /mapping/schemas/CRMdig_v3.2.1.rdfs
+    cmds:
+      - task: _ingest-data-from-file
+        vars:
+          NAME: CIDOC-CRM
+          FILE: /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
+          TYPE: application/rdf+xml
+          GRAPH: http://www.cidoc-crm.org/cidoc-crm/
+      - task: _ingest-data-from-file
+        vars:
+          NAME: CRMdig
+          FILE: /mapping/schemas/CRMdig_v3.2.1.rdfs
+          TYPE: application/rdf+xml
+          GRAPH: http://www.ics.forth.gr/isl/CRMdig/
 
   ingest-person-items:
     desc: Ingests the person items into the triplestore
@@ -214,6 +233,11 @@ tasks:
       - sed -i 's/<\/modules>//g' {{.OUTPUTFILE}}
       - sed -i 's/<\/application>//g' {{.OUTPUTFILE}}
       - echo '<application><modules>' | cat - {{.OUTPUTFILE}} > temp && mv temp {{.OUTPUTFILE}}; echo '</modules></application>' >> {{.OUTPUTFILE}}
+
+  _ingest-data-from-file:
+    cmds:
+      - echo "Ingest {{.NAME}}"
+      - curl -X POST -H 'Content-Type:{{.TYPE}}' --data-binary '@{{.FILE}}' {{.BLAZEGRAPH_ENDPOINT}}{{if .GRAPH}}?context-uri={{.GRAPH}}{{end}}
 
   _ingest_module_items:
     vars:
