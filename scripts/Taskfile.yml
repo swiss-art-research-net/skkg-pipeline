@@ -211,7 +211,7 @@ tasks:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       FILENAMEPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
-      NAMEDGRAPHBASE: "{{.NAMESPACE}}/graph/"
+      NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
     cmds:
       - mkdir -p {{.TEMPFOLDER}}
       - python prepareDataForIngest.py  --inputFolder {{.INPUTFOLDER}} --outputFolder {{.TEMPFOLDER}} --xmlFolder {{.XMLFOLDER}}
@@ -220,6 +220,7 @@ tasks:
         for f in $(find {{.TEMPFOLDER}} -type f -name '*.ttl' ); do
           identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\\.ttl//")
           echo "Ingesting {{.MODULE}} item $count of $numfiles with identifier $identifier"
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
           count=$((count+1)) 
         done
 
