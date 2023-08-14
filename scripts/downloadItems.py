@@ -60,6 +60,8 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
 
     if not limit:
         limit = numItems
+    else:
+        limit = min(limit, numItems)
     if not offset:
         offset = 0
 
