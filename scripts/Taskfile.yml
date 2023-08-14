@@ -199,6 +199,8 @@ tasks:
         sh: echo "/mapping/input/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       OUTPUTFOLDER:
         sh: echo "/mapping/output/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      DESTINATIONFOLDER:
+        sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       MAPPINGFILE:
         sh: echo "/mapping/mapping-$(echo "{{.MODULE}}" | awk '{print tolower($0)}').x3ml"
     cmds:
@@ -213,6 +215,8 @@ tasks:
           VALUE:
             sh: date -u "+%Y-%m-%d %H:%M:%S.000"
           SOURCEFOLDER: "{{.INPUTFOLDER}}"
+      - mkdir -p {{.DESTINATIONFOLDER}}
+      - mv {{.OUTPUTFOLDER}}/*.ttl {{.DESTINATIONFOLDER}}
 
   _prepare-mapping-for-module-items:
     vars:
