@@ -19,6 +19,7 @@ tasks:
       - task: download-source-items
       - task: prepare-and-perform-mapping
       - task: ingest-items
+      - task: ingest-ontologies
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus
