@@ -223,6 +223,7 @@ tasks:
           curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
           count=$((count+1)) 
         done
+      - rm -f {{.TEMPFOLDER}}/*.ttl
 
   _perform-mapping-for-module-items:
     vars:
