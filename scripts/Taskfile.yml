@@ -217,9 +217,9 @@ tasks:
       - python prepareDataForIngest.py  --inputFolder {{.INPUTFOLDER}} --outputFolder {{.TEMPFOLDER}} --xmlFolder {{.XMLFOLDER}}
       - |
         numfiles=$(find {{.TEMPFOLDER}} -type f -name '*.ttl' | wc -l)
-        for f in $(find {{.TEMPFOLDER}}  -type f -name '*.ttl' ); do
-          identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\.ttl//")
-          echo "Ingesting file $count of $numfiles ($f) with identifier $identifier"
+        for f in $(find {{.TEMPFOLDER}} -type f -name '*.ttl' ); do
+          identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\\.ttl//")
+          echo "Ingesting {{.MODULE}} item $count of $numfiles with identifier $identifier"
           count=$((count+1)) 
         done
 
