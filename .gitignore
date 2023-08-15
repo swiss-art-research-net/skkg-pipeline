@@ -13,5 +13,8 @@ mapping/output/*/*.*
 __pycache__
 .ipynb_checkpoints
 
+# Taskfile specific
+scripts/.task/**/*
+
 # Local
 *.zip
