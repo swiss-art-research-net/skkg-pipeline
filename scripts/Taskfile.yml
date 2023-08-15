@@ -273,7 +273,7 @@ tasks:
         for f in $(find {{.TEMPFOLDER}} -type f -name '*.ttl' ); do
           identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\\.ttl//")
           echo "Ingesting {{.MODULE}} item $count of $numfiles with identifier $identifier"
-          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier" > /dev/null
           count=$((count+1)) 
         done
       - task: _update-metadata-for-module
