@@ -296,7 +296,7 @@ tasks:
           SOURCEFOLDER: "{{.INPUTFOLDER}}"
           FILEEXTENSION: .xml
       - mkdir -p {{.DESTINATIONFOLDER}}
-      - mv {{.OUTPUTFOLDER}}/*.ttl {{.DESTINATIONFOLDER}}
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec mv -t {{.DESTINATIONFOLDER}} {} +
 
   _prepare-mapping-for-module-items:
     vars:
