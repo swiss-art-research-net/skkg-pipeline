@@ -95,6 +95,7 @@ tasks:
     sources:
       - /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
       - /mapping/schemas/CRMdig_v3.2.1.rdfs
+      - /mapping/schemas/skkg-ontology.ttl
     cmds:
       - task: _ingest-data-from-file
         vars:
@@ -108,6 +109,12 @@ tasks:
           FILE: /mapping/schemas/CRMdig_v3.2.1.rdfs
           TYPE: application/rdf+xml
           GRAPH: http://www.ics.forth.gr/isl/CRMdig/
+      - task: _ingest-data-from-file
+        vars:
+          NAME: SKKG Ontology
+          FILE: /mapping/schemas/skkg-ontology.ttl
+          TYPE: application/x-turtle
+          GRAPH: http://ontology.skkg.ch/ontology/
 
   ingest-person-items:
     desc: Ingests the person items into the triplestore
