@@ -11,38 +11,38 @@
 		<pattern>POINT({lat} {long})</pattern>
 	</generator>
 		
-	<generator name="URIwithType" prefix="skkg">
+	<generator name="URIwithType" prefix="resource">
 		<pattern>{type}</pattern>
 	</generator>
 
-	<generator name="URIwithTypeAndId" prefix="skkg">
+	<generator name="URIwithTypeAndId" prefix="resource">
 		<pattern>{type}/{id}</pattern>
 	</generator>
 
-	<generator name="URIwithTypeIdAnd1Level" prefix="skkg">
+	<generator name="URIwithTypeIdAnd1Level" prefix="resource">
 		<pattern>{type}/{id}/{level1}</pattern>
 	</generator>
 
-	<generator name="URIwithTypeIdAnd2Levels" prefix="skkg">
+	<generator name="URIwithTypeIdAnd2Levels" prefix="resource">
 		<pattern>{type}/{id}/{level1}/{level2}</pattern>
 	</generator>
 
-	<generator name="URIwithTypeIdAnd3Levels" prefix="skkg">
+	<generator name="URIwithTypeIdAnd3Levels" prefix="resource">
 		<pattern>{type}/{id}/{level1}/{level2}/{level3}</pattern>
 	</generator>
 
-	<generator name="URIwithTypeIdAnd4Levels" prefix="skkg">
+	<generator name="URIwithTypeIdAnd4Levels" prefix="resource">
 		<pattern>{type}/{id}/{level1}/{level2}/{level3}/{level4}</pattern>
 	</generator>
 
-	<generator name="URIwithTypeAnId_IdHashed" prefix="skkg">
+	<generator name="URIwithTypeAnId_IdHashed" prefix="resource">
         <custom generatorClass="gr.forth.MultiHashingGenerator">
             <set-arg name="type"/>
 			<set-arg name="id_HASHED_CONTENTS"/>
         </custom>
 	</generator>
 
-	<generator name="URIwithTypeIdAnd1Level_Level1Hashed" prefix="skkg">
+	<generator name="URIwithTypeIdAnd1Level_Level1Hashed" prefix="resource">
         <custom generatorClass="gr.forth.MultiHashingGenerator">
             <set-arg name="type"/>
 			<set-arg name="id"/>
@@ -50,7 +50,7 @@
         </custom>
 	</generator>
 
-	<generator name="URIwithTypeIdAnd2Levels_Level2Hashed" prefix="skkg">
+	<generator name="URIwithTypeIdAnd2Levels_Level2Hashed" prefix="resource">
         <custom generatorClass="gr.forth.MultiHashingGenerator">
             <set-arg name="type"/>
 			<set-arg name="id"/>
