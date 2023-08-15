@@ -275,6 +275,7 @@ tasks:
           echo "Ingesting {{.MODULE}} item $count of $numfiles with identifier $identifier"
           curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier" > /dev/null
           count=$((count+1)) 
+          mv $f $f.ingested
         done
       - task: _update-metadata-for-module
         vars:
