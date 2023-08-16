@@ -1,6 +1,17 @@
 """
 Items that have been deleted in MuseumPlus should be deleted from the local cache as well.
 This script checks if any items have been deleted in MuseumPlus and, if so, removes the local copy.
+
+Usage:
+    python processDeletedItems.py --url <url> --module <module> --username <username> --password <password> --inputFolder <inputFolder> [--filenamePrefix <filenamePrefix>]
+
+Arguments:
+    --url: URL of the MuseumPlus instance
+    --module: Name of the module to check for deleted items
+    --username: Username to use for authentication
+    --password: Password to use for authentication
+    --inputFolder: Folder where the XML files are stored
+    --filenamePrefix: Prefix to use for the filenames of the XML files. Defaults to "item-"
 """
 
 import argparse

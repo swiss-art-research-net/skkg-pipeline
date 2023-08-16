@@ -32,6 +32,36 @@ class ItemMetadata:
         self.metadataFile = join(directory, self.METADATA_FILENAME)
         self.metadata = self.loadMetadata()
 
+    def getLastIngestedDateForFile(self, filename):
+        """
+        Get the last ingested date from the metadata file for a specific filename.
+        The last ingested date is stored in the key 'lastIngested' in the for the given filename in the 'files' key.
+        """
+        if 'files' in self.metadata and filename in self.metadata['files'] and 'lastIngested' in self.metadata['files'][filename]:
+            return self.metadata['files'][filename]['lastIngested']
+        else:
+            return None
+
+    def getLastMappedDateForFile(self, filename):
+        """
+        Get the last mapped date from the metadata file for a specific filename.
+        The last mapped date is stored in the key 'lastMapped' in the for the given filename in the 'files' key.
+        """
+        if 'files' in self.metadata and filename in self.metadata['files'] and 'lastMapped' in self.metadata['files'][filename]:
+            return self.metadata['files'][filename]['lastMapped']
+        else:
+            return None
+        
+    def getLastUpdatedDateForFile(self, filename):
+        """
+        Get the last updated date from the metadata file for a specific filename.
+        The last updated date is stored in the key 'lastUpdated' in the for the given filename in the 'files' key.
+        """
+        if 'files' in self.metadata and filename in self.metadata['files'] and 'lastUpdated' in self.metadata['files'][filename]:
+            return self.metadata['files'][filename]['lastUpdated']
+        else:
+            return None
+
     def getLastUpdatedDate(self):
         """
         Get the last updated date from the metadata file.
@@ -135,6 +165,21 @@ class ItemMetadata:
             self.metadata['files'][filename]['lastUpdated'] = lastUpdated
         elif isinstance(lastUpdated, datetime):
             self.metadata['files'][filename] = lastUpdated.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        if write:
+            self.writeMetadata()
+
+    def setKeyValueForFile(self, filename, key, value, *, write=True):
+        """
+        Set a metadata key for a specific file to a given value.
+        The key for the specific file must exist already:
+
+        args:
+            filename (str): The filename of the file to set the last updated date for
+            key (str): The key to set
+            value (str): The value to set
+            write (bool, optional): Whether to write the metadata to the metadata file. Defaults to True.
+        """
+        self.metadata['files'][filename][key] = value
         if write:
             self.writeMetadata()
 

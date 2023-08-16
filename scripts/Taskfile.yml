@@ -7,6 +7,7 @@ vars:
   BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
   GENERATOR_POLICY: /mapping/generator-policy.xml
   MAPPING_BATCH_SIZE: 10
+  NAMESPACE: https://data.skkg.ch/
 
 output: 'prefixed'
 
@@ -16,6 +17,9 @@ tasks:
     desc: Runs the entire pipeline
     cmds:
       - task: download-source-items
+      - task: prepare-and-perform-mapping
+      - task: ingest-items
+      - task: ingest-ontologies
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus
@@ -53,10 +57,119 @@ tasks:
         vars:
           MODULE: Person
 
+  generate-example-record-object:
+    desc: Generates an example record for developing the mapping in the X3ML editor
+    vars:
+      OUTPUTFILE: /mapping/example-object-record.xml
+    cmds:
+      - task: _generate-example-record
+        vars:
+          OUTPUTFILE: "{{.OUTPUTFILE}}"
+          INPUTFILES: /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
+
+  generate-example-record-person:
+    desc: Generates an example record for developing the mapping in the X3ML editor
+    vars:
+      OUTPUTFILE: /mapping/example-person-record.xml
+    cmds:
+      - task: _generate-example-record
+        vars:
+          OUTPUTFILE: "{{.OUTPUTFILE}}"
+          INPUTFILES: /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
+
+  ingest-items:
+    desc: Ingest items for all modules
+    cmds:
+      - task: ingest-object-items
+      - task: ingest-person-items
+
+  ingest-object-items:
+    desc: Ingests the object items into the triplestore
+    cmds:
+      - task: _ingest_module_items
+        vars:
+          MODULE: Object
+  
+  ingest-ontologies:
+    desc: Ingests the ontologies into individual named Graphs
+    sources:
+      - /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
+      - /mapping/schemas/CRMdig_v3.2.1.rdfs
+      - /mapping/schemas/skkg-ontology.ttl
+    cmds:
+      - task: _ingest-data-from-file
+        vars:
+          NAME: CIDOC-CRM
+          FILE: /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
+          TYPE: application/rdf+xml
+          GRAPH: http://www.cidoc-crm.org/cidoc-crm/
+      - task: _ingest-data-from-file
+        vars:
+          NAME: CRMdig
+          FILE: /mapping/schemas/CRMdig_v3.2.1.rdfs
+          TYPE: application/rdf+xml
+          GRAPH: http://www.ics.forth.gr/isl/CRMdig/
+      - task: _ingest-data-from-file
+        vars:
+          NAME: SKKG Ontology
+          FILE: /mapping/schemas/skkg-ontology.ttl
+          TYPE: application/x-turtle
+          GRAPH: http://ontology.skkg.ch/ontology/
+
+  ingest-person-items:
+    desc: Ingests the person items into the triplestore
+    cmds:
+      - task: _ingest_module_items
+        vars:
+          MODULE: Person
+
+  prepare-and-perform-mapping:
+    desc: Prepares and performs the mapping for all modules
+    cmds:
+      - task: prepare-mapping-for-object-items
+      - task: prepare-mapping-for-person-items
+      - task: perform-mapping-for-object-items
+      - task: perform-mapping-for-person-items
+
+  perform-mapping-for-object-items:
+    desc: Performs the mapping for the object items
+    cmds:
+      - task: _perform-mapping-for-module-items
+        vars:
+          MODULE: Object
+  
+  perform-mapping-for-person-items:
+    desc: Performs the mapping for the person items
+    cmds:
+      - task: _perform-mapping-for-module-items
+        vars:
+          MODULE: Person
+  
+  prepare-mapping-for-address-items:
+    desc: Prepares the mapping for the object items
+    cmds:
+      - task: _prepare-mapping-for-module-items
+        vars:
+          MODULE: Address
+  
+  prepare-mapping-for-object-items:
+    desc: Prepares the mapping for the object items
+    cmds:
+      - task: _prepare-mapping-for-module-items
+        vars:
+          MODULE: Object
+
+  prepare-mapping-for-person-items:
+    desc: Prepares the mapping for the person items
+    cmds:
+      - task: _prepare-mapping-for-module-items
+        vars:
+          MODULE: Person
+
   recreate-folder-metadata:
     desc: Recreate the metadata for a specific folder. The folder name should be passed as an argument.
     cmds:
-      - python /scripts/updateMetadata.py --folder /data/source/{{.CLI_ARGS}}
+      - python /scripts/recreateMetadata.py --folder /data/source/{{.CLI_ARGS}}
 
   remove-deleted-address-items:
     desc: Removes address item records that have been deleted from MuseumPlus
@@ -111,10 +224,107 @@ tasks:
 
   _download-items-from-museumplus:
     vars:
-      TEMP_FOLDER: /data/temp/temp_{{.MODULE}}
+      TEMP_FOLDER: /data/temp/download/temp_{{.MODULE}}
     cmds:
       - mkdir -p {{.TEMP_FOLDER}}
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
+
+  _generate-example-record:
+    desc: Generates an example record for developing the mapping in the X3ML editor
+    vars:
+      OUTPUTFILE: "{{.OUTPUTFILE}}"
+      INPUTFILES: "{{.INPUTFILES}}"
+    cmds:
+      - cat {{.INPUTFILES}} > {{.OUTPUTFILE}}
+      - sed -i 's/<application xmlns="http:\/\/www.zetcom.com\/ria\/ws\/module">//g' {{.OUTPUTFILE}}
+      - sed -i 's/<modules>//g' {{.OUTPUTFILE}}
+      - sed -i 's/<\/modules>//g' {{.OUTPUTFILE}}
+      - sed -i 's/<\/application>//g' {{.OUTPUTFILE}}
+      - echo '<application><modules>' | cat - {{.OUTPUTFILE}} > temp && mv temp {{.OUTPUTFILE}}; echo '</modules></application>' >> {{.OUTPUTFILE}}
+
+  _ingest-data-from-file:
+    cmds:
+      - echo "Ingest {{.NAME}}"
+      - curl -X POST -H 'Content-Type:{{.TYPE}}' --data-binary '@{{.FILE}}' {{.BLAZEGRAPH_ENDPOINT}}{{if .GRAPH}}?context-uri={{.GRAPH}}{{end}}
+
+  _ingest_module_items:
+    vars:
+      INPUTFOLDER:
+        sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      TEMPFOLDER:
+        sh: echo "/data/temp/ingest/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      XMLFOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      FILENAMEPREFIX:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+      NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
+    cmds:
+      - mkdir -p {{.TEMPFOLDER}}
+      - |
+        # If folder contains already ingested files we skip the preparation step
+        if [ "$(find {{.TEMPFOLDER}} -type f -name '*.ttl.ingested' | wc -l)" -gt 0 ]; then
+          echo "Skipping preparation step for {{.MODULE}} as there are already ingested files"
+        else
+          echo "Preparing {{.MODULE}} for ingest"
+          python prepareDataForIngest.py  --inputFolder {{.INPUTFOLDER}} --outputFolder {{.TEMPFOLDER}} --xmlFolder {{.XMLFOLDER}}
+        fi
+      - |
+        numfiles=$(find {{.TEMPFOLDER}} -type f -name '*.ttl' | wc -l)
+        for f in $(find {{.TEMPFOLDER}} -type f -name '*.ttl' ); do
+          identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\\.ttl//")
+          echo "Ingesting {{.MODULE}} item $count of $numfiles with identifier $identifier"
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier" > /dev/null
+          count=$((count+1)) 
+          mv $f $f.ingested
+        done
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "{{.MODULE}}"
+          KEY: lastIngested
+          VALUE:
+            sh: date -u "+%Y-%m-%d %H:%M:%S.000"
+          SOURCEFOLDER: "{{.TEMPFOLDER}}"
+          FILEEXTENSION: .ttl.ingested
+      - find {{.TEMPFOLDER}} -maxdepth 1 -name "*.ttl.ingested" -delete
+
+  _perform-mapping-for-module-items:
+    vars:
+      INPUTFOLDER:
+        sh: echo "/mapping/input/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      OUTPUTFOLDER:
+        sh: echo "/mapping/output/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      DESTINATIONFOLDER:
+        sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      MAPPINGFILE:
+        sh: echo "/mapping/mapping-$(echo "{{.MODULE}}" | awk '{print tolower($0)}').x3ml"
+    cmds:
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
+      - sleep 5s # Wait for the mapping to finish
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "{{.MODULE}}"
+          KEY: lastMapped
+          VALUE:
+            sh: date -u "+%Y-%m-%d %H:%M:%S.000"
+          SOURCEFOLDER: "{{.INPUTFOLDER}}"
+          FILEEXTENSION: .xml
+      - mkdir -p {{.DESTINATIONFOLDER}}
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec mv -t {{.DESTINATIONFOLDER}} {} +
+
+  _prepare-mapping-for-module-items:
+    vars:
+      MODULE: "{{.MODULE}}"
+      INPUTFOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      OUTPUTFOLDER:
+        sh: echo "/mapping/input/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+    cmds:
+      - # TODO: separate preparation script (e.g. enrichment of data) from mapping preparation (i.e. moving relevant xml files to a place where they should be mapped)
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.xml" -delete
+      - python /scripts/prepareDataForMapping.py --module {{.MODULE}} --inputFolder {{.INPUTFOLDER}} --outputFolder {{.OUTPUTFOLDER}} {{.CLI_ARGS}}
 
   _process-items-deleted-from-museumplus:
     cmds:
@@ -133,3 +343,14 @@ tasks:
           MODULE: "{{.MODULE}}"
           INPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
+
+  _update-metadata-for-module:
+    vars:
+      METADATAFOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      SOURCEFOLDER: "{{.SOURCEFOLDER}}"
+      KEY: "{{.KEY}}"
+      VALUE: "{{.VALUE}}"
+      FILEEXTENSION: "{{.FILEEXTENSION}}"
+    cmds:
+      - python /scripts/updateMetadataValueForFiles.py --metadataFolder {{.METADATAFOLDER}} --inputFolder {{.SOURCEFOLDER}} --key {{.KEY}} --value "{{.VALUE}}" --fileExtension {{.FILEEXTENSION}}

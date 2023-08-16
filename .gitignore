@@ -2,14 +2,19 @@
 .env
 
 # Folder structure
-data/source/*/*.*
-data/temp/*/*.*
+data/**/*.*
 !data/temp/.gitkeep
 !data/source/.gitkeep
+!data/ttl/main/.gitkeep
+mapping/input/*/*.*
+mapping/output/*/*.*
 
 # Python Specific
 __pycache__
 .ipynb_checkpoints
+
+# Taskfile specific
+scripts/.task/**/*
 
 # Local
 *.zip

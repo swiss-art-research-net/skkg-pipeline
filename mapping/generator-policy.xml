@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator_policy>
+
+	<generator name="URIorUUID">
+		<custom generatorClass="gr.forth.URIorUUID">
+			<set-arg name="text"></set-arg>
+		</custom>
+	</generator>
+
+	<generator name="coordinates">
+		<pattern>POINT({lat} {long})</pattern>
+	</generator>
+		
+	<generator name="URIwithType" prefix="resource">
+		<pattern>{type}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeAndId" prefix="resource">
+		<pattern>{type}/{id}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd1Level" prefix="resource">
+		<pattern>{type}/{id}/{level1}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd2Levels" prefix="resource">
+		<pattern>{type}/{id}/{level1}/{level2}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd3Levels" prefix="resource">
+		<pattern>{type}/{id}/{level1}/{level2}/{level3}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd4Levels" prefix="resource">
+		<pattern>{type}/{id}/{level1}/{level2}/{level3}/{level4}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeAnId_IdHashed" prefix="resource">
+        <custom generatorClass="gr.forth.MultiHashingGenerator">
+            <set-arg name="type"/>
+			<set-arg name="id_HASHED_CONTENTS"/>
+        </custom>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd1Level_Level1Hashed" prefix="resource">
+        <custom generatorClass="gr.forth.MultiHashingGenerator">
+            <set-arg name="type"/>
+			<set-arg name="id"/>
+			<set-arg name="level1_HASHED_CONTENTS"/>
+        </custom>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd2Levels_Level2Hashed" prefix="resource">
+        <custom generatorClass="gr.forth.MultiHashingGenerator">
+            <set-arg name="type"/>
+			<set-arg name="id"/>
+			<set-arg name="level1"/>
+			<set-arg name="level2_HASHED_CONTENTS"/>
+        </custom>
+	</generator>
+
+	<generator name="URIwithAatId" prefix="aat">
+		<pattern>{id}</pattern>
+	</generator>
+
+	<generator name="URIwithCidocCrmId" prefix="crm">
+		<pattern>{id}</pattern>
+	</generator>
+
+	<generator name="URIwithGndId" prefix="gnd">
+		<pattern>{id}</pattern>
+	</generator>
+
+	<generator name="URIwithLocId" prefix="loc">
+		<pattern>{id}</pattern>
+	</generator>
+		
+	<generator name="URIwithSikartId" prefix="sikart">
+		<pattern>{id}</pattern>
+	</generator>
+		
+	<generator name="URIwithSikartPersonId" prefix="sikart">
+		<pattern>person-{id}</pattern>
+	</generator>
+
+	<generator name="URIwithUlanId" prefix="ulan">
+		<pattern>{id}</pattern>
+	</generator>
+		
+	<generator name="URIwithWikidataId" prefix="wd">
+		<pattern>{id}</pattern>
+	</generator>
+		
+	<generator name="URIwithViafId" prefix="viaf">
+		<pattern>{id}</pattern>
+	</generator>
+		
+	<generator name="dateNormalizerGen">
+		<custom generatorClass="gr.forth.DateNormalizer">
+			<set-arg name="text"/>
+			<set-arg name="bound"/>
+			<set-arg name="report"/>
+		</custom>
+	</generator>
+		
+	<generator name="typedLiteralGen">
+		<custom generatorClass="gr.forth.TypedLiteralGenerator">
+			<set-arg name="text"/>
+		</custom>
+	</generator>
+
+</generator_policy>
+ 

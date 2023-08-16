@@ -1,8 +1,18 @@
+"""
+Script to recreate the metadata file for a given folder.
+
+Usage:
+    python recreateMetadata.py --folder <folder>
+
+Arguments:
+    --folder: Folder where the XML files are stored
+"""
+
 import argparse
 from datetime import datetime
 from lxml import etree
 from os import listdir
-from os.path import join, exists, isfile
+from os.path import join, isfile
 from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
