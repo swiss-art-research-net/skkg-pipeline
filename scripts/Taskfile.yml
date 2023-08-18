@@ -207,6 +207,21 @@ tasks:
       - remove-deleted-object-items
       - remove-deleted-person-items
 
+  reset-last-mapped-metadata:
+    desc: Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
+    vars:
+      MODULE: "{{.CLI_ARGS}}"
+      SOURCEFOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+    cmds:
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "{{.MODULE}}"
+          KEY: lastMapped
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: "{{.SOURCEFOLDER}}"
+          FILEEXTENSION: .xml
+
   _download-module-items-from-museumplus:
     vars:
       FOLDER:
@@ -230,7 +245,6 @@ tasks:
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
 
   _generate-example-record:
-    desc: Generates an example record for developing the mapping in the X3ML editor
     vars:
       OUTPUTFILE: "{{.OUTPUTFILE}}"
       INPUTFILES: "{{.INPUTFILES}}"
