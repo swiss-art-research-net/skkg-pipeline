@@ -34,11 +34,23 @@ bash downloadSources.sh
 
 ### Tasks
 
+#### Essential Tasks
+
 The pipeline can be controlled by the Task runner. To run the entire pipeline, run
 
 ```sh
 docker compose exec jobs task
 ```
+
+To force a re-mapping of items (for example after a mapping has changed), reset the last mapped metadata by running
+
+```sh
+docker compose exec jobs task reset-last-mapped-metadata -- module-name
+```
+
+where `module-name` is one of `object`, `person` or `address`.
+
+#### Additional Tasks
 
 To list available tasks, run:
 
@@ -79,13 +91,13 @@ task: Available tasks for this project:
 To run a specific task type `task` followed by the task name, e.g.:
 
 ```sh
-docker compose exec jobs task download-object-items
+docker compose exec jobs task ingest-items
 ```
 
 If the task is already up to date, it will not run. To force a task to run, type the command followed by `--force`
 
 ```sh
-docker compose exec jobs task download-object-items --force
+docker compose exec jobs task ingest-items --force
 ```
 
 To add additional arguments to the task itself, enter the arguments after a `--` sign, e.g.:
