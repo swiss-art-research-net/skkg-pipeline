@@ -13,6 +13,11 @@ output: 'prefixed'
 
 tasks:
 
+  first-run:
+    desc: Task to run when the pipeline is run for the first time
+    cmds:
+      - task: download-source-vocabularies
+
   default:
     desc: Runs the entire pipeline
     cmds:
@@ -28,7 +33,45 @@ tasks:
       - download-literature-items
       - download-object-items
       - download-person-items
+  
+  download-source-vocabularies:
+    desc: Downloads all vocabularies from MuseumPlus
+    cmds:
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDateCertaintyVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDatePeriodVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDatePrefixVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDateSourceVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDateTypeVgr
 
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjObjectTitleTypeVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjObjectTitleSourceVgr
+
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjPerAssociationRoleVgr
+
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjPerAssociationAttributionVgr
+
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: GenLanguageVgr
+          
   download-address-items:
     desc: Download the address item records from MuseumPlus
     cmds:
@@ -221,6 +264,14 @@ tasks:
           VALUE: "1970-01-01 00:00:00.000"
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
+  
+  _download-vocabulary-from-museumplus:
+    vars:
+      OUTPUT_FOLDER: /data/source/vocabularies
+    cmds:
+      - echo "Downloading {{.VOCABULARY}} vocabulary from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - python /scripts/downloadVocabulary.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --vocabulary {{.VOCABULARY}} --outputFolder {{.OUTPUT_FOLDER}}
 
   _download-module-items-from-museumplus:
     vars:

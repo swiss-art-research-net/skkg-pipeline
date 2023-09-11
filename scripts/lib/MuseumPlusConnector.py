@@ -33,6 +33,20 @@ class MPWrapper:
         })
         self.session = session
         
+    def _get(self, url: str, *, timeout=300) -> requests.Request:
+        """
+        Sends a get request to the given URL
+
+        Args:
+            url (str): The URL to send the request to
+        """
+        try:
+            r = self.session.get(url, timeout=(None, timeout))
+        except requests.exceptions.Timeout as e:
+            raise e
+        r.raise_for_status()
+        return r
+    
     def _post(self, url: str, query: etree.Element, *, timeout=300) -> requests.Request:
         """
         Sends a POST request to the given URL with the given query
@@ -99,6 +113,15 @@ class MPWrapper:
         """
         return f"{self.url}/module/{module}/search"
     
+    def _getVocabularySearchUrl(self, vocabulary: str) -> str:
+        """
+        Returns the search URL for the given vocabulary
+
+        Args:
+            vocabulary (str): The vocabulary name
+        """
+        return f"{self.url}/vocabulary/instances/{vocabulary}/nodes/search"
+
     def existsItem(self, *, module: str, id: int) -> bool:
         query = self._getItemQueryById(module=module, id=id)
         search = query.find('.//search')
@@ -151,3 +174,12 @@ class MPWrapper:
             raise e
         item = etree.fromstring(response.content)
         return item
+    
+    def getVocabularyNodes(self, vocabulary: str) -> etree.Element:
+        url = self._getVocabularySearchUrl(vocabulary)
+        try:
+            response = self._get(url)
+        except requests.exceptions.HTTPError as e:
+            raise e
+        nodes = etree.fromstring(response.content)
+        return nodes
