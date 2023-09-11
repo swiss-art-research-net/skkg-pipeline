@@ -187,6 +187,20 @@ tasks:
       - task: _perform-mapping-for-module-items
         vars:
           MODULE: Person
+
+  perform-mapping-for-vocabularies:
+    desc: Performs the mapping for the vocabularies
+    source:
+      - /mapping/mapping-vocabulary.x3ml
+      - /data/source/vocabularies
+    vars:
+      INPUTFOLDER: "/data/source/vocabularies"
+      OUTPUTFOLDER: "/data/ttl/main/vocabularies"
+      MAPPINGFILE: "/mapping/mapping-vocabulary.x3ml"
+    cmds:
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
   
   prepare-mapping-for-address-items:
     desc: Prepares the mapping for the object items
