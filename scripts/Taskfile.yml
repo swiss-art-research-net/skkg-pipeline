@@ -13,11 +13,15 @@ output: 'prefixed'
 
 tasks:
 
+  first-run:
+    desc: Task to run when the pipeline is run for the first time
+    cmds:
+      - task: download-source-vocabularies
+
   default:
     desc: Runs the entire pipeline
     cmds:
       - task: download-source-items
-      - task: download-source-vocabularies
       - task: prepare-and-perform-mapping
       - task: ingest-items
       - task: ingest-ontologies
@@ -32,14 +36,42 @@ tasks:
   
   download-source-vocabularies:
     desc: Downloads all vocabularies from MuseumPlus
-    vars:
-      OUTPUT_FOLDER: /data/source/vocabularies
     cmds:
       - task: _download-vocabulary-from-museumplus
         vars:
           VOCABULARY: ObjDateCertaintyVgr
-          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDatePeriodVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDatePrefixVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDateSourceVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDateTypeVgr
 
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjObjectTitleTypeVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjObjectTitleSourceVgr
+
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjPerAssociationRoleVgr
+
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjPerAssociationAttributionVgr
+
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: GenLanguageVgr
+          
   download-address-items:
     desc: Download the address item records from MuseumPlus
     cmds:
@@ -234,6 +266,8 @@ tasks:
           FILEEXTENSION: .xml
   
   _download-vocabulary-from-museumplus:
+    vars:
+      OUTPUT_FOLDER: /data/source/vocabularies
     cmds:
       - echo "Downloading {{.VOCABULARY}} vocabulary from MuseumPlus"
       - mkdir -p {{.OUTPUT_FOLDER}}
