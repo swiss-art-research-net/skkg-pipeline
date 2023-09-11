@@ -17,6 +17,7 @@ tasks:
     desc: Runs the entire pipeline
     cmds:
       - task: download-source-items
+      - task: download-source-vocabularies
       - task: prepare-and-perform-mapping
       - task: ingest-items
       - task: ingest-ontologies
@@ -28,6 +29,16 @@ tasks:
       - download-literature-items
       - download-object-items
       - download-person-items
+  
+  download-source-vocabularies:
+    desc: Downloads all vocabularies from MuseumPlus
+    vars:
+      OUTPUT_FOLDER: /data/source/vocabularies
+    cmds:
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDateCertaintyVgr
+          OUTPUT_FOLDER: "{{.OUTPUT_FOLDER}}"
 
   download-address-items:
     desc: Download the address item records from MuseumPlus
@@ -221,6 +232,12 @@ tasks:
           VALUE: "1970-01-01 00:00:00.000"
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
+  
+  _download-vocabulary-from-museumplus:
+    cmds:
+      - echo "Downloading {{.VOCABULARY}} vocabulary from MuseumPlus"
+      - mkdir -p {{.OUTPUT_FOLDER}}
+      - python /scripts/downloadVocabulary.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --vocabulary {{.VOCABULARY}} --outputFolder {{.OUTPUT_FOLDER}}
 
   _download-module-items-from-museumplus:
     vars:
