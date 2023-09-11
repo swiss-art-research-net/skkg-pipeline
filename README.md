@@ -67,6 +67,8 @@ task: Available tasks for this project:
 * download-object-items:                   Download the object item records from MuseumPlus
 * download-person-items:                   Download the person item records from MuseumPlus
 * download-source-items:                   Downloads all item records from MuseumPlus
+* download-source-vocabularies:            Downloads all vocabularies from MuseumPlus
+* first-run:                               Task to run when the pipeline is run for the first time
 * generate-example-record-object:          Generates an example record for developing the mapping in the X3ML editor
 * generate-example-record-person:          Generates an example record for developing the mapping in the X3ML editor
 * ingest-items:                            Ingest items for all modules
