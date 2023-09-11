@@ -14,13 +14,9 @@ Arguments:
 """
 
 import argparse
-from datetime import datetime
 from lxml import etree
-from os import listdir, remove as removeFile
-from os.path import join, exists, isfile
-from tqdm import tqdm
+from os.path import join
 
-from lib.Metadata import ItemMetadata
 from lib.MuseumPlusConnector import MPWrapper
 
 def downloadVocabulary(*, host, username, password, vocabulary, outputFolder, filenamePrefix = 'vocab-'):          
