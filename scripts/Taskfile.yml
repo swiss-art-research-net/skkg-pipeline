@@ -187,6 +187,26 @@ tasks:
       - task: _perform-mapping-for-module-items
         vars:
           MODULE: Person
+
+  perform-mapping-for-vocabularies:
+    desc: Performs the mapping for the vocabularies
+    source:
+      - /mapping/mapping-vocabulary.x3ml
+      - /data/source/vocabularies
+    vars:
+      SOURCEFOLDER: "/data/source/vocabularies"
+      INPUTFOLDER: "/mapping/input/vocabularies"
+      OUTPUTFOLDER: "/data/ttl/main/vocabularies"
+      MAPPINGFILE: "/mapping/mapping-vocabulary.x3ml"
+    cmds:
+      - mkdir -p {{.INPUTFOLDER}}
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - # Copy all XML files from the source folder to the input folder
+      - find {{.SOURCEFOLDER}} -maxdepth 1 -name "*.xml" -exec cp -t {{.INPUTFOLDER}} {} +
+      - # Remove the string 'xmlns="http://www.zetcom.com/ria/ws/vocabulary"' from the XML files in the input folder as X3ML is not able to handle XML namespaces
+      - find {{.INPUTFOLDER}} -maxdepth 1 -name "*.xml" -exec sed -i 's/xmlns="http:\/\/www.zetcom.com\/ria\/ws\/vocabulary"//g' {} +
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
   
   prepare-mapping-for-address-items:
     desc: Prepares the mapping for the object items
