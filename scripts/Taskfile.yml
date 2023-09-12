@@ -291,6 +291,14 @@ tasks:
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
   
+  update-vocabularies:
+    desc: Downloads, maps, and ingests the vocabularies
+    cmds:
+      - task: download-source-vocabularies
+      - task: perform-mapping-for-vocabularies
+      - sleep 5s
+      - task: ingest-vocabularies
+  
   _download-vocabulary-from-museumplus:
     vars:
       OUTPUT_FOLDER: /data/source/vocabularies
