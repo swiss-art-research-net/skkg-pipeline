@@ -1,36 +1,35 @@
 # SKKG Pipeline
 
+## About
+
+This contains the pipeline for the Sammlung Digital project by the [Stiftung für Kunst und Kultur (SKKG)](https://www.skkg.ch/).
+
 ## Table of contents
 
-- [About](#about)
 - [How to use](#how-to-use)
 - [Initialisation](#initialisation)
   - [Running the pipeline](#running-the-pipeline)
 - [Tasks](#tasks)
     - [Useful tasks](#useful-tasks)
 - [Folder structure](#folder-structure)
-## About
-
-This contains the pipeline for the Sammlung Digital project by the [Stiftung für Kunst und Kultur (SKKG)](https://www.skkg.ch/)
-
 ## How to use
 
 Prerequisites: [Docker](http://docker.io) including Docker Compose
 
 Copy and (if required) edit the .env.example
-```
+```sh
 cp .env.example .env
 ```
 
 Run the project with
-```
+```sh
 docker compose up -d
 ```
 
 ## Initialisation
 
 To include the [SKKG App](https://github.com/swiss-art-research-net/skkg-app) when cloning, clone with:
-```
+```sh
 git clone --recurse-submodules git@github.com:swiss-art-research-net/skkg-pipeline.git
 ```
 
@@ -125,7 +124,7 @@ docker compose exec jobs task reset-last-mapped-metadata -- object
 
 ## Folder structure
 
-The pipeline does not use a stores everything as files (instead of relying on a database). The folder structure is as follows:
+The pipeline stores everything as individual files (instead of relying on a database). The folder structure is as follows:
 
 - **data**
   - **source** Contains the source files obtained from MuseumPlus
@@ -146,7 +145,7 @@ The pipeline does not use a stores everything as files (instead of relying on a 
     - ***{module}*** Temporary storage for the mapping input data for each module. There is an individual folder per 
     module.
   - **output** Mapping output data will be (temporarily) stored here
-    - ***{module}*** Temporary storage for the mapping output data for each module. There is an individual folder per module. Sucessfully mapped data will be moved to **data/ttl/main/*{module}***
+    - ***{module}*** Temporary storage for the mapping output data for each module. There is an individual folder per module. Sucessfully mapped data will be moved to *data/ttl/main/{module}*
   - **schemas** Contains RDFS schemas for the ontologies used in the mapping
 - **scripts** Contains scripts, mostly in Python or bash, used for more complex tasks in the pipeline. This folder also contains the Task definitions.
 - **services** Contains relevant files for the Docker-based services used in the Pipeline
