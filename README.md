@@ -106,10 +106,38 @@ To add additional arguments to the task itself, enter the arguments after a `--`
 docker compose exec jobs task reset-last-mapped-metadata -- object
 ```
 
-###  Useful taks
+###  Useful tasks
 
 | Name | Description | Usage
 --- | --- | ---
 | `reset-last-mapped-metadata` | Resets the last mapped metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-mapped-metadata -- {modulen}` where `{module}` can be `object`, `person` or `address`
 | `update-vocabularies` | Downloads, maps, and ingests the vocabularies | `docker compose exec jobs task update-vocabularies` |
 | `recreate-folder-metadata` | If the folder metadata is lost or gets corrupted, it can be recreated using this tasks | `docker compose exec jobs task recreate-folder-metadata -- {module}` where `{module}` is the name of the folder to recreate the metadata for, e.g. `object`, `person` or `address`
+
+### Folder structure
+
+The pipeline does not use a stores everything as files (instead of relying on a database). The folder structure is as follows:
+
+- **data**
+  - **source** Contains the source files obtained from MuseumPlus
+    - ***{module}*** Contains the module items as XML files. There is an individual folder per module.
+    - **vocabularies** Contains the vocabulary nodes
+  - **temp** Folder to store temporary data
+    - **download** Temporary data used during the download process
+      - **temp_*{module}*** Temporary data used during the download process. There is an individual folder per module so a download can be resumed if it fails.
+    - **ingest**
+      - ***{module}*** Files that need to be ingested into Blazegraph will be temporarily stored here. There is an individual folder per module.
+ - **ttl** Contains RDF data. This can include mapped source data as well as additional data.
+   - **main** Contains the main RDF data
+     - ***{module}*** Contains the RDF data for each module as Turtle files. There is an individual folder per module.
+        - **vocabularies** Contains the RDF data for the vocabularies as Turtle files.
+    - **additional** Contians additional RDF data, such as data retrieved from external soures
+- **mapping** Contains mapping specifications as well as other relevant data for mapping
+  - **input** Mapping input data will be (temporarily) stored here
+    - ***{module}*** Temporary storage for the mapping input data for each module. There is an individual folder per 
+    module.
+  - **output** Mapping output data will be (temporarily) stored here
+    - ***{module}*** Temporary storage for the mapping output data for each module. There is an individual folder per module. Sucessfully mapped data will be moved to **data/ttl/main/*{module}***
+  - **schemas** Contains RDFS schemas for the ontologies used in the mapping
+- **scripts** Contains scripts, mostly in Python or bash, used for more complex tasks in the pipeline. This folder also contains the Task definitions.
+- **services** Contains relevant files for the Docker-based services used in the Pipeline
