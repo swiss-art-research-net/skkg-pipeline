@@ -39,6 +39,9 @@ tasks:
     cmds:
       - task: _download-vocabulary-from-museumplus
         vars:
+          VOCABULARY: ObjCategoryVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
           VOCABULARY: ObjDateCertaintyVgr
       - task: _download-vocabulary-from-museumplus
         vars:
