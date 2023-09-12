@@ -124,7 +124,7 @@ docker compose exec jobs task reset-last-mapped-metadata -- object
 
 ## Folder structure
 
-The pipeline does not use a stores everything as files (instead of relying on a database). The folder structure is as follows:
+The pipeline stores everything as individual files (instead of relying on a database). The folder structure is as follows:
 
 - **data**
   - **source** Contains the source files obtained from MuseumPlus
