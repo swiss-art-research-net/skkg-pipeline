@@ -45,7 +45,7 @@ To subsequently run the entire pipeline, run
 docker compose exec jobs task
 ```
 
-### Tasks
+## Tasks
 
 The pipeline is can be controlled by the [Task](https://taskfile.dev/#/) runner. The tasks are defined in the `Taskfile.yml` file.
 
@@ -106,7 +106,7 @@ To add additional arguments to the task itself, enter the arguments after a `--`
 docker compose exec jobs task reset-last-mapped-metadata -- object
 ```
 
-####  Useful taks
+###  Useful taks
 
 | Name | Description | Usage
 --- | --- | ---
