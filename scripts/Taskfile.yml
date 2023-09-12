@@ -198,7 +198,7 @@ tasks:
     desc: Performs the mapping for the vocabularies
     source:
       - /mapping/mapping-vocabulary.x3ml
-      - /data/source/vocabularies
+      - /data/source/vocabularies/*.xml
     vars:
       SOURCEFOLDER: "/data/source/vocabularies"
       INPUTFOLDER: "/mapping/input/vocabularies"
