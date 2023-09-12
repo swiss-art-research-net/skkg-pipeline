@@ -26,7 +26,6 @@ def downloadVocabulary(*, host, username, password, vocabulary, outputFolder, fi
     vocabularyNodes = client.getVocabularyNodes(vocabulary)
     with open(filename, 'wb') as f:
         data = etree.tostring(vocabularyNodes, pretty_print=True)
-        data = data.replace(b'xmlns="http://www.zetcom.com/ria/ws/vocabulary"', b'')
         f.write(data)
     
     print(f"Downloaded vocabulary {vocabulary}.")
