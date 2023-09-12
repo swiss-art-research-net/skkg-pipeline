@@ -33,15 +33,16 @@ class MPWrapper:
         })
         self.session = session
         
-    def _get(self, url: str, *, timeout=300) -> requests.Request:
+    def _get(self, url: str, *, params: dict = {}, timeout=300) -> requests.Request:
         """
         Sends a get request to the given URL
 
         Args:
             url (str): The URL to send the request to
+            parameters (dict, optional): The parameters to send with the request. Defaults to None.
         """
         try:
-            r = self.session.get(url, timeout=(None, timeout))
+            r = self.session.get(url, params=params, timeout=(None, timeout))
         except requests.exceptions.Timeout as e:
             raise e
         r.raise_for_status()
@@ -177,8 +178,9 @@ class MPWrapper:
     
     def getVocabularyNodes(self, vocabulary: str) -> etree.Element:
         url = self._getVocabularySearchUrl(vocabulary)
+        params = { 'limit': 100000 }
         try:
-            response = self._get(url)
+            response = self._get(url, params=params)
         except requests.exceptions.HTTPError as e:
             raise e
         nodes = etree.fromstring(response.content)
