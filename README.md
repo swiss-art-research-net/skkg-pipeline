@@ -32,25 +32,22 @@ Download the source files by runnning
 bash downloadSources.sh
 ```
 
-### Tasks
+### Running the pipeline
 
-#### Essential Tasks
+The pipeline can be controlled by the Task runner. When running the pipeline for the first time, run
+```sh
+docker compose exec jobs task first-run
+```
 
-The pipeline can be controlled by the Task runner. To run the entire pipeline, run
+To subsequently run the entire pipeline, run
 
 ```sh
 docker compose exec jobs task
 ```
 
-To force a re-mapping of items (for example after a mapping has changed), reset the last mapped metadata by running
+### Tasks
 
-```sh
-docker compose exec jobs task reset-last-mapped-metadata -- module-name
-```
-
-where `module-name` is one of `object`, `person` or `address`.
-
-#### Additional Tasks
+The pipeline is can be controlled by the [Task](https://taskfile.dev/#/) runner. The tasks are defined in the `Taskfile.yml` file.
 
 To list available tasks, run:
 
@@ -59,8 +56,7 @@ docker compose exec jobs task --list
 ```
 
 This will output a list of tasks:
-```
-task: Available tasks for this project:
+```task: Available tasks for this project:
 * default:                                 Runs the entire pipeline
 * download-address-items:                  Download the address item records from MuseumPlus
 * download-literature-items:               Download the literature item records from MuseumPlus
@@ -77,6 +73,7 @@ task: Available tasks for this project:
 * ingest-person-items:                     Ingests the person items into the triplestore
 * perform-mapping-for-object-items:        Performs the mapping for the object items
 * perform-mapping-for-person-items:        Performs the mapping for the person items
+* perform-mapping-for-vocabularies:        Performs the mapping for the vocabularies
 * prepare-and-perform-mapping:             Prepares and performs the mapping for all modules
 * prepare-mapping-for-address-items:       Prepares the mapping for the object items
 * prepare-mapping-for-object-items:        Prepares the mapping for the object items
@@ -88,6 +85,7 @@ task: Available tasks for this project:
 * remove-deleted-person-items:             Removes person item records that have been deleted from MuseumPlus
 * remove-deleted-source-items:             Removes item records that have been deleted from MuseumPlus
 * reset-last-mapped-metadata:              Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
+* update-vocabularies:                     Downloads, maps, and ingests the vocabularies
 ```
 
 To run a specific task type `task` followed by the task name, e.g.:
@@ -105,5 +103,13 @@ docker compose exec jobs task ingest-items --force
 To add additional arguments to the task itself, enter the arguments after a `--` sign, e.g.:
 
 ```sh
-docker compose exec jobs task download-object-items -- --limit 100
+docker compose exec jobs task reset-last-mapped-metadata -- object
 ```
+
+####  Useful taks
+
+| Name | Description | Usage
+--- | --- | ---
+| `reset-last-mapped-metadata` | Resets the last mapped metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-mapped-metadata -- {modulen}` where `{module}` can be `object`, `person` or `address`
+| `update-vocabularies` | Downloads, maps, and ingests the vocabularies | `docker compose exec jobs task update-vocabularies` |
+| `recreate-folder-metadata` | If the folder metadata is lost or gets corrupted, it can be recreated using this tasks | `docker compose exec jobs task recreate-folder-metadata -- {module}` where `{module}` is the name of the folder to recreate the metadata for, e.g. `object`, `person` or `address`
