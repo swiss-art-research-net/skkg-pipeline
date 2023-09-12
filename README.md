@@ -1,5 +1,14 @@
 # SKKG Pipeline
 
+## Table of contents
+
+- [About](#about)
+- [How to use](#how-to-use)
+- [Initialisation](#initialisation)
+  - [Running the pipeline](#running-the-pipeline)
+- [Tasks](#tasks)
+    - [Useful tasks](#useful-tasks)
+- [Folder structure](#folder-structure)
 ## About
 
 This contains the pipeline for the Sammlung Digital project by the [Stiftung für Kunst und Kultur (SKKG)](https://www.skkg.ch/)
@@ -114,7 +123,7 @@ docker compose exec jobs task reset-last-mapped-metadata -- object
 | `update-vocabularies` | Downloads, maps, and ingests the vocabularies | `docker compose exec jobs task update-vocabularies` |
 | `recreate-folder-metadata` | If the folder metadata is lost or gets corrupted, it can be recreated using this tasks | `docker compose exec jobs task recreate-folder-metadata -- {module}` where `{module}` is the name of the folder to recreate the metadata for, e.g. `object`, `person` or `address`
 
-### Folder structure
+## Folder structure
 
 The pipeline does not use a stores everything as files (instead of relying on a database). The folder structure is as follows:
 
