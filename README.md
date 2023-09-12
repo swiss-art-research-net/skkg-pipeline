@@ -1,18 +1,17 @@
 # SKKG Pipeline
 
+## About
+
+This contains the pipeline for the Sammlung Digital project by the [Stiftung für Kunst und Kultur (SKKG)](https://www.skkg.ch/).
+
 ## Table of contents
 
-- [About](#about)
 - [How to use](#how-to-use)
 - [Initialisation](#initialisation)
   - [Running the pipeline](#running-the-pipeline)
 - [Tasks](#tasks)
     - [Useful tasks](#useful-tasks)
 - [Folder structure](#folder-structure)
-## About
-
-This contains the pipeline for the Sammlung Digital project by the [Stiftung für Kunst und Kultur (SKKG)](https://www.skkg.ch/)
-
 ## How to use
 
 Prerequisites: [Docker](http://docker.io) including Docker Compose
