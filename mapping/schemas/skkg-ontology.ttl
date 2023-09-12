@@ -26,3 +26,8 @@
 ###  https://ontology.skkg.ch/Person
 <https://ontology.skkg.ch/Person> rdf:type owl:Class ;
                                   rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E21_Person> , <https://ontology.skkg.ch/Entity> .
+
+
+###  https://ontology.skkg.ch/Type
+<https://ontology.skkg.ch/Type> rdf:type owl:Class ;
+                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E55_Type> , <https://ontology.skkg.ch/Entity> .

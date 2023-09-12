@@ -165,6 +165,12 @@ tasks:
       - task: _ingest_module_items
         vars:
           MODULE: Person
+    
+  ingest-vocabularies:
+    - task: _ingest_vocabularies
+      vars:
+        INPUTFOLDER: /data/ttl/main/vocabularies
+        NAMESPACE: https://data.skkg.ch/type/
 
   prepare-and-perform-mapping:
     desc: Prepares and performs the mapping for all modules
@@ -192,7 +198,7 @@ tasks:
     desc: Performs the mapping for the vocabularies
     source:
       - /mapping/mapping-vocabulary.x3ml
-      - /data/source/vocabularies
+      - /data/source/vocabularies/*.xml
     vars:
       SOURCEFOLDER: "/data/source/vocabularies"
       INPUTFOLDER: "/mapping/input/vocabularies"
@@ -285,6 +291,14 @@ tasks:
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
   
+  update-vocabularies:
+    desc: Downloads, maps, and ingests the vocabularies
+    cmds:
+      - task: download-source-vocabularies
+      - task: perform-mapping-for-vocabularies
+      - sleep 5s
+      - task: ingest-vocabularies
+  
   _download-vocabulary-from-museumplus:
     vars:
       OUTPUT_FOLDER: /data/source/vocabularies
@@ -358,7 +372,11 @@ tasks:
         for f in $(find {{.TEMPFOLDER}} -type f -name '*.ttl' ); do
           identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\\.ttl//")
           echo "Ingesting {{.MODULE}} item $count of $numfiles with identifier $identifier"
-          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier" > /dev/null
+          graph="{{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
+          # Drop graph
+          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" > /dev/null
+          # Ingest into graph
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph" > /dev/null
           count=$((count+1)) 
           mv $f $f.ingested
         done
@@ -371,6 +389,26 @@ tasks:
           SOURCEFOLDER: "{{.TEMPFOLDER}}"
           FILEEXTENSION: .ttl.ingested
       - find {{.TEMPFOLDER}} -maxdepth 1 -name "*.ttl.ingested" -delete
+  
+  _ingest_vocabularies:
+    vars:
+      NAMESPACE: "{{.NAMESPACE}}"
+    cmds:
+      - echo "Ingesting vocabularies"
+      - |
+        numfiles=$(find {{.INPUTFOLDER}} -type f -name '*.ttl' | wc -l)
+        count=1
+        for f in $(find {{.INPUTFOLDER}} -type f -name '*.ttl' ); do
+          uri=$(grep -oPm 1 '(<{{.NAMESPACE}})[0-9]+>' $f) 
+          # Strip < and > at beginning and end of uri
+          graph=${uri:1:-1}
+          echo -e "Ingesting vocabulary $graph ($count of $numfiles)"
+          # Drop graph
+          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" > /dev/null
+          # Ingest vocabulary into graph
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph"
+          count=$((count+1)) 
+        done
 
   _perform-mapping-for-module-items:
     vars:

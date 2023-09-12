@@ -33,6 +33,7 @@
                     <entity variable="node">
                         <type>crm:E55_Type</type>
                         <type>skos:Concept</type>
+                        <type>skkg:Type</type>
                         <instance_generator name="URIwithTypeIdAnd1Level">
                             <arg name="type" type="constant">type</arg>
                             <arg name="id" type="xpath">instance/@id</arg>
