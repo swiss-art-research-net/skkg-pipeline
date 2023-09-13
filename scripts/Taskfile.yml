@@ -17,6 +17,8 @@ tasks:
     desc: Task to run when the pipeline is run for the first time
     cmds:
       - task: download-source-vocabularies
+      - task: generate-example-record-object
+      - task: generate-example-record-person
 
   default:
     desc: Runs the entire pipeline
