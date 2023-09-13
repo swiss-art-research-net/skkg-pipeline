@@ -1,10 +1,10 @@
-@prefix : <http://www.semanticweb.org/fkraeutli/ontologies/2023/7/untitled-ontology-159/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@base <http://www.semanticweb.org/fkraeutli/ontologies/2023/7/untitled-ontology-159/> .
+@prefix skkg: <https://ontology.skkg.ch/> .
+@prefix type: <https://data.skkg.ch/type/> .
 
 <https://ontology.skkg.ch> rdf:type owl:Ontology ;
                             owl:imports <https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs> .
@@ -31,3 +31,11 @@
 ###  https://ontology.skkg.ch/Type
 <https://ontology.skkg.ch/Type> rdf:type owl:Class ;
                                   rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E55_Type> , <https://ontology.skkg.ch/Entity> .
+
+                            
+#################################################################
+#    Individuals
+#################################################################
+
+:invnr rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Inventarnummer"@de .
