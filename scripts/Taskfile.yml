@@ -374,12 +374,12 @@ tasks:
         numfiles=$(find {{.TEMPFOLDER}} -type f -name '*.ttl' | wc -l)
         for f in $(find {{.TEMPFOLDER}} -type f -name '*.ttl' ); do
           identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\\.ttl//")
-          echo "Ingesting {{.MODULE}} item $count of $numfiles with identifier $identifier"
           graph="{{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
+          echo "Ingesting {{.MODULE}} item $count of $numfiles into graph $graph"
           # Drop graph
-          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" > /dev/null
+          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" 
           # Ingest into graph
-          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph" > /dev/null
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph"
           count=$((count+1)) 
           mv $f $f.ingested
         done
