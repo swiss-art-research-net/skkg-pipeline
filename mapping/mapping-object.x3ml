@@ -285,13 +285,6 @@
                         <relation>moduleReferenceItem</relation>
                     </source_relation>
                     <target_relation>
-                        <if>
-                            <not>
-                                <if>
-                                    <exists>vocabularyReference[@instanceName="ObjPerAssociationAttributionVgr"]</exists>
-                                </if>
-                            </not>
-                        </if>
                         <relationship>crm:P9_consists_of</relationship>
                     </target_relation>
                 </path>
@@ -380,6 +373,118 @@
                             <equals value="ObjPerAssociationRoleVgr">../@instanceName</equals>
                         </if>
                         <relationship>crm:P32_used_general_technique</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/moduleReference/moduleReferenceItem</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="ObjPerAssociationRef">../@name</equals>
+                            </if>
+                            <if>
+                                <exists>vocabularyReference[@instanceName="ObjPerAssociationAttributionVgr"]</exists>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crm:E12_Production</type>
+                        <instance_generator name="URIwithTypeIdAnd2Levels">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">production</arg>
+                            <arg name="level2" type="xpath">@seqNo</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>.</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>crm:P15_was_influenced_by</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>.</source_node>
+                    <target_node>
+                        <entity variable="subproduction_person">
+                            <type>crm:E21_Person</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">person</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjPerAssociationRoleVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P32_used_general_technique</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjPerAssociationAttributionVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P2_has_type</relationship>
                     </target_relation>
                 </path>
                 <range>
