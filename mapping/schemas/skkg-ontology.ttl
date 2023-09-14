@@ -38,4 +38,9 @@
 #################################################################
 
 :invnr rdf:type skkg:Type, skos:Concept ;
-    rdfs:label "Inventarnummer"@de .
+    rdfs:label "Inv.Nr."@de, "Inventarnummer"@de ;
+    skos:prefLabel "Inventarnummer"@de .
+
+:sortlnu rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "SortLnu", "Sortierung"@de ;
+    skos:prefLabel "Sortierung"@de .
