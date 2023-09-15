@@ -326,7 +326,7 @@
                             <type>rdfs:Literal</type>
                             <instance_generator name="Literal">
                                 <arg name="text" type="xpath">value/text()</arg>
-                                <arg name="language" type="xpath">../vocabularyReference/vocabularyReferenceItem/@name</arg>
+                                <arg name="language" type="xpath">if (../vocabularyReference[@name="GenLanguageVgr"]/vocabularyReferenceItem/@name) then (../vocabularyReference[@name="GenLanguageVgr"]/vocabularyReferenceItem/@name) else ("de")</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
