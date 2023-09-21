@@ -85,6 +85,34 @@
                     <target_node>
                         <entity>
                             <type>crm:E55_Type</type>
+                            <type>skos:ConceptScheme</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">@logicalName</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>instance</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>skos:inScheme</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>instance</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E55_Type</type>
+                            <type>skos:ConceptScheme</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">type</arg>
                                 <arg name="id" type="xpath">@id</arg>
