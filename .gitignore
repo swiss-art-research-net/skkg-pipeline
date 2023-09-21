@@ -13,6 +13,9 @@ mapping/output/*/*.*
 __pycache__
 .ipynb_checkpoints
 
+# Mapping specific
+mapping/example-*.xml
+
 # Taskfile specific
 scripts/.task/**/*
 

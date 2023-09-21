@@ -17,6 +17,8 @@ tasks:
     desc: Task to run when the pipeline is run for the first time
     cmds:
       - task: download-source-vocabularies
+      - task: generate-example-record-object
+      - task: generate-example-record-person
 
   default:
     desc: Runs the entire pipeline
@@ -37,6 +39,9 @@ tasks:
   download-source-vocabularies:
     desc: Downloads all vocabularies from MuseumPlus
     cmds:
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjCategoryVgr
       - task: _download-vocabulary-from-museumplus
         vars:
           VOCABULARY: ObjDateCertaintyVgr
@@ -108,7 +113,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
+          INPUTFILES: /data/source/object/object-item-3c7215d0-3aba-4bb8-98e6-5da239ab0a64.xml /data/source/object/object-item-0b17827d-117b-42b7-9925-0731f6db779b.xml /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
 
   generate-example-record-person:
     desc: Generates an example record for developing the mapping in the X3ML editor
@@ -371,12 +376,12 @@ tasks:
         numfiles=$(find {{.TEMPFOLDER}} -type f -name '*.ttl' | wc -l)
         for f in $(find {{.TEMPFOLDER}} -type f -name '*.ttl' ); do
           identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\\.ttl//")
-          echo "Ingesting {{.MODULE}} item $count of $numfiles with identifier $identifier"
           graph="{{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
+          echo "Ingesting {{.MODULE}} item $count of $numfiles into graph $graph"
           # Drop graph
-          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" > /dev/null
+          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" 
           # Ingest into graph
-          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph" > /dev/null
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph"
           count=$((count+1)) 
           mv $f $f.ingested
         done
