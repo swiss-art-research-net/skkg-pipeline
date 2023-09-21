@@ -16,7 +16,7 @@ tasks:
   first-run:
     desc: Task to run when the pipeline is run for the first time
     cmds:
-      - task: download-source-vocabularies
+      - task: update-vocabularies
       - task: generate-example-record-object
       - task: generate-example-record-person
 
@@ -54,6 +54,9 @@ tasks:
       - task: _download-vocabulary-from-museumplus
         vars:
           VOCABULARY: ObjDateSourceVgr
+      - task: _download-vocabulary-from-museumplus
+        vars:
+          VOCABULARY: ObjDateSuffixVgr
       - task: _download-vocabulary-from-museumplus
         vars:
           VOCABULARY: ObjDateTypeVgr
