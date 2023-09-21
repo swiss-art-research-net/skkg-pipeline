@@ -113,7 +113,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/object/object-item-3c7215d0-3aba-4bb8-98e6-5da239ab0a64.xml /data/source/object/object-item-0b17827d-117b-42b7-9925-0731f6db779b.xml /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
+          INPUTFILES: /data/source/object/object-item-0a5b9c6a-2d1d-43c5-b833-6975ddfa7ded.xml /data/source/object/object-item-3c7215d0-3aba-4bb8-98e6-5da239ab0a64.xml /data/source/object/object-item-0b17827d-117b-42b7-9925-0731f6db779b.xml /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
 
   generate-example-record-person:
     desc: Generates an example record for developing the mapping in the X3ML editor
