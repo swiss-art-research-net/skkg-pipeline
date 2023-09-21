@@ -485,6 +485,36 @@
                     </target_node>
                 </range>
             </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroupItem/vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjDatePeriodVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P10_falls_within</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>repeatableGroupItem/vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E4_Period</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
         </mapping>
         <mapping>
             <domain>
@@ -612,7 +642,7 @@
                     <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
                     <target_node>
                         <entity>
-                            <type>crm:E52_Timespan</type>
+                            <type>crm:E52_Time-Span</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
                                 <arg name="type" type="constant">type</arg>
                                 <arg name="id" type="xpath">../@id</arg>
