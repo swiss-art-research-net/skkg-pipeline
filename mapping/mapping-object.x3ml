@@ -478,7 +478,7 @@
                                 <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">if (virtualField[@name="PreviewVrt"]/value/text()) then (virtualField[@name="PreviewVrt"]/value/text()) else "unknown date"</arg>
+                                <arg name="text" type="xpath">if (dataField[@name="DateTxt"]/value/text()) then (dataField[@name="DateTxt"]/value/text()) else "unknown date"</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
                         </entity>
