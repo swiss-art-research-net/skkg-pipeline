@@ -561,12 +561,10 @@
                         <relationship>crm:P1_is_identified_by</relationship>
                         <entity>
                             <type>crm:E42_Identifier</type>
-                            <instance_generator name="URIwithTypeIdAnd3Levels">
-                                <arg name="type" type="constant">object</arg>
-                                <arg name="id" type="xpath">../../../@uuid</arg>
-                                <arg name="level1" type="constant">production</arg>
-                                <arg name="level2" type="xpath">../@seqNo</arg>
-                                <arg name="level3" type="constant">sortlnu</arg>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">timespan</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">sortlnu</arg>
                             </instance_generator>
                             <additional>
                                 <relationship>crm:P2_has_type</relationship>
