@@ -286,6 +286,7 @@ tasks:
   
   _download-vocabulary-from-museumplus:
     requires:
+      vars: [VOCABULARY]
     vars:
       OUTPUT_FOLDER: /data/source/vocabularies
     cmds:
