@@ -75,6 +75,10 @@
 		<pattern>{id}</pattern>
 	</generator>
 		
+	<generator name="URIwitSkkgId" prefix="skkg">
+		<pattern>{id}</pattern>
+	</generator>
+		
 	<generator name="URIwithSikartId" prefix="sikart">
 		<pattern>{id}</pattern>
 	</generator>
