@@ -17,8 +17,6 @@ tasks:
     desc: Task to run when the pipeline is run for the first time
     cmds:
       - task: update-vocabularies
-      - task: generate-example-record-object
-      - task: generate-example-record-person
 
   default:
     desc: Runs the entire pipeline
@@ -107,7 +105,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
+          INPUTFILES: /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
 
   ingest-items:
     desc: Ingest items for all modules
