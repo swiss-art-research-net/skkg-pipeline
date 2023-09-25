@@ -21,6 +21,7 @@ Arguments:
 
 
 import argparse
+import pytz
 from datetime import datetime
 from lxml import etree
 from os import listdir, remove as removeFile
@@ -44,7 +45,9 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     lastUpdated = metadata.getLastUpdatedDate();
 
     # Store the current datetime
-    downloadStarted = datetime.now()
+    downloadStarted_utc = datetime.now(pytz.utc)
+    zurich_timezone = pytz.timezone('Europe/Zurich')
+    downloadStarted = downloadStarted_utc.astimezone(zurich_timezone)
     
     # Get the number of items
     numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
