@@ -17,8 +17,6 @@ tasks:
     desc: Task to run when the pipeline is run for the first time
     cmds:
       - task: update-vocabularies
-      - task: generate-example-record-object
-      - task: generate-example-record-person
 
   default:
     desc: Runs the entire pipeline
@@ -39,46 +37,27 @@ tasks:
   download-source-vocabularies:
     desc: Downloads all vocabularies from MuseumPlus
     cmds:
-      - task: _download-vocabulary-from-museumplus
+      - for:
+          - GenLanguageVgr
+          - ObjDateCertaintyVgr
+          - ObjDatePeriodVgr
+          - ObjDatePrefixVgr
+          - ObjDateSourceVgr
+          - ObjDateSuffixVgr
+          - ObjDateTypeVgr
+          - ObjIconographyVgr
+          - ObjIconographyTypeVgr
+          - ObjInscriptionDialogTypeVgr
+          - ObjInscriptionTypeVgr
+          - ObjInscriptionPositionVgr
+          - ObjObjectTitleTypeVgr
+          - ObjObjectTitleSourceVgr
+          - ObjPerAssociationRoleVgr
+          - ObjPerAssociationAttributionVgr
+          - PerTypeVgr
+        task: _download-vocabulary-from-museumplus
         vars:
-          VOCABULARY: ObjCategoryVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDateCertaintyVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDatePeriodVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDatePrefixVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDateSourceVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDateSuffixVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDateTypeVgr
-
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjObjectTitleTypeVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjObjectTitleSourceVgr
-
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjPerAssociationRoleVgr
-
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjPerAssociationAttributionVgr
-
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: GenLanguageVgr
+          VOCABULARY: "{{.ITEM}}"
           
   download-address-items:
     desc: Download the address item records from MuseumPlus
@@ -126,7 +105,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
+          INPUTFILES: /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
 
   ingest-items:
     desc: Ingest items for all modules
@@ -308,6 +287,8 @@ tasks:
       - task: ingest-vocabularies
   
   _download-vocabulary-from-museumplus:
+    requires:
+      vars: [VOCABULARY]
     vars:
       OUTPUT_FOLDER: /data/source/vocabularies
     cmds:
@@ -316,6 +297,8 @@ tasks:
       - python /scripts/downloadVocabulary.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --vocabulary {{.VOCABULARY}} --outputFolder {{.OUTPUT_FOLDER}}
 
   _download-module-items-from-museumplus:
+    requires:
+      vars: [MODULE]
     vars:
       FOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -331,6 +314,8 @@ tasks:
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _download-items-from-museumplus:
+    requires:
+      vars: [MODULE, OUTPUT_FOLDER, FILENAMEPREFIX]
     vars:
       TEMP_FOLDER: /data/temp/download/temp_{{.MODULE}}
     cmds:
@@ -338,6 +323,8 @@ tasks:
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
 
   _generate-example-record:
+    requires:
+      vars: [OUTPUTFILE, INPUTFILES]
     vars:
       OUTPUTFILE: "{{.OUTPUTFILE}}"
       INPUTFILES: "{{.INPUTFILES}}"
@@ -355,6 +342,8 @@ tasks:
       - curl -X POST -H 'Content-Type:{{.TYPE}}' --data-binary '@{{.FILE}}' {{.BLAZEGRAPH_ENDPOINT}}{{if .GRAPH}}?context-uri={{.GRAPH}}{{end}}
 
   _ingest_module_items:
+    requires:
+      vars: [MODULE, NAMESPACE]
     vars:
       INPUTFOLDER:
         sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -399,6 +388,8 @@ tasks:
       - find {{.TEMPFOLDER}} -maxdepth 1 -name "*.ttl.ingested" -delete
   
   _ingest_vocabularies:
+    requires:
+      vars: [INPUTFOLDER, NAMESPACE]
     vars:
       NAMESPACE: "{{.NAMESPACE}}"
     cmds:
@@ -419,6 +410,8 @@ tasks:
         done
 
   _perform-mapping-for-module-items:
+    requires:
+      vars: [MODULE]
     vars:
       INPUTFOLDER:
         sh: echo "/mapping/input/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -445,6 +438,8 @@ tasks:
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec mv -t {{.DESTINATIONFOLDER}} {} +
 
   _prepare-mapping-for-module-items:
+    requires:
+      vars: [MODULE]
     vars:
       MODULE: "{{.MODULE}}"
       INPUTFOLDER:
@@ -462,6 +457,8 @@ tasks:
       - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}}
 
   _remove-deleted-module-items:
+    requires:
+      vars: [MODULE]
     vars:
       FOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -476,6 +473,8 @@ tasks:
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _update-metadata-for-module:
+    requires:
+      vars: [MODULE, KEY, VALUE, SOURCEFOLDER, FILEEXTENSION]
     vars:
       METADATAFOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
