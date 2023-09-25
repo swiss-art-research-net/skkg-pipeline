@@ -31,10 +31,10 @@
                 <source_node>/application/modules/module/moduleItem</source_node>
                 <target_node>
                     <entity>
-                        <type>crm:E21_Person</type>
-                        <type>skkg:Person</type>
+                        <type>crm:E39_Actor</type>
+                        <type>skkg:Actor</type>
                         <instance_generator name="URIwithTypeAndId">
-                            <arg name="type" type="constant">person</arg>
+                            <arg name="type" type="constant">actor</arg>
                             <arg name="id" type="xpath">@uuid</arg>
                         </instance_generator>
                         <label_generator name="Literal">
@@ -59,12 +59,12 @@
                         <entity variable="metadata">
                             <type>crm:E31_Document</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
-                                <arg name="type" type="constant">person</arg>
+                                <arg name="type" type="constant">actor</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
                                 <arg name="level1" type="constant">meta</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">concat('metadata for person ', @uuid)</arg>
+                                <arg name="text" type="xpath">concat('metadata for actor ', @uuid)</arg>
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
                         </entity>
@@ -95,7 +95,7 @@
                         <entity>
                             <type>crm:E65_Creation</type>
                             <instance_generator name="URIwithTypeIdAnd2Levels">
-                                <arg name="type" type="constant">person</arg>
+                                <arg name="type" type="constant">actor</arg>
                                 <arg name="id" type="xpath">../@uuid</arg>
                                 <arg name="level1" type="constant">meta</arg>
                                 <arg name="level2" type="constant">update</arg>
@@ -114,7 +114,7 @@
                         <entity variable="metadata_creation">
                             <type>crm:E52_Time-Span</type>
                             <instance_generator name="URIwithTypeIdAnd3Levels">
-                                <arg name="type" type="constant">person</arg>
+                                <arg name="type" type="constant">actor</arg>
                                 <arg name="id" type="xpath">../@uuid</arg>
                                 <arg name="level1" type="constant">meta</arg>
                                 <arg name="level2" type="constant">update</arg>

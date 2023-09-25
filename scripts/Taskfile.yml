@@ -40,6 +40,7 @@ tasks:
     desc: Downloads all vocabularies from MuseumPlus
     cmds:
       - for:
+          - GenLanguageVgr
           - ObjDateCertaintyVgr
           - ObjDatePeriodVgr
           - ObjDatePrefixVgr
@@ -48,11 +49,14 @@ tasks:
           - ObjDateTypeVgr
           - ObjIconographyVgr
           - ObjIconographyTypeVgr
+          - ObjInscriptionDialogTypeVgr
+          - ObjInscriptionTypeVgr
+          - ObjInscriptionPositionVgr
           - ObjObjectTitleTypeVgr
           - ObjObjectTitleSourceVgr
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
-          - GenLanguageVgr
+          - PerTypeVgr
         task: _download-vocabulary-from-museumplus
         vars:
           VOCABULARY: "{{.ITEM}}"
