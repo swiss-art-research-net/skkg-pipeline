@@ -39,46 +39,21 @@ tasks:
   download-source-vocabularies:
     desc: Downloads all vocabularies from MuseumPlus
     cmds:
-      - task: _download-vocabulary-from-museumplus
+      - for:
+          - ObjDateCertaintyVgr
+          - ObjDatePeriodVgr
+          - ObjDatePrefixVgr
+          - ObjDateSourceVgr
+          - ObjDateSuffixVgr
+          - ObjDateTypeVgr
+          - ObjObjectTitleTypeVgr
+          - ObjObjectTitleSourceVgr
+          - ObjPerAssociationRoleVgr
+          - ObjPerAssociationAttributionVgr
+          - GenLanguageVgr
+        task: _download-vocabulary-from-museumplus
         vars:
-          VOCABULARY: ObjCategoryVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDateCertaintyVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDatePeriodVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDatePrefixVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDateSourceVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDateSuffixVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjDateTypeVgr
-
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjObjectTitleTypeVgr
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjObjectTitleSourceVgr
-
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjPerAssociationRoleVgr
-
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: ObjPerAssociationAttributionVgr
-
-      - task: _download-vocabulary-from-museumplus
-        vars:
-          VOCABULARY: GenLanguageVgr
+          VOCABULARY: "{{.ITEM}}"
           
   download-address-items:
     desc: Download the address item records from MuseumPlus
