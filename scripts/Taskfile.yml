@@ -46,6 +46,8 @@ tasks:
           - ObjDateSourceVgr
           - ObjDateSuffixVgr
           - ObjDateTypeVgr
+          - ObjIconographyVgr
+          - ObjIconographyTypeVgr
           - ObjObjectTitleTypeVgr
           - ObjObjectTitleSourceVgr
           - ObjPerAssociationRoleVgr
@@ -284,7 +286,6 @@ tasks:
   
   _download-vocabulary-from-museumplus:
     requires:
-      vars: [OUTPUT_FOLDER, VOCABULARY]
     vars:
       OUTPUT_FOLDER: /data/source/vocabularies
     cmds:
