@@ -308,6 +308,8 @@ tasks:
       - task: ingest-vocabularies
   
   _download-vocabulary-from-museumplus:
+    requires:
+      vars: [OUTPUT_FOLDER, VOCABULARY]
     vars:
       OUTPUT_FOLDER: /data/source/vocabularies
     cmds:
@@ -316,6 +318,8 @@ tasks:
       - python /scripts/downloadVocabulary.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --vocabulary {{.VOCABULARY}} --outputFolder {{.OUTPUT_FOLDER}}
 
   _download-module-items-from-museumplus:
+    requires:
+      vars: [MODULE]
     vars:
       FOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -331,6 +335,8 @@ tasks:
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _download-items-from-museumplus:
+    requires:
+      vars: [MODULE, OUTPUT_FOLDER, FILENAMEPREFIX]
     vars:
       TEMP_FOLDER: /data/temp/download/temp_{{.MODULE}}
     cmds:
@@ -338,6 +344,8 @@ tasks:
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
 
   _generate-example-record:
+    requires:
+      vars: [OUTPUTFILE, INPUTFILES]
     vars:
       OUTPUTFILE: "{{.OUTPUTFILE}}"
       INPUTFILES: "{{.INPUTFILES}}"
@@ -355,6 +363,8 @@ tasks:
       - curl -X POST -H 'Content-Type:{{.TYPE}}' --data-binary '@{{.FILE}}' {{.BLAZEGRAPH_ENDPOINT}}{{if .GRAPH}}?context-uri={{.GRAPH}}{{end}}
 
   _ingest_module_items:
+    requires:
+      vars: [MODULE, NAMESPACE]
     vars:
       INPUTFOLDER:
         sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -399,6 +409,8 @@ tasks:
       - find {{.TEMPFOLDER}} -maxdepth 1 -name "*.ttl.ingested" -delete
   
   _ingest_vocabularies:
+    requires:
+      vars: [INPUTFOLDER, NAMESPACE]
     vars:
       NAMESPACE: "{{.NAMESPACE}}"
     cmds:
@@ -419,6 +431,8 @@ tasks:
         done
 
   _perform-mapping-for-module-items:
+    requires:
+      vars: [MODULE]
     vars:
       INPUTFOLDER:
         sh: echo "/mapping/input/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -445,6 +459,8 @@ tasks:
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec mv -t {{.DESTINATIONFOLDER}} {} +
 
   _prepare-mapping-for-module-items:
+    requires:
+      vars: [MODULE]
     vars:
       MODULE: "{{.MODULE}}"
       INPUTFOLDER:
@@ -462,6 +478,8 @@ tasks:
       - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}}
 
   _remove-deleted-module-items:
+    requires:
+      vars: [MODULE]
     vars:
       FOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -476,6 +494,8 @@ tasks:
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _update-metadata-for-module:
+    requires:
+      vars: [MODULE, KEY, VALUE, SOURCEFOLDER, FILEEXTENSION]
     vars:
       METADATAFOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
