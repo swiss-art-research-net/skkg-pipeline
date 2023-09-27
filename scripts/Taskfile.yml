@@ -13,6 +13,27 @@ output: 'prefixed'
 
 tasks:
 
+  test:
+    vars:
+      DEBUG:
+        sh: |
+          # Your input string of arguments
+          args="{{.CLI_ARGS}}"
+          # Check if "--debug" is present in the input string
+          if [[ "$args" == *"--debug"* ]]; then
+            # Use parameter expansion to extract the value after "--debug"
+            value="${args#*--debug }"
+            # Split the arguments by space and get the first part as the value
+            value="${value%% *}"
+            echo "$value"
+          else
+            # "--debug" is not present, echo "false"
+            echo "false"
+          fi
+    cmds:
+      - echo "{{.DEBUG}}"
+    
+
   first-run:
     desc: Task to run when the pipeline is run for the first time
     cmds:
@@ -369,6 +390,21 @@ tasks:
       FILENAMEPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
       NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
+      DEBUG:
+        sh: |
+          # Your input string of arguments
+          args="{{.CLI_ARGS}}"
+          # Check if "--debug" is present in the input string
+          if [[ "$args" == *"--debug"* ]]; then
+            # Use parameter expansion to extract the value after "--debug"
+            value="${args#*--debug }"
+            # Split the arguments by space and get the first part as the value
+            value="${value%% *}"
+            echo "$value"
+          else
+            # "--debug" is not present, echo "false"
+            echo "false"
+          fi
     cmds:
       - mkdir -p {{.TEMPFOLDER}}
       - |
@@ -386,9 +422,9 @@ tasks:
           graph="{{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
           echo "Ingesting {{.MODULE}} item $count of $numfiles into graph $graph"
           # Drop graph
-          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" 
+          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
           # Ingest into graph
-          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph"
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
           count=$((count+1)) 
           mv $f $f.ingested
         done
