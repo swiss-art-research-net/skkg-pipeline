@@ -64,7 +64,7 @@
                                 <arg name="level1" type="constant">meta</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">concat('metadata for actor ', @uuid)</arg>
+                                <arg name="text" type="xpath">concat("Metadata for ", virtualField[@name='PerPersonVrt']/value/text())</arg>
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
                         </entity>
@@ -89,7 +89,427 @@
                         <entity>
                             <type>rdfs:Class</type>
                             <instance_generator name="URIwitSkkgId">
-                                <arg type="xpath" name="id">concat(upper-case(substring(@name,1,1)), substring(@name, 2))</arg>
+                                <arg name="id" type="xpath">concat(upper-case(substring(@name,1,1)), substring(@name, 2))</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>virtualField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PerPersonVrt">@name</equals>
+                        </if>
+                        <relationship>crm:P1_is_identified_by</relationship>
+                        <entity variable="person_name">
+                            <type>crm:E33_E41_Linguistic_Appellation</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">name</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300404670</arg>
+                                    </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">preferred terms</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>virtualField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="PerDateGrp">../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P98i_was_born</relationship>
+                    </target_relation>
+                    <comments>
+                        <comment type="">
+                            <rationale>P98i_was_born appears as invalid, however Persons will have type E21 Person assigned in mapping 1.2, making this mapping valid again,</rationale>
+                            <alternatives/>
+                            <typical_mistakes/>
+                            <local_habits/>
+                            <link_to_cook_book/>
+                            <example>
+                                <example_source/>
+                                <example_target/>
+                            </example>
+                            <comments_last_update date="" person=""/>
+                        </comment>
+                    </comments>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E67_Birth</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">birth</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Birth of ", ../../virtualField[@name='PerPersonVrt']/value/text())</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="PerDateGrp">../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P100i_died_in</relationship>
+                    </target_relation>
+                    <comments>
+                        <comment type="">
+                            <rationale>P100i_died_in appears as invalid, however Persons will have type E21 Person assigned in mapping 1.2, making this mapping valid again,</rationale>
+                            <alternatives/>
+                            <typical_mistakes/>
+                            <local_habits/>
+                            <link_to_cook_book/>
+                            <example>
+                                <example_source/>
+                                <example_target/>
+                            </example>
+                            <comments_last_update date="" person=""/>
+                        </comment>
+                    </comments>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E69_Death</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">death</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Death of ", ../../virtualField[@name='PerPersonVrt']/value/text())</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="PerDateGrp">../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P95i_was_formed_by</relationship>
+                    </target_relation>
+                    <comments>
+                        <comment type="">
+                            <rationale>P95i_was_formed_by appears as invalid, however Persons will have type E21 Person assigned in mapping 1.2, making this mapping valid again,</rationale>
+                            <alternatives/>
+                            <typical_mistakes/>
+                            <local_habits/>
+                            <link_to_cook_book/>
+                            <example>
+                                <example_source/>
+                                <example_target/>
+                            </example>
+                            <comments_last_update date="" person=""/>
+                        </comment>
+                    </comments>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E66_Formation</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">formation</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Formation of ", ../../virtualField[@name='PerPersonVrt']/value/text())</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="PerDateGrp">../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P99i_was_dissolved_by</relationship>
+                    </target_relation>
+                    <comments>
+                        <comment type="">
+                            <rationale>P99i_was_dissolved_by appears as invalid, however Persons will have type E21 Person assigned in mapping 1.2, making this mapping valid again,</rationale>
+                            <alternatives/>
+                            <typical_mistakes/>
+                            <local_habits/>
+                            <link_to_cook_book/>
+                            <example>
+                                <example_source/>
+                                <example_target/>
+                            </example>
+                            <comments_last_update date="" person=""/>
+                        </comment>
+                    </comments>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E68_Dissolution</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">dissolution</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Dissolution of ", ../../virtualField[@name='PerPersonVrt']/value/text())</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PerReferenceGNDVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crmdig:L54_is_same-as</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E39_Actor</type>
+                            <instance_generator name="URIorUUID">
+                                <arg name="text" type="xpath">@name</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem</source_node>
+                <target_node>
+                    <entity variable="person_name">
+                        <type>crm:E33_E41_Linguistic_Appellation</type>
+                        <instance_generator name="URIwithTypeIdAnd1Level">
+                            <arg name="type" type="constant">actor</arg>
+                            <arg name="id" type="xpath">../@uuid</arg>
+                            <arg name="level1" type="constant">name</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="PerLastNameTxt">@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="person">../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P106_is_composed_of</relationship>
+                        <entity>
+                            <type>crm:E33_E41_Linguistic_Appellation</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">lastname</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300404652</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Family Name</arg>
+                                        <arg name="language" type="constant"/>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="PerFirstNameTxt">@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="person">../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P106_is_composed_of</relationship>
+                        <entity>
+                            <type>crm:E33_E41_Linguistic_Appellation</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">firstname</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300404651</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Given Name</arg>
+                                        <arg name="language" type="constant"/>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
                             </instance_generator>
                         </entity>
                     </target_node>
@@ -160,6 +580,1102 @@
                                     </instance_generator>
                                 </entity>
                             </additional>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="PerDateGrp">../@name</equals>
+                            </if>
+                            <if>
+                                <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <if>
+                                <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crm:E67_Birth</type>
+                        <instance_generator name="URIwithTypeIdAnd1Level">
+                            <arg name="type" type="constant">actor</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">birth</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>virtualField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PreviewVrt">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>virtualField</source_node>
+                    <target_node>
+                        <entity variable="birth_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">birth</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="DateFromBeginDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity variable="birth_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">birth</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82a_begin_of_the_begin</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity variable="birth_date_begin">
+                            <type>xsd:date</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="DateFromEndDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity variable="birth_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">birth</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82b_end_of_the_end</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity variable="birth_date_end">
+                            <type>xsd:date</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PlaceTxt">@name</equals>
+                        </if>
+                        <relationship>crm:P7_took_place_at</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">birth</arg>
+                                <arg name="level2" type="constant">place</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="AdrCountryVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P7_took_place_at</relationship>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">birth</arg>
+                                <arg name="level2" type="constant">place</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P89_falls_within</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="NotesClb">@name</equals>
+                        </if>
+                        <relationship>crm:P3_has_note</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="SortLnu">@name</equals>
+                        </if>
+                        <relationship>crm:P1_is_identified_by</relationship>
+                        <entity>
+                            <type>crm:E42_Identifier</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">birth</arg>
+                                <arg name="level2" type="constant">sortlnu</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="constant">sortlnu</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="PerDateGrp">../@name</equals>
+                            </if>
+                            <if>
+                                <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <if>
+                                <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crm:E69_Death</type>
+                        <instance_generator name="URIwithTypeIdAnd1Level">
+                            <arg name="type" type="constant">actor</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">death</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>virtualField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PreviewVrt">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>virtualField</source_node>
+                    <target_node>
+                        <entity variable="death_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">death</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="DateToBeginDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity variable="death_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">death</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82a_begin_of_the_begin</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity variable="death_date_begin">
+                            <type>xsd:date</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="DateToEndDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity variable="death_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">death</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82b_end_of_the_end</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity variable="death_date_end">
+                            <type>xsd:date</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PlaceTxt">@name</equals>
+                        </if>
+                        <relationship>crm:P7_took_place_at</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">death</arg>
+                                <arg name="level2" type="constant">place</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="AdrCountryVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P7_took_place_at</relationship>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">death</arg>
+                                <arg name="level2" type="constant">place</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P89_falls_within</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="NotesClb">@name</equals>
+                        </if>
+                        <relationship>crm:P3_has_note</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="SortLnu">@name</equals>
+                        </if>
+                        <relationship>crm:P1_is_identified_by</relationship>
+                        <entity>
+                            <type>crm:E42_Identifier</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">death</arg>
+                                <arg name="level2" type="constant">sortlnu</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="constant">sortlnu</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="PerDateGrp">../@name</equals>
+                            </if>
+                            <if>
+                                <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <if>
+                                <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crm:E66_Formation</type>
+                        <instance_generator name="URIwithTypeIdAnd1Level">
+                            <arg name="type" type="constant">actor</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">formation</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>virtualField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PreviewVrt">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>virtualField</source_node>
+                    <target_node>
+                        <entity variable="formation_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">formation</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="DateFromBeginDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity variable="formation_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">formation</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82a_begin_of_the_begin</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity variable="formation_date_begin">
+                            <type>xsd:date</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="DateFromEndDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity variable="formation_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">formation</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82b_end_of_the_end</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity variable="formation_date_end">
+                            <type>xsd:date</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PlaceTxt">@name</equals>
+                        </if>
+                        <relationship>crm:P7_took_place_at</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">formation</arg>
+                                <arg name="level2" type="constant">place</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="AdrCountryVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P7_took_place_at</relationship>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">formation</arg>
+                                <arg name="level2" type="constant">place</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P89_falls_within</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="NotesClb">@name</equals>
+                        </if>
+                        <relationship>crm:P3_has_note</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="SortLnu">@name</equals>
+                        </if>
+                        <relationship>crm:P1_is_identified_by</relationship>
+                        <entity>
+                            <type>crm:E42_Identifier</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">formation</arg>
+                                <arg name="level2" type="constant">sortlnu</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="constant">sortlnu</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="PerDateGrp">../@name</equals>
+                            </if>
+                            <if>
+                                <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <if>
+                                <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crm:E68_Dissolution</type>
+                        <instance_generator name="URIwithTypeIdAnd1Level">
+                            <arg name="type" type="constant">actor</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">dissolution</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>virtualField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PreviewVrt">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>virtualField</source_node>
+                    <target_node>
+                        <entity variable="dissolution_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">dissolution</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="DateToBeginDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity variable="dissolution_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">dissolution</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82a_begin_of_the_begin</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity variable="dissolution_date_begin">
+                            <type>xsd:date</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="DateToEndDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity variable="dissolution_date">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">dissolution</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82b_end_of_the_end</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity variable="dissolution_date_end">
+                            <type>xsd:date</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="PlaceTxt">@name</equals>
+                        </if>
+                        <relationship>crm:P7_took_place_at</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">dissolution</arg>
+                                <arg name="level2" type="constant">place</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="AdrCountryVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P7_took_place_at</relationship>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">dissolution</arg>
+                                <arg name="level2" type="constant">place</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P89_falls_within</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E53_Place</type>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="NotesClb">@name</equals>
+                        </if>
+                        <relationship>crm:P3_has_note</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="SortLnu">@name</equals>
+                        </if>
+                        <relationship>crm:P1_is_identified_by</relationship>
+                        <entity>
+                            <type>crm:E42_Identifier</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">dissolution</arg>
+                                <arg name="level2" type="constant">sortlnu</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="constant">sortlnu</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
                         </entity>
                     </target_node>
                 </range>
