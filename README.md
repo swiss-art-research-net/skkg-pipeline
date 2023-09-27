@@ -64,7 +64,7 @@ docker compose exec jobs task --list
 ```
 
 This will output a list of tasks:
-```task: Available tasks for this project:
+```task: Available tasks for this project:task: Available tasks for this project:
 * default:                                 Runs the entire pipeline
 * download-address-items:                  Download the address item records from MuseumPlus
 * download-literature-items:               Download the literature item records from MuseumPlus
@@ -92,6 +92,7 @@ This will output a list of tasks:
 * remove-deleted-object-items:             Removes object item records that have been deleted from MuseumPlus
 * remove-deleted-person-items:             Removes person item records that have been deleted from MuseumPlus
 * remove-deleted-source-items:             Removes item records that have been deleted from MuseumPlus
+* reset-last-ingested-metadata:            Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
 * reset-last-mapped-metadata:              Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
 * update-vocabularies:                     Downloads, maps, and ingests the vocabularies
 ```
@@ -118,7 +119,8 @@ docker compose exec jobs task reset-last-mapped-metadata -- object
 
 | Name | Description | Usage
 --- | --- | ---
-| `reset-last-mapped-metadata` | Resets the last mapped metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-mapped-metadata -- {modulen}` where `{module}` can be `object`, `person` or `address`
+| `reset-last-ingested-metadata` | Resets the last ingested metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-ingested-metadata -- {module}` where `{module}` can be `object`, `person` or `address`
+| `reset-last-mapped-metadata` | Resets the last mapped metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-mapped-metadata -- {module}` where `{module}` can be `object`, `person` or `address`
 | `update-vocabularies` | Downloads, maps, and ingests the vocabularies | `docker compose exec jobs task update-vocabularies` |
 | `recreate-folder-metadata` | If the folder metadata is lost or gets corrupted, it can be recreated using this tasks | `docker compose exec jobs task recreate-folder-metadata -- {module}` where `{module}` is the name of the folder to recreate the metadata for, e.g. `object`, `person` or `address`
 

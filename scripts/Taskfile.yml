@@ -263,6 +263,21 @@ tasks:
       - remove-deleted-object-items
       - remove-deleted-person-items
 
+  reset-last-ingested-metadata:
+    desc: Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
+    vars:
+      MODULE: "{{.CLI_ARGS}}"
+      SOURCEFOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+    cmds:
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "{{.MODULE}}"
+          KEY: lastIngested
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: "{{.SOURCEFOLDER}}"
+          FILEEXTENSION: .xml
+
   reset-last-mapped-metadata:
     desc: Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
     vars:
