@@ -108,7 +108,7 @@ tasks:
           INPUTFILES: /data/source/person/person-item-1111.xml /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
 
   ingest-items:
-    desc: Ingest items for all modules
+    desc: Ingest items for all modules. Add --debug true To see the response from the triplestore
     cmds:
       - task: ingest-object-items
       - task: ingest-person-items
@@ -263,6 +263,71 @@ tasks:
       - remove-deleted-object-items
       - remove-deleted-person-items
 
+  reset:
+    prompt: This will delete all artefacts produced by the pipeline... Do you want to continue?
+    cmds:
+      - echo "Deleting..."
+      - rm -rf /data/temp
+      - rm -rf /data/ttl/main/address
+      - rm -rf /data/ttl/main/object
+      - rm -rf /data/ttl/main/person
+      - rm -rf /data/ttl/main/vocabularies
+      - rm -rf /mapping/input/address
+      - rm -rf /mapping/input/object
+      - rm -rf /mapping/input/person
+      - rm -rf /mapping/input/vocabularies
+      - rm -rf /mapping/output/address
+      - rm -rf /mapping/output/object
+      - rm -rf /mapping/output/person
+      - rm -rf /mapping/output/vocabularies
+      - rm -f /scripts/.task/checksum/*
+      - echo "Resetting metadata.."
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "object"
+          KEY: lastIngested
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: /data/source/object
+          FILEEXTENSION: .xml
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "object"
+          KEY: lastMapped
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: /data/source/object
+          FILEEXTENSION: .xml
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "person"
+          KEY: lastIngested
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: /data/source/person
+          FILEEXTENSION: .xml
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "person"
+          KEY: lastMapped
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: /data/source/person
+          FILEEXTENSION: .xml
+      - echo "Done!"
+
+
+  reset-last-ingested-metadata:
+    desc: Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
+    vars:
+      MODULE: "{{.CLI_ARGS}}"
+      SOURCEFOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+    cmds:
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "{{.MODULE}}"
+          KEY: lastIngested
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: "{{.SOURCEFOLDER}}"
+          FILEEXTENSION: .xml
+
   reset-last-mapped-metadata:
     desc: Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
     vars:
@@ -354,6 +419,21 @@ tasks:
       FILENAMEPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
       NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
+      DEBUG:
+        sh: |
+          # Your input string of arguments
+          args="{{.CLI_ARGS}}"
+          # Check if "--debug" is present in the input string
+          if [[ "$args" == *"--debug"* ]]; then
+            # Use parameter expansion to extract the value after "--debug"
+            value="${args#*--debug }"
+            # Split the arguments by space and get the first part as the value
+            value="${value%% *}"
+            echo "$value"
+          else
+            # "--debug" is not present, echo "false"
+            echo "false"
+          fi
     cmds:
       - mkdir -p {{.TEMPFOLDER}}
       - |
@@ -371,9 +451,9 @@ tasks:
           graph="{{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
           echo "Ingesting {{.MODULE}} item $count of $numfiles into graph $graph"
           # Drop graph
-          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" 
+          curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
           # Ingest into graph
-          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph"
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
           count=$((count+1)) 
           mv $f $f.ingested
         done

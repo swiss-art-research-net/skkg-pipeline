@@ -64,7 +64,7 @@
                                 <arg name="level1" type="constant">meta</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">concat('metadata for object ', @uuid)</arg>
+                                <arg name="text" type="xpath">concat('metadata for object ', if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@uuid))</arg>
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
                         </entity>
@@ -91,7 +91,7 @@
                                 <arg name="level1" type="constant">production</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">concat('production of object ', @uuid)</arg>
+                                <arg name="text" type="xpath">concat('production of object ', if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@uuid))</arg>
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
                         </entity>
@@ -465,6 +465,9 @@
                         <relation>repeatableGroupItem</relation>
                     </source_relation>
                     <target_relation>
+                        <if>
+                            <exists>virtualField[@name="PreviewVrt"]/value/text()</exists>
+                        </if>
                         <relationship>crm:P4_has_time-span</relationship>
                     </target_relation>
                 </path>
@@ -478,7 +481,7 @@
                                 <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">if (virtualField[@name="PreviewVrt"]/value/text()) then (virtualField[@name="PreviewVrt"]/value/text()) else "unknown date"</arg>
+                                <arg name="text" type="xpath">virtualField[@name="PreviewVrt"]/value/text()</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
                         </entity>
@@ -525,7 +528,10 @@
                     </if>
                     <entity>
                         <type>crm:E52_Time-Span</type>
-                        <instance_generator name="UUID"/>
+                        <instance_generator name="URIwithTypeAndId">
+                            <arg name="type" type="constant">timespan</arg>
+                            <arg name="id" type="xpath">@uuid</arg>
+                        </instance_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -944,7 +950,7 @@
                                 <arg name="level2" type="xpath">@seqNo</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">concat("production ", @seqNo, " of object ", ../../@uuid)</arg>
+                                <arg name="text" type="xpath">concat("production ", @seqNo, " of object ", concat('metadata for object ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid)))</arg>
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
                         </entity>
@@ -993,10 +999,10 @@
                 <range>
                     <source_node>.</source_node>
                     <target_node>
-                        <entity variable="subproduction_actor">
-                            <type>crm:E39_Actor</type>
+                        <entity variable="subproduction_person">
+                            <type>crm:E21_Person</type>
                             <instance_generator name="URIwithTypeAndId">
-                                <arg name="type" type="constant">actor</arg>
+                                <arg name="type" type="constant">person</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                             <label_generator name="Literal">
@@ -1124,10 +1130,10 @@
                 <range>
                     <source_node>.</source_node>
                     <target_node>
-                        <entity variable="subproduction_actor">
-                            <type>crm:E39_Actor</type>
+                        <entity variable="subproduction_person">
+                            <type>crm:E21_Person</type>
                             <instance_generator name="URIwithTypeAndId">
-                                <arg name="type" type="constant">actor</arg>
+                                <arg name="type" type="constant">person</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                             <label_generator name="Literal">

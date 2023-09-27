@@ -619,7 +619,14 @@
                     </source_relation>
                     <target_relation>
                         <if>
-                            <equals value="PreviewVrt">@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="PreviewVrt">@name</equals>
+                                </if>
+                                <if>
+                                    <exists>value/text()</exists>
+                                </if>
+                            </and>
                         </if>
                         <relationship>crm:P4_has_time-span</relationship>
                     </target_relation>
@@ -893,7 +900,14 @@
                     </source_relation>
                     <target_relation>
                         <if>
-                            <equals value="PreviewVrt">@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="PreviewVrt">@name</equals>
+                                </if>
+                                <if>
+                                    <exists>value/text()</exists>
+                                </if>
+                            </and>
                         </if>
                         <relationship>crm:P4_has_time-span</relationship>
                     </target_relation>
@@ -1167,7 +1181,14 @@
                     </source_relation>
                     <target_relation>
                         <if>
-                            <equals value="PreviewVrt">@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="PreviewVrt">@name</equals>
+                                </if>
+                                <if>
+                                    <exists>value/text()</exists>
+                                </if>
+                            </and>
                         </if>
                         <relationship>crm:P4_has_time-span</relationship>
                     </target_relation>
@@ -1441,7 +1462,14 @@
                     </source_relation>
                     <target_relation>
                         <if>
-                            <equals value="PreviewVrt">@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="PreviewVrt">@name</equals>
+                                </if>
+                                <if>
+                                    <exists>value/text()</exists>
+                                </if>
+                            </and>
                         </if>
                         <relationship>crm:P4_has_time-span</relationship>
                     </target_relation>
