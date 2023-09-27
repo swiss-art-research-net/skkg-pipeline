@@ -242,6 +242,106 @@
                     </target_node>
                 </range>
             </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="PerDateGrp">../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P95i_was_formed_by</relationship>
+                    </target_relation>
+                    <comments>
+                        <comment type="">
+                            <rationale>P95i_was_formed_by appears as invalid, however Persons will have type E21 Person assigned in mapping 1.2, making this mapping valid again,</rationale>
+                            <alternatives/>
+                            <typical_mistakes/>
+                            <local_habits/>
+                            <link_to_cook_book/>
+                            <example>
+                                <example_source/>
+                                <example_target/>
+                            </example>
+                            <comments_last_update date="" person=""/>
+                        </comment>
+                    </comments>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E66_Formation</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">formation</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="PerDateGrp">../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P99i_was_dissolved_by</relationship>
+                    </target_relation>
+                    <comments>
+                        <comment type="">
+                            <rationale>P99i_was_dissolved_by appears as invalid, however Persons will have type E21 Person assigned in mapping 1.2, making this mapping valid again,</rationale>
+                            <alternatives/>
+                            <typical_mistakes/>
+                            <local_habits/>
+                            <link_to_cook_book/>
+                            <example>
+                                <example_source/>
+                                <example_target/>
+                            </example>
+                            <comments_last_update date="" person=""/>
+                        </comment>
+                    </comments>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E68_Dissolution</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">dissolution</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
         </mapping>
         <mapping>
             <domain>
