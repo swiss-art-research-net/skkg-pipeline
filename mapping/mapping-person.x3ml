@@ -156,6 +156,9 @@
                                 <if>
                                     <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
                                 </if>
+                                <if>
+                                    <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
                             </and>
                         </if>
                         <relationship>crm:P98i_was_born</relationship>
@@ -202,6 +205,9 @@
                                 </if>
                                 <if>
                                     <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
                                 </if>
                             </and>
                         </if>
@@ -446,6 +452,9 @@
                             </if>
                             <if>
                                 <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <if>
+                                <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
                             </if>
                         </and>
                     </if>
@@ -717,6 +726,9 @@
                             </if>
                             <if>
                                 <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <if>
+                                <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
                             </if>
                         </and>
                     </if>
