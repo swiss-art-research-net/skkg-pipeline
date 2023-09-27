@@ -13,27 +13,6 @@ output: 'prefixed'
 
 tasks:
 
-  test:
-    vars:
-      DEBUG:
-        sh: |
-          # Your input string of arguments
-          args="{{.CLI_ARGS}}"
-          # Check if "--debug" is present in the input string
-          if [[ "$args" == *"--debug"* ]]; then
-            # Use parameter expansion to extract the value after "--debug"
-            value="${args#*--debug }"
-            # Split the arguments by space and get the first part as the value
-            value="${value%% *}"
-            echo "$value"
-          else
-            # "--debug" is not present, echo "false"
-            echo "false"
-          fi
-    cmds:
-      - echo "{{.DEBUG}}"
-    
-
   first-run:
     desc: Task to run when the pipeline is run for the first time
     cmds:
@@ -283,6 +262,56 @@ tasks:
       - remove-deleted-literature-items
       - remove-deleted-object-items
       - remove-deleted-person-items
+
+  reset:
+    prompt: This will delete all artefacts produced by the pipeline... Do you want to continue?
+    cmds:
+      - echo "Deleting..."
+      - rm -rf /data/temp
+      - rm -rf /data/ttl/main/address
+      - rm -rf /data/ttl/main/object
+      - rm -rf /data/ttl/main/person
+      - rm -rf /data/ttl/main/vocabularies
+      - rm -rf /mapping/input/address
+      - rm -rf /mapping/input/object
+      - rm -rf /mapping/input/person
+      - rm -rf /mapping/input/vocabularies
+      - rm -rf /mapping/output/address
+      - rm -rf /mapping/output/object
+      - rm -rf /mapping/output/person
+      - rm -rf /mapping/output/vocabularies
+      - rm -f /scripts/.task/checksum/*
+      - echo "Resetting metadata.."
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "object"
+          KEY: lastIngested
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: /data/source/object
+          FILEEXTENSION: .xml
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "object"
+          KEY: lastMapped
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: /data/source/object
+          FILEEXTENSION: .xml
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "person"
+          KEY: lastIngested
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: /data/source/person
+          FILEEXTENSION: .xml
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "person"
+          KEY: lastMapped
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: /data/source/person
+          FILEEXTENSION: .xml
+      - echo "Done!"
+
 
   reset-last-ingested-metadata:
     desc: Resets the last ingested metadata for a specific module. The module name should be passed as an argument.

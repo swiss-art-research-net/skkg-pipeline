@@ -64,7 +64,7 @@ docker compose exec jobs task --list
 ```
 
 This will output a list of tasks:
-```task: Available tasks for this project:task: Available tasks for this project:
+```task: Available tasks for this project:
 * default:                                 Runs the entire pipeline
 * download-address-items:                  Download the address item records from MuseumPlus
 * download-literature-items:               Download the literature item records from MuseumPlus
@@ -75,7 +75,7 @@ This will output a list of tasks:
 * first-run:                               Task to run when the pipeline is run for the first time
 * generate-example-record-object:          Generates an example record for developing the mapping in the X3ML editor
 * generate-example-record-person:          Generates an example record for developing the mapping in the X3ML editor
-* ingest-items:                            Ingest items for all modules
+* ingest-items:                            Ingest items for all modules. Add --debug true To see the response from the triplestore
 * ingest-object-items:                     Ingests the object items into the triplestore
 * ingest-ontologies:                       Ingests the ontologies into individual named Graphs
 * ingest-person-items:                     Ingests the person items into the triplestore
