@@ -29,7 +29,7 @@ shift $((OPTIND-1))
 echo "Mapping Records"
 numfiles=$(find $RECORDSINPUTFOLDER -type f -name '*.xml' | wc -l)
 count=1
-echo "Found $numfiles record XML files"
+echo "Found $numfiles record XML files in $RECORDSINPUTFOLDER"
 
 (
 for f in $(find $RECORDSINPUTFOLDER -type f -name '*.xml' ); do
