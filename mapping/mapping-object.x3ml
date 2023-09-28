@@ -836,6 +836,10 @@
                             <arg name="id" type="xpath">../../@uuid</arg>
                             <arg name="level1" type="constant">source</arg>
                         </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="xpath">concat("Source of date of object ",if (../../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../../@id))</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
