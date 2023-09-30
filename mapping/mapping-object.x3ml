@@ -219,6 +219,48 @@
                     </target_node>
                 </range>
             </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>moduleReference/moduleReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjMultimediaRef">../@name</equals>
+                        </if>
+                        <relationship>crm:P138i_has_representation</relationship>
+                        <entity>
+                            <type>crm:E36_Visual_Item</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                        <relationship>la:digitally_shown_by</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>moduleReference/moduleReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crmdig:D1_Digital_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                                <arg name="level1" type="constant">file</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
         </mapping>
         <mapping>
             <domain>
