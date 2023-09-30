@@ -33,12 +33,14 @@ tasks:
       - download-literature-items
       - download-object-items
       - download-person-items
+      - download-multimedia-items
   
   download-source-vocabularies:
     desc: Downloads all vocabularies from MuseumPlus
     cmds:
       - for:
           - GenLanguageVgr
+          - MulTypeVgr
           - ObjDateCertaintyVgr
           - ObjDatePeriodVgr
           - ObjDatePrefixVgr
@@ -79,6 +81,13 @@ tasks:
       - task: _download-module-items-from-museumplus
         vars:
           MODULE: Object
+
+  download-multimedia-items:
+    desc: Download the multimedia item records from MuseumPlus
+    cmds:
+      - task: _download-module-items-from-museumplus
+        vars:
+          MODULE: Multimedia
 
   download-person-items:
     desc: Download the person item records from MuseumPlus
