@@ -28,6 +28,10 @@
 <https://ontology.skkg.ch/Actor> rdf:type owl:Class ;
                                   rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <https://ontology.skkg.ch/Entity> .
 
+###  https://ontology.skkg.ch/Multimedia
+<https://ontology.skkg.ch/Multimedia> rdf:type owl:Class ;
+                                  rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> , <https://ontology.skkg.ch/Entity> .
+
 ###  https://ontology.skkg.ch/Person
 <https://ontology.skkg.ch/Person> rdf:type owl:Class ;
                                   rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E21_Person> , <https://ontology.skkg.ch/Actor> .
