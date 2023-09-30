@@ -131,6 +131,14 @@ tasks:
     cmds:
       - task: ingest-object-items
       - task: ingest-person-items
+      - task: ingest-multimedia-items
+
+  ingest-multimedia-items:
+    desc: Ingests the multimedia items into the triplestore
+    cmds:
+      - task: _ingest_module_items
+        vars:
+          MODULE: Multimedia
 
   ingest-object-items:
     desc: Ingests the object items into the triplestore
@@ -181,10 +189,21 @@ tasks:
   prepare-and-perform-mapping:
     desc: Prepares and performs the mapping for all modules
     cmds:
+      - echo "Preparing mapping..."
       - task: prepare-mapping-for-object-items
       - task: prepare-mapping-for-person-items
+      - task: prepare-mapping-for-multimedia-items
+      - echo "Mapping..."
       - task: perform-mapping-for-object-items
       - task: perform-mapping-for-person-items
+      - task: perform-mapping-for-multimedia-items
+
+  perform-mapping-for-multimedia-items:
+    desc: Performs the mapping for the multimedia items
+    cmds:
+      - task: _perform-mapping-for-module-items
+        vars:
+          MODULE: Multimedia
 
   perform-mapping-for-object-items:
     desc: Performs the mapping for the object items
@@ -226,6 +245,13 @@ tasks:
       - task: _prepare-mapping-for-module-items
         vars:
           MODULE: Address
+  
+  prepare-mapping-for-multimedia-items:
+    desc: Prepares the mapping for the multimedia items
+    cmds:
+      - task: _prepare-mapping-for-module-items
+        vars:
+          MODULE: Multimedia
   
   prepare-mapping-for-object-items:
     desc: Prepares the mapping for the object items
