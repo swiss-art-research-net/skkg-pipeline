@@ -26,8 +26,8 @@ def synchroniseItems(*, host, username, password, module, inputFolder, filenameP
     metadata = ItemMetadata(inputFolder)
     files = metadata.listFiles()
     for file in files:
-        identifier = int(file.replace(filenamePrefix, '').replace('.xml', ''))
-        if not client.existsItem(module=module, id=identifier):
+        identifier = str(file.replace(filenamePrefix, '').replace('.xml', ''))
+        if not client.existsItem(module=module, uuid=identifier):
             print(f"Item {identifier} in module {module} has been deleted in MuseumPlus. Deleting local copy.")
             filepath = join(inputFolder, file)
             removeFile(filepath)
