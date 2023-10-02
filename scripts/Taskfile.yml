@@ -114,7 +114,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/multimedia/multimedia-item-1857.xml /data/source/multimedia/multimedia-item-2270.xml /data/source/multimedia/multimedia-item-8727.xml
+          INPUTFILES: /data/source/multimedia/multimedia-item-2270.xml /data/source/multimedia/multimedia-item-8727.xml
 
   generate-example-record-person:
     desc: Generates an example record for developing the mapping in the X3ML editor
@@ -286,6 +286,13 @@ tasks:
         vars:
           MODULE: Literature
 
+  remove-deleted-multimedia-items:
+    desc: Removes multimedia item records that have been deleted from MuseumPlus
+    cmds:
+      - task: _remove-deleted-module-items
+        vars:
+          MODULE: Multimedia
+
   remove-deleted-object-items:
     desc: Removes object item records that have been deleted from MuseumPlus
     cmds:
@@ -309,54 +316,64 @@ tasks:
       - remove-deleted-person-items
 
   reset:
+    desc: Delete all artefacts produced by the pipeline.
     prompt: This will delete all artefacts produced by the pipeline... Do you want to continue?
     cmds:
-      - echo "Deleting..."
-      - rm -rf /data/temp
-      - rm -rf /data/ttl/main/address
-      - rm -rf /data/ttl/main/object
-      - rm -rf /data/ttl/main/person
-      - rm -rf /data/ttl/main/vocabularies
-      - rm -rf /mapping/input/address
-      - rm -rf /mapping/input/object
-      - rm -rf /mapping/input/person
-      - rm -rf /mapping/input/vocabularies
-      - rm -rf /mapping/output/address
-      - rm -rf /mapping/output/object
-      - rm -rf /mapping/output/person
-      - rm -rf /mapping/output/vocabularies
       - rm -f /scripts/.task/checksum/*
-      - echo "Resetting metadata.."
-      - task: _update-metadata-for-module
+      - for:
+          - address
+          - literature
+          - multimedia
+          - object
+          - person
+        task: reset-module
         vars:
-          MODULE: "object"
-          KEY: lastIngested
-          VALUE: "1970-01-01 00:00:00.000"
-          SOURCEFOLDER: /data/source/object
-          FILEEXTENSION: .xml
-      - task: _update-metadata-for-module
-        vars:
-          MODULE: "object"
-          KEY: lastMapped
-          VALUE: "1970-01-01 00:00:00.000"
-          SOURCEFOLDER: /data/source/object
-          FILEEXTENSION: .xml
-      - task: _update-metadata-for-module
-        vars:
-          MODULE: "person"
-          KEY: lastIngested
-          VALUE: "1970-01-01 00:00:00.000"
-          SOURCEFOLDER: /data/source/person
-          FILEEXTENSION: .xml
-      - task: _update-metadata-for-module
-        vars:
-          MODULE: "person"
-          KEY: lastMapped
-          VALUE: "1970-01-01 00:00:00.000"
-          SOURCEFOLDER: /data/source/person
-          FILEEXTENSION: .xml
+          MODULE: "{{.ITEM}}"
+      - task: reset-vocabularies
       - echo "Done!"
 
+  reset-module:
+    desc: Delete all artefacts produced by the pipeline for a given module.
+    silent: true
+    vars:
+      MODULE:
+        sh: |
+          if [ -z "{{.MODULE}}" ]; then
+            echo "{{.CLI_ARGS}}"
+          else
+            echo "{{.MODULE}}"
+          fi
+      MODULE_LOWERCASE:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      MODULE_UCFIRST:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+    cmds:
+      - |
+        if [ -z "{{.MODULE}}" ]; then
+          echo "No module specified as variable or cli argument. Exiting script."
+          exit 1
+        fi
+      - echo "Deleting files for {{.MODULE}}..."
+      - rm -rf /data/temp/download/temp_{{.MODULE_UCFIRST}}
+      - rm -rf /data/temp/ingest/{{.MODULE_LOWERCASE}}
+      - rm -rf /data/ttl/main/{{.MODULE_LOWERCASE}}
+      - rm -rf /mapping/input/{{.MODULE_LOWERCASE}}
+      - rm -rf /mapping/output/{{.MODULE_LOWERCASE}}
+      - echo "Resetting metadata for {{.MODULE}}.."
+      - task: _update-metadata-for-module
+        vars:
+          MODULE: "{{.MODULE_LOWERCASE}}"
+          KEY: lastMapped
+          VALUE: "1970-01-01 00:00:00.000"
+          SOURCEFOLDER: "/data/source/{{.MODULE_LOWERCASE}}"
+          FILEEXTENSION: .xml
+
+  reset-vocabularies:
+    desc: Delete all artefacts produced by the pipeline for the vocabularies.
+    cmds: 
+      - rm -rf /data/ttl/main/vocabularies
+      - rm -rf /mapping/input/vocabularies
+      - rm -rf /mapping/output/vocabularies
 
   reset-last-ingested-metadata:
     desc: Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
@@ -578,8 +595,10 @@ tasks:
       - python /scripts/prepareDataForMapping.py --module {{.MODULE}} --inputFolder {{.INPUTFOLDER}} --outputFolder {{.OUTPUTFOLDER}} {{.CLI_ARGS}}
 
   _process-items-deleted-from-museumplus:
+    vars: 
+      NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
     cmds:
-      - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}}
+      - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --namedGraphBase {{.NAMEDGRAPHBASE}} --filenamePrefix {{.FILENAMEPREFIX}} --sparqlEndpoint {{.BLAZEGRAPH_ENDPOINT}}
 
   _remove-deleted-module-items:
     requires:
