@@ -286,6 +286,13 @@ tasks:
         vars:
           MODULE: Literature
 
+  remove-deleted-multimedia-items:
+    desc: Removes multimedia item records that have been deleted from MuseumPlus
+    cmds:
+      - task: _remove-deleted-module-items
+        vars:
+          MODULE: Multimedia
+
   remove-deleted-object-items:
     desc: Removes object item records that have been deleted from MuseumPlus
     cmds:
@@ -578,8 +585,10 @@ tasks:
       - python /scripts/prepareDataForMapping.py --module {{.MODULE}} --inputFolder {{.INPUTFOLDER}} --outputFolder {{.OUTPUTFOLDER}} {{.CLI_ARGS}}
 
   _process-items-deleted-from-museumplus:
+    vars: 
+      NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
     cmds:
-      - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}}
+      - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --namedGraphBase {{.NAMEDGRAPHBASE}} --filenamePrefix {{.FILENAMEPREFIX}} --sparqlEndpoint {{.BLAZEGRAPH_ENDPOINT}}
 
   _remove-deleted-module-items:
     requires:
