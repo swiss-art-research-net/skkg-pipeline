@@ -25,6 +25,7 @@ def synchroniseItems(*, host, username, password, module, inputFolder, filenameP
     client = MPWrapper(url=host, username=username, password=password)
     metadata = ItemMetadata(inputFolder)
     files = metadata.listFiles()
+    deletedFiles = []
     for file in files:
         identifier = str(file.replace(filenamePrefix, '').replace('.xml', ''))
         if not client.existsItem(module=module, uuid=identifier):
@@ -32,6 +33,9 @@ def synchroniseItems(*, host, username, password, module, inputFolder, filenameP
             filepath = join(inputFolder, file)
             removeFile(filepath)
             metadata.removeFile(file)
+            deletedFiles.append(file)
+    if len(deletedFiles) > 0:
+        print(f"Deleted {len(deletedFiles)} files from the local copy.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
