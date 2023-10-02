@@ -104,6 +104,18 @@ class MPWrapper:
         equalsField.set('fieldPath', '__id')
         equalsField.set('operand', str(id))
         return query
+    
+    def _getItemQueryByUuid(self, *, module: str, uuid: str) -> etree.Element:
+        query = etree.fromstring(self.BASE_XML_SEARCH)
+        modules = etree.SubElement(query, 'modules')
+        requestedModule = etree.SubElement(modules, 'module')
+        requestedModule.set('name', module)
+        search = etree.SubElement(requestedModule, 'search')
+        expert = etree.SubElement(search, 'expert')
+        equalsField = etree.SubElement(expert, 'equalsField')
+        equalsField.set('fieldPath', '__uuid')
+        equalsField.set('operand', uuid)
+        return query
 
     def _getModuleSearchUrl(self, module: str) -> str:
         """
@@ -123,12 +135,12 @@ class MPWrapper:
         """
         return f"{self.url}/vocabulary/instances/{vocabulary}/nodes/search"
 
-    def existsItem(self, *, module: str, id: int) -> bool:
-        query = self._getItemQueryById(module=module, id=id)
+    def existsItem(self, *, module: str, uuid: str) -> bool:
+        query = self._getItemQueryByUuid(module=module, uuid=uuid)
         search = query.find('.//search')
         select = etree.SubElement(search, 'select')
         field = etree.SubElement(select, 'field')
-        field.set('fieldPath', '__id')
+        field.set('fieldPath', '__uuid')
         url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
         if not response.content:
