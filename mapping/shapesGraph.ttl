@@ -1,0 +1,21 @@
+@prefix crm:   <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.com/ns#> .
+@prefix skkg:  <https://ontology.skkg.ch/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+skkg:ObjectShape a sh:NodeShape ;
+    sh:targetClass crm:E1_CRM_Entity ;
+    sh:or (
+        [ 
+            sh:path rdfs:label ;
+            sh:minCount 1;
+        ]
+        [ 
+            sh:path crm:P190_has_symbolic_content ;
+            sh:minCount 1;
+        ]
+    ) .

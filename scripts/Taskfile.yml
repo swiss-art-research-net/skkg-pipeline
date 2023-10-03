@@ -413,6 +413,12 @@ tasks:
       - sleep 5s
       - task: ingest-vocabularies
   
+  validate:
+    requires:
+      vars: [CLI_ARGS]
+    cmds:
+      - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f human {{.CLI_ARGS}}
+
   _download-vocabulary-from-museumplus:
     requires:
       vars: [VOCABULARY]
