@@ -2,7 +2,7 @@
 Script to suggest alignments to SKKG entities using reconciliation service
 
 Usage:
-    python suggestAlignments.py --input_file <input_file> --type <type> --limit <limit> --output_file <output_file> [--api_uri <api_uri> --minimum_score <minimum_score>]
+    python suggestAlignments.py --input_file <input_file> --type <type> --limit <limit> --output_file <output_file> [--api_uri <api_uri> --minimum_score <minimum_score> --aligned_prefix <aligned_prefix> --ttl_namespaces <ttl_namespaces>]
 
 Arguments:
     --input_file: TTL input file
@@ -11,6 +11,9 @@ Arguments:
     --output_file: TTL output file
     --api_uri: URL of reconciliation API. Defaults to https://lobid.org/gnd/reconcile/. 
     --minimum_score: Minimum score to consider for results. Defaults to 0.
+    --aligned_prefix : Prefix abbreviation to use. Defaults to "gnd".
+    --ttl_namespaces : Text file containing namespaces for TTL files. Defaults to the most common ones (crm, crmdig, gnd, rdf, rdfs, skos, xsd).
+    
 """
 
 from rdflib import Graph
@@ -20,6 +23,7 @@ import requests
 from itertools import islice
 from string import Template
 import uuid
+
 namespaces = """
 PREFIX loc: <http://id.loc.gov/vocabulary/relators/> 
 PREFIX skkg:  <https://ontology.skkg.ch/> 
@@ -48,7 +52,7 @@ PREFIX dc:    <http://purl.org/dc/elements/1.1/>
 PREFIX frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/>
 """
 
-namespaces4ttl = """
+namespaces4ttl_hardcoded = """
 @prefix classification: <https://data.skkg.ch/classification/> .
 @prefix crm:   <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix crmdig: <http://www.ics.forth.gr/isl/CRMdig/> .
@@ -62,12 +66,12 @@ namespaces4ttl = """
 one_classification = Template("""
 classification:$class_id a crm:E13_Attribute_Assignment ;
 crm:P140_assigned_attribute_to $skkg_uri ;
-crm:P141_assigned gnd:$gnd_id ;
+crm:P141_assigned $aligned_prefix:$aligned_id ;
 crm:P177_assigned_property_of_type crmdig:L54_is_same-as, skos:$match_type ;
 rdf:value "$score"^^xsd:float .
 
-gnd:$gnd_id a crm:E55_Type ;
-    rdfs:label "$gnd_label" .
+$aligned_prefix:$aligned_id a crm:E55_Type ;
+    rdfs:label "$aligned_label" .
 """)
 
 def chunks(data, SIZE=10):
@@ -83,40 +87,42 @@ def chunks(data, SIZE=10):
     for i in range(0, len(data), SIZE):
         yield {k:data[k] for k in islice(it, SIZE)}
 
-def parse_reconciliation_response(q_response, q_number, skkg_dict, min_score=0):
+def parse_reconciliation_response(q_response, q_number, skkg_dict, aligned_prefix='gnd', min_score=0):
     """
-    function to parse the one element in the response from the GND reconciliation endpoint and format it into a ttl classification
+    function to parse the one element in the response from the reconciliation endpoint and format it into a ttl classification
     Args:
-    q_response - one element from the GND query response
+    q_response - one element from the reconciliation query response
     q_number - query number in format "qn" where n is the number of the query
     skkg_dict - a dictionary such that keys are the query numbers and values are dictionaries containing 'uri' which
     correspond to SKKG uris of elements of interest and 'label' which contain the labels used for reconciliation
+    min_score - minimum score to consider for results
     """
     ret = ''
     for result in q_response:
         if float(result['score']) >= min_score:
-#             print(result['score'], min_score)
             ret = ret + one_classification.substitute(class_id=str(uuid.uuid4()),
                                             skkg_uri=skkg_dict[q_number]['uri'],
-                                            gnd_id=result['id'],
+                                            aligned_id=result['id'],
                                             match_type='exactMatch' if result['match'] else 'closeMatch',
                                             score=result['score'],
-                                            gnd_label=result['name'])
+                                            aligned_label=result['name'],
+                                            aligned_prefix=aligned_prefix)
     return ret
 
-def parse_all_responses(gnd_whole_response, skkg_dict, min_score=0):
+def parse_all_responses(reconciliation_whole_response, skkg_dict, aligned_prefix='gnd', min_score=0):
     """
-    function to parse the whole GND query response into a ttl string
+    function to parse the whole reconciliation query response into a ttl string
     Args:
-    gnd_whole_response - the whole response from the GND reconciliation endpoint
+    reconciliation_whole_response - the whole response from the reconciliation endpoint
     skkg_dict - a dictionary such that keys are the query numbers and values are dictionaries containing 'uri' which
+    min_score - minimum score to consider for results
     Returns:
     string with ttl formatted classifications
     """
-    return ''.join([  parse_reconciliation_response(values['result'], key, skkg_dict, min_score) for (key, values) in gnd_whole_response.items() ])
+    return ''.join([  parse_reconciliation_response(values['result'], key, skkg_dict, aligned_prefix=aligned_prefix, min_score=min_score) for (key, values) in reconciliation_whole_response.items() ])
 
 
-def main(input_file, type_, limit, output_file, api_uri, minimum_score=0):
+def main(input_file, type_, limit, output_file, api_uri, aligned_prefix='gnd', minimum_score=0, namespaces4ttl=namespaces4ttl_hardcoded):
     #parse input file
     g = Graph()
     g.parse(input_file)
@@ -136,7 +142,7 @@ def main(input_file, type_, limit, output_file, api_uri, minimum_score=0):
         i = i + 1
     
     #prepare reconciliation queries
-    queries = {key : {"query": values['label'], "limit": limit, "type":type_ } for (key, values) in skkg_res_dict.items()}
+    queries = {key : {"query": values['label'], "limit": limit, "type": type_ } for (key, values) in skkg_res_dict.items()}
     
     #make requests and put in dictionary
     response_dict = {}
@@ -145,7 +151,7 @@ def main(input_file, type_, limit, output_file, api_uri, minimum_score=0):
         response_dict.update(response.json())
     
     #format response into ttl
-    ttl = parse_all_responses(response_dict, skkg_res_dict, minimum_score)
+    ttl = parse_all_responses(response_dict, skkg_res_dict, aligned_prefix=aligned_prefix, min_score=minimum_score)
     
     #save ttl
     with open(output_file, 'w') as f:
@@ -155,15 +161,29 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     
-    parser = argparse.ArgumentParser(description = 'Produce GND alignments to SKKG entities using GND reconciliation service')
+    parser = argparse.ArgumentParser(description = 'Produce alignments to SKKG entities using reconciliation service')
     parser.add_argument('--input_file', required= True, help='TTL input file with SKKG entities')
     parser.add_argument('--type', required= True, help='SKKG type of entities to reteive')
     parser.add_argument('--limit', required= True, help='Limit of results when querying reconciliation service')
     parser.add_argument('--output_file', required= True, help='TTL output file')
     parser.add_argument('--api_uri', required= False, help='URL of reconciliation API. Defaults to https://lobid.org/gnd/reconcile/.')
     parser.add_argument('--minimum_score', required= False, help='Minimum score to consider for results. Defaults to 0.')
+    parser.add_argument('--aligned_prefix', required= False, help='Prefix abbreviation to use. Defaults to "gnd".')
+    parser.add_argument('--ttl_namespaces', required= False, help='Text file containing namespaces for TTL files. Defaults to the most common ones (crm, crmdig, gnd, rdf, rdfs, skos, xsd)')
+    
     args = parser.parse_args()
     
+    if args.ttl_namespaces is None:
+        namespaces4ttl = namespaces4ttl_hardcoded
+    else:
+        with open(args.ttl_namespaces, 'r') as f:
+            namespaces4ttl = f.read()
+    
+    if args.aligned_prefix is None:
+        aligned_prefix = 'gnd'
+    else:
+        aligned_prefix = args.aligned_prefix
+        
     if args.api_uri is None:
         api_uri = 'https://lobid.org/gnd/reconcile/'
     else:
@@ -174,4 +194,4 @@ if __name__ == "__main__":
     else:
         minimum_score = float(args.minimum_score)
 
-    main(args.input_file, args.type, args.limit, args.output_file, api_uri, minimum_score)
+    main(args.input_file, args.type, args.limit, args.output_file, api_uri, aligned_prefix=aligned_prefix, minimum_score=minimum_score, namespaces4ttl=namespaces4ttl)
