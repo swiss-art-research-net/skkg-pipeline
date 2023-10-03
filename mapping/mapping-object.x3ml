@@ -173,6 +173,10 @@
                                         <arg name="type" type="constant">type</arg>
                                         <arg name="id" type="constant">invnr</arg>
                                     </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">Inv. Nr.</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
@@ -322,7 +326,7 @@
                                         <constant/>
                                     </instance_info>
                                     <instance_generator name="typedLiteralGen">
-                                        <arg name="text" type="xpath">value/text()</arg>
+                                        <arg name="text" type="xpath">replace(value/text(),' ', 'T')</arg>
                                     </instance_generator>
                                 </entity>
                             </additional>
@@ -464,6 +468,10 @@
                                         <arg name="type" type="constant">type</arg>
                                         <arg name="id" type="constant">sortlnu</arg>
                                     </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">Sortierung</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
