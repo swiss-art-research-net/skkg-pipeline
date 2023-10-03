@@ -116,7 +116,7 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
             removeFile(join(inputFolder, file))
             # Update last modified for file
             metadata.setLastUpdatedForFile(filename, lastModified, write=False)
-        metadata.writeMetadata()
+    metadata.writeMetadata()
         
         
 if __name__ == "__main__":
