@@ -99,7 +99,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
 def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
     # Read all XML files in the input folder
     files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
-    for file in tqdm(files):
+    for file in files:
 
         # Retrieve the uuid and last modified attributes from the moduleItem element
         tree = etree.parse(join(inputFolder, file))
