@@ -23,7 +23,7 @@ def updateMetadata(*, folder):
     files = [f for f in listdir(folder) if isfile(join(folder, f)) and f.endswith('.xml')]
     for file in tqdm(files):
         tree = etree.parse(join(folder, file))
-        lastModified= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
+        lastModified = tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
         metadata.setLastUpdatedForFile(file, lastModified, write=False)
     metadata.writeMetadata()
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     parser = argparse.ArgumentParser(description = 'Update the metadata file for a given folder')
-    parser.add_argument('--folder', required= True, help='Folder to save the XML files to')
+    parser.add_argument('--folder', required=True, help='Folder where the XML files are found')
     args = parser.parse_args()
 
     updateMetadata(folder=args.folder)
