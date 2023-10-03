@@ -100,10 +100,12 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
     # Read all XML files in the input folder
     files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
     for file in tqdm(files):
+
         # Retrieve the uuid and last modified attributes from the moduleItem element
         tree = etree.parse(join(inputFolder, file))
         uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
         lastModified= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
+
         # Rename the file
         filename = filenamePrefix + uuid + ".xml"
         newFile = join(outputFolder, filename)
@@ -112,8 +114,10 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
         # Remove the old file
         if exists(join(inputFolder, file)):
             removeFile(join(inputFolder, file))
-        # Update last modified for file
-            metadata.setLastUpdatedForFile(filename, lastModified)
+            # Update last modified for file
+            metadata.setLastUpdatedForFile(filename, lastModified, write=False)
+        metadata.writeMetadata()
+        
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
