@@ -574,7 +574,14 @@
                 <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
                 <target_node>
                     <if>
-                        <equals value="ObjDateGrp">../@name</equals>
+                        <and>
+                            <if>
+                                <equals value="ObjDateGrp">../@name</equals>
+                            </if>
+                            <if>
+                                <exists>virtualField[@name='PreviewVrt']/value/text()</exists>
+                            </if>
+                        </and>
                     </if>
                     <entity>
                         <type>crm:E52_Time-Span</type>
@@ -582,6 +589,10 @@
                             <arg name="type" type="constant">timespan</arg>
                             <arg name="id" type="xpath">@uuid</arg>
                         </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="xpath">virtualField[@name='PreviewVrt']/value/text()</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -775,7 +786,7 @@
                             <type>crm:E52_Time-Span</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">timespan</arg>
-                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
@@ -846,7 +857,7 @@
                             <type>crm:E52_Time-Span</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">timespan</arg>
-                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
