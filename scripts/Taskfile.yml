@@ -451,6 +451,7 @@ tasks:
       vars: [MODULE, OUTPUT_FOLDER, FILENAMEPREFIX]
     vars:
       TEMP_FOLDER: /data/temp/download/temp_{{.MODULE}}
+    interactive: True
     cmds:
       - mkdir -p {{.TEMP_FOLDER}}
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
@@ -502,6 +503,7 @@ tasks:
             # "--debug" is not present, echo "false"
             echo "false"
           fi
+    interactive: True
     cmds:
       - mkdir -p {{.TEMPFOLDER}}
       - |
