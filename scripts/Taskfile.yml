@@ -13,6 +13,11 @@ output: 'prefixed'
 
 tasks:
 
+  test-alignment:
+    desc: Test alignment of vocabularies with GND data
+    cmds:
+      - python /scripts/suggestAlignments.py --input_file /data/ttl/main/vocabularies/vocab-ObjCategoryVgr.ttl --type SubjectHeading --limit 5 --output_file /ttl/additional/classifications/vocab-ObjCategoryVgr-alignments.ttl
+
   first-run:
     desc: Task to run when the pipeline is run for the first time
     cmds:
