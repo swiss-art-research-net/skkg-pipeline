@@ -9,6 +9,7 @@ import argparse
 from datetime import datetime
 from os import listdir
 from os.path import join, isfile
+from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
 
@@ -17,7 +18,7 @@ def prepareDataForIngest(*, inputFolder, outputFolder, xmlFolder):
     files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.ttl')]
     filesToIngest = []
 
-    for file in files:
+    for file in tqdm(files):
         if shouldBeIngested(file=file, metadata=metadata):
             filesToIngest.append(file)
             prepareFileForIngest(file=file, inputFolder=inputFolder, outputFolder=outputFolder)
