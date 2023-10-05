@@ -64,37 +64,48 @@ docker compose exec jobs task --list
 ```
 
 This will output a list of tasks:
-```task: Available tasks for this project:
-* default:                                 Runs the entire pipeline
-* download-address-items:                  Download the address item records from MuseumPlus
-* download-literature-items:               Download the literature item records from MuseumPlus
-* download-object-items:                   Download the object item records from MuseumPlus
-* download-person-items:                   Download the person item records from MuseumPlus
-* download-source-items:                   Downloads all item records from MuseumPlus
-* download-source-vocabularies:            Downloads all vocabularies from MuseumPlus
-* first-run:                               Task to run when the pipeline is run for the first time
-* generate-example-record-object:          Generates an example record for developing the mapping in the X3ML editor
-* generate-example-record-person:          Generates an example record for developing the mapping in the X3ML editor
-* ingest-items:                            Ingest items for all modules. Add --debug true To see the response from the triplestore
-* ingest-object-items:                     Ingests the object items into the triplestore
-* ingest-ontologies:                       Ingests the ontologies into individual named Graphs
-* ingest-person-items:                     Ingests the person items into the triplestore
-* perform-mapping-for-object-items:        Performs the mapping for the object items
-* perform-mapping-for-person-items:        Performs the mapping for the person items
-* perform-mapping-for-vocabularies:        Performs the mapping for the vocabularies
-* prepare-and-perform-mapping:             Prepares and performs the mapping for all modules
-* prepare-mapping-for-address-items:       Prepares the mapping for the object items
-* prepare-mapping-for-object-items:        Prepares the mapping for the object items
-* prepare-mapping-for-person-items:        Prepares the mapping for the person items
-* recreate-folder-metadata:                Recreate the metadata for a specific folder. The folder name should be passed as an argument.
-* remove-deleted-address-items:            Removes address item records that have been deleted from MuseumPlus
-* remove-deleted-literature-items:         Removes literature item records that have been deleted from MuseumPlus
-* remove-deleted-object-items:             Removes object item records that have been deleted from MuseumPlus
-* remove-deleted-person-items:             Removes person item records that have been deleted from MuseumPlus
-* remove-deleted-source-items:             Removes item records that have been deleted from MuseumPlus
-* reset-last-ingested-metadata:            Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
-* reset-last-mapped-metadata:              Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
-* update-vocabularies:                     Downloads, maps, and ingests the vocabularies
+```
+task: Available tasks for this project:
+* default:                                    Runs the entire pipeline
+* download-address-items:                     Download the address item records from MuseumPlus
+* download-literature-items:                  Download the literature item records from MuseumPlus
+* download-multimedia-items:                  Download the multimedia item records from MuseumPlus
+* download-object-items:                      Download the object item records from MuseumPlus
+* download-person-items:                      Download the person item records from MuseumPlus
+* download-source-items:                      Downloads all item records from MuseumPlus
+* download-source-vocabularies:               Downloads all vocabularies from MuseumPlus
+* first-run:                                  Task to run when the pipeline is run for the first time
+* generate-example-record-multimedia:         Generates an example record for developing the mapping in the X3ML editor
+* generate-example-record-object:             Generates an example record for developing the mapping in the X3ML editor
+* generate-example-record-person:             Generates an example record for developing the mapping in the X3ML editor
+* ingest-items:                               Ingest items for all modules. Add --debug true To see the response from the triplestore
+* ingest-multimedia-items:                    Ingests the multimedia items into the triplestore
+* ingest-object-items:                        Ingests the object items into the triplestore
+* ingest-ontologies:                          Ingests the ontologies into individual named Graphs
+* ingest-person-items:                        Ingests the person items into the triplestore
+* perform-mapping-for-multimedia-items:       Performs the mapping for the multimedia items
+* perform-mapping-for-object-items:           Performs the mapping for the object items
+* perform-mapping-for-person-items:           Performs the mapping for the person items
+* perform-mapping-for-vocabularies:           Performs the mapping for the vocabularies
+* prepare-and-perform-mapping:                Prepares and performs the mapping for all modules
+* prepare-mapping-for-address-items:          Prepares the mapping for the object items
+* prepare-mapping-for-multimedia-items:       Prepares the mapping for the multimedia items
+* prepare-mapping-for-object-items:           Prepares the mapping for the object items
+* prepare-mapping-for-person-items:           Prepares the mapping for the person items
+* recreate-folder-metadata:                   Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
+* remove-deleted-address-items:               Removes address item records that have been deleted from MuseumPlus
+* remove-deleted-literature-items:            Removes literature item records that have been deleted from MuseumPlus
+* remove-deleted-multimedia-items:            Removes multimedia item records that have been deleted from MuseumPlus
+* remove-deleted-object-items:                Removes object item records that have been deleted from MuseumPlus
+* remove-deleted-person-items:                Removes person item records that have been deleted from MuseumPlus
+* remove-deleted-source-items:                Removes item records that have been deleted from MuseumPlus
+* reset:                                      Delete all artefacts produced by the pipeline.
+* reset-last-ingested-metadata:               Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
+* reset-last-mapped-metadata:                 Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
+* reset-module:                               Delete all artefacts produced by the pipeline for a given module.
+* reset-vocabularies:                         Delete all artefacts produced by the pipeline for the vocabularies.
+* update-vocabularies:                        Downloads, maps, and ingests the vocabularies
+* validate-turtle-file:                       Validate a Turtle file using SHACL. Pass the file to validate as FILE variable or through command line argument
 ```
 
 To run a specific task type `task` followed by the task name, e.g.:
