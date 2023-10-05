@@ -752,6 +752,10 @@
                             <arg name="id" type="xpath">../../@uuid</arg>
                             <arg name="level1" type="constant">prefix</arg>
                         </instance_generator>
+                        <label_generator name="Constant">
+                            <arg name="text" type="xpath">concat("Qualifier for timespan ", ../../virtualField[@name='PreviewVrt']/value/text())</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -819,6 +823,10 @@
                             <arg name="id" type="xpath">../../@uuid</arg>
                             <arg name="level1" type="constant">suffix</arg>
                         </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="xpath">concat("Qualifier for timespan ", ../../virtualField[@name='PreviewVrt']/value/text())</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -856,7 +864,7 @@
                 <range>
                     <source_node>.</source_node>
                     <target_node>
-                        <entity variable="object_production_timespan_prefix">
+                        <entity variable="object_production_timespan_suffix">
                             <type>crm:E55_Type</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
                                 <arg name="type" type="constant">type</arg>
