@@ -13,6 +13,12 @@ output: 'prefixed'
 
 tasks:
 
+  test-validation:
+    cmds:
+      - task: _validate-turtle-files-in-folder
+        vars:
+          FOLDER: /mapping/output/object
+
   first-run:
     desc: Task to run when the pipeline is run for the first time
     cmds:
@@ -420,15 +426,7 @@ tasks:
       - task: ingest-vocabularies
   
   validate-turtle-file:
-    desc: Validate a Turtle file using SHACL. Pass the file to validate as FILE variable or through command line argument
-    vars:
-      FILE:
-        sh: |
-          if [ -z "{{.FILE}}" ]; then
-            echo "{{.CLI_ARGS}}"
-          else
-            echo "{{.FILE}}"
-          fi
+    desc: Validate a Turtle file using SHACL. Pass the file to validate through command line argument
     cmds:
       - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f human {{.CLI_ARGS}}
 
@@ -659,13 +657,7 @@ tasks:
     vars:
       SHAPES_GRAPH: /mapping/shapesGraph.ttl
       SCHEMA_SKKG: /mapping/schemas/skkg-ontology.ttl
-      SCHEMA_CIDOC_CRM: https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs
-      OUTPUTFILE: /data/ttl/additional/reports/shaclReport.ttl
+      SCHEMA_CRM: /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
+    interactive: True
     cmds:
-      - rm {{.OUTPUTFILE}}
-      - |
-        for file in $(find {{.FOLDER}} -type f); do
-          # Your additional commands here
-          echo "Validating file: $file"
-          pyshacl -s "{{.SHAPES_GRAPH}}" -e "{{.SCHEMA_SKKG}}" -e "{{.SCHEMA_CIDOC_CRM}}" -m -i rdfs -df turtle -sf turtle -f turtle "$file" >> {{.OUTPUTFILE}}
-        done
+      - python /scripts/validateTurtleWithShacl.py --directory "{{.FOLDER}}" --shapesGraph {{.SHAPES_GRAPH}} --ontologyFile {{.SCHEMA_SKKG}} --ontologyFile {{.SCHEMA_CRM}} --endpoint {{.BLAZEGRAPH_ENDPOINT}}
