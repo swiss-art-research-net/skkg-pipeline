@@ -13,12 +13,6 @@ output: 'prefixed'
 
 tasks:
 
-  test-validation:
-    cmds:
-      - task: _validate-turtle-files-in-folder
-        vars:
-          FOLDER: /mapping/output/object
-
   first-run:
     desc: Task to run when the pipeline is run for the first time
     cmds:
@@ -595,11 +589,20 @@ tasks:
             sh: date -u "+%Y-%m-%d %H:%M:%S.000"
           SOURCEFOLDER: "{{.INPUTFOLDER}}"
           FILEEXTENSION: .xml
-      - task: _validate-turtle-files-in-folder
+      - task: _perform-post-mapping-tasks
         vars:
+          MODULE: "{{.MODULE}}"
           FOLDER: "{{.OUTPUTFOLDER}}"
       - mkdir -p {{.DESTINATIONFOLDER}}
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec mv -t {{.DESTINATIONFOLDER}} {} +
+
+  _perform-post-mapping-tasks:
+    requires:
+      vars: [MODULE, FOLDER]
+    cmds:
+      - task: _validate-turtle-files-in-folder
+        vars:
+          FOLDER: "{{.FOLDER}}"
 
   _prepare-mapping-for-module-items:
     requires:
@@ -657,7 +660,7 @@ tasks:
     vars:
       SHAPES_GRAPH: /mapping/shapesGraph.ttl
       SCHEMA_SKKG: /mapping/schemas/skkg-ontology.ttl
-      SCHEMA_CRM: /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
+      REPORTS_GRAPH: "{{.NAMESPACE}}graph/shaclReports"
     interactive: True
     cmds:
-      - python /scripts/validateTurtleWithShacl.py --directory "{{.FOLDER}}" --shapesGraph {{.SHAPES_GRAPH}} --ontologyFile {{.SCHEMA_SKKG}} --ontologyFile {{.SCHEMA_CRM}} --endpoint {{.BLAZEGRAPH_ENDPOINT}}
+      - python /scripts/validateTurtleWithShacl.py --directory "{{.FOLDER}}" --shapesGraph {{.SHAPES_GRAPH}} --ontologyFile {{.SCHEMA_SKKG}} --endpoint {{.BLAZEGRAPH_ENDPOINT}} --namedGraph {{.REPORTS_GRAPH}}
