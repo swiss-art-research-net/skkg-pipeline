@@ -35,16 +35,14 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
     print("Validating...")
     r = validate(dataGraph,
                  shacl_graph=shaclGraph,
+                 shacl_graph_format='turtle',
+                 do_owl_imports=True,
                  ont_graph=ontologyGraph,
                  inference='rdfs',
-                 abort_on_first=False,
-                 meta_shacl=False,
-                 advanced=True,
-                 js=False,
-                 debug=False,
+                 abort_on_first=True,
                  serialize_report_graph=False,
-                 use_iron=True,
                  allow_warnings=False,
+                 debug=False
                  )
     conforms, results_graph, results_text = r
     
