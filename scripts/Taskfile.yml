@@ -268,11 +268,19 @@ tasks:
           MODULE: Person
 
   recreate-folder-metadata:
-    desc: Recreate the metadata for a specific folder. The folder name should be passed as an argument.
-    interactive: true
+    desc: Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
+    interactive: True
+    vars:
+      MODULE:
+        sh: |
+          if [ -z "{{.MODULE}}" ]; then
+            echo "{{.CLI_ARGS}}"
+          else
+            echo "{{.MODULE}}"
+          fi
     cmds:
-      - rm /data/source/{{.CLI_ARGS}}/metadata.json
-      - python /scripts/recreateMetadata.py --folder /data/source/{{.CLI_ARGS}}
+      - rm /data/source/{{.MODULE}}/metadata.json
+      - python /scripts/recreateMetadata.py --folder /data/source/{{.MODULE}}
 
   remove-deleted-address-items:
     desc: Removes address item records that have been deleted from MuseumPlus
@@ -362,13 +370,9 @@ tasks:
       - rm -rf /mapping/input/{{.MODULE_LOWERCASE}}
       - rm -rf /mapping/output/{{.MODULE_LOWERCASE}}
       - echo "Resetting metadata for {{.MODULE}}.."
-      - task: _update-metadata-for-module
+      - task: recreate-folder-metadata
         vars:
           MODULE: "{{.MODULE_LOWERCASE}}"
-          KEY: lastMapped
-          VALUE: "1970-01-01 00:00:00.000"
-          SOURCEFOLDER: "/data/source/{{.MODULE_LOWERCASE}}"
-          FILEEXTENSION: .xml
 
   reset-vocabularies:
     desc: Delete all artefacts produced by the pipeline for the vocabularies.
@@ -415,6 +419,11 @@ tasks:
       - sleep 5s
       - task: ingest-vocabularies
   
+  validate-turtle-file:
+    desc: Validate a Turtle file using SHACL. Pass the file to validate through command line argument
+    cmds:
+      - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f human {{.CLI_ARGS}}
+
   _download-vocabulary-from-museumplus:
     requires:
       vars: [VOCABULARY]
@@ -448,6 +457,7 @@ tasks:
     interactive: true
     vars:
       TEMP_FOLDER: /data/temp/download/temp_{{.MODULE}}
+    interactive: True
     cmds:
       - mkdir -p {{.TEMP_FOLDER}}
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
@@ -499,6 +509,7 @@ tasks:
             # "--debug" is not present, echo "false"
             echo "false"
           fi
+    interactive: True
     cmds:
       - mkdir -p {{.TEMPFOLDER}}
       - |
@@ -579,8 +590,20 @@ tasks:
             sh: date -u "+%Y-%m-%d %H:%M:%S.000"
           SOURCEFOLDER: "{{.INPUTFOLDER}}"
           FILEEXTENSION: .xml
+      - task: _perform-post-mapping-tasks
+        vars:
+          MODULE: "{{.MODULE}}"
+          FOLDER: "{{.OUTPUTFOLDER}}"
       - mkdir -p {{.DESTINATIONFOLDER}}
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec mv -t {{.DESTINATIONFOLDER}} {} +
+
+  _perform-post-mapping-tasks:
+    requires:
+      vars: [MODULE, FOLDER]
+    cmds:
+      - task: _validate-turtle-files-in-folder
+        vars:
+          FOLDER: "{{.FOLDER}}"
 
   _prepare-mapping-for-module-items:
     requires:
@@ -631,3 +654,14 @@ tasks:
       FILEEXTENSION: "{{.FILEEXTENSION}}"
     cmds:
       - python /scripts/updateMetadataValueForFiles.py --metadataFolder {{.METADATAFOLDER}} --inputFolder {{.SOURCEFOLDER}} --key {{.KEY}} --value "{{.VALUE}}" --fileExtension {{.FILEEXTENSION}}
+
+  _validate-turtle-files-in-folder:
+    requires:
+      vars: [FOLDER]
+    vars:
+      SHAPES_GRAPH: /mapping/shapesGraph.ttl
+      SCHEMA_SKKG: /mapping/schemas/skkg-ontology.ttl
+      REPORTS_GRAPH: "{{.NAMESPACE}}graph/shaclReports"
+    interactive: True
+    cmds:
+      - python /scripts/validateTurtleWithShacl.py --directory "{{.FOLDER}}" --shapesGraph {{.SHAPES_GRAPH}} --ontologyFile {{.SCHEMA_SKKG}} --endpoint {{.BLAZEGRAPH_ENDPOINT}} --namedGraph {{.REPORTS_GRAPH}}
