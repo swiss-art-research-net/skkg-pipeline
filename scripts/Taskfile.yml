@@ -454,7 +454,6 @@ tasks:
   _download-items-from-museumplus:
     requires:
       vars: [MODULE, OUTPUT_FOLDER, FILENAMEPREFIX]
-    interactive: true
     vars:
       TEMP_FOLDER: /data/temp/download/temp_{{.MODULE}}
     interactive: True
