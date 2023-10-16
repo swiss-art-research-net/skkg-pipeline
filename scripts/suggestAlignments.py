@@ -152,8 +152,10 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
     """.format(base_type)
     base_res = query_ttl(input_file, base_query)
     
+    if list(base_res) == []:
+        print('There are no entitites of type {0} in input file.'.format(base_type))
+        return
     #get entities that are already classified
-    
     if os.path.isfile(output_file):
         existing_classifications_query = """
         SELECT DISTINCT ?base_uri WHERE {
@@ -183,7 +185,7 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
         for row in base_res:
             base_res_dict.update({'q'+str(i): {'uri': str(row.entity), 'label': str(row.label)}})
             i = i + 1
-#     print(base_res_dict)
+
     if base_res_dict == {}:
         print('All entities are already classified in output file!')
         return
