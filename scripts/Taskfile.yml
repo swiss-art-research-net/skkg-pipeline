@@ -96,6 +96,12 @@ tasks:
         vars:
           MODULE: Person
 
+  execute-query:
+    desc: Execute a query against the main Blazegraph instance. Pass the query as a command line argument
+    cmds:
+      - |
+        curl -X POST -H "Accept: text/csv" --data-urlencode "query=$(echo "{{.CLI_ARGS}}" | cut -c2- | rev | cut -c2- | rev )" {{.BLAZEGRAPH_ENDPOINT}}
+
   generate-example-record-object:
     desc: Generates an example record for developing the mapping in the X3ML editor
     vars:
