@@ -16,7 +16,7 @@ tasks:
   test-alignment:
     desc: Test alignment of vocabularies with GND data
     cmds:
-      - python /scripts/suggestAlignments.py --input_file /data/ttl/main/vocabularies/vocab-ObjCategoryVgr.ttl --type SubjectHeading --limit 5 --output_file /data/ttl/additional/classifications/vocab-ObjCategoryVgr-alignments.ttl
+      - python /scripts/suggestAlignments.py --input_file /data/ttl/main/vocabularies/vocab-ObjCategoryVgr.ttl --reconciliation_type SubjectHeading --limit 5 --output_file /data/ttl/additional/classifications/vocab-ObjCategoryVgr-alignments.ttl --base_type https://data.skkg.ch/type
 
   first-run:
     desc: Task to run when the pipeline is run for the first time
