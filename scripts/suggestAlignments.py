@@ -24,6 +24,9 @@ from string import Template
 import uuid
 from tqdm import tqdm
 import time
+import os
+
+ESCAPE_DICT = {'"':  r'\"'}
 
 NAMESPACES = """
 PREFIX loc: <http://id.loc.gov/vocabulary/relators/> 
@@ -79,6 +82,14 @@ MINIMUM_SCORE_NULL = 0
 LOBID_API_URL ='https://lobid.org/gnd/reconcile/'
 AUTHORITY_RESOURCE = 'AuthorityResource'
 
+def query_ttl(input_file, query):
+    #parse input file
+    g = Graph()
+    g.parse(input_file)
+    #retrieve needed entities and labels from input file
+    res = g.query(NAMESPACES + query)
+    return res
+
 def chunks(data, SIZE=10):
     """
     function to chunk a dictionary into multiple parts of a given size
@@ -105,12 +116,15 @@ def parse_reconciliation_response(q_response, q_number, q2entities_dict, min_sco
     ret = ''
     for result in q_response:
         if float(result['score']) >= min_score:
-            ret = ret + ONE_CLASSIFICATION.substitute(class_id=str(uuid.uuid4()),
+            #get SHA1 UUID bases on base uri first and then use resulting UUID to get SHA1 UUID based on ID of aligned entity
+            base_uri_uuid = uuid.uuid5(uuid.NAMESPACE_URL, q2entities_dict[q_number]['uri'])
+            class_id = uuid.uuid5(base_uri_uuid, result['id'])
+            ret = ret + ONE_CLASSIFICATION.substitute(class_id=str(class_id),
                                             base_uri=q2entities_dict[q_number]['uri'],
                                             aligned_id=result['id'],
                                             match_type='exactMatch' if result['match'] else 'closeMatch',
                                             score=result['score'],
-                                            aligned_label=result['name'],
+                                            aligned_label=result['name'].translate(str.maketrans(ESCAPE_DICT)),
                                             same_as = 'crmdig:L54_is_same-as,' if result['match'] else '')
     return ret
 
@@ -128,9 +142,6 @@ def parse_all_responses(reconciliation_whole_response, q2entities_dict, min_scor
     return ''.join([  parse_reconciliation_response(q_response = values['result'], q_number = key, q2entities_dict = q2entities_dict, min_score=min_score) for (key, values) in reconciliation_whole_response.items() ])
 
 def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri, minimum_score=0, namespaces4ttl=NAMESPACES4TTL_HARDCODED):
-    #parse input file
-    g = Graph()
-    g.parse(input_file)
     
     #retrieve needed entities and labels from input file
     base_query = """
@@ -139,12 +150,43 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
     ?entity rdfs:label ?label .
     }}
     """.format(base_type)
-    base_res = g.query(NAMESPACES + base_query)
-    base_res_dict = {}
-    i = 1
-    for row in base_res:
-        base_res_dict.update({'q'+str(i): {'uri': str(row.entity), 'label': str(row.label)}})
-        i = i + 1
+    base_res = query_ttl(input_file, base_query)
+    
+    #get entities that are already classified
+    
+    if os.path.isfile(output_file):
+        existing_classifications_query = """
+        SELECT DISTINCT ?base_uri WHERE {
+            ?classification a crm:E13_Attribute_Assignment ;
+            crm:P140_assigned_attribute_to ?base_uri ;
+            crm:P141_assigned ?gnd ;
+            crm:P177_assigned_property_of_type ?sameness ;
+            rdf:value ?score .
+
+            ?gnd a crm:E55_Type ;
+            rdfs:label ?label .
+        }
+        """
+        existing_classifications_res = query_ttl(output_file, existing_classifications_query)
+        existing_entities_list = []
+        for row in existing_classifications_res:
+            existing_entities_list.append(str(row.base_uri))
+        base_res_dict = {}
+        i = 1
+        for row in base_res:
+            if not str(row.entity) in existing_entities_list:
+                base_res_dict.update({'q'+str(i): {'uri': str(row.entity), 'label': str(row.label)}})
+                i = i + 1
+    else:
+        base_res_dict = {}
+        i = 1
+        for row in base_res:
+            base_res_dict.update({'q'+str(i): {'uri': str(row.entity), 'label': str(row.label)}})
+            i = i + 1
+#     print(base_res_dict)
+    if base_res_dict == {}:
+        print('All entities are already classified in output file!')
+        return
     
     #prepare reconciliation queries
     queries = {key : {"query": values['label'], "limit": limit, "type": reconciliation_type } for (key, values) in base_res_dict.items()}
@@ -163,8 +205,12 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
     ttl = parse_all_responses(reconciliation_whole_response = response_dict, q2entities_dict = base_res_dict, min_score=minimum_score)
     
     #save ttl
-    with open(output_file, 'w') as f:
-        f.write(namespaces4ttl + ttl)
+    if os.path.isfile(output_file):
+        with open(output_file, 'a') as f:
+            f.write(ttl)        
+    else:
+        with open(output_file, 'w') as f:
+            f.write(namespaces4ttl + ttl)
         
 if __name__ == "__main__":
     
