@@ -6,5 +6,5 @@ SELECT ?s ?uuid ?filename WHERE {
      crm:P1_is_identified_by ?name .
   ?name crm:P2_has_type aat:300404670 ;
         crm:P190_has_symbolic_content ?filename .
-  BIND(STRAFTER(STR(?s), \"multimedia\") as ?uuid)
+  BIND(STRAFTER(STR(?s), "multimedia") as ?uuid)
 } ORDER BY ?uuid
