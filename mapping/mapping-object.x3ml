@@ -173,6 +173,10 @@
                                         <arg name="type" type="constant">type</arg>
                                         <arg name="id" type="constant">invnr</arg>
                                     </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">Inv. Nr.</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
@@ -261,6 +265,37 @@
                     </target_node>
                 </range>
             </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjDim3DGrp">../@name</equals>
+                        </if>
+                        <relationship>crm:P46_is_composed_of</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity variable="object_part_for_dimensions">
+                            <type>crm:E22_Human-Made_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">part</arg>
+                                <arg name="level2" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat('part of object "', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid), '" for purpose of dimensions')</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
         </mapping>
         <mapping>
             <domain>
@@ -322,7 +357,7 @@
                                         <constant/>
                                     </instance_info>
                                     <instance_generator name="typedLiteralGen">
-                                        <arg name="text" type="xpath">value/text()</arg>
+                                        <arg name="text" type="xpath">replace(value/text(),' ', 'T')</arg>
                                     </instance_generator>
                                 </entity>
                             </additional>
@@ -464,6 +499,10 @@
                                         <arg name="type" type="constant">type</arg>
                                         <arg name="id" type="constant">sortlnu</arg>
                                     </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">Sortierung</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
@@ -566,7 +605,14 @@
                 <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
                 <target_node>
                     <if>
-                        <equals value="ObjDateGrp">../@name</equals>
+                        <and>
+                            <if>
+                                <equals value="ObjDateGrp">../@name</equals>
+                            </if>
+                            <if>
+                                <exists>virtualField[@name='PreviewVrt']/value/text()</exists>
+                            </if>
+                        </and>
                     </if>
                     <entity>
                         <type>crm:E52_Time-Span</type>
@@ -574,6 +620,10 @@
                             <arg name="type" type="constant">timespan</arg>
                             <arg name="id" type="xpath">@uuid</arg>
                         </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="xpath">virtualField[@name='PreviewVrt']/value/text()</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -732,6 +782,112 @@
         </mapping>
         <mapping>
             <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                <target_node>
+                    <if>
+                        <equals value="ObjDim3DGrp">../@name</equals>
+                    </if>
+                    <entity variable="object_part_for_dimensions">
+                        <type>crm:E22_Human-Made_Object</type>
+                        <instance_generator name="URIwithTypeIdAnd2Levels">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">part</arg>
+                            <arg name="level2" type="xpath">@uuid</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjDim3DTypeVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P2_has_type</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="FirstNum">@name</equals>
+                        </if>
+                        <relationship>crm:P43_has_dimension</relationship>
+                        <entity>
+                            <type>crm:E54_Dimension</type>
+                            <instance_generator name="URIwithTypeIdAnd4Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">part</arg>
+                                <arg name="level2" type="xpath">../@uuid</arg>
+                                <arg name="level3" type="constant">dimension</arg>
+                                <arg name="level4" type="constant">1</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300055644</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">height</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Höhe</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P90_has_value</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
                 <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem/vocabularyReference/vocabularyReferenceItem</source_node>
                 <target_node>
                     <if>
@@ -744,6 +900,10 @@
                             <arg name="id" type="xpath">../../@uuid</arg>
                             <arg name="level1" type="constant">prefix</arg>
                         </instance_generator>
+                        <label_generator name="Constant">
+                            <arg name="text" type="xpath">concat("Qualifier for timespan ", ../../virtualField[@name='PreviewVrt']/value/text())</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -763,7 +923,7 @@
                             <type>crm:E52_Time-Span</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">timespan</arg>
-                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
@@ -811,6 +971,10 @@
                             <arg name="id" type="xpath">../../@uuid</arg>
                             <arg name="level1" type="constant">suffix</arg>
                         </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="xpath">concat("Qualifier for timespan ", ../../virtualField[@name='PreviewVrt']/value/text())</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -830,7 +994,7 @@
                             <type>crm:E52_Time-Span</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">timespan</arg>
-                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
@@ -848,7 +1012,7 @@
                 <range>
                     <source_node>.</source_node>
                     <target_node>
-                        <entity variable="object_production_timespan_prefix">
+                        <entity variable="object_production_timespan_suffix">
                             <type>crm:E55_Type</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
                                 <arg name="type" type="constant">type</arg>
