@@ -868,6 +868,24 @@
                                     </label_generator>
                                 </entity>
                             </additional>
+                            <additional>
+                                <relationship>crm:P91_has_unit</relationship>
+                                <entity>
+                                    <type>crm:E58_Measurement_Unit</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeIdAnd1Level">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/@id</arg>
+                                        <arg name="level1" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/@id</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/text()</arg>
+                                        <arg name="language" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/@language</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
                         </entity>
                         <relationship>crm:P90_has_value</relationship>
                     </target_relation>
@@ -925,6 +943,24 @@
                                     </label_generator>
                                 </entity>
                             </additional>
+                            <additional>
+                                <relationship>crm:P91_has_unit</relationship>
+                                <entity>
+                                    <type>crm:E58_Measurement_Unit</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeIdAnd1Level">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/@id</arg>
+                                        <arg name="level1" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/@id</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/text()</arg>
+                                        <arg name="language" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/@language</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
                         </entity>
                         <relationship>crm:P90_has_value</relationship>
                     </target_relation>
@@ -979,6 +1015,24 @@
                                     <label_generator name="Literal">
                                         <arg name="text" type="constant">Tiefe</arg>
                                         <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P91_has_unit</relationship>
+                                <entity>
+                                    <type>crm:E58_Measurement_Unit</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeIdAnd1Level">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/@id</arg>
+                                        <arg name="level1" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/@id</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/text()</arg>
+                                        <arg name="language" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/@language</arg>
                                     </label_generator>
                                 </entity>
                             </additional>
