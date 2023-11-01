@@ -25,6 +25,7 @@ import uuid
 from tqdm import tqdm
 import time
 import os
+import datetime
 
 ESCAPE_DICT = {'"':  r'\"'}
 
@@ -78,9 +79,27 @@ gnd:$aligned_id a crm:E55_Type ;
     rdfs:label "$aligned_label" .
 """)
 
+
+GENERAL_CLASSIFICATION_STATEMENT = Template("""
+classification:$class_id a crm:E13_Attribute_Assignment ;
+    crm:P16_used_specific_object $all_uris ;
+    crm:P33_used_specific_technique <$technique_uri> ;
+    crm:P4_has_time_span <https://data.skkg.ch/classification/$class_id/date> ;
+    rdf:value "$minimum_score"^^xsd:float ;
+    rdfs:label "Alignment Suggestions" .
+    
+    $matched_uris_statement
+
+<https://data.skkg.ch/classification/$class_id/date> a crm:E52_Time-Span ;
+    crm:P82_at_some_time_within "$current_time"^^xsd:dateTime .
+""")
+
 MINIMUM_SCORE_NULL = 0
 LOBID_API_URL ='https://lobid.org/gnd/reconcile/'
 AUTHORITY_RESOURCE = 'AuthorityResource'
+MATCHED_INPUT_URIS = []
+ALL_INPUT_URIS = []
+TECHNIQUE_URI = 'https://github.com/swiss-art-research-net/skkg-pipeline/blob/45-create-python-script-to-suggest-alignments/scripts/suggestAlignments.py'
 
 def query_ttl(input_file, query):
     #parse input file
@@ -114,8 +133,10 @@ def parse_reconciliation_response(q_response, q_number, q2entities_dict, min_sco
     min_score - minimum score to consider for results
     """
     ret = ''
+    matched_gnd_nb = 0
     for result in q_response:
         if float(result['score']) >= min_score:
+            matched_gnd_nb = matched_gnd_nb + 1
             #get SHA1 UUID bases on base uri first and then use resulting UUID to get SHA1 UUID based on ID of aligned entity
             base_uri_uuid = uuid.uuid5(uuid.NAMESPACE_URL, q2entities_dict[q_number]['uri'])
             class_id = uuid.uuid5(base_uri_uuid, result['id'])
@@ -126,6 +147,8 @@ def parse_reconciliation_response(q_response, q_number, q2entities_dict, min_sco
                                             score=result['score'],
                                             aligned_label=result['name'].translate(str.maketrans(ESCAPE_DICT)),
                                             same_as = 'crmdig:L54_is_same-as,' if result['match'] else '')
+    if matched_gnd_nb > 0:
+        MATCHED_INPUT_URIS.append(q2entities_dict[q_number]['uri'])#append input URI
     return ret
 
 def parse_all_responses(reconciliation_whole_response, q2entities_dict, min_score=0):
@@ -157,7 +180,8 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
         return
     #get entities that are already classified
     if os.path.isfile(output_file):
-        existing_classifications_query = """
+        
+        existing_classifications_query_1 = """
         SELECT DISTINCT ?base_uri WHERE {
             ?classification a crm:E13_Attribute_Assignment ;
             crm:P140_assigned_attribute_to ?base_uri ;
@@ -169,25 +193,37 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
             rdfs:label ?label .
         }
         """
-        existing_classifications_res = query_ttl(output_file, existing_classifications_query)
+        existing_classifications_query_2 = """
+        SELECT DISTINCT ?base_uri WHERE {
+            ?classification a crm:E13_Attribute_Assignment ;
+            crm:P16_used_specific_object ?base_uri .
+        }
+        """
+        existing_classifications_res_1 = query_ttl(output_file, existing_classifications_query_1)
+        existing_classifications_res_2 = query_ttl(output_file, existing_classifications_query_2)
         existing_entities_list = []
-        for row in existing_classifications_res:
+        for row in existing_classifications_res_1:
             existing_entities_list.append(str(row.base_uri))
+        for row in existing_classifications_res_2:
+            existing_entities_list.append(str(row.base_uri))
+
         base_res_dict = {}
         i = 1
         for row in base_res:
             if not str(row.entity) in existing_entities_list:
+                ALL_INPUT_URIS.append(str(row.entity))
                 base_res_dict.update({'q'+str(i): {'uri': str(row.entity), 'label': str(row.label)}})
                 i = i + 1
     else:
         base_res_dict = {}
         i = 1
         for row in base_res:
+            ALL_INPUT_URIS.append(str(row.entity))
             base_res_dict.update({'q'+str(i): {'uri': str(row.entity), 'label': str(row.label)}})
             i = i + 1
 
     if base_res_dict == {}:
-        print('All entities are already classified in output file!')
+        print('All entities are present in output file! To query for non classified input entities, please remove the general classification statement. To query for all input entities, please specify another output file.')
         return
     
     #prepare reconciliation queries
@@ -196,6 +232,7 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
     #make requests and put in dictionary
     response_dict = {}
     print('Reconciliation queries in progress...')
+    current_date_time = datetime.datetime.now()
     pbar = tqdm(total = len(queries))
     for chunk in chunks(queries):
         response = requests.get(api_uri, params={'queries': str(chunk).replace('\'', '"') })
@@ -213,7 +250,24 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
     else:
         with open(output_file, 'w') as f:
             f.write(namespaces4ttl + ttl)
-        
+    
+    with open(output_file, 'a') as f:
+        general_classification_base_uri_uuid = uuid.uuid5(uuid.NAMESPACE_URL, TECHNIQUE_URI)
+        general_classification_uuid = uuid.uuid5(general_classification_base_uri_uuid, current_date_time.strftime("%Y-%m-%dT%H:%M:%SZ"))
+        if len(MATCHED_INPUT_URIS) > 0:
+            matched_uris_statement = 'classification:{0} crm:P140_assigned_attribute_to {1} .'.format(general_classification_uuid, ', '.join(['<' + internal_entity + '>' for internal_entity in MATCHED_INPUT_URIS]))
+        else:
+            matched_uris_statement = ''
+        all_uris = ', '.join(['<' + internal_entity + '>' for internal_entity in ALL_INPUT_URIS])
+        concluding_classification = GENERAL_CLASSIFICATION_STATEMENT.substitute(
+                                                            all_uris = all_uris,
+                                                            class_id = general_classification_uuid,
+                                                            current_time = current_date_time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                                                            technique_uri = TECHNIQUE_URI,
+                                                            minimum_score = minimum_score,
+                                                            matched_uris_statement = matched_uris_statement)
+        f.write(concluding_classification)
+
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
