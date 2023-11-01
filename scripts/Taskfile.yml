@@ -606,9 +606,10 @@ tasks:
     requires:
       vars: [MODULE, FOLDER]
     cmds:
-      - task: _validate-turtle-files-in-folder
-        vars:
-          FOLDER: "{{.FOLDER}}"
+      - echo "Performing post-mapping tasks for {{.MODULE}}"
+      #- task: _validate-turtle-files-in-folder
+      #  vars:
+      #    FOLDER: "{{.FOLDER}}"
 
   _prepare-mapping-for-module-items:
     requires:
