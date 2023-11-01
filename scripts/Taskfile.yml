@@ -16,7 +16,11 @@ tasks:
   test-alignment:
     desc: Test alignment of vocabularies with GND data
     cmds:
-      - python /scripts/suggestAlignments.py --input_file /data/ttl/main/vocabularies/vocab-ObjCategoryVgr.ttl --reconciliation_type SubjectHeading --limit 5 --output_file /data/ttl/additional/classifications/vocab-ObjCategoryVgr-alignments.ttl --base_type https://data.skkg.ch/type
+      - task: _suggest-alignments
+        vars:
+          INPUT_FILE: /data/ttl/main/vocabularies/vocab-ObjCategoryVgr.ttl
+          RECONCILIATION_TYPE: SubjectHeading
+          BASE_TYPE: https://ontology.skkg.ch/Type
 
   first-run:
     desc: Task to run when the pipeline is run for the first time
@@ -620,6 +624,17 @@ tasks:
           MODULE: "{{.MODULE}}"
           INPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
+
+  _suggest-alignments:
+    interactive: True
+    requires:
+      vars: [INPUT_FILE, RECONCILIATION_TYPE, BASE_TYPE, RECONCILIATION_TYPE]
+    vars:
+      LIMIT: 5
+      OUTPUTFILE:
+        sh: echo "/data/ttl/additional/classifications/$(basename {{.INPUT_FILE}} .ttl)-alignments.ttl"
+    cmds:
+        - python /scripts/suggestAlignments.py --input_file "{{.INPUT_FILE}}" --reconciliation_type "{{.RECONCILIATION_TYPE}}"  --limit "{{.LIMIT}}" --output_file "{{.OUTPUTFILE}}" --base_type "{{.BASE_TYPE}}"
 
   _update-metadata-for-module:
     requires:
