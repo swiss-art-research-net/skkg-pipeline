@@ -1,0 +1,10 @@
+PREFIX skkg: <https://ontology.skkg.ch/>
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX aat: <http://vocab.getty.edu/aat/>
+SELECT ?s ?uuid ?filename WHERE {
+  ?s a skkg:Multimedia ;
+     crm:P1_is_identified_by ?name .
+  ?name crm:P2_has_type aat:300404670 ;
+        crm:P190_has_symbolic_content ?filename .
+  BIND(STRAFTER(STR(?s), "multimedia") as ?uuid)
+} ORDER BY ?uuid

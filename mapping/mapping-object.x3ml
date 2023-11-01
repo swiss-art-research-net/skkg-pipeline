@@ -173,6 +173,10 @@
                                         <arg name="type" type="constant">type</arg>
                                         <arg name="id" type="constant">invnr</arg>
                                     </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">Inv. Nr.</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
@@ -322,7 +326,7 @@
                                         <constant/>
                                     </instance_info>
                                     <instance_generator name="typedLiteralGen">
-                                        <arg name="text" type="xpath">value/text()</arg>
+                                        <arg name="text" type="xpath">replace(value/text(),' ', 'T')</arg>
                                     </instance_generator>
                                 </entity>
                             </additional>
@@ -464,6 +468,10 @@
                                         <arg name="type" type="constant">type</arg>
                                         <arg name="id" type="constant">sortlnu</arg>
                                     </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">Sortierung</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
@@ -566,7 +574,14 @@
                 <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
                 <target_node>
                     <if>
-                        <equals value="ObjDateGrp">../@name</equals>
+                        <and>
+                            <if>
+                                <equals value="ObjDateGrp">../@name</equals>
+                            </if>
+                            <if>
+                                <exists>virtualField[@name='PreviewVrt']/value/text()</exists>
+                            </if>
+                        </and>
                     </if>
                     <entity>
                         <type>crm:E52_Time-Span</type>
@@ -574,6 +589,10 @@
                             <arg name="type" type="constant">timespan</arg>
                             <arg name="id" type="xpath">@uuid</arg>
                         </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="xpath">virtualField[@name='PreviewVrt']/value/text()</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -744,6 +763,10 @@
                             <arg name="id" type="xpath">../../@uuid</arg>
                             <arg name="level1" type="constant">prefix</arg>
                         </instance_generator>
+                        <label_generator name="Constant">
+                            <arg name="text" type="xpath">concat("Qualifier for timespan ", ../../virtualField[@name='PreviewVrt']/value/text())</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -763,7 +786,7 @@
                             <type>crm:E52_Time-Span</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">timespan</arg>
-                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
@@ -811,6 +834,10 @@
                             <arg name="id" type="xpath">../../@uuid</arg>
                             <arg name="level1" type="constant">suffix</arg>
                         </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="xpath">concat("Qualifier for timespan ", ../../virtualField[@name='PreviewVrt']/value/text())</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -830,7 +857,7 @@
                             <type>crm:E52_Time-Span</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">timespan</arg>
-                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
@@ -848,7 +875,7 @@
                 <range>
                     <source_node>.</source_node>
                     <target_node>
-                        <entity variable="object_production_timespan_prefix">
+                        <entity variable="object_production_timespan_suffix">
                             <type>crm:E55_Type</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
                                 <arg name="type" type="constant">type</arg>

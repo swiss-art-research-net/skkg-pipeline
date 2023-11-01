@@ -624,7 +624,7 @@
                                         <constant/>
                                     </instance_info>
                                     <instance_generator name="typedLiteralGen">
-                                        <arg name="text" type="xpath">value/text()</arg>
+                                        <arg name="text" type="xpath">replace(value/text(),' ','T')</arg>
                                     </instance_generator>
                                 </entity>
                             </additional>
