@@ -28,6 +28,7 @@ tasks:
       - task: download-source-items
       - task: prepare-and-perform-mapping
       - task: ingest-items
+      - task: ingest-classifications
       - task: ingest-ontologies
 
   download-source-items:
@@ -141,6 +142,21 @@ tasks:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           INPUTFILES: /data/source/person/person-item-1111.xml /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
 
+  ingest-classifications:
+    desc: Ingest classifications into the triplestore
+    sources:
+      - /data/ttl/additional/classifications/*.ttl
+    cmds:
+      - for: sources
+        task: _ingest-data-from-file
+        vars:
+          NAME:
+            sh: echo "$(basename {{.ITEM}} .ttl)"
+          FILE: "{{.ITEM}}"
+          TYPE: application/x-turtle
+          GRAPH: 
+            sh: echo "{{.NAMESPACE}}graph/classifications/$(basename {{.ITEM}} .ttl)"
+  
   ingest-items:
     desc: Ingest items for all modules. Add --debug true To see the response from the triplestore
     cmds:

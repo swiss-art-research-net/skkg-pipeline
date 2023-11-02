@@ -74,11 +74,12 @@ task: Available tasks for this project:
 * download-person-items:                      Download the person item records from MuseumPlus
 * download-source-items:                      Downloads all item records from MuseumPlus
 * download-source-vocabularies:               Downloads all vocabularies from MuseumPlus
-* execute-query:                              Execute a query against the main Blazegraph instance. Pass the query as a command line argument
+* execute-query-from-file:                    Execute a query against the main Blazegraph instance. Pass the path to the file as command line argument
 * first-run:                                  Task to run when the pipeline is run for the first time
 * generate-example-record-multimedia:         Generates an example record for developing the mapping in the X3ML editor
 * generate-example-record-object:             Generates an example record for developing the mapping in the X3ML editor
 * generate-example-record-person:             Generates an example record for developing the mapping in the X3ML editor
+* ingest-classifications:                     Ingest classifications into the triplestore
 * ingest-items:                               Ingest items for all modules. Add --debug true To see the response from the triplestore
 * ingest-multimedia-items:                    Ingests the multimedia items into the triplestore
 * ingest-object-items:                        Ingests the object items into the triplestore
@@ -105,6 +106,7 @@ task: Available tasks for this project:
 * reset-last-mapped-metadata:                 Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
 * reset-module:                               Delete all artefacts produced by the pipeline for a given module.
 * reset-vocabularies:                         Delete all artefacts produced by the pipeline for the vocabularies.
+* suggest-alignments-for-vocabularies:        Suggest alignments for all vocabularies with GND data
 * update-vocabularies:                        Downloads, maps, and ingests the vocabularies
 * validate-turtle-file:                       Validate a Turtle file using SHACL. Pass the file to validate through command line argument
 ```
