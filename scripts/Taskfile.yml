@@ -426,6 +426,18 @@ tasks:
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
   
+  suggest-alignments-for-vocabularies:
+    desc: Suggest alignments for all vocabularies with GND data
+    sources:
+      - /data/ttl/main/vocabularies/*.ttl
+    cmds:
+      - for: sources
+        task: _suggest-alignments
+        vars:
+          INPUT_FILE: "{{.ITEM}}"
+          RECONCILIATION_TYPE: SubjectHeading
+          BASE_TYPE: https://ontology.skkg.ch/Type
+
   update-vocabularies:
     desc: Downloads, maps, and ingests the vocabularies
     cmds:
