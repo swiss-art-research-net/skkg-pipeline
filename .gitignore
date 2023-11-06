@@ -9,6 +9,7 @@ data/**/*.*
 !data/ttl/additional/classifications/.gitkeep
 mapping/input/*/*.*
 mapping/output/*/*.*
+experiments/output/*.*
 
 # Python Specific
 __pycache__
