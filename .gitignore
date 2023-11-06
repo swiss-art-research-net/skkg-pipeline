@@ -6,6 +6,7 @@ data/**/*.*
 !data/temp/.gitkeep
 !data/source/.gitkeep
 !data/ttl/main/.gitkeep
+!data/ttl/additional/classifications/.gitkeep
 mapping/input/*/*.*
 mapping/output/*/*.*
 experiments/output/*.*
