@@ -2,7 +2,7 @@
 Script to suggest alignments to entities that have a given type using reconciliation service
 
 Usage:
-    python suggestAlignments.py --input_file <input_file> --base_type <base_type> --limit <limit> --output_file <output_file> [--api_uri <api_uri> --minimum_score <minimum_score>  --reconciliation_type <reconciliation_type>]
+    python suggestAlignments.py --input_file <input_file> --base_type <base_type> --limit <limit> --output_file <output_file> [--api_uri <api_uri> --minimum_score <minimum_score>  --reconciliation_type <reconciliation_type> --log_file <log_file>]
 
 Arguments:
     --input_file: TTL input file
@@ -12,7 +12,7 @@ Arguments:
     --output_file: TTL output file
     --api_uri: URL of reconciliation API. Defaults to https://lobid.org/gnd/reconcile/. 
     --minimum_score: Minimum score to consider for results. Defaults to 0.
-    
+    --log_file: Log file (optional): path to log file. Defaults to None.
 """
 
 from rdflib import Graph
@@ -23,9 +23,10 @@ from itertools import islice
 from string import Template
 import uuid
 from tqdm import tqdm
-import time
+import json
 import os
 import datetime
+import logging
 
 ESCAPE_DICT = {'"':  r'\"'}
 
@@ -169,7 +170,7 @@ def parse_all_responses(reconciliation_whole_response, q2entities_dict, min_scor
     """
     return ''.join([  parse_reconciliation_response(q_response = values['result'], q_number = key, q2entities_dict = q2entities_dict, min_score=min_score) for (key, values) in reconciliation_whole_response.items() ])
 
-def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri, minimum_score=0, namespaces4ttl=NAMESPACES4TTL_HARDCODED):
+def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri, log_file=None, minimum_score=0, namespaces4ttl=NAMESPACES4TTL_HARDCODED):
     
     #retrieve needed entities and labels from input file
     base_query = """
@@ -179,6 +180,14 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
     }}
     """.format(base_type)
     base_res = query_ttl(input_file, base_query)
+
+    # Initialise log
+    if log_file is not None:
+        logging.basicConfig(filename=log_file, level=logging.INFO)
+    else:
+        logging.basicConfig(level=logging.ERROR)
+    logging.info('Running at: {0}'.format(datetime.datetime.now()))
+    logging.info('Input file: {0}'.format(input_file))
     
     if list(base_res) == []:
         print('There are no entitites of type {0} in input file.'.format(base_type))
@@ -241,8 +250,13 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
     pbar = tqdm(total = len(queries))
     for chunk in chunks(queries):
         response = requests.get(api_uri, params={'queries': json.dumps(chunk) })
-        response_dict.update(response.json())
-        pbar.update(len(chunk))
+        if response.status_code == 200:
+            response_dict.update(response.json())
+            pbar.update(len(chunk))
+        else:
+            # Log error
+            logging.error('Error returned for queries: {0}'.format(json.dumps(chunk)))
+
     pbar.close()
     
     #format response into ttl
@@ -285,6 +299,7 @@ if __name__ == "__main__":
     parser.add_argument('--reconciliation_type', required= False, help='GND type of entities to retrieve')
     parser.add_argument('--api_uri', required= False, help='URL of reconciliation API. Defaults to https://lobid.org/gnd/reconcile/.')
     parser.add_argument('--minimum_score', required= False, help='Minimum score to consider for results. Defaults to 0.')
+    parser.add_argument('--log_file', required= False, help='Path to log file. Defaults to None.')
     
     args = parser.parse_args()
     
@@ -303,4 +318,4 @@ if __name__ == "__main__":
     else:
         minimum_score = float(args.minimum_score)
         
-    main(input_file = args.input_file, base_type= args.base_type, reconciliation_type = reconciliation_type, limit = args.limit, output_file = args.output_file, api_uri = api_uri, minimum_score=minimum_score, namespaces4ttl=NAMESPACES4TTL_HARDCODED)
+    main(input_file = args.input_file, base_type= args.base_type, reconciliation_type = reconciliation_type, limit = args.limit, output_file = args.output_file, api_uri = api_uri, log_file=args.log_file, minimum_score=minimum_score, namespaces4ttl=NAMESPACES4TTL_HARDCODED)
