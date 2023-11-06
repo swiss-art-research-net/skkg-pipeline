@@ -8,6 +8,7 @@ data/**/*.*
 !data/ttl/main/.gitkeep
 mapping/input/*/*.*
 mapping/output/*/*.*
+experiments/output/*.*
 
 # Python Specific
 __pycache__
