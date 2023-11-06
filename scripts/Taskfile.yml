@@ -13,17 +13,13 @@ output: 'prefixed'
 
 tasks:
 
-  first-run:
-    desc: Task to run when the pipeline is run for the first time
-    cmds:
-      - task: update-vocabularies
-
   default:
     desc: Runs the entire pipeline
     cmds:
       - task: download-source-items
       - task: prepare-and-perform-mapping
       - task: ingest-items
+      - task: ingest-classifications
       - task: ingest-ontologies
 
   download-source-items:
@@ -105,6 +101,11 @@ tasks:
       - |
         curl -X POST -H "Accept: text/csv" --data-urlencode "query=$(cat "{{.CLI_ARGS}}")" {{.BLAZEGRAPH_ENDPOINT}}
 
+  first-run:
+    desc: Task to run when the pipeline is run for the first time
+    cmds:
+      - task: update-vocabularies
+
   generate-example-record-object:
     desc: Generates an example record for developing the mapping in the X3ML editor
     vars:
@@ -135,6 +136,21 @@ tasks:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           INPUTFILES: /data/source/person/person-item-1111.xml /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
 
+  ingest-classifications:
+    desc: Ingest classifications into the triplestore
+    sources:
+      - /data/ttl/additional/classifications/*.ttl
+    cmds:
+      - for: sources
+        task: _ingest-data-from-file
+        vars:
+          NAME:
+            sh: echo "$(basename {{.ITEM}} .ttl)"
+          FILE: "{{.ITEM}}"
+          TYPE: application/x-turtle
+          GRAPH: 
+            sh: echo "{{.NAMESPACE}}graph/classifications/$(basename {{.ITEM}} .ttl)"
+  
   ingest-items:
     desc: Ingest items for all modules. Add --debug true To see the response from the triplestore
     cmds:
@@ -420,12 +436,26 @@ tasks:
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
   
+  suggest-alignments-for-vocabularies:
+    desc: Suggest alignments for all vocabularies with GND data
+    sources:
+      - /data/ttl/main/vocabularies/*.ttl
+    cmds:
+      - for: sources
+        task: _suggest-alignments
+        vars:
+          INPUT_FILE: "{{.ITEM}}"
+          RECONCILIATION_TYPE: SubjectHeading
+          BASE_TYPE: https://ontology.skkg.ch/Type
+          LOG_FILE: /logs/suggest-alignments-for-vocabularies.log
+
   update-vocabularies:
     desc: Downloads, maps, and ingests the vocabularies
     cmds:
       - task: download-source-vocabularies
       - task: perform-mapping-for-vocabularies
       - sleep 5s
+      - task: suggest-alignments-for-vocabularies
       - task: ingest-vocabularies
   
   validate-turtle-file:
@@ -650,6 +680,17 @@ tasks:
           MODULE: "{{.MODULE}}"
           INPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
+
+  _suggest-alignments:
+    interactive: True
+    requires:
+      vars: [INPUT_FILE, RECONCILIATION_TYPE, BASE_TYPE, RECONCILIATION_TYPE]
+    vars:
+      LIMIT: 5
+      OUTPUTFILE:
+        sh: echo "/data/ttl/additional/classifications/$(basename {{.INPUT_FILE}} .ttl)-alignments.ttl"
+    cmds:
+        - python /scripts/suggestAlignments.py --input_file "{{.INPUT_FILE}}" --reconciliation_type "{{.RECONCILIATION_TYPE}}"  --limit "{{.LIMIT}}" --output_file "{{.OUTPUTFILE}}" --base_type "{{.BASE_TYPE}}" {{if .LOG_FILE}}--log_file "{{.LOG_FILE}}"{{end}}
 
   _update-metadata-for-module:
     requires:
