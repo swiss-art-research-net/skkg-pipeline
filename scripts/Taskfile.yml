@@ -18,7 +18,7 @@ tasks:
     cmds:
       - task: _suggest-alignments
         vars:
-          INPUT_FILE: /data/ttl/main/vocabularies/vocab-ObjDatePeriodVgr.ttl
+          INPUT_FILE: /data/ttl/main/vocabularies/vocab-ObjObjectTitleSourceVgr.ttl
           RECONCILIATION_TYPE: SubjectHeading
           BASE_TYPE: https://ontology.skkg.ch/Type
 
@@ -456,6 +456,7 @@ tasks:
           INPUT_FILE: "{{.ITEM}}"
           RECONCILIATION_TYPE: SubjectHeading
           BASE_TYPE: https://ontology.skkg.ch/Type
+          LOG_FILE: /logs/suggest-alignments-for-vocabularies.log
 
   update-vocabularies:
     desc: Downloads, maps, and ingests the vocabularies
@@ -463,6 +464,7 @@ tasks:
       - task: download-source-vocabularies
       - task: perform-mapping-for-vocabularies
       - sleep 5s
+      - task: suggest-alignments-for-vocabularies
       - task: ingest-vocabularies
   
   validate-turtle-file:
@@ -697,7 +699,7 @@ tasks:
       OUTPUTFILE:
         sh: echo "/data/ttl/additional/classifications/$(basename {{.INPUT_FILE}} .ttl)-alignments.ttl"
     cmds:
-        - python /scripts/suggestAlignments.py --input_file "{{.INPUT_FILE}}" --reconciliation_type "{{.RECONCILIATION_TYPE}}"  --limit "{{.LIMIT}}" --output_file "{{.OUTPUTFILE}}" --base_type "{{.BASE_TYPE}}"
+        - python /scripts/suggestAlignments.py --input_file "{{.INPUT_FILE}}" --reconciliation_type "{{.RECONCILIATION_TYPE}}"  --limit "{{.LIMIT}}" --output_file "{{.OUTPUTFILE}}" --base_type "{{.BASE_TYPE}}" {{if .LOG_FILE}}--log_file "{{.LOG_FILE}}"{{end}}
 
   _update-metadata-for-module:
     requires:

@@ -156,6 +156,7 @@ The pipeline stores everything as individual files (instead of relying on a data
       - ***{module}*** Contains the RDF data for each module as Turtle files. There is an individual folder per module.
       - **vocabularies** Contains the RDF data for the vocabularies as Turtle files.
     - **additional** Contains additional RDF data, such as data retrieved from external soures
+- **logs** Contains log files
 - **mapping** Contains mapping specifications as well as other relevant data for mapping
   - **input** Mapping input data will be (temporarily) stored here
     - ***{module}*** Temporary storage for the mapping input data for each module. There is an individual folder per 

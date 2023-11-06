@@ -43,6 +43,7 @@ services:
       - MUSEUMPLUS_PASSWORD=${MUSEUMPLUS_PASSWORD}
     volumes:
       - ./data:/data
+      - ./logs:/logs
       - ./mapping:/mapping
       - ./scripts:/scripts
       - ./services/platform/apps:/apps
