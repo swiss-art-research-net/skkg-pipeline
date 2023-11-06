@@ -70,10 +70,11 @@ NAMESPACES4TTL_HARDCODED = """
 
 ONE_CLASSIFICATION = Template("""
 classification:$class_id a crm:E13_Attribute_Assignment ;
-crm:P140_assigned_attribute_to <$base_uri> ;
-crm:P141_assigned gnd:$aligned_id ;
-crm:P177_assigned_property_of_type $same_as skos:$match_type ;
-rdf:value "$score"^^xsd:float .
+    crm:P33_used_specific_technique <$technique_uri> ;
+    crm:P140_assigned_attribute_to <$base_uri> ;
+    crm:P141_assigned gnd:$aligned_id ;
+    crm:P177_assigned_property_of_type $same_as skos:$match_type ;
+    rdf:value "$score"^^xsd:float .
 
 gnd:$aligned_id a crm:E55_Type ;
     rdfs:label "$aligned_label" .
@@ -93,6 +94,9 @@ classification:$class_id a crm:E13_Attribute_Assignment ;
 <https://data.skkg.ch/classification/$class_id/date> a crm:E52_Time-Span ;
     crm:P82_at_some_time_within "$current_time"^^xsd:dateTime .
 """)
+
+ESCAPE_TRANSLATION_TABLE = str.maketrans({"\"": r"\"",})
+
 
 MINIMUM_SCORE_NULL = 0
 LOBID_API_URL ='https://lobid.org/gnd/reconcile/'
@@ -143,6 +147,7 @@ def parse_reconciliation_response(q_response, q_number, q2entities_dict, min_sco
             ret = ret + ONE_CLASSIFICATION.substitute(class_id=str(class_id),
                                             base_uri=q2entities_dict[q_number]['uri'],
                                             aligned_id=result['id'],
+                                            technique_uri = TECHNIQUE_URI,
                                             match_type='exactMatch' if result['match'] else 'closeMatch',
                                             score=result['score'],
                                             aligned_label=result['name'].translate(str.maketrans(ESCAPE_DICT)),
@@ -226,8 +231,8 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
         print('All entities are present in output file! To query for non classified input entities, please remove the general classification statement. To query for all input entities, please specify another output file.')
         return
     
-    #prepare reconciliation queries
-    queries = {key : {"query": values['label'], "limit": limit, "type": reconciliation_type } for (key, values) in base_res_dict.items()}
+    #prepare reconciliation queries    
+    queries = {key : {"query": values['label'].translate(ESCAPE_TRANSLATION_TABLE), "limit": limit, "type": reconciliation_type } for (key, values) in base_res_dict.items()}
     
     #make requests and put in dictionary
     response_dict = {}
@@ -235,7 +240,7 @@ def main(input_file, base_type, reconciliation_type, limit, output_file, api_uri
     current_date_time = datetime.datetime.now()
     pbar = tqdm(total = len(queries))
     for chunk in chunks(queries):
-        response = requests.get(api_uri, params={'queries': str(chunk).replace('\'', '"') })
+        response = requests.get(api_uri, params={'queries': json.dumps(chunk) })
         response_dict.update(response.json())
         pbar.update(len(chunk))
     pbar.close()
