@@ -13,15 +13,6 @@ output: 'prefixed'
 
 tasks:
 
-  test-alignment:
-    desc: Test alignment of vocabularies with GND data
-    cmds:
-      - task: _suggest-alignments
-        vars:
-          INPUT_FILE: /data/ttl/main/vocabularies/vocab-ObjObjectTitleSourceVgr.ttl
-          RECONCILIATION_TYPE: SubjectHeading
-          BASE_TYPE: https://ontology.skkg.ch/Type
-
   default:
     desc: Runs the entire pipeline
     cmds:
