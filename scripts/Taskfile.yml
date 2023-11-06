@@ -52,6 +52,9 @@ tasks:
           - ObjInscriptionDialogTypeVgr
           - ObjInscriptionTypeVgr
           - ObjInscriptionPositionVgr
+          - ObjMaterialVgr
+          - ObjMaterialTechniqueVgr
+          - ObjMaterialTechniqueTypeVgr
           - ObjObjectTitleTypeVgr
           - ObjObjectTitleSourceVgr
           - ObjPerAssociationRoleVgr
