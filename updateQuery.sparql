@@ -1,0 +1,11 @@
+PREFIX : <http://www.researchspace.org/resource/>
+DELETE {
+ GRAPH ?g {
+   ?s ?p ?o
+ }
+} WHERE {
+  GRAPH ?g {
+    ?s ?p ?o
+  }
+  FILTER(STRSTARTS(STR(?g), "https://data.skkg.ch/graph/classifications"))
+}
