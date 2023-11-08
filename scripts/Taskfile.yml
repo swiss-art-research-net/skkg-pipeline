@@ -37,7 +37,7 @@ tasks:
       - for:
           - GenLanguageVgr
           - MulTypeVgr
-          - ObjDateCertaintyVgr
+          - ObjCategoryVgr
           - ObjDatePeriodVgr
           - ObjDatePrefixVgr
           - ObjDateSourceVgr
