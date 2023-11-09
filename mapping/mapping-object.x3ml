@@ -474,6 +474,31 @@
                     </target_node>
                 </range>
             </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>composite/compositeItem/moduleReference/moduleReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="part_of">vocabularyReference[@name="TypeAVoc"][@instanceName="ObjObjectTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                        </if>
+                        <relationship>crm:P46i_forms_part_of</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>composite/compositeItem/moduleReference/moduleReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E22_Human-Made_Object</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
         </mapping>
         <mapping>
             <domain>
