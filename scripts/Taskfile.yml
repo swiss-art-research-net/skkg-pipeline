@@ -151,6 +151,7 @@ tasks:
           TYPE: application/x-turtle
           GRAPH: 
             sh: echo "{{.NAMESPACE}}graph/classifications/$(basename {{.ITEM}} .ttl)"
+          ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT_SECONDARY}}"
   
   ingest-items:
     desc: Ingest items for all modules. Add --debug true To see the response from the triplestore
@@ -516,9 +517,12 @@ tasks:
       - echo '<application><modules>' | cat - {{.OUTPUTFILE}} > temp && mv temp {{.OUTPUTFILE}}; echo '</modules></application>' >> {{.OUTPUTFILE}}
 
   _ingest-data-from-file:
+    vars:
+      ENDPOINT: 
+        sh: echo "{{if .ENDPOINT}}{{.ENDPOINT}}{{else}}{{.BLAZEGRAPH_ENDPOINT}}{{end}}"
     cmds:
       - echo "Ingest {{.NAME}}"
-      - curl -X POST -H 'Content-Type:{{.TYPE}}' --data-binary '@{{.FILE}}' {{.BLAZEGRAPH_ENDPOINT}}{{if .GRAPH}}?context-uri={{.GRAPH}}{{end}}
+      - curl -X POST -H 'Content-Type:{{.TYPE}}' --data-binary '@{{.FILE}}' {{.ENDPOINT}}{{if .GRAPH}}?context-uri={{.GRAPH}}{{end}}
 
   _ingest_module_items:
     requires:
