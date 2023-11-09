@@ -77,6 +77,13 @@
                         <relation>instance</relation>
                     </source_relation>
                     <target_relation>
+                        <if>
+                            <not>
+                                <if>
+                                    <exists>../parents/parent/@nodeId</exists>
+                                </if>
+                            </not>
+                        </if>
                         <relationship>crm:P127_has_broader_term</relationship>
                     </target_relation>
                 </path>
@@ -121,6 +128,30 @@
                                 <arg name="text" type="xpath">@logicalName</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>parents/parent</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>crm:P127_has_broader_term</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>parents/parent</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E55_Type</type>
+                            <type>skos:Concept</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../../instance/@id</arg>
+                                <arg name="level1" type="xpath">@nodeId</arg>
+                            </instance_generator>
                         </entity>
                     </target_node>
                 </range>

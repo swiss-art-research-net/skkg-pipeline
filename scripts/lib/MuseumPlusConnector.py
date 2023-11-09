@@ -190,7 +190,10 @@ class MPWrapper:
     
     def getVocabularyNodes(self, vocabulary: str) -> etree.Element:
         url = self._getVocabularySearchUrl(vocabulary)
-        params = { 'limit': 100000 }
+        params = { 
+            'limit': 100000,
+            'status': ['valid']
+        }
         try:
             response = self._get(url, params=params)
         except requests.exceptions.HTTPError as e:

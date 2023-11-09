@@ -37,7 +37,7 @@ tasks:
       - for:
           - GenLanguageVgr
           - MulTypeVgr
-          - ObjDateCertaintyVgr
+          - ObjCategoryVgr
           - ObjDatePeriodVgr
           - ObjDatePrefixVgr
           - ObjDateSourceVgr
@@ -53,6 +53,7 @@ tasks:
           - ObjMaterialTechniqueTypeVgr
           - ObjObjectTitleTypeVgr
           - ObjObjectTitleSourceVgr
+          - ObjObjectTypeVgr
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
           - PerTypeVgr
