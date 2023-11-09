@@ -53,6 +53,7 @@ tasks:
           - ObjMaterialTechniqueTypeVgr
           - ObjObjectTitleTypeVgr
           - ObjObjectTitleSourceVgr
+          - ObjObjectTypeVgr
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
           - PerTypeVgr
