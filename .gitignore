@@ -26,3 +26,5 @@ scripts/.task/**/*
 # Local
 *.zip
 docker-compose.override.yml
+
+scripts/debug

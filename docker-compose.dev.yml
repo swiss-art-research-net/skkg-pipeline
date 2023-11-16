@@ -10,3 +10,9 @@ services:
       - blazegraph
     ports:
       - $PORT_DEV:80
+
+  platform:
+    environment:
+      PLATFORM_OPTS: >-
+        -Dconfig.environment.sparqlEndpoint=http://blazegraph:8080/blazegraph/sparql
+        -Dlog4j.configurationFile=classpath:org/researchspace/logging/log4j2-trace.xml
