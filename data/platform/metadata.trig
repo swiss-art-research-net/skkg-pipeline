@@ -1,0 +1,7 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix graph: <https://data.skkg.ch/graph/> .
+
+<https://data.skkg.ch/graph/metadata> {
+     graph:alignments rdfs:label "Alignments" ;
+        rdfs:comment "This graph contains alignments between SKKG entities and other vocabularies"
+}

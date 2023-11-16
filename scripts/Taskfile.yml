@@ -106,6 +106,7 @@ tasks:
     desc: Task to run when the pipeline is run for the first time
     cmds:
       - task: update-vocabularies
+      - task: ingest-platform-data
 
   generate-example-record-object:
     desc: Generates an example record for developing the mapping in the X3ML editor
@@ -199,6 +200,18 @@ tasks:
           FILE: /mapping/schemas/skkg-ontology.ttl
           TYPE: application/x-turtle
           GRAPH: http://ontology.skkg.ch/ontology/
+
+  ingest-platform-data:
+    desc: Ingests the data used for the operation of the platform
+    sources:
+      - /data/platform/*.trig
+    cmds: 
+      - for: sources
+        task: _ingest-data-from-file
+        vars:
+          NAME: "{{.ITEM}}"
+          FILE: "{{.ITEM}}"
+          TYPE: application/x-trig
 
   ingest-person-items:
     desc: Ingests the person items into the triplestore

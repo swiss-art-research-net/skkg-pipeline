@@ -85,6 +85,7 @@ task: Available tasks for this project:
 * ingest-object-items:                        Ingests the object items into the triplestore
 * ingest-ontologies:                          Ingests the ontologies into individual named Graphs
 * ingest-person-items:                        Ingests the person items into the triplestore
+* ingest-platform-data:                       Ingests the data used for the operation of the platform
 * perform-mapping-for-multimedia-items:       Performs the mapping for the multimedia items
 * perform-mapping-for-object-items:           Performs the mapping for the object items
 * perform-mapping-for-person-items:           Performs the mapping for the person items
@@ -143,6 +144,7 @@ docker compose exec jobs task reset-last-mapped-metadata -- object
 The pipeline stores everything as individual files (instead of relying on a database). The folder structure is as follows:
 
 - **data**
+  - **platform** Contains data that is used for the operation of the platform
   - **source** Contains the source files obtained from MuseumPlus
     - ***{module}*** Contains the module items as XML files. There is an individual folder per module.
     - **vocabularies** Contains the vocabulary nodes
