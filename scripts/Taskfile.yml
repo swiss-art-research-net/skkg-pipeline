@@ -106,6 +106,7 @@ tasks:
     desc: Task to run when the pipeline is run for the first time
     cmds:
       - task: update-vocabularies
+      - task: ingest-platform-data
 
   generate-example-record-object:
     desc: Generates an example record for developing the mapping in the X3ML editor
@@ -137,6 +138,18 @@ tasks:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           INPUTFILES: /data/source/person/person-item-1111.xml /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
 
+  generate-field-definitions:
+    desc: Generates the field definitions for the platform based on the fieldDefinitions.yml file
+    sources:
+      - /apps/src/fieldDefinitions.yml
+    vars:
+      INPUTFILE: /apps/skkg/src/fieldDefinitions.yml
+      JSONOUTPUT: /apps/skkg/data/templates/https%3A%2F%2Fstatic.swissartresearch.net%2Fpartial%2FfieldDefinitions.html
+      INLINEOUTPUT: /apps/skkg/data/templates/https%3A%2F%2Fstatic.swissartresearch.net%2Fpartial%2FfieldDefinitionsInline.html
+    cmds:
+      - semantic-field-util -f JSON -y {{.INPUTFILE}}  write -t {{.JSONOUTPUT}}
+      - semantic-field-util -f INLINE -y {{.INPUTFILE}}  write -t {{.INLINEOUTPUT}}
+  
   ingest-classifications:
     desc: Ingest classifications into the triplestore
     sources:
@@ -199,6 +212,18 @@ tasks:
           FILE: /mapping/schemas/skkg-ontology.ttl
           TYPE: application/x-turtle
           GRAPH: http://ontology.skkg.ch/ontology/
+
+  ingest-platform-data:
+    desc: Ingests the data used for the operation of the platform
+    sources:
+      - /data/platform/*.trig
+    cmds: 
+      - for: sources
+        task: _ingest-data-from-file
+        vars:
+          NAME: "{{.ITEM}}"
+          FILE: "{{.ITEM}}"
+          TYPE: application/x-trig
 
   ingest-person-items:
     desc: Ingests the person items into the triplestore

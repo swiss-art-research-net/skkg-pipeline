@@ -79,12 +79,14 @@ task: Available tasks for this project:
 * generate-example-record-multimedia:         Generates an example record for developing the mapping in the X3ML editor
 * generate-example-record-object:             Generates an example record for developing the mapping in the X3ML editor
 * generate-example-record-person:             Generates an example record for developing the mapping in the X3ML editor
+* generate-field-definitions:                 Generates the field definitions for the platform based on the fieldDefinitions.yml file
 * ingest-classifications:                     Ingest classifications into the triplestore
 * ingest-items:                               Ingest items for all modules. Add --debug true To see the response from the triplestore
 * ingest-multimedia-items:                    Ingests the multimedia items into the triplestore
 * ingest-object-items:                        Ingests the object items into the triplestore
 * ingest-ontologies:                          Ingests the ontologies into individual named Graphs
 * ingest-person-items:                        Ingests the person items into the triplestore
+* ingest-platform-data:                       Ingests the data used for the operation of the platform
 * perform-mapping-for-multimedia-items:       Performs the mapping for the multimedia items
 * perform-mapping-for-object-items:           Performs the mapping for the object items
 * perform-mapping-for-person-items:           Performs the mapping for the person items
@@ -137,12 +139,14 @@ docker compose exec jobs task reset-last-mapped-metadata -- object
 | `reset-last-mapped-metadata` | Resets the last mapped metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-mapped-metadata -- {module}` where `{module}` can be `object`, `person` or `address`
 | `update-vocabularies` | Downloads, maps, and ingests the vocabularies | `docker compose exec jobs task update-vocabularies` |
 | `recreate-folder-metadata` | If the folder metadata is lost or gets corrupted, it can be recreated using this tasks | `docker compose exec jobs task recreate-folder-metadata -- {module}` where `{module}` is the name of the folder to recreate the metadata for, e.g. `object`, `person` or `address`
+| `generate-field-definitions` | Generates the field definitions for the platform based on the fieldDefinitions.yml file | `docker compose exec jobs task generate-field-definitions`
 
 ## Folder structure
 
 The pipeline stores everything as individual files (instead of relying on a database). The folder structure is as follows:
 
 - **data**
+  - **platform** Contains data that is used for the operation of the platform
   - **source** Contains the source files obtained from MuseumPlus
     - ***{module}*** Contains the module items as XML files. There is an individual folder per module.
     - **vocabularies** Contains the vocabulary nodes
