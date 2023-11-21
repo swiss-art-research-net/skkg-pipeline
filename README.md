@@ -70,6 +70,7 @@ docker compose exec jobs task --list
 This will output a list of tasks:
 ```
 task: Available tasks for this project:
+* create-blazegraph-backup:                   Creates a compressed Blazegraph backup
 * default:                                    Runs the entire pipeline
 * download-address-items:                     Download the address item records from MuseumPlus
 * download-literature-items:                  Download the literature item records from MuseumPlus
