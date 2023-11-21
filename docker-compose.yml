@@ -14,6 +14,7 @@ services:
         max-file: "10"
     volumes:
       - blazegraph-data:/blazegraph-data
+      - ./backup:/backup
       - ./data:/data
 
   blazegraph-secondary:

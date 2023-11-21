@@ -5,6 +5,7 @@ version: '3'
 vars:
   BLAZEGRAPH_ENDPOINT: http://blazegraph:8080/blazegraph/sparql
   BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
+  BLAZEGRAPH_BACKUP: http://blazegraph:8080/blazegraph/backup
   GENERATOR_POLICY: /mapping/generator-policy.xml
   MAPPING_BATCH_SIZE: 10
   NAMESPACE: https://data.skkg.ch/
@@ -21,6 +22,15 @@ tasks:
       - task: ingest-items
       - task: ingest-classifications
       - task: ingest-ontologies
+
+  create-blazegraph-backup:
+    desc: Creates a compressed Blazegraph backup
+    vars:
+      FILENAME:
+        sh: echo "/backup/blazegraph-$(date -u "+%Y-%m-%d-%H-%M-%S").jnl.tar.gz"
+    cmds:
+       - curl --data-urlencode "file={{.FILENAME}}" --data-urlencode "compress=true" --data-urlencode "block=true" {{.BLAZEGRAPH_BACKUP}}  
+      
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus
@@ -141,7 +151,7 @@ tasks:
   generate-field-definitions:
     desc: Generates the field definitions for the platform based on the fieldDefinitions.yml file
     sources:
-      - /apps/src/fieldDefinitions.yml
+      - /apps/skkg/src/fieldDefinitions.yml
     vars:
       INPUTFILE: /apps/skkg/src/fieldDefinitions.yml
       JSONOUTPUT: /apps/skkg/data/templates/https%3A%2F%2Fstatic.swissartresearch.net%2Fpartial%2FfieldDefinitions.html
