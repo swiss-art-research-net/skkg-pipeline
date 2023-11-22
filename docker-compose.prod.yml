@@ -9,6 +9,8 @@ services:
       start_period: 40s
     labels:
       - "autoheal=true"
+    mem_limit: ${BLAZEGRAPH_MEMORY}
+    mem_reservation: ${BLAZEGRAPH_MEMORY}
     networks:
     - internal
 
@@ -49,6 +51,8 @@ services:
       start_period: 40s
     labels:
       - "autoheal=true"
+    mem_limit: ${PLATFORM_MEMORY}
+    mem_reservation: ${PLATFORM_MEMORY}
     networks:
     - internal
     - proxy

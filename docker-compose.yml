@@ -5,8 +5,6 @@ services:
     image: robcast/researchspace-blazegraph:2.2.0-20160908
     container_name: ${PROJECT_NAME}_blazegraph
     restart: unless-stopped
-    environment:
-      - JAVA_OPTS=-Xmx4g
     logging:
       driver: json-file
       options:
@@ -21,8 +19,6 @@ services:
     image: robcast/researchspace-blazegraph:2.2.0-20160908
     container_name: ${PROJECT_NAME}_blazegraph_secondary
     restart: unless-stopped
-    environment:
-      - JAVA_OPTS=-Xmx1g
     logging:
       driver: json-file
       options:
