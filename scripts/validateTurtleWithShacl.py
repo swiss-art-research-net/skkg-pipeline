@@ -9,6 +9,7 @@ Arguments:
 --directory: Directory containing the Turtle files to validate
 --shapesGraph: Path to the SHACL Shape Graph to use for validation
 --ontologyFile: Path to an ontology file to use for validation
+--limit: Maximum number of files to validate (optional)
 --endpoint: URL of the SPARQL endpoint to ingest the validation results into (optional)
 --namedGraph: URI of the named graph to ingest the validation results into (optional)
 """
@@ -22,7 +23,7 @@ from os.path import join, isfile
 from rdflib import Graph
 from tqdm import tqdm
 
-def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endpoint=False, namedGraph=''):
+def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endpoint=False, limit=999999, namedGraph=''):
     # Read SHACL shape graph into graph
     shaclGraph = Graph()
     shaclGraph.parse(shapesGraph, format='turtle')
@@ -41,7 +42,9 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
     ttlOutput = ''
     
     print("Validating...")
-    for file in tqdm(glob.iglob(directory + '/*.ttl')):
+    inputFiles = glob.iglob(directory + '/*.ttl')
+    count = 0;
+    for file in tqdm(inputFiles):
         # Read RDF file into graph
         dataGraph = Graph()
         dataGraph.parse(join(directory, file), format='turtle')
@@ -63,6 +66,10 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
             validationSuccessful = False
             if endpoint:
                 ttlOutput += results_graph.serialize(format='turtle')
+        count += 1
+        if count >= int(limit):
+            print("Stopping validation after " + str(limit) + " files as specified by the limit argument.")
+            break
     
     if validationSuccessful:
         print("Validation successful!")
@@ -91,7 +98,8 @@ if __name__ == "__main__":
     parser.add_argument('--namedGraph', required=False, help='URI of the named graph to ingest the validation results into')
     parser.add_argument('--ontologyFile', required=False, action='append', help='Path to an ontology file to use for validation')
     parser.add_argument('--endpoint', required=False, help='URL of the SPARQL endpoint to ingest the validation results into')
+    parser.add_argument('--limit', required=False, help='Maximum number of files to validate')
 
     args = parser.parse_args()
 
-    validateTurtleWithShacl(directory=args.directory, shapesGraph=args.shapesGraph, ontologyFiles=args.ontologyFile, endpoint=args.endpoint, namedGraph=args.namedGraph)
+    validateTurtleWithShacl(directory=args.directory, shapesGraph=args.shapesGraph, ontologyFiles=args.ontologyFile, endpoint=args.endpoint, namedGraph=args.namedGraph, limit=args.limit)
