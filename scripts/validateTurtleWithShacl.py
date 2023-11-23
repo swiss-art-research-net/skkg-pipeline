@@ -16,24 +16,13 @@ Arguments:
 
 import argparse
 import requests
+import glob
 from pyshacl import validate
-from os import listdir
 from os.path import join, isfile
 from rdflib import Graph
-
-import sys
+from tqdm import tqdm
 
 def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endpoint=False, namedGraph=''):
-    inputFiles = [f for f in listdir(directory) if isfile(join(directory, f)) and f.endswith('.ttl')]
-    # Check if there are any files to validate
-    if not inputFiles:
-        sys.exit()
-
-    # Read RDF files into graph
-    dataGraph = Graph()
-    for file in inputFiles:
-        dataGraph.parse(join(directory, file), format='turtle')
-
     # Read SHACL shape graph into graph
     shaclGraph = Graph()
     shaclGraph.parse(shapesGraph, format='turtle')
@@ -48,10 +37,17 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
             elif file.endswith('.rdfs'):
                 ontologyGraph.parse(file, format='xml')
 
-    # Validate
+    validationSuccessful = True
+    ttlOutput = ''
+    
     print("Validating...")
-    r = validate(dataGraph,
-                 shacl_graph=shaclGraph,
+    for file in tqdm(glob.iglob(directory + '/*.ttl')):
+        # Read RDF file into graph
+        dataGraph = Graph()
+        dataGraph.parse(join(directory, file), format='turtle')
+        # Validate
+        r = validate(dataGraph,
+                shacl_graph=shaclGraph,
                  shacl_graph_format='turtle',
                  do_owl_imports=True,
                  ont_graph=ontologyGraph,
@@ -60,10 +56,15 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
                  serialize_report_graph=False,
                  allow_warnings=False,
                  debug=False
-                 )
-    conforms, results_graph, results_text = r
+        )
+        conforms, results_graph, results_text = r
     
-    if conforms:
+        if not conforms:
+            validationSuccessful = False
+            if endpoint:
+                ttlOutput += results_graph.serialize(format='turtle')
+    
+    if validationSuccessful:
         print("Validation successful!")
     else:
         print("Validation failed!")
