@@ -366,7 +366,7 @@
                         <entity>
                             <type>rdfs:Literal</type>
                             <instance_generator name="Constant">
-                                <arg name="text" type="constant">value/text()</arg>
+                                <arg name="text" type="xpath">value/text()</arg>
                                 <arg name="language" type="constant"/>
                             </instance_generator>
                         </entity>
