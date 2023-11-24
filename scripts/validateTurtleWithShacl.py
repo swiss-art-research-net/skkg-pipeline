@@ -44,34 +44,28 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
     print("Validating...")
     inputFiles = glob.iglob(directory + '/*.ttl')
     count = 0;
+    dataGraph = Graph()
     for file in tqdm(inputFiles):
         # Read RDF file into graph
-        dataGraph = Graph()
         dataGraph.parse(join(directory, file), format='turtle')
-        # Validate
-        r = validate(dataGraph,
-                shacl_graph=shaclGraph,
-                 shacl_graph_format='turtle',
-                 do_owl_imports=True,
-                 ont_graph=ontologyGraph,
-                 inference='rdfs',
-                 abort_on_first=True,
-                 serialize_report_graph=False,
-                 allow_warnings=False,
-                 debug=False
-        )
-        conforms, results_graph, results_text = r
-    
-        if not conforms:
-            validationSuccessful = False
-            if endpoint:
-                ttlOutput += results_graph.serialize(format='turtle')
         count += 1
         if count >= int(limit):
             print("Stopping validation after " + str(limit) + " files as specified by the limit argument.")
             break
-    
-    if validationSuccessful:
+    # Validate
+    r = validate(dataGraph,
+        shacl_graph=shaclGraph,
+        shacl_graph_format='turtle',
+        do_owl_imports=True,
+        ont_graph=ontologyGraph,
+        inference='rdfs',
+        abort_on_first=True,
+        serialize_report_graph=False,
+        allow_warnings=False,
+        debug=False
+    )
+    conforms, results_graph, results_text = r
+    if conforms:
         print("Validation successful!")
     else:
         print("Validation failed!")
