@@ -2400,7 +2400,7 @@
                             <equals value="ValueNum">@name</equals>
                         </if>
                         <relationship>la:paid_amount</relationship>
-                        <entity>
+                        <entity variable="object_acquisition_payment_price">
                             <type>crm:E97_Monetary_Amount</type>
                             <instance_generator name="URIwithTypeIdAnd4Levels">
                                 <arg name="type" type="constant">object</arg>
@@ -2422,6 +2422,48 @@
                             <instance_generator name="typedLiteralGen">
                                 <arg name="text" type="xpath">value/text()</arg>
                             </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="CurrencyVoc">../@name</equals>
+                        </if>
+                        <relationship>la:paid_amount</relationship>
+                        <entity variable="object_acquisition_payment_price">
+                            <type>crm:E97_Monetary_Amount</type>
+                            <instance_generator name="URIwithTypeIdAnd4Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                                <arg name="level2" type="constant">payment</arg>
+                                <arg name="level3" type="xpath">../@uuid</arg>
+                                <arg name="level4" type="constant">price</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P180_has_currency</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E98_Currency</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
                         </entity>
                     </target_node>
                 </range>
