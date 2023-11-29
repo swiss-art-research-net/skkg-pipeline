@@ -5,3 +5,8 @@
      graph:alignments rdfs:label "Alignments" ;
         rdfs:comment "This graph contains alignments between SKKG entities and other vocabularies"
 }
+
+<https://data.skkg.ch/graph/shaclReports> {
+        graph:alignments rdfs:label "SHACL Reports" ;
+                rdfs:comment "This graph contains SHACL reports for the SKKG data"
+}

@@ -9,6 +9,7 @@ Arguments:
 --directory: Directory containing the Turtle files to validate
 --shapesGraph: Path to the SHACL Shape Graph to use for validation
 --ontologyFile: Path to an ontology file to use for validation
+--limit: Maximum number of files to validate (optional)
 --endpoint: URL of the SPARQL endpoint to ingest the validation results into (optional)
 --namedGraph: URI of the named graph to ingest the validation results into (optional)
 """
@@ -16,24 +17,13 @@ Arguments:
 
 import argparse
 import requests
+import glob
 from pyshacl import validate
-from os import listdir
 from os.path import join, isfile
 from rdflib import Graph
+from tqdm import tqdm
 
-import sys
-
-def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endpoint=False, namedGraph=''):
-    inputFiles = [f for f in listdir(directory) if isfile(join(directory, f)) and f.endswith('.ttl')]
-    # Check if there are any files to validate
-    if not inputFiles:
-        sys.exit()
-
-    # Read RDF files into graph
-    dataGraph = Graph()
-    for file in inputFiles:
-        dataGraph.parse(join(directory, file), format='turtle')
-
+def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endpoint=False, limit=999999, namedGraph=''):
     # Read SHACL shape graph into graph
     shaclGraph = Graph()
     shaclGraph.parse(shapesGraph, format='turtle')
@@ -48,21 +38,33 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
             elif file.endswith('.rdfs'):
                 ontologyGraph.parse(file, format='xml')
 
-    # Validate
-    print("Validating...")
-    r = validate(dataGraph,
-                 shacl_graph=shaclGraph,
-                 shacl_graph_format='turtle',
-                 do_owl_imports=True,
-                 ont_graph=ontologyGraph,
-                 inference='rdfs',
-                 abort_on_first=True,
-                 serialize_report_graph=False,
-                 allow_warnings=False,
-                 debug=False
-                 )
-    conforms, results_graph, results_text = r
+    validationSuccessful = True
+    ttlOutput = ''
     
+    print("Validating...")
+    inputFiles = glob.iglob(directory + '/*.ttl')
+    count = 0;
+    dataGraph = Graph()
+    for file in tqdm(inputFiles):
+        # Read RDF file into graph
+        dataGraph.parse(join(directory, file), format='turtle')
+        count += 1
+        if count >= int(limit):
+            print("Stopping validation after " + str(limit) + " files as specified by the limit argument.")
+            break
+    # Validate
+    r = validate(dataGraph,
+        shacl_graph=shaclGraph,
+        shacl_graph_format='turtle',
+        do_owl_imports=True,
+        ont_graph=ontologyGraph,
+        inference='rdfs',
+        abort_on_first=True,
+        serialize_report_graph=False,
+        allow_warnings=False,
+        debug=False
+    )
+    conforms, results_graph, results_text = r
     if conforms:
         print("Validation successful!")
     else:
@@ -90,7 +92,8 @@ if __name__ == "__main__":
     parser.add_argument('--namedGraph', required=False, help='URI of the named graph to ingest the validation results into')
     parser.add_argument('--ontologyFile', required=False, action='append', help='Path to an ontology file to use for validation')
     parser.add_argument('--endpoint', required=False, help='URL of the SPARQL endpoint to ingest the validation results into')
+    parser.add_argument('--limit', required=False, help='Maximum number of files to validate')
 
     args = parser.parse_args()
 
-    validateTurtleWithShacl(directory=args.directory, shapesGraph=args.shapesGraph, ontologyFiles=args.ontologyFile, endpoint=args.endpoint, namedGraph=args.namedGraph)
+    validateTurtleWithShacl(directory=args.directory, shapesGraph=args.shapesGraph, ontologyFiles=args.ontologyFile, endpoint=args.endpoint, namedGraph=args.namedGraph, limit=args.limit)

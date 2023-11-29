@@ -24,6 +24,7 @@
         <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
         <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
         <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+        <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
     </namespaces>
     <mappings>
         <mapping>
@@ -494,6 +495,206 @@
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">object</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">replace(formattedValue/text(),'.*: \d*\n,','')</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjAcquisitionModeVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P24i_changed_ownership_through</relationship>
+                        <entity variable="object_acquisition">
+                            <type>crm:E8_Acquisition</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat('acquisition of object ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                        <relationship>crm:P2_has_type</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjAcquisitionDateDat">@name</equals>
+                        </if>
+                        <relationship>crm:P24i_changed_ownership_through</relationship>
+                        <entity variable="object_acquisition">
+                            <type>crm:E8_Acquisition</type>
+                            <instance_generator name="UUID"/>
+                        </entity>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity>
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                        <relationship>crm:P82_at_some_time_within</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>xsd:date</type>
+                            <instance_generator name="typedLiteralGen">
+                                <arg name="text" type="xpath">value/text()</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjAcquisitionValueGrp">../@name</equals>
+                        </if>
+                        <relationship>crm:P24i_changed_ownership_through</relationship>
+                        <entity variable="object_acquisition">
+                            <type>crm:E8_Acquisition</type>
+                            <instance_generator name="UUID"/>
+                        </entity>
+                        <relationship>crm:P9_consists_of</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity variable="object_acquisition_payment">
+                            <type>crm:E7_Activity</type>
+                            <type>la:Payment</type>
+                            <instance_generator name="URIwithTypeIdAnd3Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                                <arg name="level2" type="constant">payment</arg>
+                                <arg name="level3" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat('payment for object ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjAcquisitionNumberTxt">@name</equals>
+                        </if>
+                        <relationship>crm:P24i_changed_ownership_through</relationship>
+                        <entity variable="object_acquisition">
+                            <type>crm:E8_Acquisition</type>
+                            <instance_generator name="UUID"/>
+                        </entity>
+                        <relationship>crm:P67i_is_referred_to_by</relationship>
+                        <entity>
+                            <type>crm:E33_Linguistic_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                                <arg name="level2" type="constant">reference</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300417447</arg>
+                                    </instance_generator>
+                                    <label_generator name="prefLabel">
+                                        <arg name="text" type="constant">identification numbers and codes</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300411307</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">auction lots</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
                             </instance_generator>
                         </entity>
                     </target_node>
@@ -2236,6 +2437,244 @@
                             <instance_generator name="Literal">
                                 <arg name="text" type="xpath">text()</arg>
                                 <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                <target_node>
+                    <if>
+                        <equals value="ObjAcquisitionValueGrp">../@name</equals>
+                    </if>
+                    <entity variable="object_acquisition_payment">
+                        <type>crm:E7_Activity</type>
+                        <type>la:Payment</type>
+                        <instance_generator name="URIwithTypeIdAnd3Levels">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">acquisition</arg>
+                            <arg name="level2" type="constant">payment</arg>
+                            <arg name="level3" type="xpath">@uuid</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ValueNum">@name</equals>
+                        </if>
+                        <relationship>la:paid_amount</relationship>
+                        <entity variable="object_acquisition_payment_price">
+                            <type>crm:E97_Monetary_Amount</type>
+                            <instance_generator name="URIwithTypeIdAnd4Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                                <arg name="level2" type="constant">payment</arg>
+                                <arg name="level3" type="xpath">../@uuid</arg>
+                                <arg name="level4" type="constant">price</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P90_has_value</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>xsd:decimal</type>
+                            <instance_generator name="typedLiteralGen">
+                                <arg name="text" type="xpath">value/text()</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="CurrencyVoc">../@name</equals>
+                        </if>
+                        <relationship>la:paid_amount</relationship>
+                        <entity variable="object_acquisition_payment_price">
+                            <type>crm:E97_Monetary_Amount</type>
+                            <instance_generator name="URIwithTypeIdAnd4Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                                <arg name="level2" type="constant">payment</arg>
+                                <arg name="level3" type="xpath">../@uuid</arg>
+                                <arg name="level4" type="constant">price</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P180_has_currency</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E98_Currency</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem/dataField</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="ObjAcquisitionValueGrp">../../@name</equals>
+                            </if>
+                            <if>
+                                <equals value="ConversionRateNum">@name</equals>
+                            </if>
+                            <if>
+                                <not>
+                                    <if>
+                                        <equals value="1">value/text()</equals>
+                                    </if>
+                                </not>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crmsci:S6_Data_Evaluation</type>
+                        <instance_generator name="URIwithTypeIdAnd4Levels">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">../../../@uuid</arg>
+                            <arg name="level1" type="constant">acquisition</arg>
+                            <arg name="level2" type="constant">payment</arg>
+                            <arg name="level3" type="xpath">../@uuid</arg>
+                            <arg name="level4" type="constant">conversion</arg>
+                        </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="constant">Conversion of sale price to CHF</arg>
+                            <arg name="language" type="constant">en</arg>
+                        </label_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>value</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>crmsci:O10_assigned_dimension</relationship>
+                        <entity variable="object_acquisition_payment_price_normalised">
+                            <type>crm:E97_Monetary_Amount</type>
+                            <instance_generator name="URIwithTypeIdAnd5Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                                <arg name="level2" type="constant">payment</arg>
+                                <arg name="level3" type="xpath">../../@uuid</arg>
+                                <arg name="level4" type="constant">price</arg>
+                                <arg name="level5" type="constant">normalised</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P180_has_currency</relationship>
+                                <entity>
+                                    <type>crm:E98_Currency</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIorUUID">
+                                        <arg name="text" type="constant">https://data.skkg.ch/type/20033/20152</arg>
+                                    </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">CHF</arg>
+                                        <arg name="language" type="constant"/>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P90_has_value</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>value</source_node>
+                    <target_node>
+                        <entity>
+                            <type>xsd:decimal</type>
+                            <instance_generator name="typedLiteralGen">
+                                <arg name="text" type="xpath">text() * ../../dataField[@name="ValueNum"]/value/text()</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>../dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ValueNum">@name</equals>
+                        </if>
+                        <relationship>crmsci:O11_described</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>../dataField</source_node>
+                    <target_node>
+                        <entity variable="object_acquisition_payment_price">
+                            <type>crm:E97_Monetary_Amount</type>
+                            <instance_generator name="URIwithTypeIdAnd4Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                                <arg name="level2" type="constant">payment</arg>
+                                <arg name="level3" type="xpath">../@uuid</arg>
+                                <arg name="level4" type="constant">price</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>value</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>crm:P16_used_specific_object</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>value</source_node>
+                    <target_node>
+                        <entity>
+                            <type>xsd:decimal</type>
+                            <instance_generator name="typedLiteralGen">
+                                <arg name="text" type="xpath">text()</arg>
                             </instance_generator>
                         </entity>
                     </target_node>

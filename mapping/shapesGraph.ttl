@@ -18,6 +18,10 @@ skkg:EntityShape a sh:NodeShape ;
             sh:path crm:P190_has_symbolic_content ;
             sh:minCount 1;
         ]
+        [
+            sh:path crm:P90_has_value ;
+            sh:minCount 1;
+        ]
     ) .
 
 skkg:TimespanShape a sh:NodeShape ;
