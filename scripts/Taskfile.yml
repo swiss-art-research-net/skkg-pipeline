@@ -202,6 +202,7 @@ tasks:
     sources:
       - /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
       - /mapping/schemas/CRMdig_v3.2.1.rdfs
+      - /mapping/schemas/LinkedArt.rdfs
       - /mapping/schemas/skkg-ontology.ttl
     cmds:
       - task: _ingest-data-from-file
@@ -216,6 +217,12 @@ tasks:
           FILE: /mapping/schemas/CRMdig_v3.2.1.rdfs
           TYPE: application/rdf+xml
           GRAPH: http://www.ics.forth.gr/isl/CRMdig/
+      - task: _ingest-data-from-file
+        vars:
+          NAME: Linked.Art
+          FILE: /mapping/schemas/LinkedArt.rdfs
+          TYPE: application/rdf+xml
+          GRAPH: https://linked.art/ns/terms/
       - task: _ingest-data-from-file
         vars:
           NAME: SKKG Ontology
