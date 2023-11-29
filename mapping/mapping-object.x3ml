@@ -24,6 +24,7 @@
         <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
         <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
         <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+        <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
     </namespaces>
     <mappings>
         <mapping>
