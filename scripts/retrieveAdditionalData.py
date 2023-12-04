@@ -21,7 +21,7 @@ SOURCE_NAMESPACES  = {
     "wd": "http://www.wikidata.org/entity/"
 }
 
-def retrieveAdditionalData(*, endpoint, sources, predicates, outputFolder, outputFilePrefix=''):
+def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix=''):
     """Retrieve additional data for URIs in the Triple Store from respective sources
 
     Args:
@@ -46,8 +46,6 @@ def retrieveAdditionalData(*, endpoint, sources, predicates, outputFolder, outpu
         elif source == "gnd":
             logs[source] = retrieveGndData(identifiers, outputFileName)
     print(logs)
-        
-
 
 def getSourceQuery(source, predicates):
     predicatesForQuery = '|'.join(["<%s>" % d for d in predicates])
@@ -170,4 +168,4 @@ if __name__ == "__main__":
     if args.sources is not None:
         args.sources = [s.strip() for s in args.sources.split(",")]
 
-    retrieveAdditionalData(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix)
+    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix)
