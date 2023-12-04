@@ -1,9 +1,17 @@
 import argparse
 from os import path
+from rdflib import Graph
 from SPARQLWrapper import SPARQLWrapper, JSON
 from string import Template
 from tqdm import tqdm
 from urllib import request
+
+PREFIXES = """
+    PREFIX gvp:  <http://vocab.getty.edu/ontology#>
+    PREFIX gndo:  <https://d-nb.info/standards/elementset/gnd#>
+    PREFIX wd: <http://www.wikidata.org/entity/>
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    """
 
 SOURCE_NAMESPACES  = {
     "aat": "http://vocab.getty.edu/",
@@ -24,6 +32,7 @@ def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, 
     """
     sparql = SPARQLWrapper(endpoint)
     sparql.setReturnFormat(JSON)
+    logs = {}
     for source in sources:
         query = _getSourceQuery(source, sameAsPredicate)
         sparql.setQuery(query)
@@ -31,7 +40,8 @@ def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, 
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
         if source == "gnd":
             identifiers = [r["identifier"] for r in results]
-            _retrieveGndData(identifiers, outputFileName)
+            logs[source] = _retrieveGndData(identifiers, outputFileName)
+    print(logs)
         
 def _queryIdentifiersInFile(sourceFile, queryPart):
     """
