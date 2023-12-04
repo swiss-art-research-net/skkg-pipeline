@@ -1,4 +1,5 @@
 import argparse
+import requests
 from os import path
 from rdflib import Graph
 from SPARQLWrapper import SPARQLWrapper, JSON
@@ -20,7 +21,7 @@ SOURCE_NAMESPACES  = {
     "wd": "http://www.wikidata.org/entity/"
 }
 
-def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, outputFilePrefix=''):
+def retrieveAdditionalData(*, endpoint, sources, predicates, outputFolder, outputFilePrefix=''):
     """Retrieve additional data for URIs in the Triple Store from respective sources
 
     Args:
@@ -34,15 +35,30 @@ def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, 
     sparql.setReturnFormat(JSON)
     logs = {}
     for source in sources:
-        query = _getSourceQuery(source, sameAsPredicate)
+        query = _getSourceQuery(source, predicates)
         sparql.setQuery(query)
         results = _sparqlResultToDict(sparql.query().convert())
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
-        if source == "gnd":
-            identifiers = [r["identifier"] for r in results]
+        identifiers = [r["identifier"] for r in results]
+
+        if source == "aat":
+            logs[source] = _retrieveAatData(identifiers, outputFileName)
+        elif source == "gnd":
             logs[source] = _retrieveGndData(identifiers, outputFileName)
     print(logs)
         
+
+
+def _getSourceQuery(source, predicates):
+    predicatesForQuery = '|'.join(["<%s>" % d for d in predicates])
+    template = Template("""SELECT DISTINCT ?identifier WHERE { 
+                        ?s $predicates ?identifier . 
+                        FILTER(STRSTARTS(STR(?identifier), '$namespace')) 
+    }""")
+    query = template.substitute(predicates=predicatesForQuery, namespace=SOURCE_NAMESPACES[source])
+    print(query)
+    return query
+
 def _queryIdentifiersInFile(sourceFile, queryPart):
     """
     Queries the given file for identifiers and returns a list of the identifiers found.
@@ -60,6 +76,41 @@ def _queryIdentifiersInFile(sourceFile, queryPart):
         for row in queryResults:
             identifiers.append(str(row[0]))
     return identifiers
+
+def _retrieveAatData(identifiers, outputFile):
+    """
+    Retrieves the data for the given identifiers and writes it to a file named aat.ttl in the target folder.
+    Only the data for the identifiers that are not already in the file is retrieved.
+    The data is retrieved from the Getty AAT.
+    :param identifiers: The list of identifiers to retrieve.
+    :param targetFolder: The folder where the data is stored.
+    :return: A dictionary with the status and a message.
+    """
+    # Read the output file and query for existing URIs
+    existingIdentifiers = _queryIdentifiersInFile(outputFile, "?identifier a gvp:Concept .")
+    # Filter out existing identifiers
+    identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
+    # Retrieve ttl data from GND and append to ttl file
+    with open(outputFile, 'a') as outputFile:
+        for identifier in tqdm(identifiersToRetrieve):
+            url = "%s.ttl" % identifier
+            try:
+                firstRequest = requests.get(url)
+                # Follow redirect
+                if firstRequest.status_code == 200:
+                    outputFile.write(firstRequest.text + "\n")
+                elif firstRequest.status_code == 301:
+                    url = firstRequest.headers['location']
+                    secondRequest = requests.get(url)
+                    outputFile.write(secondRequest.text + "\n")
+            except:
+                print("Could not retrieve", url)
+
+        outputFile.close()
+    return {
+        "status": "success",
+        "message": "Retrieved %d additional AAT identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
+    }
 
 def _retrieveGndData(identifiers, outputFile):
     """
@@ -104,25 +155,22 @@ def _sparqlResultToDict(results):
     return rows
 
 
-def _getSourceQuery(source, sameAsPredicate):
-    template = Template("""SELECT DISTINCT ?identifier WHERE { 
-                        ?s <$sameAsPredicate> ?identifier . 
-                        FILTER(STRSTARTS(STR(?identifier), '$namespace')) 
-    }""")
-    query = template.substitute(sameAsPredicate=sameAsPredicate, namespace=SOURCE_NAMESPACES[source])
-    return query
-
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
     parser = argparse.ArgumentParser(description = 'Retrieve additional data for URIs in the Triple Store from respective sources')
     parser.add_argument('--endpoint', type=str, default='http://blazegraph:8080/blazegraph/sparql', help='SPARQL Endpoint to query for URIs')
-    parser.add_argument('--sources', nargs='+', default=['gnd'], help='Sources to retrieve additional data from. Supported sources: aat, gnd, loc, wikidata, loc')
-    parser.add_argument('--sameAsPredicate', type=str, default='http://www.w3.org/2002/07/owl#sameAs', help='Predicate to use for sameAs links')
+    parser.add_argument('--sources', type=str, default='aat,gnd', help='Sources to retrieve additional data from. Supported sources: aat, gnd, loc, wikidata, loc. Provide as comma separated list.')
+    parser.add_argument('--predicates', type=str, default='http://www.w3.org/2002/07/owl#sameAs', help='Predicates to use for retrieving external data. Provide as comma separated list.')
     parser.add_argument('--outputFolder', type=str, help='Folder to store the retrieved data', required=True)
     parser.add_argument('--outputFilePrefix', type=str, default='', help='Optional prefix for the output files')
     args = parser.parse_args()
 
-    retrieveAdditionalData(endpoint=args.endpoint, sources=args.sources, sameAsPredicate=args.sameAsPredicate, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix)
+    if args.predicates is not None:
+        args.predicates = [s.strip() for s in args.predicates.split(",")]
+
+    if args.sources is not None:
+        args.sources = [s.strip() for s in args.sources.split(",")]
+
+    retrieveAdditionalData(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix)
