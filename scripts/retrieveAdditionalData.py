@@ -12,7 +12,7 @@ SOURCE_NAMESPACES  = {
     "wd": "http://www.wikidata.org/entity/"
 }
 
-def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, outputFilePrefix):
+def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, outputFilePrefix=''):
     """Retrieve additional data for URIs in the Triple Store from respective sources
 
     Args:
@@ -28,9 +28,10 @@ def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, 
         query = _getSourceQuery(source, sameAsPredicate)
         sparql.setQuery(query)
         results = _sparqlResultToDict(sparql.query().convert())
+        outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
+        print(outputFileName)
         
 
-    print(query)
 
 def _queryIdentifiersInFile(sourceFile, queryPart):
     """
@@ -110,8 +111,8 @@ if __name__ == "__main__":
     parser.add_argument('--endpoint', type=str, default='http://blazegraph:8080/blazegraph/sparql', help='SPARQL Endpoint to query for URIs')
     parser.add_argument('--sources', nargs='+', default=['gnd'], help='Sources to retrieve additional data from. Supported sources: aat, gnd, loc, wikidata, loc')
     parser.add_argument('--sameAsPredicate', type=str, default='http://www.w3.org/2002/07/owl#sameAs', help='Predicate to use for sameAs links')
-    parser.add_argument('--outputFolder', type=str, help='Folder to store the retrieved data')
-    parser.add_argument('--outputFilePrefix', type=str, help='Optional prefix for the output files')
+    parser.add_argument('--outputFolder', type=str, help='Folder to store the retrieved data', required=True)
+    parser.add_argument('--outputFilePrefix', type=str, default='', help='Optional prefix for the output files')
     args = parser.parse_args()
 
     retrieveAdditionalData(endpoint=args.endpoint, sources=args.sources, sameAsPredicate=args.sameAsPredicate, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix)
