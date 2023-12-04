@@ -153,8 +153,6 @@ def sparqlResultToDict(results):
         rows.append(row)
     return rows
 
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
