@@ -35,31 +35,30 @@ def retrieveAdditionalData(*, endpoint, sources, predicates, outputFolder, outpu
     sparql.setReturnFormat(JSON)
     logs = {}
     for source in sources:
-        query = _getSourceQuery(source, predicates)
+        query = getSourceQuery(source, predicates)
         sparql.setQuery(query)
-        results = _sparqlResultToDict(sparql.query().convert())
+        results = sparqlResultToDict(sparql.query().convert())
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
         identifiers = [r["identifier"] for r in results]
 
         if source == "aat":
-            logs[source] = _retrieveAatData(identifiers, outputFileName)
+            logs[source] = retrieveAatData(identifiers, outputFileName)
         elif source == "gnd":
-            logs[source] = _retrieveGndData(identifiers, outputFileName)
+            logs[source] = retrieveGndData(identifiers, outputFileName)
     print(logs)
         
 
 
-def _getSourceQuery(source, predicates):
+def getSourceQuery(source, predicates):
     predicatesForQuery = '|'.join(["<%s>" % d for d in predicates])
     template = Template("""SELECT DISTINCT ?identifier WHERE { 
                         ?s $predicates ?identifier . 
                         FILTER(STRSTARTS(STR(?identifier), '$namespace')) 
     }""")
     query = template.substitute(predicates=predicatesForQuery, namespace=SOURCE_NAMESPACES[source])
-    print(query)
     return query
 
-def _queryIdentifiersInFile(sourceFile, queryPart):
+def queryIdentifiersInFile(sourceFile, queryPart):
     """
     Queries the given file for identifiers and returns a list of the identifiers found.
     Expects a part of a SPARQL select query that is used in the WHERE clause that returns the identifier as ?identifier.
@@ -77,7 +76,7 @@ def _queryIdentifiersInFile(sourceFile, queryPart):
             identifiers.append(str(row[0]))
     return identifiers
 
-def _retrieveAatData(identifiers, outputFile):
+def retrieveAatData(identifiers, outputFile):
     """
     Retrieves the data for the given identifiers and writes it to a file named aat.ttl in the target folder.
     Only the data for the identifiers that are not already in the file is retrieved.
@@ -87,7 +86,7 @@ def _retrieveAatData(identifiers, outputFile):
     :return: A dictionary with the status and a message.
     """
     # Read the output file and query for existing URIs
-    existingIdentifiers = _queryIdentifiersInFile(outputFile, "?identifier a gvp:Concept .")
+    existingIdentifiers = queryIdentifiersInFile(outputFile, "?identifier a gvp:Concept .")
     # Filter out existing identifiers
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
     # Retrieve ttl data from GND and append to ttl file
@@ -112,7 +111,7 @@ def _retrieveAatData(identifiers, outputFile):
         "message": "Retrieved %d additional AAT identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
-def _retrieveGndData(identifiers, outputFile):
+def retrieveGndData(identifiers, outputFile):
     """
     Retrieves the data for the given identifiers and writes it to an output file.
     Only the data for the identifiers that are not already in the file is retrieved.
@@ -122,7 +121,7 @@ def _retrieveGndData(identifiers, outputFile):
     :return: A dictionary with the status and a message.
     """
     # Read the output file and query for existing URIs
-    existingIdentifiers = _queryIdentifiersInFile(outputFile, "?identifier a gndo:AuthorityResource .")
+    existingIdentifiers = queryIdentifiersInFile(outputFile, "?identifier a gndo:AuthorityResource .")
     # Filter out existing identifiers
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
     # Retrieve ttl data from GND and append to ttl file
@@ -141,7 +140,7 @@ def _retrieveGndData(identifiers, outputFile):
         "message": "Retrieved %d additional GND identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
-def _sparqlResultToDict(results):
+def sparqlResultToDict(results):
     """
     Convert a SPARQL query result to a list of dictionaries
     :param results: The SPARQL query result returned from SPARQLWrapper
