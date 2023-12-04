@@ -29,7 +29,6 @@ def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, 
         sparql.setQuery(query)
         results = _sparqlResultToDict(sparql.query().convert())
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
-        print(outputFileName)
         if source == "gnd":
             identifiers = [r["identifier"] for r in results]
             _retrieveGndData(identifiers, outputFileName)
