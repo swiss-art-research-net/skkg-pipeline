@@ -30,9 +30,10 @@ def retrieveAdditionalData(*, endpoint, sources, sameAsPredicate, outputFolder, 
         results = _sparqlResultToDict(sparql.query().convert())
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
         print(outputFileName)
+        if source == "gnd":
+            identifiers = [r["identifier"] for r in results]
+            _retrieveGndData(identifiers, outputFileName)
         
-
-
 def _queryIdentifiersInFile(sourceFile, queryPart):
     """
     Queries the given file for identifiers and returns a list of the identifiers found.
