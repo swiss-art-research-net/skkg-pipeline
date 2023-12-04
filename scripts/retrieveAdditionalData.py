@@ -45,6 +45,8 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
             logs[source] = retrieveAatData(identifiers, outputFileName)
         elif source == "gnd":
             logs[source] = retrieveGndData(identifiers, outputFileName)
+        elif source == "loc":
+            logs[source] = retrieveLocData(identifiers, outputFileName)
     print(logs)
 
 def getSourceQuery(source, predicates):
@@ -138,6 +140,41 @@ def retrieveGndData(identifiers, outputFile):
         "message": "Retrieved %d additional GND identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
+def retrieveLocData(identifiers, outputFile):
+    """
+    Retrieves the data for the given identifiers and writes it to a file named loc.ttl in the target folder.
+    Only the data for the identifiers that are not already in the file is retrieved.
+    The data is retrieved from the Library of Congress API.
+    :param identifiers: The list of identifiers to retrieve.
+    :param targetFolder: The folder where the data is stored.
+    :return: A dictionary with the status and a message.
+    """
+    # Read the output file and query for existing URIs
+    existingIdentifiers = queryIdentifiersInFile(outputFile, "?identifier a <http://www.loc.gov/mads/rdf/v1#Authority> .")
+    # Filter out existing identifiers
+    identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
+    # Retrieve ttl data from GND and append to ttl file
+    with open(outputFile, 'a') as f:
+        for identifier in tqdm(identifiersToRetrieve):
+            url = "%s.nt" % identifier
+            try:
+                firstRequest = requests.get(url)
+                # Follow redirect
+                if firstRequest.status_code == 200:
+                    f.write(firstRequest.text + "\n")
+                elif firstRequest.status_code == 301:
+                    url = firstRequest.headers['location']
+                    secondRequest = requests.get(url)
+                    f.write(secondRequest.text + "\n")
+            except:
+                print("Could not retrieve", url)
+
+        f.close()
+    return {
+        "status": "success",
+        "message": "Retrieved %d additional LOC identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
+    }
+
 def sparqlResultToDict(results):
     """
     Convert a SPARQL query result to a list of dictionaries
@@ -156,7 +193,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description = 'Retrieve additional data for URIs in the Triple Store from respective sources')
     parser.add_argument('--endpoint', type=str, default='http://blazegraph:8080/blazegraph/sparql', help='SPARQL Endpoint to query for URIs')
-    parser.add_argument('--sources', type=str, default='aat,gnd', help='Sources to retrieve additional data from. Supported sources: aat, gnd, loc, wikidata, loc. Provide as comma separated list.')
+    parser.add_argument('--sources', type=str, default='aat,gnd,loc', help='Sources to retrieve additional data from. Supported sources: aat, gnd, loc, wikidata, loc. Provide as comma separated list.')
     parser.add_argument('--predicates', type=str, default='http://www.w3.org/2002/07/owl#sameAs', help='Predicates to use for retrieving external data. Provide as comma separated list.')
     parser.add_argument('--outputFolder', type=str, help='Folder to store the retrieved data', required=True)
     parser.add_argument('--outputFilePrefix', type=str, default='', help='Optional prefix for the output files')
