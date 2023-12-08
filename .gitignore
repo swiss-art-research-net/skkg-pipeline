@@ -8,6 +8,7 @@ data/**/*.*
 !data/source/.gitkeep
 !data/ttl/main/.gitkeep
 !data/ttl/additional/classifications/.gitkeep
+!data/ttl/external/.gitkeep
 !data/platform/*.*
 logs/*.*
 !logs/.gitkeep
