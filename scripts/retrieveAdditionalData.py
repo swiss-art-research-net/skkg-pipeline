@@ -21,7 +21,7 @@ SOURCE_NAMESPACES  = {
     "wd": "http://www.wikidata.org/entity/"
 }
 
-def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None):
+def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None, ingestUpdate=False):
     """Retrieve additional data for URIs in the Triple Store from respective sources
 
     Args:
@@ -58,7 +58,14 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
     printLogs(logs)
 
     if ingest:
-        ingestRetrievedData(endpoint, sources, outputFolder, outputFilePrefix, ingestNamespace)
+        if ingestUpdate:
+            # Remove sources for which no new data has been retrieved
+            ingestSources = [source for source in sources if logs[source]["numRetrieved"] > 0]
+            print("Ingesting data for %d sources" % len(ingestSources))
+        else:
+            # Ingest all sources
+            ingestSources = sources
+        ingestRetrievedData(endpoint, ingestSources, outputFolder, outputFilePrefix, ingestNamespace)
 
 def getSourceQuery(source, predicates):
     predicatesForQuery = '|'.join(["<%s>" % d for d in predicates])
@@ -109,14 +116,12 @@ def ingestRetrievedData(endpoint, sources, inputFolder, filePrefix, ingestNamesp
                 try:
                     r = requests.post(sourceEndpoint, data=data, headers=headers)
                     if r.status_code == 200:
-                        print("Successfully ingested %s" % filename)
+                        print("Successfully ingested %s" % source)
                     else:
-                        print("Could not ingest %s because of an error" % filename)
+                        print("Could not ingest %s because of an error" % source)
                         print(r.text)
                 except:
-                    print("Could not ingest %s because of an error" % filename)
-
-
+                    print("Could not ingest %s because of an error" % source)
         else:
             print("Could not ingest %s because the file does not exist" % filename)
 
@@ -152,6 +157,7 @@ def retrieveAatData(identifiers, outputFile):
         outputFile.close()
     return {
         "status": "success",
+        "numRetrieved": len(identifiersToRetrieve),
         "message": "Retrieved %d additional AAT identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
@@ -181,6 +187,7 @@ def retrieveGndData(identifiers, outputFile):
                 print("Could not retrieve", url)
     return {
         "status": "success",
+        "numRetrieved": len(identifiersToRetrieve),
         "message": "Retrieved %d additional GND identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
@@ -216,6 +223,7 @@ def retrieveLocData(identifiers, outputFile):
         f.close()
     return {
         "status": "success",
+        "numRetrieved": len(identifiersToRetrieve),
         "message": "Retrieved %d additional LOC identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
@@ -262,6 +270,7 @@ if __name__ == "__main__":
     parser.add_argument('--outputFilePrefix', type=str, default='', help='Optional prefix for the output files')
     parser.add_argument('--ingest', type=bool, default=False, help='Ingest the retrieved data into the Triple Store')
     parser.add_argument('--ingestNamespace', type=str, help='Namespace for named graphs where sources will be ingested to. The source name will be appended to the namespace.')
+    parser.add_argument('--ingestUpdate', type=bool, default=False, help='Ingest the data only if new data has been retrieved')
     args = parser.parse_args()
 
     if args.predicates is not None:
@@ -270,4 +279,4 @@ if __name__ == "__main__":
     if args.sources is not None:
         args.sources = [s.strip() for s in args.sources.split(",")]
 
-    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix, ingest=args.ingest, ingestNamespace=args.ingestNamespace)
+    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix, ingest=args.ingest, ingestNamespace=args.ingestNamespace, ingestUpdate=args.ingestUpdate)
