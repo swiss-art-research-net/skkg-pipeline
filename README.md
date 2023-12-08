@@ -113,6 +113,7 @@ task: Available tasks for this project:
 * reset-last-mapped-metadata:                 Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
 * reset-module:                               Delete all artefacts produced by the pipeline for a given module.
 * reset-vocabularies:                         Delete all artefacts produced by the pipeline for the vocabularies.
+* retrieve-and-ingest-additional-data:        Retrieve and ingest additional data for external URIs in the Triple Store
 * suggest-alignments-for-vocabularies:        Suggest alignments for all vocabularies with GND data
 * update-vocabularies:                        Downloads, maps, and ingests the vocabularies
 * validate-turtle-file:                       Validate a Turtle file using SHACL. Pass the file to validate through command line argument
