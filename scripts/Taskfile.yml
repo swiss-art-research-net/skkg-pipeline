@@ -14,18 +14,6 @@ output: 'prefixed'
 
 tasks:
 
-  testRetrieveAdditionalData:
-    desc: Test task to retrieve additional data
-    interactive: True
-    vars:
-      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type
-      OUTPUTFOLDER: /data/ttl/additional/external
-      INGEST: True
-      INGESTUPDATE: True
-      INGESTNAMESPACE: https://data.skkg.ch/graph/externalData/
-    cmds:
-      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}}
-
   default:
     desc: Runs the entire pipeline
     cmds:
@@ -34,6 +22,7 @@ tasks:
       - task: ingest-items
       - task: ingest-classifications
       - task: ingest-ontologies
+      - task: retrieve-and-ingest-additional-data
 
   create-blazegraph-backup:
     desc: Creates a compressed Blazegraph backup
@@ -409,6 +398,19 @@ tasks:
       - remove-deleted-literature-items
       - remove-deleted-object-items
       - remove-deleted-person-items
+
+  retrieve-and-ingest-additional-data:
+    desc: Retrieve and ingest additional data for external URIs in the Triple Store 
+    interactive: True
+    vars:
+      OUTPUTFOLDER: /data/ttl/additional/external
+      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type
+      SOURCES: gnd,aat
+      INGEST: True
+      INGESTUPDATE: True
+      INGESTNAMESPACE: https://data.skkg.ch/graph/externalData/
+    cmds:
+      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}}
 
   reset:
     desc: Delete all artefacts produced by the pipeline.
