@@ -21,9 +21,10 @@ tasks:
       PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type
       OUTPUTFOLDER: /data/ttl/additional/external
       INGEST: True
+      INGESTUPDATE: True
       INGESTNAMESPACE: https://data.skkg.ch/graph/externalData/
     cmds:
-      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}}
+      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}}
 
   default:
     desc: Runs the entire pipeline
