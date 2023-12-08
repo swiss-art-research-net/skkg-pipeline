@@ -34,6 +34,12 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
     sparql = SPARQLWrapper(endpoint)
     sparql.setReturnFormat(JSON)
     logs = {}
+    sourceRetrievalFunctions = {
+        "aat": retrieveAatData,
+        "gnd": retrieveGndData,
+        "loc": retrieveLocData
+    }
+
     for source in sources:
         query = getSourceQuery(source, predicates)
         sparql.setQuery(query)
@@ -41,13 +47,15 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
         identifiers = [r["identifier"] for r in results]
 
-        if source == "aat":
-            logs[source] = retrieveAatData(identifiers, outputFileName)
-        elif source == "gnd":
-            logs[source] = retrieveGndData(identifiers, outputFileName)
-        elif source == "loc":
-            logs[source] = retrieveLocData(identifiers, outputFileName)
-    print(logs)
+        if source in sourceRetrievalFunctions:
+            logs[source] = sourceRetrievalFunctions[source](identifiers, outputFileName)
+        else:
+            logs[source] = {
+                "status": "error",
+                "message": "Source %s is not supported" % source
+            }
+
+    printLogs(logs)
 
 def getSourceQuery(source, predicates):
     predicatesForQuery = '|'.join(["<%s>" % d for d in predicates])
@@ -174,6 +182,25 @@ def retrieveLocData(identifiers, outputFile):
         "status": "success",
         "message": "Retrieved %d additional LOC identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
+
+def printLogs(logs):
+    """
+    Print the logs for the data retrieval
+    :param logs: A dictionary with the status and a message for each source, contains keys 'status' and 'message'
+    """
+    # Print a summary stating how many sources were retrieved successfully
+    successCount = len([source for source in logs if logs[source]["status"] == "success"])
+    print("Successfully retrieved data for %d sources" % successCount)
+    # If there have been errors, print how many sources produced errors
+    if successCount < len(logs):
+        errorCount = len([source for source in logs if logs[source]["status"] == "error"])
+        print("Could not retrieve data for %d sources" % errorCount)
+    for source in logs:
+        # Depending on the status (success or error), print the message in green or red
+        if logs[source]["status"] == "success":
+            print("\033[92m%s\033[0m: %s" % (source, logs[source]["message"]))
+        else:
+            print("\033[91m%s\033[0m: %s" % (source, logs[source]["message"]))
 
 def sparqlResultToDict(results):
     """
