@@ -21,7 +21,7 @@ SOURCE_NAMESPACES  = {
     "wd": "http://www.wikidata.org/entity/"
 }
 
-def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix=''):
+def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None):
     """Retrieve additional data for URIs in the Triple Store from respective sources
 
     Args:
@@ -57,6 +57,9 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
 
     printLogs(logs)
 
+    if ingest:
+        ingestRetrievedData(endpoint, sources, outputFolder, outputFilePrefix, ingestNamespace)
+
 def getSourceQuery(source, predicates):
     predicatesForQuery = '|'.join(["<%s>" % d for d in predicates])
     template = Template("""SELECT DISTINCT ?identifier WHERE { 
@@ -83,6 +86,39 @@ def queryIdentifiersInFile(sourceFile, queryPart):
         for row in queryResults:
             identifiers.append(str(row[0]))
     return identifiers
+
+def ingestRetrievedData(endpoint, sources, inputFolder, filePrefix, ingestNamespace=None):
+    sparql = SPARQLWrapper(endpoint)
+    for source in sources:
+        filename = path.join(inputFolder, "%s%s.ttl" % (filePrefix, source))
+        if path.isfile(filename):
+            if ingestNamespace is not None:
+                namedGraph = "%s%s" % (ingestNamespace, source)
+            with open(filename, 'rb') as f:
+                data = f.read()
+                headers = {'Content-Type': 'text/turtle'}
+                if namedGraph:
+                    # Drop the named graph if it already exists
+                    sparql.setQuery("DROP GRAPH <%s>" % namedGraph)
+                    sparql.method = 'POST'
+                    result = sparql.query()
+                if ingestNamespace is not None:
+                    sourceEndpoint = endpoint + "?context-uri=%s" % namedGraph
+                else:
+                    sourceEndpoint = endpoint
+                try:
+                    r = requests.post(sourceEndpoint, data=data, headers=headers)
+                    if r.status_code == 200:
+                        print("Successfully ingested %s" % filename)
+                    else:
+                        print("Could not ingest %s because of an error" % filename)
+                        print(r.text)
+                except:
+                    print("Could not ingest %s because of an error" % filename)
+
+
+        else:
+            print("Could not ingest %s because the file does not exist" % filename)
 
 def retrieveAatData(identifiers, outputFile):
     """
@@ -224,6 +260,8 @@ if __name__ == "__main__":
     parser.add_argument('--predicates', type=str, default='http://www.w3.org/2002/07/owl#sameAs', help='Predicates to use for retrieving external data. Provide as comma separated list.')
     parser.add_argument('--outputFolder', type=str, help='Folder to store the retrieved data', required=True)
     parser.add_argument('--outputFilePrefix', type=str, default='', help='Optional prefix for the output files')
+    parser.add_argument('--ingest', type=bool, default=False, help='Ingest the retrieved data into the Triple Store')
+    parser.add_argument('--ingestNamespace', type=str, help='Namespace for named graphs where sources will be ingested to. The source name will be appended to the namespace.')
     args = parser.parse_args()
 
     if args.predicates is not None:
@@ -232,4 +270,4 @@ if __name__ == "__main__":
     if args.sources is not None:
         args.sources = [s.strip() for s in args.sources.split(",")]
 
-    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix)
+    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix, ingest=args.ingest, ingestNamespace=args.ingestNamespace)
