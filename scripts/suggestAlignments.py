@@ -62,7 +62,7 @@ NAMESPACES4TTL_HARDCODED = """
 @prefix classification: <https://data.skkg.ch/classification/> .
 @prefix crm:   <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix crmdig: <http://www.ics.forth.gr/isl/CRMdig/> .
-@prefix gnd: <http://d-nb.info/gnd/> .
+@prefix gnd: <https://d-nb.info/gnd/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
