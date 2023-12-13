@@ -430,7 +430,7 @@ tasks:
       - echo "Done!"
 
   reset-module:
-    desc: Delete all artefacts produced by the pipeline for a given module.
+    desc: Delete all artefacts produced by the pipeline for a given module. The module name should be passed as an argument or via the MODULE variable.
     silent: true
     vars:
       MODULE:
@@ -563,7 +563,6 @@ tasks:
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
 
   _drop-graph:
-    desc: Drops a named graph from the Blazegraph instance
     cmds:
       - curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <{{.GRAPH}}>" > /dev/null
 

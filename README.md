@@ -111,7 +111,7 @@ task: Available tasks for this project:
 * reset:                                      Delete all artefacts produced by the pipeline.
 * reset-last-ingested-metadata:               Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
 * reset-last-mapped-metadata:                 Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
-* reset-module:                               Delete all artefacts produced by the pipeline for a given module.
+* reset-module:                               Delete all artefacts produced by the pipeline for a given module. The module name should be passed as an argument or via the MODULE variable.
 * reset-vocabularies:                         Delete all artefacts produced by the pipeline for the vocabularies.
 * retrieve-and-ingest-additional-data:        Retrieve and ingest additional data for external URIs in the Triple Store
 * suggest-alignments-for-vocabularies:        Suggest alignments for all vocabularies with GND data
