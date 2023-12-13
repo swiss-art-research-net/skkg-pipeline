@@ -1946,7 +1946,7 @@
                         <if>
                             <equals value="ObjPerAssociationRoleVgr">../@instanceName</equals>
                         </if>
-                        <relationship>crm:P32_used_general_technique</relationship>
+                        <relationship>crm:P2_has_type</relationship>
                     </target_relation>
                 </path>
                 <range>
