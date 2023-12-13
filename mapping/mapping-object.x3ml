@@ -559,7 +559,11 @@
                         <relationship>crm:P24i_changed_ownership_through</relationship>
                         <entity variable="object_acquisition">
                             <type>crm:E8_Acquisition</type>
-                            <instance_generator name="UUID"/>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                            </instance_generator>
                         </entity>
                         <relationship>crm:P4_has_time-span</relationship>
                         <entity>
@@ -602,7 +606,11 @@
                         <relationship>crm:P24i_changed_ownership_through</relationship>
                         <entity variable="object_acquisition">
                             <type>crm:E8_Acquisition</type>
-                            <instance_generator name="UUID"/>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                            </instance_generator>
                         </entity>
                         <relationship>crm:P9_consists_of</relationship>
                     </target_relation>
@@ -640,7 +648,11 @@
                         <relationship>crm:P24i_changed_ownership_through</relationship>
                         <entity variable="object_acquisition">
                             <type>crm:E8_Acquisition</type>
-                            <instance_generator name="UUID"/>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                            </instance_generator>
                         </entity>
                         <relationship>crm:P67i_is_referred_to_by</relationship>
                         <entity>
