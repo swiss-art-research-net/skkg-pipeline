@@ -12,6 +12,7 @@ Arguments:
     --outputFolder: Folder to put the XML files that should be mapped.
     --limit: Limit the number of items to process.
     --offset: Offset the items to process.
+    --ids: List of ids to process. If this argument is given, the script will ignore the limit and offset arguments.
 """
 
 import argparse
@@ -21,22 +22,26 @@ from os.path import join, isfile
 
 from lib.Metadata import ItemMetadata
 
-def prepareDataForMapping(*, module, inputFolder, outputFolder, limit=None, offset=None):
+def prepareDataForMapping(*, module, inputFolder, outputFolder, filenamePrefix='item-', limit=None, offset=None, ids=None):
     metadata = ItemMetadata(inputFolder)
     files = [f for f in listdir(inputFolder) if isfile(join(inputFolder, f)) and f.endswith('.xml')]
     filesToMap = []
     
-    if limit is None:
+    if ids is not None:
+        # Filenames are of the shape {module}-{filenamePrefix}{id}.xml
+        # Hence we extract the id from the filename by removing the module and the filenamePrefix
+        files = [f for f in files if f.split(f'{module.lower()}-{filenamePrefix}')[1].replace('.xml', '') in ids]
+    if limit is None or ids is not None:
         limit = len(files)
     else:
         limit = int(limit)
-    if offset is None:
+    if offset is None or ids is not None:
         offset = 0
     else:
         offset = int(offset)
 
     for file in files[offset:offset+limit]:
-        if shouldBeMapped(file=file, metadata=metadata):
+        if ids is not None or shouldBeMapped(file=file, metadata=metadata):
             filesToMap.append(file)
             prepareFileForMapping(file=file, inputFolder=inputFolder, outputFolder=outputFolder)
     if len(filesToMap) < limit:
@@ -73,6 +78,14 @@ if __name__ == "__main__":
     parser.add_argument('--outputFolder', required= True, help='Folder to put the XML files that should be mapped.')
     parser.add_argument('--limit', required= False, help='Limit the number of items to process.')
     parser.add_argument('--offset', required= False, help='Offset the items to process.')
+    parser.add_argument('--ids', required= False, help='List of ids to process. If this argument is given, the script will ignore the limit and offset arguments.')
+    parser.add_argument('--filenamePrefix', required= False, help='Prefix to use for the filenames of the XML files. Required when using ids argument. Defaults to "item-"')
     args = parser.parse_args()
 
-    prepareDataForMapping(module=args.module, inputFolder=args.inputFolder, outputFolder=args.outputFolder, limit=args.limit, offset=args.offset)
+    if args.ids is not None:
+        args.ids = args.ids.split(',')
+
+    if args.filenamePrefix is None:
+        args.filenamePrefix = 'item-'
+
+    prepareDataForMapping(module=args.module, inputFolder=args.inputFolder, outputFolder=args.outputFolder, limit=args.limit, offset=args.offset, ids=args.ids, filenamePrefix=args.filenamePrefix)
