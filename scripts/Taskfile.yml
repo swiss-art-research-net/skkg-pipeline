@@ -562,6 +562,11 @@ tasks:
       - mkdir -p {{.TEMP_FOLDER}}
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
 
+  _drop-graph:
+    desc: Drops a named graph from the Blazegraph instance
+    cmds:
+      - curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <{{.GRAPH}}>" > /dev/null
+
   _generate-example-record:
     requires:
       vars: [OUTPUTFILE, INPUTFILES]
@@ -781,4 +786,7 @@ tasks:
       LIMIT: 100
     interactive: True
     cmds:
+      - task: _drop-graph
+        vars:
+          GRAPH: "{{.REPORTS_GRAPH}}"
       - python /scripts/validateTurtleWithShacl.py --directory "{{.FOLDER}}" --shapesGraph {{.SHAPES_GRAPH}} --ontologyFile {{.SCHEMA_SKKG}} --endpoint {{.BLAZEGRAPH_ENDPOINT}} --namedGraph {{.REPORTS_GRAPH}} --limit {{.LIMIT}} {{if .DEBUG}}--debug{{end}}
