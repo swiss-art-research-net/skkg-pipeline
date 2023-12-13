@@ -70,11 +70,12 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
     else:
         print("Validation failed!")
         if endpoint:
-            print("Ingesting validation results into endpoint...")
             ttlOutput = results_graph.serialize(format='turtle')
             if namedGraph:
+                print(f"Ingesting validation results into graph {namedGraph } in endpoint...")
                 url = endpoint + "?context-uri=" + namedGraph
             else:
+                print("Ingesting validation results into endpoint...")
                 url = endpoint
             r = requests.post(url, data=ttlOutput, headers={'Content-Type': 'application/x-turtle'})
             if r.status_code == 200:

@@ -264,7 +264,7 @@
                 <range>
                     <source_node>repeatableGroup/repeatableGroupItem</source_node>
                     <target_node>
-                        <entity variable="object_part_for_dimensions">
+                        <entity>
                             <type>crm:E22_Human-Made_Object</type>
                             <instance_generator name="URIwithTypeIdAnd2Levels">
                                 <arg name="type" type="constant">object</arg>
@@ -559,7 +559,11 @@
                         <relationship>crm:P24i_changed_ownership_through</relationship>
                         <entity variable="object_acquisition">
                             <type>crm:E8_Acquisition</type>
-                            <instance_generator name="UUID"/>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                            </instance_generator>
                         </entity>
                         <relationship>crm:P4_has_time-span</relationship>
                         <entity>
@@ -602,7 +606,11 @@
                         <relationship>crm:P24i_changed_ownership_through</relationship>
                         <entity variable="object_acquisition">
                             <type>crm:E8_Acquisition</type>
-                            <instance_generator name="UUID"/>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                            </instance_generator>
                         </entity>
                         <relationship>crm:P9_consists_of</relationship>
                     </target_relation>
@@ -640,7 +648,11 @@
                         <relationship>crm:P24i_changed_ownership_through</relationship>
                         <entity variable="object_acquisition">
                             <type>crm:E8_Acquisition</type>
-                            <instance_generator name="UUID"/>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">acquisition</arg>
+                            </instance_generator>
                         </entity>
                         <relationship>crm:P67i_is_referred_to_by</relationship>
                         <entity>
@@ -661,7 +673,7 @@
                                     <instance_generator name="URIwithAatId">
                                         <arg name="id" type="constant">300417447</arg>
                                     </instance_generator>
-                                    <label_generator name="prefLabel">
+                                    <label_generator name="Literal">
                                         <arg name="text" type="constant">identification numbers and codes</arg>
                                         <arg name="language" type="constant">en</arg>
                                     </label_generator>
@@ -1934,7 +1946,7 @@
                         <if>
                             <equals value="ObjPerAssociationRoleVgr">../@instanceName</equals>
                         </if>
-                        <relationship>crm:P32_used_general_technique</relationship>
+                        <relationship>crm:P2_has_type</relationship>
                     </target_relation>
                 </path>
                 <range>
@@ -2513,10 +2525,10 @@
                             <type>crm:E97_Monetary_Amount</type>
                             <instance_generator name="URIwithTypeIdAnd4Levels">
                                 <arg name="type" type="constant">object</arg>
-                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="id" type="xpath">../../../../@uuid</arg>
                                 <arg name="level1" type="constant">acquisition</arg>
                                 <arg name="level2" type="constant">payment</arg>
-                                <arg name="level3" type="xpath">../@uuid</arg>
+                                <arg name="level3" type="xpath">../../@uuid</arg>
                                 <arg name="level4" type="constant">price</arg>
                             </instance_generator>
                         </entity>
