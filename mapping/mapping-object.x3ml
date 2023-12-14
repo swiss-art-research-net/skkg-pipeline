@@ -712,6 +712,118 @@
                     </target_node>
                 </range>
             </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjCreditlineTxt">@name</equals>
+                        </if>
+                        <relationship>crm:P67i_is_referred_to_by</relationship>
+                        <entity>
+                            <type>crm:E33_Linguistic_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">credit</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat('Credit statement for object ', if (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../@uuid))</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300026687</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Credit Statement</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjRecordingNotesClb">@name</equals>
+                        </if>
+                        <relationship>crm:P67i_is_referred_to_by</relationship>
+                        <entity>
+                            <type>crm:E33_Linguistic_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">inventory</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat('Inventory statement for object ', if (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../@uuid))</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300027045</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Inventory Statement</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Inv. Bemerkung</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
         </mapping>
         <mapping>
             <domain>
