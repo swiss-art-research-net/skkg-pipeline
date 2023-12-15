@@ -886,6 +886,32 @@
                     </target_node>
                 </range>
             </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjConditionGrp">../@name</equals>
+                        </if>
+                        <relationship>crm:P34i_was_assessed_by</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity variable="object_condition_assessment">
+                            <type>crm:E14_Condition_Assessment</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">conditionAssessment</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
         </mapping>
         <mapping>
             <domain>
@@ -2862,6 +2888,73 @@
                             <instance_generator name="typedLiteralGen">
                                 <arg name="text" type="xpath">text()</arg>
                             </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                <target_node>
+                    <if>
+                        <equals value="ObjConditionGrp">../@name</equals>
+                    </if>
+                    <entity variable="object_condition_assessment">
+                        <type>crm:E14_Condition_Assessment</type>
+                        <instance_generator name="URIwithTypeIdAnd1Level">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">conditionAssessment</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ObjConditionShortVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P35_has_identified</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E3_Condition_State</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation/>
+                    </source_relation>
+                    <target_relation>
+                        <relationship/>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node/>
+                    <target_node>
+                        <entity>
+                            <type/>
+                            <instance_generator name="UUID"/>
                         </entity>
                     </target_node>
                 </range>
