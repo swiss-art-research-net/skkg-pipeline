@@ -2943,18 +2943,58 @@
             <link>
                 <path>
                     <source_relation>
-                        <relation/>
+                        <relation>dataField</relation>
                     </source_relation>
                     <target_relation>
-                        <relationship/>
+                        <if>
+                            <equals value="FromDat">@name</equals>
+                        </if>
+                        <relationship>crm:P4_has_time-span</relationship>
+                        <entity>
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">conditionAssessment</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                        <relationship>crm:P82_at_some_time_within</relationship>
                     </target_relation>
                 </path>
                 <range>
-                    <source_node/>
+                    <source_node>dataField</source_node>
                     <target_node>
                         <entity>
-                            <type/>
-                            <instance_generator name="UUID"/>
+                            <type>xsd:date</type>
+                            <instance_generator name="typedLiteralGen">
+                                <arg name="text" type="xpath">value/text()</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="ConditionClb">@name</equals>
+                        </if>
+                        <relationship>crm:P3_has_note</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
                         </entity>
                     </target_node>
                 </range>
