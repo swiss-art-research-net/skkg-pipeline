@@ -18,6 +18,7 @@ import argparse
 import requests
 from os import remove as removeFile
 from os.path import join
+from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
 from lib.MuseumPlusConnector import MPWrapper
@@ -27,7 +28,7 @@ def synchroniseItems(*, host, username, password, module, inputFolder, namedGrap
     metadata = ItemMetadata(inputFolder)
     files = metadata.listFiles()
     identifiersToRemove = []
-    for file in files:
+    for file in tqdm(files):
         identifier = str(file.replace(filenamePrefix, '').replace('.xml', ''))
         if not client.existsItem(module=module, uuid=identifier):
             identifiersToRemove.append(identifier)
