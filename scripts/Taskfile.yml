@@ -732,6 +732,7 @@ tasks:
   _process-items-deleted-from-museumplus:
     vars: 
       NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
+    interactive: True
     cmds:
       - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --namedGraphBase {{.NAMEDGRAPHBASE}} --filenamePrefix {{.FILENAMEPREFIX}} --sparqlEndpoint {{.BLAZEGRAPH_ENDPOINT}}
 
