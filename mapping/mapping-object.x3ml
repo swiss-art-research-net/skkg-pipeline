@@ -2697,6 +2697,10 @@
                                     <instance_generator name="URIorUUID">
                                         <arg name="text" type="constant">http://iiif.io/api/image</arg>
                                     </instance_generator>
+                                    <label_generator name="Constant">
+                                        <arg name="text" type="constant">IIIF Image API</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
