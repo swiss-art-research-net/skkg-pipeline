@@ -812,7 +812,4 @@ tasks:
       LIMIT: 100
     interactive: True
     cmds:
-      - task: _drop-graph
-        vars:
-          GRAPH: "{{.REPORTS_GRAPH}}"
       - python /scripts/validateTurtleWithShacl.py --directory "{{.FOLDER}}" --shapesGraph {{.SHAPES_GRAPH}} --ontologyFile {{.SCHEMA_SKKG}} --endpoint {{.BLAZEGRAPH_ENDPOINT}} --namedGraph {{.REPORTS_GRAPH}} --limit {{.LIMIT}} {{if .DEBUG}}--debug{{end}}
