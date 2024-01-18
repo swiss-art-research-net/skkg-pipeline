@@ -28,6 +28,10 @@
 <https://ontology.skkg.ch/Actor> rdf:type owl:Class ;
                                   rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <https://ontology.skkg.ch/Entity> .
 
+###  https://ontology.skkg.ch/Literature
+<https://ontology.skkg.ch/Literature> rdf:type owl:Class ;
+                                  rdfs:subClassOf <http://iflastandards.info/ns/fr/frbr/frbroo/F24_Publication_Expression> , <https://ontology.skkg.ch/Entity> .
+
 ###  https://ontology.skkg.ch/Multimedia
 <https://ontology.skkg.ch/Multimedia> rdf:type owl:Class ;
                                   rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> , <https://ontology.skkg.ch/Entity> .
