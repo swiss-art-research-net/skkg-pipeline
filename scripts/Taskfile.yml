@@ -48,6 +48,12 @@ tasks:
       - for:
           - GenCurrencyVgr
           - GenLanguageVgr
+          - GenLocationVgr
+          - GenMoveStatusVgr
+          - LitAuthorTypeVgr
+          - LitLanguageVgr
+          - LitTypeVgr
+          - LitPlaceVgr
           - MulTypeVgr
           - ObjCategoryVgr
           - ObjDatePeriodVgr
