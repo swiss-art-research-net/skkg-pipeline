@@ -20,4 +20,4 @@ jobs:
           cd services/platform/apps/skkg
           git pull
           cd ${{ secrets.DEPLOY_PATH_STAGING }}
-          docker-compose exec jobs task
+          docker compose exec jobs task
