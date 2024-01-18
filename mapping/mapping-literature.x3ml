@@ -176,7 +176,7 @@
                     </target_relation>
                 </path>
                 <range>
-                    <source_node>virtualField</source_node>
+                    <source_node>dataField</source_node>
                     <target_node>
                         <entity>
                             <type>rdfs:Literal</type>
@@ -184,6 +184,215 @@
                                 <arg name="text" type="xpath">value/text()</arg>
                                 <arg name="language" type="constant"/>
                             </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>repeatableGroup/repeatableGroupItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="LitAuthorGrp">../@name</equals>
+                        </if>
+                        <relationship>frbroo:R24i_was_created_through</relationship>
+                        <entity>
+                            <type>frbroo:F30_Publication_Event</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">publication</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Publication of: ", ../../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                        <relationship>crm:P9_consists_of</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <entity variable="subcreation">
+                            <type>crm:E65_Creation</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">publication</arg>
+                                <arg name="level2" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Publication part of: ", ../../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                <target_node>
+                    <if>
+                        <equals value="LitAuthorGrp">../@name</equals>
+                    </if>
+                    <entity variable="subcreation">
+                        <type>crm:E65_Creation</type>
+                        <instance_generator name="URIwithTypeIdAnd2Levels">
+                            <arg name="type" type="constant">literature</arg>
+                            <arg name="id" type="xpath">../../@uuid</arg>
+                            <arg name="level1" type="constant">publication</arg>
+                            <arg name="level2" type="xpath">@uuid</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="ForenameTxt">@name</equals>
+                                </if>
+                                <if>
+                                    <exists>../dataField[@name='SurnameTxt']/value/text()</exists>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P14_carried_out_by</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E21_Person</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">person</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat(value/text(), ' ', ../dataField[@name='SurnameTxt']/value/text())</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="ForenameTxt">@name</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <exists>../dataField[@name='SurnameTxt']/value/text()</exists>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P14_carried_out_by</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E21_Person</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">person</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="SurnameTxt">@name</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <exists>../dataField[@name='ForenameTxt']/value/text()</exists>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
+                        </if>
+                        <relationship>crm:P14_carried_out_by</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E21_Person</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">person</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="LitAuthorTypeVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P2_has_type</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E55_Type</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
                         </entity>
                     </target_node>
                 </range>
