@@ -138,7 +138,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/literature/literature-item-0a1ab550-dabb-4afd-be17-f0f43725be33.xml
+          INPUTFILES: /data/source/literature/literature-item-0a1ab550-dabb-4afd-be17-f0f43725be33.xml /data/source/literature/literature-item-0b7ee850-6fd8-45ba-af19-267548c9c4cf.xml
   
   generate-example-record-multimedia:
     desc: Generates an example Multimedia record for developing the mapping in the X3ML editor
