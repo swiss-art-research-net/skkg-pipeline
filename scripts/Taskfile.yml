@@ -282,7 +282,7 @@ tasks:
       - task: perform-mapping-for-object-items
       - task: perform-mapping-for-person-items
       - task: perform-mapping-for-multimedia-items
-      - task: prepare-mapping-for-literature-items
+      - task: perform-mapping-for-literature-items
 
   perform-mapping-for-literature-items:
     desc: Performs the mapping for the literature items
