@@ -194,6 +194,14 @@ tasks:
       - task: ingest-object-items
       - task: ingest-person-items
       - task: ingest-multimedia-items
+      - task: ingest-literature-items
+
+  ingest-literature-items:
+    desc: Ingests the literature items into the triplestore
+    cmds:
+      - task: _ingest_module_items
+        vars:
+          MODULE: Literature
 
   ingest-multimedia-items:
     desc: Ingests the multimedia items into the triplestore
