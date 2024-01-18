@@ -121,7 +121,7 @@ tasks:
       - task: ingest-platform-data
 
   generate-example-record-object:
-    desc: Generates an example record for developing the mapping in the X3ML editor
+    desc: Generates an example Object record for developing the mapping in the X3ML editor
     vars:
       OUTPUTFILE: /mapping/example-object-record.xml
     cmds:
@@ -129,9 +129,19 @@ tasks:
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           INPUTFILES: /data/source/object/object-item-3412c1a2-3c87-462a-8943-34aede5dcf5a.xml /data/source/object/object-item-2a0c8fab-5771-496c-9350-5482f50c93e2.xml /data/source/object/object-item-0a5b9c6a-2d1d-43c5-b833-6975ddfa7ded.xml /data/source/object/object-item-3c7215d0-3aba-4bb8-98e6-5da239ab0a64.xml /data/source/object/object-item-0b17827d-117b-42b7-9925-0731f6db779b.xml /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
-
+  
+  generate-example-record-literature:
+    desc: Generates an example Literature record for developing the mapping in the X3ML editor
+    vars:
+      OUTPUTFILE: /mapping/example-literature-record.xml
+    cmds:
+      - task: _generate-example-record
+        vars:
+          OUTPUTFILE: "{{.OUTPUTFILE}}"
+          INPUTFILES: /data/source/literature/literature-item-0a1ab550-dabb-4afd-be17-f0f43725be33.xml
+  
   generate-example-record-multimedia:
-    desc: Generates an example record for developing the mapping in the X3ML editor
+    desc: Generates an example Multimedia record for developing the mapping in the X3ML editor
     vars:
       OUTPUTFILE: /mapping/example-multimedia-record.xml
     cmds:
@@ -141,7 +151,7 @@ tasks:
           INPUTFILES: /data/source/multimedia/multimedia-item-2270.xml /data/source/multimedia/multimedia-item-8727.xml
 
   generate-example-record-person:
-    desc: Generates an example record for developing the mapping in the X3ML editor
+    desc: Generates an example Person record for developing the mapping in the X3ML editor
     vars:
       OUTPUTFILE: /mapping/example-person-record.xml
     cmds:
