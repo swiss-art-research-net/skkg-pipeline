@@ -14,7 +14,6 @@ jobs:
         host: ${{ secrets.DEPLOY_HOST_STAGING }}
         username: ${{ secrets.SSH_USER_STAGING }}
         key: ${{ secrets.DEPLOY_KEY_STAGING }}
-        passphrase: ${{ secrets.DEPLOY_KEY_PASS_STAGING }}
         script: |
           cd ${{ secrets.DEPLOY_PATH_STAGING }}
           git pull
