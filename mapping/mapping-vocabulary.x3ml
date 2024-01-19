@@ -41,7 +41,7 @@
                         </instance_generator>
                         <label_generator name="Literal">
                             <arg name="text" type="xpath">terms/term/content/text()</arg>
-                            <arg name="language" type="xpath">if (terms/term/isoLanguageCode/text() != '--') then (terms/term/isoLanguageCode/text()) else ('und')</arg>
+                            <arg name="language" type="xpath">if (contains(terms/term/isoLanguageCode/text(),'--')) then ('und') else (terms/term/isoLanguageCode/text())</arg>
                         </label_generator>
                     </entity>
                 </target_node>
@@ -65,7 +65,7 @@
                             <type>rdf:Literal</type>
                             <instance_generator name="Literal">
                                 <arg name="text" type="xpath">../content/text()</arg>
-                                <arg name="language" type="xpath">if (../isoLanguageCode/text() != '--') then (../isoLanguageCode/text()) else ('und')</arg>
+                                <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
