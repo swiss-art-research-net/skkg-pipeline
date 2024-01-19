@@ -393,7 +393,7 @@ tasks:
             echo "{{.MODULE}}"
           fi
     cmds:
-      - rm /data/source/{{.MODULE}}/metadata.json
+      - rm -f /data/source/{{.MODULE}}/metadata.json
       - python /scripts/recreateMetadata.py --folder /data/source/{{.MODULE}}
 
   remove-deleted-address-items:
