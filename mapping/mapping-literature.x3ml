@@ -225,8 +225,160 @@
                                 <arg name="level2" type="xpath">@uuid</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">concat("Publication part of: ", ../../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                <arg name="text" type="xpath">concat("Authoring of: ", ../../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
                                 <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="LitEditorTxt">@name</equals>
+                        </if>
+                        <relationship>frbroo:R24i_was_created_through</relationship>
+                        <entity>
+                            <type>frbroo:F30_Publication_Event</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">publication</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Publication of: ", ../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                        <relationship>crm:P9_consists_of</relationship>
+                        <entity>
+                            <type>frbroo:F30_Publication_Event</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">publication</arg>
+                                <arg name="level2" type="constant">editing</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Editing of: ", ../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="xpath">300189515</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Editor</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Herausgeber*in</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P14_carried_out_by</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E39_Actor</type>
+                            <instance_generator name="URIwithTypeAnId_IdHashed">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id_HASHED_CONTENTS" type="xpath">value/text()</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>dataField</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="LitPublisherTxt">@name</equals>
+                        </if>
+                        <relationship>frbroo:R24i_was_created_through</relationship>
+                        <entity>
+                            <type>frbroo:F30_Publication_Event</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">publication</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Publication of: ", ../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                        <relationship>crm:P9_consists_of</relationship>
+                        <entity>
+                            <type>frbroo:F30_Publication_Event</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">publication</arg>
+                                <arg name="level2" type="constant">publishing</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Publishing of: ", ../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="xpath">300443925</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Publisher</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Verleger*in</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P14_carried_out_by</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>dataField</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E39_Actor</type>
+                            <instance_generator name="URIwithTypeAnId_IdHashed">
+                                <arg name="type" type="constant">actor</arg>
+                                <arg name="id_HASHED_CONTENTS" type="xpath">value/text()</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">value/text()</arg>
+                                <arg name="language" type="constant"/>
                             </label_generator>
                         </entity>
                     </target_node>
