@@ -39,10 +39,6 @@
                             <arg name="id" type="xpath">instance/@id</arg>
                             <arg name="level1" type="xpath">@id</arg>
                         </instance_generator>
-                        <label_generator name="Literal">
-                            <arg name="text" type="xpath">terms/term/content/text()</arg>
-                            <arg name="language" type="xpath">if (contains(terms/term/isoLanguageCode/text(),'--')) then ('und') else (terms/term/isoLanguageCode/text())</arg>
-                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
@@ -151,6 +147,28 @@
                                 <arg name="type" type="constant">type</arg>
                                 <arg name="id" type="xpath">../../instance/@id</arg>
                                 <arg name="level1" type="xpath">@nodeId</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>terms/term/content</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>rdfs:label</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>terms/term/content</source_node>
+                    <target_node>
+                        <entity>
+                            <type>http://www.w3.org/2000/01/rdf-schema#Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">text()</arg>
+                                <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
