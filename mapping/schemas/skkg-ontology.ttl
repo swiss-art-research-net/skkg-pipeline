@@ -60,3 +60,17 @@ type:invnr rdf:type skkg:Type, skos:Concept ;
 type:sortlnu rdf:type skkg:Type, skos:Concept ;
     rdfs:label "SortLnu", "Sortierung"@de ;
     skos:prefLabel "Sortierung"@de .
+
+type:figref rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Abb. S."@de ;
+    skos:prefLabel "Abbildung Seite"@de ;
+    crm:P127_has_broader_term aat:300445022 .
+
+type:pageref rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Erwähnung S."@de ;
+    skos:prefLabel "Erwähnung Seite"@de ;
+    crm:P127_has_broader_term aat:300445022 .
+
+type:catalogueno rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Kat. Nr."@de ;
+    skos:prefLabel "Katalognummer"@de .
