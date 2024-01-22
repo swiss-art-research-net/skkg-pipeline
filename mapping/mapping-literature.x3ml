@@ -697,6 +697,19 @@
                                     </label_generator>
                                 </entity>
                             </additional>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="constant">pageref</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
                         </entity>
                         <relationship>crm:P190_has_symbolic_content</relationship>
                     </target_relation>
@@ -751,6 +764,19 @@
                                         <arg name="text" type="constant">Seitennummer</arg>
                                         <arg name="language" type="constant">de</arg>
                                     </label_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="constant">figref</arg>
+                                    </instance_generator>
                                 </entity>
                             </additional>
                         </entity>
