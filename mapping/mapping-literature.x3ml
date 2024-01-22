@@ -97,7 +97,18 @@
                     </source_relation>
                     <target_relation>
                         <if>
-                            <equals value="LitYearTxt">@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="LitYearTxt">@name</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="o. J.">value/text()</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
                         </if>
                         <relationship>frbroo:R24i_was_created_through</relationship>
                         <entity>
@@ -216,7 +227,7 @@
                 <range>
                     <source_node>repeatableGroup/repeatableGroupItem</source_node>
                     <target_node>
-                        <entity variable="subcreation">
+                        <entity>
                             <type>crm:E65_Creation</type>
                             <instance_generator name="URIwithTypeIdAnd2Levels">
                                 <arg name="type" type="constant">literature</arg>
@@ -392,7 +403,7 @@
                     <if>
                         <equals value="LitAuthorGrp">../@name</equals>
                     </if>
-                    <entity variable="subcreation">
+                    <entity>
                         <type>crm:E65_Creation</type>
                         <instance_generator name="URIwithTypeIdAnd2Levels">
                             <arg name="type" type="constant">literature</arg>
