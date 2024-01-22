@@ -75,6 +75,10 @@
 		<pattern>{id}</pattern>
 	</generator>
 
+	<generator name="URIwithIiifId" prefix="iiif">
+		<pattern>{id}</pattern>
+	</generator>
+
 	<generator name="URIwithLocId" prefix="loc">
 		<pattern>{id}</pattern>
 	</generator>
