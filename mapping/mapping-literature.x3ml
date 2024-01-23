@@ -169,6 +169,10 @@
                                 <arg name="id" type="xpath">../@uuid</arg>
                                 <arg name="level1" type="constant">title</arg>
                             </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Title of: ", ../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
                             <additional>
                                 <relationship>crm:P2_has_type</relationship>
                                 <entity>
@@ -708,6 +712,10 @@
                                         <arg name="type" type="constant">type</arg>
                                         <arg name="id" type="constant">pageref</arg>
                                     </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Erwähnung S.</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
@@ -777,6 +785,10 @@
                                         <arg name="type" type="constant">type</arg>
                                         <arg name="id" type="constant">figref</arg>
                                     </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Abb. S.</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
