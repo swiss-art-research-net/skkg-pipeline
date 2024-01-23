@@ -38,7 +38,7 @@
                             <arg name="id" type="xpath">@uuid</arg>
                         </instance_generator>
                         <label_generator name="Literal">
-                            <arg name="text" type="xpath">virtualField[@name='LitLiteratureVrt']/value/text()</arg>
+                            <arg name="text" type="xpath">if (virtualField[@name='LitLiteratureVrt']/value/text()) then (virtualField[@name='LitLiteratureVrt']/value/text()) else (@id)</arg>
                             <arg name="language" type="constant"/>
                         </label_generator>
                     </entity>
