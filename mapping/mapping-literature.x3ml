@@ -428,7 +428,7 @@
                 <range>
                     <source_node>moduleReference/moduleReferenceItem</source_node>
                     <target_node>
-                        <entity variable="object_referenced">
+                        <entity>
                             <type>crm:E22_Human-Made_Object</type>
                             <type>skkg:Object</type>
                             <instance_generator name="URIwithTypeAndId">
@@ -471,9 +471,13 @@
                 <range>
                     <source_node>moduleReference/moduleReferenceItem/dataField</source_node>
                     <target_node>
-                        <entity variable="object_referenced">
+                        <entity>
                             <type>crm:E22_Human-Made_Object</type>
-                            <instance_generator name="UUID"/>
+                            <type>skkg:Object</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                            </instance_generator>
                         </entity>
                     </target_node>
                 </range>
