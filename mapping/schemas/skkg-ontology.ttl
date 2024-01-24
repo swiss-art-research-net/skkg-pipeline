@@ -19,37 +19,43 @@
 
 ###  https://ontology.skkg.ch/Actor
 <https://ontology.skkg.ch/Actor> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <https://ontology.skkg.ch/Entity> .
-
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Actor"@en, "Akteur"@de .
 
 ###  https://ontology.skkg.ch/Entity
 <https://ontology.skkg.ch/Entity> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity> .
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity> ;
+    rdfs:label "Entity"@en, "Entität"@de .
 
 ###  https://ontology.skkg.ch/Group
 <https://ontology.skkg.ch/Group> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E74_Group> , <https://ontology.skkg.ch/Actor> .
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E74_Group> , <https://ontology.skkg.ch/Actor> ;
+    rdfs:label "Group"@en, "Gruppe"@de .
 
 ###  https://ontology.skkg.ch/Literature
 <https://ontology.skkg.ch/Literature> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://iflastandards.info/ns/fr/frbr/frbroo/F24_Publication_Expression> , <https://ontology.skkg.ch/Entity> .
+    rdfs:subClassOf <http://iflastandards.info/ns/fr/frbr/frbroo/F24_Publication_Expression> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Literature"@en, "Literatur"@de .
 
 ###  https://ontology.skkg.ch/Multimedia
 <https://ontology.skkg.ch/Multimedia> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> , <https://ontology.skkg.ch/Entity> .
+    rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Multimedia"@en, "Multimedia"@de .
 
 ###  https://ontology.skkg.ch/Object
 <https://ontology.skkg.ch/Object> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E22_Human-Made_Object> , <https://ontology.skkg.ch/Entity> .
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E22_Human-Made_Object> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Object"@en, "Objekt"@de .
 
 ###  https://ontology.skkg.ch/Person
 <https://ontology.skkg.ch/Person> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E21_Person> , <https://ontology.skkg.ch/Actor> .
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E21_Person> , <https://ontology.skkg.ch/Actor> ;
+    rdfs:label "Person"@en, "Person"@de .
 
 ###  https://ontology.skkg.ch/Type
 <https://ontology.skkg.ch/Type> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E55_Type> , <https://ontology.skkg.ch/Entity> .
-
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E55_Type> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Type"@en, "Typ"@de .
                             
 #################################################################
 #    Individuals
