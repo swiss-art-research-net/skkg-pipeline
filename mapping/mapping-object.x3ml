@@ -240,7 +240,7 @@
                 <range>
                     <source_node>moduleReference/moduleReferenceItem</source_node>
                     <target_node>
-                        <entity variable="object_image">
+                        <entity>
                             <type>crm:E36_Visual_Item</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">multimedia</arg>
@@ -2710,7 +2710,7 @@
                 <range>
                     <source_node>.</source_node>
                     <target_node>
-                        <entity>
+                        <entity variable="object_iiif">
                             <type>crmdig:D1_Digital_Object</type>
                             <instance_generator name="URIwithIiifId">
                                 <arg name="id" type="xpath">@uuid</arg>
