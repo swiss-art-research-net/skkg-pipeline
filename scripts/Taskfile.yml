@@ -38,6 +38,7 @@ tasks:
     vars:
       OUTPUTFOLDER: /data/source/iiif
     cmds:
+      - mkdir -p {{.OUTPUTFOLDER}}
       - python /scripts/retrieveIiifData.py --input $IIIF_CSV_URL --outputFolder {{.OUTPUTFOLDER}}
 
   download-source-items:
