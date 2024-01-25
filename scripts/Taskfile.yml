@@ -18,6 +18,7 @@ tasks:
     desc: Runs the entire pipeline
     cmds:
       - task: download-source-items
+      - task: retrieve-iiif-data
       - task: prepare-and-perform-mapping
       - task: ingest-items
       - task: ingest-classifications
@@ -31,7 +32,13 @@ tasks:
         sh: echo "/backup/blazegraph-$(date -u "+%Y-%m-%d-%H-%M-%S").jnl.gz"
     cmds:
        - curl --data-urlencode "file={{.FILENAME}}" --data-urlencode "compress=true" --data-urlencode "block=true" {{.BLAZEGRAPH_BACKUP}}  
-      
+
+  retrieve-iiif-data:
+    desc: Downloads and prepares data related to the IIIF images
+    vars:
+      OUTPUTFOLDER: /data/source/iiif
+    cmds:
+      - python /scripts/retrieveIiifData.py --input $IIIF_CSV_URL --outputFolder {{.OUTPUTFOLDER}}
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus

@@ -41,6 +41,7 @@ services:
       - MUSEUMPLUS_URL=${MUSEUMPLUS_URL}
       - MUSEUMPLUS_USERNAME=${MUSEUMPLUS_USERNAME}
       - MUSEUMPLUS_PASSWORD=${MUSEUMPLUS_PASSWORD}
+      - IIIF_CSV_URL=${IIIF_CSV_URL}
     volumes:
       - ./data:/data
       - ./logs:/logs
