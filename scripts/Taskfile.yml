@@ -19,7 +19,7 @@ tasks:
     cmds:
       - task: download-source-items
       - task: retrieve-iiif-data
-      - task: prepare-and-perform-mappin-for-items
+      - task: prepare-and-perform-mapping-for-items
       - task: prepare-and-perform-mapping-for-iiif
       - task: ingest-items
       - task: ingest-iiif
@@ -596,6 +596,13 @@ tasks:
           RECONCILIATION_TYPE: SubjectHeading
           BASE_TYPE: https://ontology.skkg.ch/Type
           LOG_FILE: /logs/suggest-alignments-for-vocabularies.log
+
+  update-iiif:
+    desc: Downloads, maps, and ingests the IIIF data
+    cmds: 
+      - task: retrieve-iiif-data
+      - task: prepare-and-perform-mapping-for-iiif
+      - task: ingest-iiif
 
   update-vocabularies:
     desc: Downloads, maps, and ingests the vocabularies
