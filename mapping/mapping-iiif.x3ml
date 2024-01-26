@@ -33,14 +33,126 @@
                 <source_node>/collection/item</source_node>
                 <target_node>
                     <if>
-                        <equals value="true">done/text()</equals>
+                        <and>
+                            <if>
+                                <equals value="true">done/text()</equals>
+                            </if>
+                            <if>
+                                <equals value="1">page_number/text()</equals>
+                            </if>
+                        </and>
                     </if>
-                    <entity>
+                    <entity variable="multimedia_item">
                         <type>crmdig:D1_Digital_Object</type>
                         <type>skkg:Multimedia</type>
                         <instance_generator name="URIwithTypeAndId">
                             <arg name="type" type="constant">multimedia</arg>
                             <arg name="id" type="xpath">uuid/text()</arg>
+                        </instance_generator>
+                        <label_generator name="Literal">
+                            <arg name="text" type="constant">placeholder</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>.</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>la:digitally_shown_by</relationship>
+                        <entity>
+                            <type>crmdig:D1_Digital_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">filename/text()</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                        <relationship>la:digitally_available_via</relationship>
+                        <entity>
+                            <type>la:DigitalService</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                                <arg name="level2" type="constant">iiif</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat(filename/text(), ' (IIIF Service)')</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                            <additional>
+                                <relationship>dcterms:conformsTo</relationship>
+                                <entity>
+                                    <type>crm:E73_Information_Object</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIorUUID">
+                                        <arg name="text" type="constant">http://iiif.io/api/image</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">IIIF Image API</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>la:access_point</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>.</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crmdig:D1_Digital_Object</type>
+                            <type>rso:EX_Digital_Image</type>
+                            <instance_generator name="URIwithIiifId">
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat(filename/text(), ' (IIIF Access Point)')</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/collection/item</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="true">done/text()</equals>
+                            </if>
+                            <if>
+                                <exists>page_number/text()</exists>
+                            </if>
+                            <if>
+                                <not>
+                                    <if>
+                                        <equals value="1">page_number/text()</equals>
+                                    </if>
+                                </not>
+                            </if>
+                        </and>
+                    </if>
+                    <entity variable="multimedia_item">
+                        <type>crmdig:D1_Digital_Object</type>
+                        <type>skkg:Multimedia</type>
+                        <instance_generator name="URIwithTypeAndId">
+                            <arg name="type" type="constant">multimedia</arg>
+                            <arg name="id" type="xpath">substring-before(uuid/text(),"_p")</arg>
                         </instance_generator>
                     </entity>
                 </target_node>
@@ -100,7 +212,7 @@
                 <range>
                     <source_node>.</source_node>
                     <target_node>
-                        <entity variable="object_iiif">
+                        <entity>
                             <type>crmdig:D1_Digital_Object</type>
                             <type>rso:EX_Digital_Image</type>
                             <instance_generator name="URIwithIiifId">
@@ -110,6 +222,77 @@
                                 <arg name="text" type="xpath">concat(filename/text(), ' (IIIF Access Point)')</arg>
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/collection/item</source_node>
+                <target_node>
+                    <if>
+                        <equals value="true">done/text()</equals>
+                    </if>
+                    <entity variable="digitalObject">
+                        <type>crmdig:D1_Digital_Object</type>
+                        <instance_generator name="URIwithTypeIdAnd1Level">
+                            <arg name="type" type="constant">multimedia</arg>
+                            <arg name="id" type="xpath">uuid/text()</arg>
+                            <arg name="level1" type="constant">digitalobject</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>page_number</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>crm:P1_is_identified_by</relationship>
+                        <entity>
+                            <type>crm:E42_Identifier</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">../uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                                <arg name="level2" type="constant">pagenr</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300445022</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">page number</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Seitennummer
+                                                    </arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>page_number</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
                         </entity>
                     </target_node>
                 </range>
