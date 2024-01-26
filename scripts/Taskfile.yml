@@ -513,7 +513,15 @@ tasks:
         vars:
           MODULE: "{{.ITEM}}"
       - task: reset-vocabularies
+      - task: reset-iiif
       - echo "Done!"
+
+  reset-iiif:
+    desc: Delete all artefacts produced by the pipeline for the iiif data.
+    cmds: 
+      - rm -rf /data/ttl/main/iiif
+      - rm -rf /mapping/input/iiif
+      - rm -rf /mapping/output/iiif
 
   reset-module:
     desc: Delete all artefacts produced by the pipeline for a given module. The module name should be passed as an argument or via the MODULE variable.
