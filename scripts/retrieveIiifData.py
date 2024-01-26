@@ -13,26 +13,25 @@ Arguments:
 import argparse
 import csv
 import urllib.request
-from os.path import getsize, join
+from os.path import exists, getsize, join
 from lxml import etree
-import sys
 
 def retrieveIiifData(*, input, outputFolder, filename='iiif'):
-    # Check if local file size is same as remote file size
-    remoteFileSize = urllib.request.urlopen(input).info()['Content-Length']
-    localFileSize = getsize(join(outputFolder, f'{filename}.csv'))
-    
-    inputFileUpdated = False
+    inputFileNeedsUpdate = True
 
-    if str(remoteFileSize) == str(localFileSize):
-        print('Remote file has not changed, no need to download it again')
-    else:
+    if exists(join(outputFolder, f'{filename}.csv')):
+        remoteFileSize = urllib.request.urlopen(input).info()['Content-Length']
+        localFileSize = getsize(join(outputFolder, f'{filename}.csv'))    
+        if str(remoteFileSize) == str(localFileSize):
+            print('Remote file has not changed, no need to download it again')
+            inputFileNeedsUpdate = False
+    
+    if inputFileNeedsUpdate:
         print('Downloading report file')
         urllib.request.urlretrieve(input, join(outputFolder, f'{filename}.csv'))
-        inputFileUpdated = True
 
     # If the input file has changed or the output file does not exist, convert the CSV to XML
-    if inputFileUpdated or not join(outputFolder, f'{filename}.xml'):
+    if inputFileNeedsUpdate or not join(outputFolder, f'{filename}.xml'):
         print('Converting CSV to XML')
         convertCsvToXml(inputFile=join(outputFolder, f'{filename}.csv'), outputFile=join(outputFolder, f'{filename}.xml'))
     else:
@@ -48,7 +47,7 @@ def convertCsvToXml(*, inputFile, outputFile):
             for index, column in enumerate(row):
                 if column:
                     etree.SubElement(item, header[index]).text = column
-    with open(outputfile, 'wb') as xmlfile:
+    with open(outputFile, 'wb') as xmlfile:
         xmlfile.write(etree.tostring(root, pretty_print=True))
 
 if __name__ == "__main__":
