@@ -49,10 +49,6 @@
                             <arg name="type" type="constant">multimedia</arg>
                             <arg name="id" type="xpath">uuid/text()</arg>
                         </instance_generator>
-                        <label_generator name="Literal">
-                            <arg name="text" type="constant">placeholder</arg>
-                            <arg name="language" type="constant"/>
-                        </label_generator>
                     </entity>
                 </target_node>
             </domain>
