@@ -74,7 +74,7 @@
                                 <arg name="level2" type="constant">iiif</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">concat(filename/text, ' (IIIF Service)')</arg>
+                                <arg name="text" type="xpath">concat(filename/text(), ' (IIIF Service)')</arg>
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
                             <additional>
