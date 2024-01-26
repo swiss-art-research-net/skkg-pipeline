@@ -275,6 +275,12 @@ tasks:
           GRAPH: http://www.cidoc-crm.org/extensions/crmsci/
       - task: _ingest-data-from-file
         vars:
+          NAME: FRBRoo
+          FILE: /mapping/schemas/FRBR2.4.rdfs
+          TYPE: application/rdf+xml
+          GRAPH: http://iflastandards.info/ns/fr/frbr/frbroo/
+      - task: _ingest-data-from-file
+        vars:
           NAME: Linked.Art
           FILE: /mapping/schemas/LinkedArt.rdfs
           TYPE: application/rdf+xml
