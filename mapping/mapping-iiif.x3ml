@@ -102,6 +102,7 @@
                     <target_node>
                         <entity variable="object_iiif">
                             <type>crmdig:D1_Digital_Object</type>
+                            <type>rso:EX_Digital_Image</type>
                             <instance_generator name="URIwithIiifId">
                                 <arg name="id" type="xpath">uuid/text()</arg>
                             </instance_generator>
