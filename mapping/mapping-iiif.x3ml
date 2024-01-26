@@ -1,0 +1,450 @@
+
+<x3ml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" source_type="xpath" version="1.0" xsi:noNamespaceSchemaLocation="x3ml_v1.4.xsd" editor="3MEditor v3.3">
+    <namespaces>
+        <namespace prefix="resource" uri="https://data.skkg.ch/"/>
+        <namespace prefix="aat" uri="http://vocab.getty.edu/aat/" />
+        <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+        <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
+        <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
+        <namespace prefix="dcterms" uri="http://purl.org/dc/terms/" />
+        <namespace prefix="frbroo" uri="http://iflastandards.info/ns/fr/frbr/frbroo/" />
+        <namespace prefix="gnd" uri="https://d-nb.info/gnd/"/>
+        <namespace prefix="la" uri="https://linked.art/ns/terms/"/>
+        <namespace prefix="loc" uri="http://id.loc.gov/vocabulary/relators/"/>
+        <namespace prefix="mets" uri="http://www.loc.gov/METS/"/>
+        <namespace prefix="mods" uri="http://www.loc.gov/mods/v3"/>
+        <namespace prefix="oai" uri="http://www.openarchives.org/OAI/2.0/"/>
+        <namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+        <namespace prefix="rso" uri="http://www.researchspace.org/ontology/" />
+        <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
+        <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
+        <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/"/>
+        <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
+        <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
+        <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
+        <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
+        <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+        <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
+        <namespace prefix="iiif" uri="https://iiif.skkg.3ms.io/iiif/2/"/>
+    </namespaces>
+    <mappings>
+        <mapping>
+            <domain>
+                <source_node>/collection/item</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="true">done/text()</equals>
+                            </if>
+                            <if>
+                                <equals value="1">page_number/text()</equals>
+                            </if>
+                        </and>
+                    </if>
+                    <entity variable="multimedia_item">
+                        <type>crmdig:D1_Digital_Object</type>
+                        <type>skkg:Multimedia</type>
+                        <instance_generator name="URIwithTypeAndId">
+                            <arg name="type" type="constant">multimedia</arg>
+                            <arg name="id" type="xpath">uuid/text()</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>.</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>la:digitally_shown_by</relationship>
+                        <entity>
+                            <type>crmdig:D1_Digital_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">filename/text()</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                        <relationship>la:digitally_available_via</relationship>
+                        <entity>
+                            <type>la:DigitalService</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                                <arg name="level2" type="constant">iiif</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat(filename/text(), ' (IIIF Service)')</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                            <additional>
+                                <relationship>dcterms:conformsTo</relationship>
+                                <entity>
+                                    <type>crm:E73_Information_Object</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIorUUID">
+                                        <arg name="text" type="constant">http://iiif.io/api/image</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">IIIF Image API</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>la:access_point</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>.</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crmdig:D1_Digital_Object</type>
+                            <type>rso:EX_Digital_Image</type>
+                            <instance_generator name="URIwithIiifId">
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat(filename/text(), ' (IIIF Access Point)')</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/collection/item</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="true">done/text()</equals>
+                            </if>
+                            <if>
+                                <exists>page_number/text()</exists>
+                            </if>
+                            <if>
+                                <not>
+                                    <if>
+                                        <equals value="1">page_number/text()</equals>
+                                    </if>
+                                </not>
+                            </if>
+                        </and>
+                    </if>
+                    <entity variable="multimedia_item">
+                        <type>crmdig:D1_Digital_Object</type>
+                        <type>skkg:Multimedia</type>
+                        <instance_generator name="URIwithTypeAndId">
+                            <arg name="type" type="constant">multimedia</arg>
+                            <arg name="id" type="xpath">substring-before(uuid/text(),"_p")</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>.</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>la:digitally_shown_by</relationship>
+                        <entity>
+                            <type>crmdig:D1_Digital_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">filename/text()</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                        <relationship>la:digitally_available_via</relationship>
+                        <entity>
+                            <type>la:DigitalService</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                                <arg name="level2" type="constant">iiif</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat(filename/text(), ' (IIIF Service)')</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                            <additional>
+                                <relationship>dcterms:conformsTo</relationship>
+                                <entity>
+                                    <type>crm:E73_Information_Object</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIorUUID">
+                                        <arg name="text" type="constant">http://iiif.io/api/image</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">IIIF Image API</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>la:access_point</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>.</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crmdig:D1_Digital_Object</type>
+                            <type>rso:EX_Digital_Image</type>
+                            <instance_generator name="URIwithIiifId">
+                                <arg name="id" type="xpath">uuid/text()</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat(filename/text(), ' (IIIF Access Point)')</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/collection/item</source_node>
+                <target_node>
+                    <if>
+                        <equals value="true">done/text()</equals>
+                    </if>
+                    <entity variable="digitalObject">
+                        <type>crmdig:D1_Digital_Object</type>
+                        <instance_generator name="URIwithTypeIdAnd1Level">
+                            <arg name="type" type="constant">multimedia</arg>
+                            <arg name="id" type="xpath">uuid/text()</arg>
+                            <arg name="level1" type="constant">digitalobject</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>page_number</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>crm:P1_is_identified_by</relationship>
+                        <entity>
+                            <type>crm:E42_Identifier</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">../uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                                <arg name="level2" type="constant">pagenr</arg>
+                            </instance_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300445022</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">page number</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Seitennummer
+                                                    </arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P190_has_symbolic_content</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>page_number</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>width</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>crm:P43_has_dimension</relationship>
+                        <entity>
+                            <type>crm:E54_Dimension</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">../uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                                <arg name="level2" type="constant">width</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="constant">image width</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300055647</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">width</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Breite</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P91_has_unit</relationship>
+                                <entity>
+                                    <type>crm:E58_Measurement_Unit</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300266190</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">pixels</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Pixel</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P90_has_value</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>width</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>height</relation>
+                    </source_relation>
+                    <target_relation>
+                        <relationship>crm:P43_has_dimension</relationship>
+                        <entity>
+                            <type>crm:E54_Dimension</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">../uuid/text()</arg>
+                                <arg name="level1" type="constant">digitalobject</arg>
+                                <arg name="level2" type="constant">height</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="constant">image height</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300055644</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">height</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Höhe</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P91_has_unit</relationship>
+                                <entity>
+                                    <type>crm:E58_Measurement_Unit</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300266190</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">pixels</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Pixel</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                        <relationship>crm:P90_has_value</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>height</source_node>
+                    <target_node>
+                        <entity>
+                            <type>rdfs:Literal</type>
+                            <instance_generator name="Literal">
+                                <arg name="text" type="xpath">text()</arg>
+                                <arg name="language" type="constant"/>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+    </mappings>
+</x3ml>

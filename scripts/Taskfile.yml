@@ -18,8 +18,11 @@ tasks:
     desc: Runs the entire pipeline
     cmds:
       - task: download-source-items
-      - task: prepare-and-perform-mapping
+      - task: retrieve-iiif-data
+      - task: prepare-and-perform-mapping-for-items
+      - task: prepare-and-perform-mapping-for-iiif
       - task: ingest-items
+      - task: ingest-iiif
       - task: ingest-classifications
       - task: ingest-ontologies
       - task: retrieve-and-ingest-additional-data
@@ -31,7 +34,14 @@ tasks:
         sh: echo "/backup/blazegraph-$(date -u "+%Y-%m-%d-%H-%M-%S").jnl.gz"
     cmds:
        - curl --data-urlencode "file={{.FILENAME}}" --data-urlencode "compress=true" --data-urlencode "block=true" {{.BLAZEGRAPH_BACKUP}}  
-      
+
+  retrieve-iiif-data:
+    desc: Downloads and prepares data related to the IIIF images
+    vars:
+      OUTPUTFOLDER: /data/source/iiif
+    cmds:
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - python /scripts/retrieveIiifData.py --input $IIIF_CSV_URL --outputFolder {{.OUTPUTFOLDER}} --filename iiifPaths
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus
@@ -201,6 +211,23 @@ tasks:
       - task: ingest-person-items
       - task: ingest-multimedia-items
       - task: ingest-literature-items
+      - task: ingest-iiif
+
+  ingest-iiif:
+    desc: Ingest IIIF data into the triplestore
+    sources:
+      - /data/ttl/main/iiif/*.ttl
+    cmds:
+      - for: sources
+        task: _ingest-data-from-file
+        vars:
+          NAME:
+            sh: echo "$(basename {{.ITEM}} .ttl)"
+          FILE: "{{.ITEM}}"
+          TYPE: application/x-turtle
+          GRAPH: 
+            sh: echo "{{.NAMESPACE}}graph/iiif/$(basename {{.ITEM}} .ttl)"
+          ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT}}"
 
   ingest-literature-items:
     desc: Ingests the literature items into the triplestore
@@ -284,7 +311,7 @@ tasks:
         INPUTFOLDER: /data/ttl/main/vocabularies
         NAMESPACE: https://data.skkg.ch/type/
 
-  prepare-and-perform-mapping:
+  prepare-and-perform-mapping-for-items:
     desc: Prepares and performs the mapping for all modules
     cmds:
       - echo "Preparing mapping..."
@@ -325,10 +352,29 @@ tasks:
       - task: _perform-mapping-for-module-items
         vars:
           MODULE: Person
+    
+  prepare-and-perform-mapping-for-iiif:
+    desc: Performs the mapping for the IIIF data
+    sources:
+      - /mapping/mapping-iiif.x3ml
+      - /data/source/iiif/*.xml
+    vars:
+      SOURCEFOLDER: /data/source/iiif
+      INPUTFOLDER: /mapping/input/iiif
+      OUTPUTFOLDER: /data/ttl/main/iiif
+      MAPPINGFILE: /mapping/mapping-iiif.x3ml
+    cmds:
+      - mkdir -p {{.INPUTFOLDER}}
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - rm -rf {{.INPUTFOLDER}}/*.xml
+      - rm -rf {{.OUTPUTFOLDER}}/*.ttl
+      - # Copy all XML files from the source folder to the input folder
+      - find {{.SOURCEFOLDER}} -maxdepth 1 -name "*.xml" -exec cp -t {{.INPUTFOLDER}} {} +
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
 
   perform-mapping-for-vocabularies:
     desc: Performs the mapping for the vocabularies
-    source:
+    sources:
       - /mapping/mapping-vocabulary.x3ml
       - /data/source/vocabularies/*.xml
     vars:
@@ -467,7 +513,15 @@ tasks:
         vars:
           MODULE: "{{.ITEM}}"
       - task: reset-vocabularies
+      - task: reset-iiif
       - echo "Done!"
+
+  reset-iiif:
+    desc: Delete all artefacts produced by the pipeline for the iiif data.
+    cmds: 
+      - rm -rf /data/ttl/main/iiif
+      - rm -rf /mapping/input/iiif
+      - rm -rf /mapping/output/iiif
 
   reset-module:
     desc: Delete all artefacts produced by the pipeline for a given module. The module name should be passed as an argument or via the MODULE variable.
@@ -550,6 +604,13 @@ tasks:
           RECONCILIATION_TYPE: SubjectHeading
           BASE_TYPE: https://ontology.skkg.ch/Type
           LOG_FILE: /logs/suggest-alignments-for-vocabularies.log
+
+  update-iiif:
+    desc: Downloads, maps, and ingests the IIIF data
+    cmds: 
+      - task: retrieve-iiif-data
+      - task: prepare-and-perform-mapping-for-iiif
+      - task: ingest-iiif
 
   update-vocabularies:
     desc: Downloads, maps, and ingests the vocabularies
