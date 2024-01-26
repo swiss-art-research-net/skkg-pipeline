@@ -38,15 +38,24 @@ def retrieveIiifData(*, input, outputFolder, filename='iiif'):
         print('Output file already exists, no need to convert CSV to XML')
 
 def convertCsvToXml(*, inputFile, outputFile):
+    # read csv file
+    inputData = []
     with open(inputFile, 'r') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-        header = next(reader)
-        root = etree.Element('collection')
+        reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
         for row in reader:
-            item = etree.SubElement(root, 'item')
-            for index, column in enumerate(row):
-                if column:
-                    etree.SubElement(item, header[index]).text = column
+            inputData.append(row)
+    
+    # write xml file
+    root = etree.Element('collection')
+    for row in inputData:
+        # If the page number is empty, set it to 1
+        if row['page_number'] == '':
+            row['page_number'] = '1'
+        item = etree.SubElement(root, 'item')
+        for key, value in row.items():
+            if value:
+                etree.SubElement(item, key).text = value
+
     with open(outputFile, 'wb') as xmlfile:
         xmlfile.write(etree.tostring(root, pretty_print=True))
 
