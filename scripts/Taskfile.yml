@@ -14,12 +14,6 @@ output: 'prefixed'
 
 tasks:
 
-  test-iiif:
-    cmds: 
-      - task: retrieve-iiif-data
-      - task: prepare-and-perform-mapping-for-iiif
-      - task: ingest-iiif
-
   default:
     desc: Runs the entire pipeline
     cmds:
