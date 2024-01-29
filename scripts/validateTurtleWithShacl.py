@@ -41,10 +41,14 @@ def validateTurtleWithShacl(*, directory, shapesGraph, ontologyFiles=False, endp
     validationSuccessful = True
     ttlOutput = ''
     
-    print("Validating...")
     inputFiles = glob.iglob(directory + '/*.ttl')
+    # If no input files are found, exit
+    if not list(inputFiles):
+        return
+
     count = 0;
     dataGraph = Graph()
+    print("Validating...")
     for file in tqdm(inputFiles):
         # Read RDF file into graph
         dataGraph.parse(join(directory, file), format='turtle')
