@@ -18,11 +18,9 @@ tasks:
     desc: Runs the entire pipeline
     cmds:
       - task: download-source-items
-      - task: retrieve-iiif-data
       - task: prepare-and-perform-mapping-for-items
-      - task: prepare-and-perform-mapping-for-iiif
+      - task: update-iiif 
       - task: ingest-items
-      - task: ingest-iiif
       - task: ingest-classifications
       - task: ingest-ontologies
       - task: retrieve-and-ingest-additional-data
