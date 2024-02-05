@@ -217,6 +217,11 @@ tasks:
       - /data/ttl/main/iiif/*.ttl
     cmds:
       - for: sources
+        task: _drop-graph
+        vars:
+          GRAPH:
+            sh: echo "{{.NAMESPACE}}graph/iiif/$(basename {{.ITEM}} .ttl)"
+      - for: sources
         task: _ingest-data-from-file
         vars:
           NAME:
