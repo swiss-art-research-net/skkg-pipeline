@@ -219,7 +219,14 @@ tasks:
       - task: ingest-person-items
       - task: ingest-multimedia-items
       - task: ingest-literature-items
-      - task: ingest-iiif
+      - task: ingest-address-items
+
+  ingest-address-items:
+    desc: Ingests the address items into the triplestore
+    cmds:
+      - task: _ingest_module_items
+        vars:
+          MODULE: Address
 
   ingest-iiif:
     desc: Ingest IIIF data into the triplestore
@@ -338,11 +345,20 @@ tasks:
       - task: prepare-mapping-for-person-items
       - task: prepare-mapping-for-multimedia-items
       - task: prepare-mapping-for-literature-items
+      - task: prepare-mapping-for-address-items
       - echo "Mapping..."
       - task: perform-mapping-for-object-items
       - task: perform-mapping-for-person-items
       - task: perform-mapping-for-multimedia-items
       - task: perform-mapping-for-literature-items
+      - task: perform-mapping-for-address-items
+
+  perform-mapping-for-address-items:
+    desc: Performs the mapping for the address items
+    cmds:
+      - task: _perform-mapping-for-module-items
+        vars:
+          MODULE: Address
 
   perform-mapping-for-literature-items:
     desc: Performs the mapping for the literature items
