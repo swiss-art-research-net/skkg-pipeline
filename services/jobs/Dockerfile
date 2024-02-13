@@ -26,7 +26,6 @@ RUN mkdir /mapping
 RUN mkdir /scripts
 VOLUME /data
 VOLUME /mapping
-VOLUME /static
 WORKDIR /scripts
 
 # Run idling
