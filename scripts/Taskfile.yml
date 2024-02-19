@@ -55,6 +55,7 @@ tasks:
     desc: Downloads all vocabularies from MuseumPlus
     cmds:
       - for:
+          - ExhTypeVgr
           - GenCurrencyVgr
           - GenLanguageVgr
           - GenLocationVgr
