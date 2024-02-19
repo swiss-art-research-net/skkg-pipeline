@@ -29,7 +29,7 @@
                 <domain>
                     <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
-                        <entity variable="object">
+                        <entity>
                             <type>crm:E5_Event</type>
                             <type>skkg:Exhibition</type>
                             <instance_generator name="URIwithTypeAndId">
@@ -40,6 +40,26 @@
                                 <arg name="text" type="xpath">if (virtualField[@name='ExhExhibitionVrt']/value/text()) then (virtualField[@name='ExhExhibitionVrt']/value/text()) else (@id)</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithAatId">
+                                        <arg name="id" type="constant">300054766</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Exhibiting</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Ausstellen</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
                         </entity>
                     </target_node>
                 </domain>
