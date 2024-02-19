@@ -43,17 +43,19 @@ tasks:
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus
-    deps:
-      - download-address-items
-      - download-literature-items
-      - download-object-items
-      - download-person-items
-      - download-multimedia-items
+    cmds:
+      - task: download-address-items
+      - task: download-exhibition-items
+      - task: download-literature-items
+      - task: download-object-items
+      - task: download-person-items
+      - task: download-multimedia-items
   
   download-source-vocabularies:
     desc: Downloads all vocabularies from MuseumPlus
     cmds:
       - for:
+          - ExhTypeVgr
           - GenCurrencyVgr
           - GenLanguageVgr
           - GenLocationVgr
@@ -93,6 +95,13 @@ tasks:
       - task: _download-module-items-from-museumplus
         vars:
           MODULE: Address
+
+  download-exhibition-items:
+    desc: Download the exhibition item records from MuseumPlus
+    cmds:
+      - task: _download-module-items-from-museumplus
+        vars:
+          MODULE: Exhibition
 
   download-literature-items:
     desc: Download the literature item records from MuseumPlus
@@ -144,6 +153,16 @@ tasks:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           INPUTFILES: /data/source/address/address-item-0a4ea0e2-f98f-4966-a0df-ab159620d3bf.xml
 
+  generate-example-record-exhibition:
+    desc: Generates an example Exhibition record for developing the mapping in the X3ML editor
+    vars:
+      OUTPUTFILE: /mapping/example-exhibition-record.xml
+    cmds:
+      - task: _generate-example-record
+        vars:
+          OUTPUTFILE: "{{.OUTPUTFILE}}"
+          INPUTFILES: /data/source/exhibition/exhibition-item-53b63629-5c82-4614-aecc-7bf3075778a7.xml
+  
   generate-example-record-object:
     desc: Generates an example Object record for developing the mapping in the X3ML editor
     vars:
@@ -225,6 +244,7 @@ tasks:
       - task: ingest-multimedia-items
       - task: ingest-literature-items
       - task: ingest-address-items
+      - task: ingest-exhibition-items
 
   ingest-address-items:
     desc: Ingests the address items into the triplestore
@@ -232,6 +252,13 @@ tasks:
       - task: _ingest_module_items
         vars:
           MODULE: Address
+
+  ingest-exhibition-items:
+    desc: Ingests the exhibition items into the triplestore
+    cmds:
+      - task: _ingest_module_items
+        vars:
+          MODULE: Exhibition
 
   ingest-iiif:
     desc: Ingest IIIF data into the triplestore
@@ -351,12 +378,14 @@ tasks:
       - task: prepare-mapping-for-multimedia-items
       - task: prepare-mapping-for-literature-items
       - task: prepare-mapping-for-address-items
+      - task: prepare-mapping-for-exhibition-items
       - echo "Mapping..."
       - task: perform-mapping-for-object-items
       - task: perform-mapping-for-person-items
       - task: perform-mapping-for-multimedia-items
       - task: perform-mapping-for-literature-items
       - task: perform-mapping-for-address-items
+      - task: perform-mapping-for-exhibition-items
 
   perform-mapping-for-address-items:
     desc: Performs the mapping for the address items
@@ -364,6 +393,13 @@ tasks:
       - task: _perform-mapping-for-module-items
         vars:
           MODULE: Address
+
+  perform-mapping-for-exhibition-items:
+    desc: Performs the mapping for the exhibition items
+    cmds:
+      - task: _perform-mapping-for-module-items
+        vars:
+          MODULE: Exhibition
 
   perform-mapping-for-literature-items:
     desc: Performs the mapping for the literature items
@@ -433,11 +469,18 @@ tasks:
       - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
   
   prepare-mapping-for-address-items:
-    desc: Prepares the mapping for the object items
+    desc: Prepares the mapping for the address items
     cmds:
       - task: _prepare-mapping-for-module-items
         vars:
           MODULE: Address
+
+  prepare-mapping-for-exhibition-items:
+    desc: Prepares the mapping for the exhibition items
+    cmds:
+      - task: _prepare-mapping-for-module-items
+        vars:
+          MODULE: Exhibition
   
   prepare-mapping-for-literature-items:
     desc: Prepares the mapping for the literature items
