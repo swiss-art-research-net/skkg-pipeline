@@ -218,6 +218,36 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference/moduleReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ExhVenueAddressRef">../@name</equals>
+                            </if>
+                            <relationship>crm:P7_took_place_at</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReference/moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E53_Place</type>
+                                <type>skkg:Address</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
         </mappings>
         </x3ml>
