@@ -41,14 +41,10 @@ tasks:
     cmds:
       - mkdir -p {{.OUTPUTFOLDER}}
       - rm -f {{.OUTPUTFOLDER}}/*.ttl
-      - cat /data/ttl/main/*/*.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}
-      - grep -v "^@prefix" {{.OUTPUTFOLDER}}/{{.FILENAME}} > {{.OUTPUTFOLDER}}/temp.ttl
-      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER}}/{{.FILENAME}} > {{.OUTPUTFOLDER}}/prefixes.ttl
-      - cat {{.OUTPUTFOLDER}}/prefixes.ttl {{.OUTPUTFOLDER}}/temp.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}
+      - cat /data/ttl/main/*/*.ttl > {{.OUTPUTFOLDER}}/temp.ttl
+      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER}}/temp.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}
+      - grep -v "^@prefix" {{.OUTPUTFOLDER}}/temp.ttl >> {{.OUTPUTFOLDER}}/{{.FILENAME}}
       - rm -f {{.OUTPUTFOLDER}}/temp.ttl
-      - rm -f {{.OUTPUTFOLDER}}/prefixes.ttl
-
-      
 
   retrieve-iiif-data:
     desc: Downloads and prepares data related to the IIIF images
