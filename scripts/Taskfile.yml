@@ -19,7 +19,6 @@ tasks:
     cmds:
       - task: download-source-items
       - task: prepare-and-perform-mapping-for-items
-      - task: update-iiif 
       - task: ingest-items
       - task: ingest-classifications
       - task: ingest-ontologies
@@ -141,6 +140,7 @@ tasks:
     desc: Task to run when the pipeline is run for the first time
     cmds:
       - task: update-vocabularies
+      - task: update-iiif 
       - task: ingest-platform-data
 
   generate-example-record-address:
