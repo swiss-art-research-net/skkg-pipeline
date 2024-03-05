@@ -30,7 +30,7 @@
                     <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
                         <entity>
-                            <type>crm:E5_Event</type>
+                            <type>crm:E7_Activity</type>
                             <type>skkg:Exhibition</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">exhibition</arg>
@@ -243,6 +243,83 @@
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">formattedValue/text()</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ExhObjectRef">@name</equals>
+                            </if>
+                            <relationship>crm:P16_used_specific_object</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReference</source_node>
+                        <target_node>
+                            <entity>
+                                <type>la:Set</type>
+                                <type>crm:E89_Propositional_Object</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">exhibition</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">objects</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat("Objects exhibited at: ", ../virtualField[@name='ExhExhibitionVrt']/value/text())</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/moduleReference</source_node>
+                    <target_node>
+                        <if>
+                            <equals value="ExhObjectRef">@name</equals>
+                        </if>
+                        <entity>
+                            <type>la:Set</type>
+                            <type>crm:E89_Propositional_Object</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">exhibition</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">objects</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>la:has_member</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>skkg:Object</type>
+                                <type>crm:E22_Human-Made_Object</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="constant">formattedValue/@language</arg>
                                 </label_generator>
                             </entity>
                         </target_node>
