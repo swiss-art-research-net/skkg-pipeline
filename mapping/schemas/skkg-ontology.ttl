@@ -24,7 +24,7 @@
 
 ###  https://ontology.skkg.ch/Address
 <https://ontology.skkg.ch/Adress> rdf:type owl:Class ;
-    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <http://www.cidoc-crm.org/cidoc-crm/E53_Place>,  <https://ontology.skkg.ch/Entity> ;
     rdfs:label "Address"@en, "Adresse"@de .
 
 ###  https://ontology.skkg.ch/Entity
