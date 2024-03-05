@@ -45,9 +45,9 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, filenamePrefix='
             filesToMap.append(file)
             prepareFileForMapping(file=file, inputFolder=inputFolder, outputFolder=outputFolder)
     if len(filesToMap) < limit:
-        print(f"Prepared {len(filesToMap)} files for mapping. {limit - len(filesToMap)} files do not need to be mapped.")
+        print(f"Prepared {len(filesToMap)} {module} items for mapping. {limit - len(filesToMap)} items do not need to be mapped.")
     else:
-        print(f"Prepared {len(filesToMap)} files for mapping")
+        print(f"Prepared {len(filesToMap)} {module} items for mapping")
 
 def prepareFileForMapping(*, file, inputFolder, outputFolder):
     # TODO: This function currently only copies the file from the input folder to the output folder,
