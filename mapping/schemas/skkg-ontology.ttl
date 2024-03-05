@@ -34,7 +34,7 @@
 
 ###  https://ontology.skkg.ch/Exhibition
 <https://ontology.skkg.ch/Exhibition> rdf:type owl:Class ;
-    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E5_Event> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E7_Activity> , <https://ontology.skkg.ch/Entity> ;
     rdfs:label "Exhibition"@en, "Ausstellung"@de .
 
 ###  https://ontology.skkg.ch/Group
