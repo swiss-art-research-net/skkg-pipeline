@@ -149,18 +149,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/exhibition/exhibition-item-53b63629-5c82-4614-aecc-7bf3075778a7.xml
-  
-
-  generate-example-record-exhibition:
-    desc: Generates an example Exhibition record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-exhibition-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/exhibition/exhibition-item-53b63629-5c82-4614-aecc-7bf3075778a7.xml
+          INPUTFILES: /data/source/exhibition/exhibition-item-53b63629-5c82-4614-aecc-7bf3075778a7.xml /data/source/exhibition/exhibition-item-4.xml
   
   generate-example-record-object:
     desc: Generates an example Object record for developing the mapping in the X3ML editor
