@@ -41,7 +41,7 @@ tasks:
     cmds:
       - mkdir -p {{.OUTPUTFOLDER}}
       - rm -f {{.OUTPUTFOLDER}}/*.ttl
-      - cat /data/ttl/main/*/*.ttl > {{.OUTPUTFOLDER}}/temp.ttl
+      - find /data/ttl/main/ -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER}}/temp.ttl
       - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER}}/temp.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}
       - grep -v "^@prefix" {{.OUTPUTFOLDER}}/temp.ttl >> {{.OUTPUTFOLDER}}/{{.FILENAME}}
       - rm -f {{.OUTPUTFOLDER}}/temp.ttl
