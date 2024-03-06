@@ -286,10 +286,6 @@
                                     <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="xpath">formattedValue/text()</arg>
-                                    <arg name="language" type="xpath">formattedValue/@language</arg>
-                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
