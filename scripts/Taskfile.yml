@@ -706,6 +706,7 @@ tasks:
         sh: echo "{{if .ENDPOINT}}{{.ENDPOINT}}{{else}}{{.BLAZEGRAPH_ENDPOINT}}{{end}}"
     cmds:
       - echo "Ingest {{.NAME}}"
+      - curl --silent -X POST {{.ENDPOINT}} --data-urlencode 'update={{if .GRAPH}}DROP GRAPH <{{.GRAPH}}>{{end}}'
       - curl -X POST -H 'Content-Type:{{.TYPE}}' --data-binary '@{{.FILE}}' {{.ENDPOINT}}{{if .GRAPH}}?context-uri={{.GRAPH}}{{end}}
 
   _ingest_module_items:
