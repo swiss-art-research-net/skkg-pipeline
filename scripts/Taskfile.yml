@@ -640,6 +640,7 @@ tasks:
       - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f human {{.CLI_ARGS}}
 
   _download-vocabulary-from-museumplus:
+    internal: true
     requires:
       vars: [VOCABULARY]
     vars:
@@ -650,6 +651,7 @@ tasks:
       - python /scripts/downloadVocabulary.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --vocabulary {{.VOCABULARY}} --outputFolder {{.OUTPUT_FOLDER}}
 
   _download-module-items-from-museumplus:
+    internal: true
     requires:
       vars: [MODULE]
     vars:
@@ -667,6 +669,7 @@ tasks:
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _download-items-from-museumplus:
+    internal: true
     requires:
       vars: [MODULE, OUTPUT_FOLDER, FILENAMEPREFIX]
     vars:
@@ -677,10 +680,12 @@ tasks:
       - python /scripts/downloadItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --outputFolder {{.OUTPUT_FOLDER}} --tempFolder {{.TEMP_FOLDER}} --filenamePrefix {{.FILENAMEPREFIX}} {{.CLI_ARGS}}
 
   _drop-graph:
+    internal: true
     cmds:
       - curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <{{.GRAPH}}>" > /dev/null
 
   _generate-example-record:
+    internal: true
     requires:
       vars: [OUTPUTFILE, INPUTFILES]
     vars:
@@ -695,14 +700,17 @@ tasks:
       - echo '<application><modules>' | cat - {{.OUTPUTFILE}} > temp && mv temp {{.OUTPUTFILE}}; echo '</modules></application>' >> {{.OUTPUTFILE}}
 
   _ingest-data-from-file:
+    internal: true
     vars:
       ENDPOINT: 
         sh: echo "{{if .ENDPOINT}}{{.ENDPOINT}}{{else}}{{.BLAZEGRAPH_ENDPOINT}}{{end}}"
     cmds:
       - echo "Ingest {{.NAME}}"
+      - curl --silent -X POST {{.ENDPOINT}} --data-urlencode 'update={{if .GRAPH}}DROP GRAPH <{{.GRAPH}}>{{end}}'
       - curl -X POST -H 'Content-Type:{{.TYPE}}' --data-binary '@{{.FILE}}' {{.ENDPOINT}}{{if .GRAPH}}?context-uri={{.GRAPH}}{{end}}
 
   _ingest_module_items:
+    internal: true
     requires:
       vars: [MODULE, NAMESPACE]
     vars:
@@ -769,6 +777,7 @@ tasks:
       - find {{.TEMPFOLDER}} -maxdepth 1 -name "*.ttl.ingested" -delete
   
   _ingest_vocabularies:
+    internal: true
     requires:
       vars: [INPUTFOLDER, NAMESPACE]
     vars:
@@ -791,6 +800,7 @@ tasks:
         done
 
   _perform-mapping-for-module-items:
+    internal: true
     requires:
       vars: [MODULE]
     vars:
@@ -823,6 +833,7 @@ tasks:
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec mv -t {{.DESTINATIONFOLDER}} {} +
 
   _perform-post-mapping-tasks:
+    internal: true
     requires:
       vars: [MODULE, FOLDER]
     cmds:
@@ -847,6 +858,7 @@ tasks:
       - python /scripts/prepareDataForMapping.py --module {{.MODULE}} --inputFolder {{.INPUTFOLDER}} --outputFolder {{.OUTPUTFOLDER}} {{.CLI_ARGS}}
 
   _process-items-deleted-from-museumplus:
+    internal: true
     vars: 
       NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
     interactive: True
@@ -854,6 +866,7 @@ tasks:
       - python /scripts/processDeletedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --namedGraphBase {{.NAMEDGRAPHBASE}} --filenamePrefix {{.FILENAMEPREFIX}} --sparqlEndpoint {{.BLAZEGRAPH_ENDPOINT}}
 
   _remove-deleted-module-items:
+    internal: true
     requires:
       vars: [MODULE]
     vars:
@@ -870,6 +883,7 @@ tasks:
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _suggest-alignments:
+    internal: true
     interactive: True
     requires:
       vars: [INPUT_FILE, RECONCILIATION_TYPE, BASE_TYPE, RECONCILIATION_TYPE]
@@ -881,6 +895,7 @@ tasks:
         - python /scripts/suggestAlignments.py --input_file "{{.INPUT_FILE}}" --reconciliation_type "{{.RECONCILIATION_TYPE}}"  --limit "{{.LIMIT}}" --output_file "{{.OUTPUTFILE}}" --base_type "{{.BASE_TYPE}}" {{if .LOG_FILE}}--log_file "{{.LOG_FILE}}"{{end}}
 
   _update-metadata-for-module:
+    internal: true
     requires:
       vars: [MODULE, KEY, VALUE, SOURCEFOLDER, FILEEXTENSION]
     vars:
@@ -894,6 +909,7 @@ tasks:
       - python /scripts/updateMetadataValueForFiles.py --metadataFolder {{.METADATAFOLDER}} --inputFolder {{.SOURCEFOLDER}} --key {{.KEY}} --value "{{.VALUE}}" --fileExtension {{.FILEEXTENSION}}
 
   _validate-turtle-files-in-folder:
+    internal: true
     requires:
       vars: [FOLDER]
     vars:
