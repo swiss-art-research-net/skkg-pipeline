@@ -150,7 +150,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/exhibition/exhibition-item-53b63629-5c82-4614-aecc-7bf3075778a7.xml /data/source/exhibition/exhibition-item-4.xml
+          INPUTFILES: /data/source/exhibition/exhibition-item-da48d99a-b421-4730-8e0e-7a800d251d18.xml /data/source/exhibition/exhibition-item-53b63629-5c82-4614-aecc-7bf3075778a7.xml /data/source/exhibition/exhibition-item-4.xml
   
   generate-example-record-object:
     desc: Generates an example Object record for developing the mapping in the X3ML editor
