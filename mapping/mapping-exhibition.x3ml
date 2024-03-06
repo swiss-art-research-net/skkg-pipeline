@@ -29,6 +29,38 @@
                 <domain>
                     <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
+                        <if>
+                            <and>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="151965">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="25578">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="vocabularyReference[@instanceName=&quot;ExhStatusVgr&quot;]/vocabularyReferenceItem/@id">177046</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="148975">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
+                        </if>
                         <entity>
                             <type>crm:E7_Activity</type>
                             <type>skkg:Exhibition</type>
@@ -62,6 +94,20 @@
                             </additional>
                         </entity>
                     </target_node>
+                    <comments>
+                        <comment type="">
+                            <rationale>ExhStatusVgr limits which exhibitions should be published</rationale>
+                            <alternatives/>
+                            <typical_mistakes/>
+                            <local_habits/>
+                            <link_to_cook_book/>
+                            <example>
+                                <example_source/>
+                                <example_target/>
+                            </example>
+                            <comments_last_update date="" person=""/>
+                        </comment>
+                    </comments>
                 </domain>
                 <link>
                     <path>
@@ -285,7 +331,39 @@
                     <source_node>/application/modules/module/moduleItem/moduleReference</source_node>
                     <target_node>
                         <if>
-                            <equals value="ExhObjectRef">@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="ExhObjectRef">@name</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="151965">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="25578">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="vocabularyReference[@instanceName=&quot;ExhStatusVgr&quot;]/vocabularyReferenceItem/@id">177046</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="148975">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
                         </if>
                         <entity>
                             <type>la:Set</type>
