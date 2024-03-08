@@ -260,6 +260,19 @@
                                     <arg name="text" type="xpath">formattedValue/text()</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">21102</arg>
+                                        </instance_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                         </target_node>
                     </range>
@@ -370,6 +383,49 @@
                                     <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link template="vocab_type">
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ExhExternalInternalVgr">../@instanceName</equals>
+                            </if>
+                            <relationship>crm:P2_has_type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">43086</arg>
+                                        </instance_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                         </target_node>
                     </range>
