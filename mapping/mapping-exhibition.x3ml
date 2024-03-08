@@ -430,6 +430,37 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroup/repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ExhOtherVenuesGrp">../@name</equals>
+                            </if>
+                            <relationship>crm:P9_consists_of</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">exhibition</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="level1" type="constant">variant</arg>
+                                    <arg name="level2" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat("Other station or venue of exhibition: ", ../../virtualField[@name='ExhExhibitionVrt']/value/text())</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
             <mapping>
                 <domain>
@@ -498,6 +529,52 @@
                                 <type>crm:E22_Human-Made_Object</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <if>
+                            <equals value="ExhOtherVenuesGrp">../@name</equals>
+                        </if>
+                        <entity>
+                            <type>crm:E7_Activity</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">exhibition</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">variant</arg>
+                                <arg name="level2" type="xpath">@uuid</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference/moduleReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P7_took_place_at</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReference/moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E53_Place</type>
+                                <type>skkg:Address</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
