@@ -41,6 +41,7 @@ services:
       - MUSEUMPLUS_URL=${MUSEUMPLUS_URL}
       - MUSEUMPLUS_USERNAME=${MUSEUMPLUS_USERNAME}
       - MUSEUMPLUS_PASSWORD=${MUSEUMPLUS_PASSWORD}
+      - IIIF_CSV_URL=${IIIF_CSV_URL}
     volumes:
       - ./data:/data
       - ./logs:/logs
@@ -49,7 +50,7 @@ services:
       - ./services/platform/apps:/apps
 
   platform:
-    image: swissartresearx/researchspace:develop
+    image: swissartresearx/researchspace:a4240f7ead4e0acc68a7dca477ba141851b81f5b
     container_name: ${PROJECT_NAME}_platform
     restart: unless-stopped
     depends_on:

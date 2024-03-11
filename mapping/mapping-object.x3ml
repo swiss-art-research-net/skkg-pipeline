@@ -25,6 +25,7 @@
         <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
         <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
         <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
+        <namespace prefix="iiif" uri="https://iiif.skkg.3ms.io/iiif/2/"/>
     </namespaces>
     <mappings>
         <mapping>
@@ -239,7 +240,7 @@
                 <range>
                     <source_node>moduleReference/moduleReferenceItem</source_node>
                     <target_node>
-                        <entity variable="object_image">
+                        <entity>
                             <type>crm:E36_Visual_Item</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">multimedia</arg>
@@ -1484,24 +1485,6 @@
                                     </label_generator>
                                 </entity>
                             </additional>
-                            <additional>
-                                <relationship>crm:P91_has_unit</relationship>
-                                <entity>
-                                    <type>crm:E58_Measurement_Unit</type>
-                                    <instance_info>
-                                        <constant/>
-                                    </instance_info>
-                                    <instance_generator name="URIwithTypeIdAnd1Level">
-                                        <arg name="type" type="constant">type</arg>
-                                        <arg name="id" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/@id</arg>
-                                        <arg name="level1" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/@id</arg>
-                                    </instance_generator>
-                                    <label_generator name="Literal">
-                                        <arg name="text" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/text()</arg>
-                                        <arg name="language" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/@language</arg>
-                                    </label_generator>
-                                </entity>
-                            </additional>
                         </entity>
                         <relationship>crm:P90_has_value</relationship>
                     </target_relation>
@@ -1559,24 +1542,6 @@
                                     </label_generator>
                                 </entity>
                             </additional>
-                            <additional>
-                                <relationship>crm:P91_has_unit</relationship>
-                                <entity>
-                                    <type>crm:E58_Measurement_Unit</type>
-                                    <instance_info>
-                                        <constant/>
-                                    </instance_info>
-                                    <instance_generator name="URIwithTypeIdAnd1Level">
-                                        <arg name="type" type="constant">type</arg>
-                                        <arg name="id" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/@id</arg>
-                                        <arg name="level1" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/@id</arg>
-                                    </instance_generator>
-                                    <label_generator name="Literal">
-                                        <arg name="text" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/text()</arg>
-                                        <arg name="language" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/@language</arg>
-                                    </label_generator>
-                                </entity>
-                            </additional>
                         </entity>
                         <relationship>crm:P90_has_value</relationship>
                     </target_relation>
@@ -1631,24 +1596,6 @@
                                     <label_generator name="Literal">
                                         <arg name="text" type="constant">Tiefe</arg>
                                         <arg name="language" type="constant">de</arg>
-                                    </label_generator>
-                                </entity>
-                            </additional>
-                            <additional>
-                                <relationship>crm:P91_has_unit</relationship>
-                                <entity>
-                                    <type>crm:E58_Measurement_Unit</type>
-                                    <instance_info>
-                                        <constant/>
-                                    </instance_info>
-                                    <instance_generator name="URIwithTypeIdAnd1Level">
-                                        <arg name="type" type="constant">type</arg>
-                                        <arg name="id" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/@id</arg>
-                                        <arg name="level1" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/@id</arg>
-                                    </instance_generator>
-                                    <label_generator name="Literal">
-                                        <arg name="text" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/text()</arg>
-                                        <arg name="language" type="xpath">../vocabularyReference[@instanceName="GenDimSizeUnitVgr"]/vocabularyReferenceItem/formattedValue/@language</arg>
                                     </label_generator>
                                 </entity>
                             </additional>
@@ -2995,6 +2942,180 @@
                                 <arg name="text" type="xpath">value/text()</arg>
                                 <arg name="language" type="constant"/>
                             </instance_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem/dataField</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="ObjDim3DGrp">../../@name</equals>
+                            </if>
+                            <if>
+                                <equals value="FirstNum">@name</equals>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crm:E54_Dimension</type>
+                        <instance_generator name="URIwithTypeIdAnd4Levels">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">../../../@uuid</arg>
+                            <arg name="level1" type="constant">part</arg>
+                            <arg name="level2" type="xpath">../@uuid</arg>
+                            <arg name="level3" type="constant">dimension</arg>
+                            <arg name="level4" type="constant">1</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>../vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="GenDimSizeUnitVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P91_has_unit</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>../vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E58_Measurement_Unit</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem/dataField</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="ObjDim3DGrp">../../@name</equals>
+                            </if>
+                            <if>
+                                <equals value="SecondNum">@name</equals>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crm:E54_Dimension</type>
+                        <instance_generator name="URIwithTypeIdAnd4Levels">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">../../../@uuid</arg>
+                            <arg name="level1" type="constant">part</arg>
+                            <arg name="level2" type="xpath">../@uuid</arg>
+                            <arg name="level3" type="constant">dimension</arg>
+                            <arg name="level4" type="constant">2</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>../vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="GenDimSizeUnitVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P91_has_unit</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>../vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E58_Measurement_Unit</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </range>
+            </link>
+        </mapping>
+        <mapping>
+            <domain>
+                <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem/dataField</source_node>
+                <target_node>
+                    <if>
+                        <and>
+                            <if>
+                                <equals value="ObjDim3DGrp">../../@name</equals>
+                            </if>
+                            <if>
+                                <equals value="ThirdNum">@name</equals>
+                            </if>
+                        </and>
+                    </if>
+                    <entity>
+                        <type>crm:E54_Dimension</type>
+                        <instance_generator name="URIwithTypeIdAnd4Levels">
+                            <arg name="type" type="constant">object</arg>
+                            <arg name="id" type="xpath">../../../@uuid</arg>
+                            <arg name="level1" type="constant">part</arg>
+                            <arg name="level2" type="xpath">../@uuid</arg>
+                            <arg name="level3" type="constant">dimension</arg>
+                            <arg name="level4" type="constant">3</arg>
+                        </instance_generator>
+                    </entity>
+                </target_node>
+            </domain>
+            <link>
+                <path>
+                    <source_relation>
+                        <relation>../vocabularyReference/vocabularyReferenceItem</relation>
+                    </source_relation>
+                    <target_relation>
+                        <if>
+                            <equals value="GenDimSizeUnitVgr">../@instanceName</equals>
+                        </if>
+                        <relationship>crm:P91_has_unit</relationship>
+                    </target_relation>
+                </path>
+                <range>
+                    <source_node>../vocabularyReference/vocabularyReferenceItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crm:E58_Measurement_Unit</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">../@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
                         </entity>
                     </target_node>
                 </range>

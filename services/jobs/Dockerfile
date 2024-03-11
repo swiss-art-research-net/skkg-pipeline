@@ -10,7 +10,7 @@ RUN apt clean
 RUN apt update
 RUN apt install -y default-jre
 # Install Python packages
-RUN pip install chardet date-parser-sari lxml urllib3 requests edtf tqdm rdflib sari-field-definitions-generator sparqlwrapper PyYAML Pillow beautifulsoup4 Sickle dicttoxml Pillow pytz pyshacl pandas semantic-field-definition-generator
+RUN pip install chardet date-parser-sari lxml urllib3 requests edtf tqdm rdflib sari-field-definitions-generator sparqlwrapper PyYAML Pillow beautifulsoup4 Sickle dicttoxml Pillow pytz pyshacl pandas semantic-field-definition-generator pyexistdb
 
 # Install x3ml Mapping engine
 RUN mkdir x3ml
@@ -26,7 +26,6 @@ RUN mkdir /mapping
 RUN mkdir /scripts
 VOLUME /data
 VOLUME /mapping
-VOLUME /static
 WORKDIR /scripts
 
 # Run idling

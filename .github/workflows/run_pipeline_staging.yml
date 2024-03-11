@@ -1,0 +1,24 @@
+name: Update and run pipeline on Staging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: SSH into server and run pipeline
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEPLOY_HOST_STAGING }}
+        username: ${{ secrets.SSH_USER_STAGING }}
+        key: ${{ secrets.DEPLOY_KEY_STAGING }}
+        command_timeout: 200m
+        script: |
+          cd ${{ secrets.DEPLOY_PATH_STAGING }}
+          git pull
+          cd services/platform/apps/skkg
+          git pull
+          cd ${{ secrets.DEPLOY_PATH_STAGING }}
+          docker compose exec jobs task

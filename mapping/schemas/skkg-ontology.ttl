@@ -1,3 +1,5 @@
+@prefix aat: <http://vocab.getty.edu/aat/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
@@ -14,37 +16,56 @@
 #    Classes
 #################################################################
 
-###  https://ontology.skkg.ch/Entity
-<https://ontology.skkg.ch/Entity> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity> .
-
-
-###  https://ontology.skkg.ch/Object
-<https://ontology.skkg.ch/Object> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E22_Human-Made_Object> , <https://ontology.skkg.ch/Entity> .
-
 
 ###  https://ontology.skkg.ch/Actor
 <https://ontology.skkg.ch/Actor> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <https://ontology.skkg.ch/Entity> .
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Actor"@en, "Akteur"@de .
 
-###  https://ontology.skkg.ch/Multimedia
-<https://ontology.skkg.ch/Multimedia> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> , <https://ontology.skkg.ch/Entity> .
+###  https://ontology.skkg.ch/Address
+<https://ontology.skkg.ch/Adress> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <http://www.cidoc-crm.org/cidoc-crm/E53_Place>,  <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Address"@en, "Adresse"@de .
 
-###  https://ontology.skkg.ch/Person
-<https://ontology.skkg.ch/Person> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E21_Person> , <https://ontology.skkg.ch/Actor> .
+###  https://ontology.skkg.ch/Entity
+<https://ontology.skkg.ch/Entity> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity> ;
+    rdfs:label "Entity"@en, "Entität"@de .
+
+###  https://ontology.skkg.ch/Exhibition
+<https://ontology.skkg.ch/Exhibition> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E7_Activity> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Exhibition"@en, "Ausstellung"@de .
 
 ###  https://ontology.skkg.ch/Group
 <https://ontology.skkg.ch/Group> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E74_Group> , <https://ontology.skkg.ch/Actor> .
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E74_Group> , <https://ontology.skkg.ch/Actor> ;
+    rdfs:label "Group"@en, "Gruppe"@de .
 
+###  https://ontology.skkg.ch/Literature
+<https://ontology.skkg.ch/Literature> rdf:type owl:Class ;
+    rdfs:subClassOf <http://iflastandards.info/ns/fr/frbr/frbroo/F24_Publication_Expression> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Literature"@en, "Literatur"@de .
+
+###  https://ontology.skkg.ch/Multimedia
+<https://ontology.skkg.ch/Multimedia> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Multimedia"@en, "Multimedia"@de .
+
+###  https://ontology.skkg.ch/Object
+<https://ontology.skkg.ch/Object> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E22_Human-Made_Object> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Object"@en, "Objekt"@de .
+
+###  https://ontology.skkg.ch/Person
+<https://ontology.skkg.ch/Person> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E21_Person> , <https://ontology.skkg.ch/Actor> ;
+    rdfs:label "Person"@en, "Person"@de .
 
 ###  https://ontology.skkg.ch/Type
 <https://ontology.skkg.ch/Type> rdf:type owl:Class ;
-                                  rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E55_Type> , <https://ontology.skkg.ch/Entity> .
-
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E55_Type> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Type"@en, "Typ"@de .
                             
 #################################################################
 #    Individuals
@@ -57,3 +78,17 @@ type:invnr rdf:type skkg:Type, skos:Concept ;
 type:sortlnu rdf:type skkg:Type, skos:Concept ;
     rdfs:label "SortLnu", "Sortierung"@de ;
     skos:prefLabel "Sortierung"@de .
+
+type:figref rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Abb. S."@de ;
+    skos:prefLabel "Abbildung Seite"@de ;
+    crm:P127_has_broader_term aat:300445022 .
+
+type:pageref rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Erwähnung S."@de ;
+    skos:prefLabel "Erwähnung Seite"@de ;
+    crm:P127_has_broader_term aat:300445022 .
+
+type:catalogueno rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Kat. Nr."@de ;
+    skos:prefLabel "Katalognummer"@de .

@@ -45,9 +45,9 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, filenamePrefix='
             filesToMap.append(file)
             prepareFileForMapping(file=file, inputFolder=inputFolder, outputFolder=outputFolder)
     if len(filesToMap) < limit:
-        print(f"Prepared {len(filesToMap)} files for mapping. {limit - len(filesToMap)} files do not need to be mapped.")
+        print(f"Prepared {len(filesToMap)} {module} items for mapping. {limit - len(filesToMap)} items do not need to be mapped.")
     else:
-        print(f"Prepared {len(filesToMap)} files for mapping")
+        print(f"Prepared {len(filesToMap)} {module} items for mapping")
 
 def prepareFileForMapping(*, file, inputFolder, outputFolder):
     # TODO: This function currently only copies the file from the input folder to the output folder,
@@ -72,15 +72,15 @@ def shouldBeMapped(*, file, metadata):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser = argparse.ArgumentParser(description = 'Prepare data for mapping')
-    parser.add_argument('--module', required= True, help='Name of the module to process the data form')
-    parser.add_argument('--inputFolder', required= True, help='Folder where the XML files are stored.')
-    parser.add_argument('--outputFolder', required= True, help='Folder to put the XML files that should be mapped.')
-    parser.add_argument('--limit', required= False, help='Limit the number of items to process.')
-    parser.add_argument('--offset', required= False, help='Offset the items to process.')
-    parser.add_argument('--ids', required= False, help='List of ids to process. If this argument is given, the script will ignore the limit and offset arguments.')
-    parser.add_argument('--filenamePrefix', required= False, help='Prefix to use for the filenames of the XML files. Required when using ids argument. Defaults to "item-"')
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(description='Prepare data for mapping', allow_abbrev=False)
+    parser.add_argument('--module', required=True, help='Name of the module to process the data form')
+    parser.add_argument('--inputFolder', required=True, help='Folder where the XML files are stored.')
+    parser.add_argument('--outputFolder', required=True, help='Folder to put the XML files that should be mapped.')
+    parser.add_argument('--limit', required=False, help='Limit the number of items to process.')
+    parser.add_argument('--offset', required=False, help='Offset the items to process.')
+    parser.add_argument('--ids', required=False, help='List of ids to process. If this argument is given, the script will ignore the limit and offset arguments.')
+    parser.add_argument('--filenamePrefix', required=False, help='Prefix to use for the filenames of the XML files. Required when using ids argument. Defaults to "item-"')
+    args, _ = parser.parse_known_args()
 
     if args.ids is not None:
         args.ids = args.ids.split(',')
