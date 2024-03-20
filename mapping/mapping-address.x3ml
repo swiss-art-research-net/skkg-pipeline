@@ -31,6 +31,7 @@
                         <entity>
                             <type>crm:E39_Actor</type>
                             <type>skkg:Address</type>
+                            <type>crm:E53_Place</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">address</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
@@ -49,13 +50,13 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="MulOriginalFileTxt">@name</equals>
+                                <equals value="AdrOrganisationTxt">@name</equals>
                             </if>
                             <relationship>crm:P1_is_identified_by</relationship>
                             <entity>
-                                <type>crm:E33_E41_Linguistic_Appellation</type>
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">multimedia</arg>
+                                    <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">name</arg>
                                 </instance_generator>
@@ -67,7 +68,7 @@
                                             <constant/>
                                         </instance_info>
                                         <instance_generator name="URIwithAatId">
-                                            <arg name="id" type="constant">300404670</arg>
+                                            <arg name="id" type="xpath">300404670</arg>
                                         </instance_generator>
                                         <label_generator name="Constant">
                                             <arg name="text" type="constant">preferred terms</arg>
@@ -78,6 +79,20 @@
                             </entity>
                             <relationship>crm:P190_has_symbolic_content</relationship>
                         </target_relation>
+                        <comments>
+                            <comment type="">
+                                <rationale>If the address is an institution, this field contains its primary name</rationale>
+                                <alternatives/>
+                                <typical_mistakes/>
+                                <local_habits/>
+                                <link_to_cook_book/>
+                                <example>
+                                    <example_source/>
+                                    <example_target/>
+                                </example>
+                                <comments_last_update date="" person=""/>
+                            </comment>
+                        </comments>
                     </path>
                     <range>
                         <source_node>dataField</source_node>
