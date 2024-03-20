@@ -132,7 +132,7 @@ if __name__ == "__main__":
     parser.add_argument('--filenamePrefix', required= False, help='Prefix to use for the filenames of the XML files. Defaults to "item-"')
     parser.add_argument('--limit', required= False, help='Limit the number of items to download')
     parser.add_argument('--offset', required= False, help='Offset to start downloading items from')
-    args = parser.parse_args()
+    args, _ = parser.parse_known_args()
 
     if args.limit:
         args.limit = int(args.limit)
