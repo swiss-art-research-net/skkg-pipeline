@@ -2651,6 +2651,80 @@
             </mapping>
             <mapping>
                 <domain>
+                    <source_node>/application/modules/module/moduleItem/moduleReference/moduleReferenceItem</source_node>
+                    <target_node>
+                        <if>
+                            <equals value="ObjMultimediaRef">../@name</equals>
+                        </if>
+                        <entity variable="object_image_assignment">
+                            <type>crm:E13_Attribute_Assignment</type>
+                            <instance_generator name="URIwithTypeIdAnd3Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">multimedia</arg>
+                                <arg name="level2" type="xpath">@uuid</arg>
+                                <arg name="level3" type="constant">assignment</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="constant">Assignment of order of multimedia item in relation to object item</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P140_assigned_attribute_to</relationship>
+                                <entity>
+                                    <type>crm:E36_Visual_Item</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">multimedia</arg>
+                                        <arg name="id" type="xpath">@uuid</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P177_assigned_property_of_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithCidocCrmId">
+                                        <arg name="id" type="constant">P1_is_identified_by</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>.</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P141_assigned</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>.</source_node>
+                        <target_node>
+                            <entity variable="object_image_order">
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="level1" type="constant">multimedia</arg>
+                                    <arg name="level2" type="xpath">@uuid</arg>
+                                    <arg name="level3" type="constant">order</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
                     <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
                     <target_node>
                         <if>
