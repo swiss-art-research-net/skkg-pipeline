@@ -2694,6 +2694,19 @@
                                     </instance_generator>
                                 </entity>
                             </additional>
+                            <additional>
+                                <relationship>crm:P16_used_specific_object</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">object</arg>
+                                        <arg name="id" type="xpath">../../@uuid</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
                         </entity>
                     </target_node>
                 </domain>
