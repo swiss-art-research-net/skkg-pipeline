@@ -72,6 +72,10 @@
                                 <arg name="text" type="xpath">if (virtualField[@name='ExhExhibitionVrt']/value/text()) then (virtualField[@name='ExhExhibitionVrt']/value/text()) else (@id)</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
+                            <label_generator name="prefLabel">
+                                <arg name="text" type="xpath">if (virtualField[@name='ExhExhibitionVrt']/value/text()) then (virtualField[@name='ExhExhibitionVrt']/value/text()) else (@id)</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
                             <additional>
                                 <relationship>crm:P2_has_type</relationship>
                                 <entity>
