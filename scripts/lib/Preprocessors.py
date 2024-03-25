@@ -53,8 +53,8 @@ class BasePreprocessor(Preprocessor):
         It parses the date values and adds the lower and upper date values to the XML element.
         """
         for dateField in dateFields:
-            datafield = root.find(f".//dataField[@name='{dateField}']")
-            if datafield is not None:
+            datafields = root.findall(f".//dataField[@name='{dateField}']")
+            for datafield in datafields:
                 value = datafield.find('value').text
                 parsedDate = parse(value)
                 if parsedDate is not None:

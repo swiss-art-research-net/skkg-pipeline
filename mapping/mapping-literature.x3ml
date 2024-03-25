@@ -962,5 +962,73 @@
                     </range>
                 </link>
             </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/dataField</source_node>
+                    <target_node>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="LitYearTxt">@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="daterange">@_preprocessed_type</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <entity>
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">publication</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@_preprocessed_dateLower</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P82a_begin_of_the_begin</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@_preprocessed_dateLower</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:date</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">.</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@_preprocessed_dateUpper</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P82b_end_of_the_end</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@_preprocessed_dateUpper</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:date</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">.</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
         </mappings>
         </x3ml>
