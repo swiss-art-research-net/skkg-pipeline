@@ -18,6 +18,7 @@ Usage:
 
 from abc import ABC, abstractmethod
 from sariDateParser.dateParser import parse
+from lib.DateUtils import convertEDTFdate
 import xml.etree.ElementTree as ET
 
 class Preprocessor(ABC):
@@ -26,6 +27,9 @@ class Preprocessor(ABC):
         pass
 
 class BasePreprocessor(Preprocessor):
+
+    PREFIX = '_preprocessed_'
+
     def preprocess(self, content: str) -> str:
         return content.replace('xmlns="http://www.zetcom.com/ria/ws/module"', '')
     
@@ -41,7 +45,11 @@ class BasePreprocessor(Preprocessor):
             if datafield is not None:
                 value = datafield.find('value').text
                 parsedDate = parse(value)
-                print(value, parsedDate)
+                if parsedDate is not None:
+                    daterange = convertEDTFdate(parsedDate)
+                    datafield.set(f'{self.PREFIX}type', 'daterange')
+                    datafield.set(f'{self.PREFIX}dateLower', daterange['lower'])
+                    datafield.set(f'{self.PREFIX}dateUpper', daterange['upper'])
         return root
 class LiteraturePreprocessor(BasePreprocessor):
     def preprocess(self, content: str) -> str:
