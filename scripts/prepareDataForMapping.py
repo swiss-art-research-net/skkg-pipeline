@@ -16,7 +16,7 @@ Arguments:
 """
 
 import argparse
-import lib.Preprocessors as Preprocessors
+from lib.Preprocessors import Preprocessors
 from datetime import datetime
 from os import listdir
 from os.path import join, isfile

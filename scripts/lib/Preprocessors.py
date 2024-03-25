@@ -17,6 +17,7 @@ Usage:
 """
 
 from abc import ABC, abstractmethod
+import xml.etree.ElementTree as ET
 
 class Preprocessor(ABC):
     @abstractmethod
@@ -27,24 +28,39 @@ class BasePreprocessor(Preprocessor):
     def preprocess(self, content: str) -> str:
         return content.replace('xmlns="http://www.zetcom.com/ria/ws/module"', '')
     
+    def dumpXML(self, root: ET.Element) -> str:
+        return ET.tostring(root, encoding='unicode')
+
+    def parseXML(self, content: str) -> ET.Element:
+        return ET.fromstring(content)
+    
+    def processDateFields(self, root: ET.Element, dateFields: list) -> ET.Element:
+        for dateField in dateFields:
+            datafield = root.find(f".//dataField[@name='{dateField}']")
+            if datafield is not None:
+                value = datafield.find('value').text
+                print(f"Found  {dateField}: {value}")
+        return root
+    
 class LiteraturePreprocessor(BasePreprocessor):
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
-        # Add literature-specific preprocessing steps here
-        return content
-
+        root = super().parseXML(content)
+        dateFields = ['LitYearTxt']
+        root = super().processDateFields(root, dateFields)
+        return super().dumpXML(root)
+    
 class ObjectPreprocessor(BasePreprocessor):
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
-        # Add object-specific preprocessing steps here
         return content
     
 class Preprocessors:
     @staticmethod
     def getPreprocessor(module: str) -> Preprocessor:
-        if module == 'literature':
+        if module == 'Literature':
             return LiteraturePreprocessor()
-        elif module == 'object':
+        elif module == 'Object':
             return ObjectPreprocessor()
         else:
             return BasePreprocessor()
