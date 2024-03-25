@@ -17,6 +17,7 @@ Usage:
 """
 
 from abc import ABC, abstractmethod
+from sariDateParser.dateParser import parse
 import xml.etree.ElementTree as ET
 
 class Preprocessor(ABC):
@@ -39,9 +40,9 @@ class BasePreprocessor(Preprocessor):
             datafield = root.find(f".//dataField[@name='{dateField}']")
             if datafield is not None:
                 value = datafield.find('value').text
-                print(f"Found  {dateField}: {value}")
+                parsedDate = parse(value)
+                print(value, parsedDate)
         return root
-    
 class LiteraturePreprocessor(BasePreprocessor):
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
