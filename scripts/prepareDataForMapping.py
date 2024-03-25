@@ -52,7 +52,7 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, filenamePrefix='
     else:
         print(f"Prepared {len(filesToMap)} {module} items for mapping")
 
-def prepareFileForMapping(*, file, inputFolder, outputFolder, preprocessor):=
+def prepareFileForMapping(*, file, inputFolder, outputFolder, preprocessor):
     with open(join(inputFolder, file), 'r') as f:
         with open(join(outputFolder, file), 'w') as g:
             contents = f.read()
