@@ -16,6 +16,7 @@ Arguments:
 """
 
 import argparse
+import lib.Preprocessors as Preprocessors
 from datetime import datetime
 from os import listdir
 from os.path import join, isfile
@@ -40,23 +41,25 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, filenamePrefix='
     else:
         offset = int(offset)
 
+    preprocessor = Preprocessors.getPreprocessor(module)
+
     for file in files[offset:offset+limit]:
         if ids is not None or shouldBeMapped(file=file, metadata=metadata):
             filesToMap.append(file)
-            prepareFileForMapping(file=file, inputFolder=inputFolder, outputFolder=outputFolder)
+            prepareFileForMapping(file=file, inputFolder=inputFolder, outputFolder=outputFolder, preprocessor=preprocessor)
     if len(filesToMap) < limit:
         print(f"Prepared {len(filesToMap)} {module} items for mapping. {limit - len(filesToMap)} items do not need to be mapped.")
     else:
         print(f"Prepared {len(filesToMap)} {module} items for mapping")
 
-def prepareFileForMapping(*, file, inputFolder, outputFolder):
+def prepareFileForMapping(*, file, inputFolder, outputFolder, preprocessor):
     # TODO: This function currently only copies the file from the input folder to the output folder,
     # removing the XML namespace for compatibility with the X3ML mapping.
     # Later on this function will also take care of preprocessing the data for mapping.
     with open(join(inputFolder, file), 'r') as f:
         with open(join(outputFolder, file), 'w') as g:
             contents = f.read()
-            contents = contents.replace('xmlns="http://www.zetcom.com/ria/ws/module"', '')
+            contents = preprocessor.preprocess(contents)
             g.write(contents)
 
 def shouldBeMapped(*, file, metadata):
