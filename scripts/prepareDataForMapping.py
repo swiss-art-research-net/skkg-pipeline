@@ -52,10 +52,7 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, filenamePrefix='
     else:
         print(f"Prepared {len(filesToMap)} {module} items for mapping")
 
-def prepareFileForMapping(*, file, inputFolder, outputFolder, preprocessor):
-    # TODO: This function currently only copies the file from the input folder to the output folder,
-    # removing the XML namespace for compatibility with the X3ML mapping.
-    # Later on this function will also take care of preprocessing the data for mapping.
+def prepareFileForMapping(*, file, inputFolder, outputFolder, preprocessor):=
     with open(join(inputFolder, file), 'r') as f:
         with open(join(outputFolder, file), 'w') as g:
             contents = f.read()
