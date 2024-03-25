@@ -1,17 +1,16 @@
 """
-We implement an Interface Preprocessor using the ABC module
-This interface will have the method preprocess that will take as an input the
-content of an XML file as a string and return the preprocessed content as a string.
-We will implement individual subclasses for each module item that will preprocess the data.
-There are preprocessing steps that are common to all modules, such as removing the XML namespace.
-These steps will be implemented in the base class, and the individual subclasses will implement
-the module-specific preprocessing steps. Not all modules will need module-specific preprocessing steps.
+This file contains the Preprocessor classes for the different modules. It contains a function
+that returns the appropriate preprocessor based on the module name.
 
-The Preprocessor class will have a static method getPreprocessor that will return the appropriate
-Preprocessor subclass based on the module name.
+The preprocess function in each preprocessor class takes the content of an input file as a string
+and returns the preprocessed content as a string.
+
+The preprocess function in the BasePreprocessor class contains the common preprocessing steps
+that are shared across all modules. If no specific preprocessor is found for a module, the
+BasePreprocessor is returned.
 
 Usage:
-    preprocessor = Preprocessors.getPreprocessor('item')
+    preprocessor = Preprocessors.getPreprocessor('Literature')
     preprocessedContent = preprocessor.preprocess(content)
 
 """
@@ -31,15 +30,28 @@ class BasePreprocessor(Preprocessor):
     PREFIX = '_preprocessed_'
 
     def preprocess(self, content: str) -> str:
+        """
+        Common preprocessing steps that are shared across all modules.
+        """
         return content.replace('xmlns="http://www.zetcom.com/ria/ws/module"', '')
     
     def dumpXML(self, root: ET.Element) -> str:
+        """
+        Return the XML content as a string.
+        """
         return ET.tostring(root, encoding='unicode')
 
     def parseXML(self, content: str) -> ET.Element:
+        """
+        Parse the XML content and return the root element.
+        """
         return ET.fromstring(content)
     
     def processDateFields(self, root: ET.Element, dateFields: list) -> ET.Element:
+        """
+        This function takes an XML root element and a list of field names that contain dates.
+        It parses the date values and adds the lower and upper date values to the XML element.
+        """
         for dateField in dateFields:
             datafield = root.find(f".//dataField[@name='{dateField}']")
             if datafield is not None:
@@ -52,6 +64,9 @@ class BasePreprocessor(Preprocessor):
                     datafield.set(f'{self.PREFIX}dateUpper', daterange['upper'])
         return root
 class LiteraturePreprocessor(BasePreprocessor):
+    """
+    Preprocessor for the Literature module.
+    """
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
         root = super().parseXML(content)
@@ -60,6 +75,9 @@ class LiteraturePreprocessor(BasePreprocessor):
         return super().dumpXML(root)
     
 class ObjectPreprocessor(BasePreprocessor):
+    """
+    Preprocessor for the Object module.
+    """
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
         return content
@@ -67,6 +85,9 @@ class ObjectPreprocessor(BasePreprocessor):
 class Preprocessors:
     @staticmethod
     def getPreprocessor(module: str) -> Preprocessor:
+        """
+        Returns the appropriate preprocessor based on the module name.
+        """
         if module == 'Literature':
             return LiteraturePreprocessor()
         elif module == 'Object':

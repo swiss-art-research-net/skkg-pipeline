@@ -2,6 +2,9 @@ import time
 from edtf import parse_edtf
 
 def convertEDTFdate(date):
+    """
+    Convert an edtf date string to a dictionary with lower and upper date values.
+    """
     try:
         d = parse_edtf(downgradeEDTF(date))
     except:
