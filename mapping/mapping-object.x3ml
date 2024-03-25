@@ -40,6 +40,10 @@
                                 <arg name="text" type="xpath">if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@id)</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
+                            <label_generator name="prefLabel">
+                                <arg name="text" type="xpath">if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@id)</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
                         </entity>
                     </target_node>
                 </domain>
