@@ -1262,9 +1262,8 @@
                         <target_node>
                             <entity>
                                 <type>xs:gYear</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1287,9 +1286,8 @@
                         <target_node>
                             <entity>
                                 <type>xs:gYear</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>

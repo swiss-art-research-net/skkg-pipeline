@@ -47,13 +47,13 @@ class BasePreprocessor(Preprocessor):
         """
         return ET.fromstring(content)
     
-    def processDateFields(self, root: ET.Element, dateFields: list) -> ET.Element:
+    def processDateFields(self, root: ET.Element, dateFieldSelectors: list) -> ET.Element:
         """
-        This function takes an XML root element and a list of field names that contain dates.
+        This function takes an XML root element and a list of field selectors that contain dates.
         It parses the date values and adds the lower and upper date values to the XML element.
         """
-        for dateField in dateFields:
-            datafields = root.findall(f".//dataField[@name='{dateField}']")
+        for dateFieldSelector in dateFieldSelectors:
+            datafields = root.findall(dateFieldSelector)
             for datafield in datafields:
                 value = datafield.find('value').text
                 parsedDate = parse(value)
@@ -70,8 +70,8 @@ class LiteraturePreprocessor(BasePreprocessor):
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
         root = super().parseXML(content)
-        dateFields = ['LitYearTxt']
-        root = super().processDateFields(root, dateFields)
+        dateFieldSelectors = [".//dataField[@name='LitYearTxt']"]
+        root = super().processDateFields(root, dateFieldSelectors)
         return super().dumpXML(root)
     
 class ObjectPreprocessor(BasePreprocessor):
