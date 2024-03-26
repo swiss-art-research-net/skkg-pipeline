@@ -2022,7 +2022,7 @@
                                     <arg name="level2" type="xpath">@seqNo</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">concat("production ", @seqNo, " of object ", concat('metadata for object ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid)))</arg>
+                                    <arg name="text" type="xpath">concat("production ", @seqNo, " of object ", if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
                             </entity>
