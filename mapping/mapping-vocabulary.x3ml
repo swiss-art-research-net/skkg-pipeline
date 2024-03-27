@@ -175,5 +175,139 @@
                     </range>
                 </link>
             </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/collection/node</source_node>
+                    <target_node>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="ObjDatePeriodVgr">instance/@logicalName</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="0;0">@logicalName</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
+                        </if>
+                        <entity variable="node">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">instance/@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@logicalName</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P82a_begin_of_the_begin</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@logicalName</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:gYear</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">if (starts-with(substring-before(.,';'), '-'))
+then (
+    concat('-', 
+        if (string-length(substring(substring-before(.,';'), 2)) = 4)
+        then (substring(substring-before(.,';'), 2))
+        else 
+            if (string-length(substring(substring-before(.,';'), 2)) = 3)
+            then (concat('0', substring(substring-before(.,';'), 2)))
+            else 
+                if (string-length(substring(substring-before(.,';'), 2)) = 2)
+                then (concat('00', substring(substring-before(.,';'), 2)))
+                else 
+                    if (string-length(substring(substring-before(.,';'), 2)) = 1)
+                    then (concat('000', substring(substring-before(.,';'), 2)))
+                    else ('Invalid length')
+    )
+)
+else ( 
+    if (string-length(substring-before(.,';')) = 4)
+    then (substring-before(.,';'))
+    else 
+        if (string-length(substring-before(.,';')) = 3)
+        then (concat('0', substring-before(.,';')))
+        else 
+            if (string-length(substring-before(.,';')) = 2)
+            then (concat('00', substring-before(.,';')))
+            else 
+                if (string-length(substring-before(.,';')) = 1)
+                then (concat('000', substring-before(.,';')))
+                else ('Invalid length')
+)
+</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@logicalName</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P82b_end_of_the_end</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@logicalName</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:gYear</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">if (starts-with(substring-after(., ';'), '-'))
+then (
+    concat(
+        '-',
+        if (string-length(substring(substring-after(., ';'), 2)) = 4)
+        then (substring(substring-after(., ';'), 2))
+        else 
+            if (string-length(substring(substring-after(., ';'), 2)) = 3)
+            then (concat('0', substring(substring-after(., ';'), 2)))
+            else 
+                if (string-length(substring(substring-after(., ';'), 2)) = 2)
+                then (concat('00', substring(substring-after(., ';'), 2)))
+                else 
+                    if (string-length(substring(substring-after(., ';'), 2)) = 1)
+                    then (concat('000', substring(substring-after(., ';'), 2)))
+                    else ('Invalid length')
+    )
+)
+else ( 
+    if (string-length(substring-after(., ';')) = 4)
+    then (substring-after(., ';'))
+    else 
+        if (string-length(substring-after(., ';')) = 3)
+        then (concat('0', substring-after(., ';')))
+        else 
+            if (string-length(substring-after(., ';')) = 2)
+            then (concat('00', substring-after(., ';')))
+            else 
+                if (string-length(substring-after(., ';')) = 1)
+                then (concat('000', substring-after(., ';')))
+                else ('Invalid length')
+)
+</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
         </mappings>
         </x3ml>
