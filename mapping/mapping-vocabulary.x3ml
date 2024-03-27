@@ -34,7 +34,7 @@
                             <type>crm:E55_Type</type>
                             <type>skos:Concept</type>
                             <type>skkg:Type</type>
-                            <instance_generator name="URIwithTypeIdAnd1Level">
+                            <instance_generator name="URIwithTypeIdAnd1Level_dashed">
                                 <arg name="type" type="constant">type</arg>
                                 <arg name="id" type="xpath">instance/@id</arg>
                                 <arg name="level1" type="xpath">@id</arg>
@@ -143,7 +143,7 @@
                             <entity>
                                 <type>crm:E55_Type</type>
                                 <type>skos:Concept</type>
-                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                <instance_generator name="URIwithTypeIdAnd1Level_dashed">
                                     <arg name="type" type="constant">type</arg>
                                     <arg name="id" type="xpath">../../instance/@id</arg>
                                     <arg name="level1" type="xpath">@nodeId</arg>
@@ -195,7 +195,7 @@
                         </if>
                         <entity variable="node">
                             <type>crm:E52_Time-Span</type>
-                            <instance_generator name="URIwithTypeIdAnd1Level">
+                            <instance_generator name="URIwithTypeIdAnd1Level_dashed">
                                 <arg name="type" type="constant">type</arg>
                                 <arg name="id" type="xpath">instance/@id</arg>
                                 <arg name="level1" type="xpath">@id</arg>
