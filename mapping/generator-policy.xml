@@ -39,6 +39,26 @@
 		<pattern>{type}/{id}/{level1}/{level2}/{level3}/{level4}/{level5}</pattern>
 	</generator>
 
+	<generator name="URIwithTypeIdAnd1Level_dashed" prefix="resource">
+		<pattern>{type}/{id}-{level1}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd2Levels_dashed" prefix="resource">
+		<pattern>{type}/{id}-{level1}-{level2}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd3Levels_dashed" prefix="resource">
+		<pattern>{type}/{id}-{level1}-{level2}-{level3}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd4Levels_dashed" prefix="resource">
+		<pattern>{type}/{id}-{level1}-{level2}-{level3}-{level4}</pattern>
+	</generator>
+
+	<generator name="URIwithTypeIdAnd5Levels_dashed" prefix="resource">
+		<pattern>{type}/{id}-{level1}-{level2}-{level3}-{level4}-{level5}</pattern>
+	</generator>
+
 	<generator name="URIwithTypeAnId_IdHashed" prefix="resource">
 		<custom generatorClass="gr.forth.MultiHashingGenerator">
 			<set-arg name="type"/>
