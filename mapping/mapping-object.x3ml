@@ -23,6 +23,11 @@
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
             <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
             <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+            <namespace uri="https://data.skkg.ch/object/" prefix="object"/>
+            <namespace uri="https://data.skkg.ch/type/" prefix="type"/>
+            <namespace uri="https://data.skkg.ch/timespan/" prefix="timespan"/>
+            <namespace uri="https://data.skkg.ch/multimedia/" prefix="multimedia"/>
+            <namespace uri="https://data.skkg.ch/person/" prefix="person"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -484,7 +489,14 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="part_of">vocabularyReference[@name="TypeAVoc"][@instanceName="ObjObjectTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                <and>
+                                    <if>
+                                        <equals value="ObjObjectARef">../@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="part_of">vocabularyReference[@name='TypeAVoc']/vocabularyReferenceItem/@name</equals>
+                                    </if>
+                                </and>
                             </if>
                             <relationship>crm:P46i_forms_part_of</relationship>
                         </target_relation>
