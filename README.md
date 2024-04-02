@@ -20,9 +20,15 @@ Please note that we cannot be responsible for any issues or damages resulting fr
 
 Prerequisites: [Docker](http://docker.io) including Docker Compose
 
-Copy and (if required) edit the .env.example
+Copy and (if required) edit the `.env.example`
 ```sh
 cp .env.example .env
+```
+
+If using the S3 storage, copy and edit the `credentials.example` file in `secrets/aws`
+
+```sh
+cp secrets/aws/credentials.example secrets/aws/credentials
 ```
 
 Run the project with
