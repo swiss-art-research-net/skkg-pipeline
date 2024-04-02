@@ -821,9 +821,9 @@ tasks:
         numfiles=$(find {{.INPUTFOLDER}} -type f -name '*.ttl' | wc -l)
         count=1
         for f in $(find {{.INPUTFOLDER}} -type f -name '*.ttl' ); do
-          uri=$(grep -oPm 1 '(<{{.NAMESPACE}})[0-9]+>' $f) 
-          # Strip < and > at beginning and end of uri
-          graph=${uri:1:-1}
+          uri=$(grep -oPm 1 '(<{{.NAMESPACE}})[0-9]+' $f) 
+          # Strip < at beginning and end of uri
+            graph=${uri:1}
           echo -e "Ingesting vocabulary $graph ($count of $numfiles)"
           # Drop graph
           curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" > /dev/null
