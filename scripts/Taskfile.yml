@@ -49,15 +49,6 @@ tasks:
       - rm -f {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl
       - echo "Data dump created at {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl.gz"
 
-
-  retrieve-iiif-data:
-    desc: Downloads and prepares data related to the IIIF images
-    vars:
-      OUTPUTFOLDER: /data/source/iiif
-    cmds:
-      - mkdir -p {{.OUTPUTFOLDER}}
-      - python /scripts/retrieveIiifData.py --input $IIIF_CSV_URL --outputFolder {{.OUTPUTFOLDER}} --filename iiifPaths
-
   download-source-items:
     desc: Downloads all item records from MuseumPlus
     cmds:
@@ -528,6 +519,14 @@ tasks:
     cmds:
       - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}}
 
+  retrieve-iiif-data:
+    desc: Downloads and prepares data related to the IIIF images
+    vars:
+      OUTPUTFOLDER: /data/source/iiif
+    cmds:
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - python /scripts/retrieveIiifData.py --input $IIIF_CSV_URL --outputFolder {{.OUTPUTFOLDER}} --filename iiifPaths
+ 
   reset:
     desc: Delete all artefacts produced by the pipeline.
     prompt: This will delete all artefacts produced by the pipeline... Do you want to continue?
