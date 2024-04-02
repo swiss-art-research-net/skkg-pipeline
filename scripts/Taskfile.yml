@@ -454,11 +454,13 @@ tasks:
   push-latest-data-dump:
     desc: Upload latest data dump to S3 endpoint for data sharing
     vars:
-      FILENAME:
+      FILEPATH:
         sh: echo "$(ls -t {{.OUTPUTFOLDER_DUMP}}/*.ttl.gz | head -1)"
+      FILENAME:
+        sh: echo "$(basename {{.FILEPATH}})"
     cmds:
-      - echo "Uploading {{.FILENAME}} to S3 bucket $S3_BUCKET_PUSH..."
-      - aws s3 cp "{{.FILENAME}}" s3://$S3_BUCKET_PUSH/{{.FILENAME}}
+      - echo "Uploading {{.FILEPATH}} to S3 bucket $S3_BUCKET_PUSH..."
+      - aws s3 cp "{{.FILEPATH}}" s3://$S3_BUCKET_PUSH/{{.FILENAME}}
   
   recreate-folder-metadata:
     desc: Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
