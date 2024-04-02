@@ -2711,7 +2711,7 @@
                             <additional>
                                 <relationship>crm:P16_used_specific_object</relationship>
                                 <entity>
-                                    <type>crm:E55_Type</type>
+                                    <type>crm:E22_Human-Made_Object</type>
                                     <instance_info>
                                         <constant/>
                                     </instance_info>
