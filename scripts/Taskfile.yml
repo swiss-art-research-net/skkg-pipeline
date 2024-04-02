@@ -10,7 +10,6 @@ vars:
   MAPPING_BATCH_SIZE: 10
   NAMESPACE: https://data.skkg.ch/
   OUTPUTFOLDER_DUMP: /data/ttl/dump
-  DUMPS_TO_KEEP: 5
 
 output: 'prefixed'
 
@@ -50,7 +49,7 @@ tasks:
       - gzip -c {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz
       - rm -f {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
       - # Remove old dumps
-      - ls -t {{.OUTPUTFOLDER_DUMP}}/dump-*.ttl.gz | tail -n +$(({{.DUMPS_TO_KEEP}}+1)) | xargs rm -f
+      - ls -t {{.OUTPUTFOLDER_DUMP}}/dump-*.ttl.gz | tail -n +$(($NUMBER_OF_DUMPS_TO_KEEP+1)) | xargs rm -f
       - echo "Data dump created at {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz"
 
   download-source-items:
