@@ -449,6 +449,14 @@ tasks:
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
       - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
 
+  push-latest-data-dump:
+    desc: Upload latest data dump to S3 endpoint for data sharing
+    vars:
+      FILENAME:
+        sh: echo "$(ls -t {{.OUTPUTFOLDER_DUMP}}/*.ttl.gz | head -1)"
+    cmds:
+      - echo "Uploading {{.FILENAME}} to S3"
+  
   recreate-folder-metadata:
     desc: Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
     interactive: True
