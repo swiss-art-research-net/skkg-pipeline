@@ -37,14 +37,18 @@ tasks:
     vars:
       OUTPUTFOLDER: /data/ttl/dump
       FILENAME:
-        sh: echo dump-$(date -u "+%Y-%m-%d-%H-%M-%S").ttl
+        sh: echo dump-$(date -u "+%Y-%m-%d-%H-%M-%S")
     cmds:
       - mkdir -p {{.OUTPUTFOLDER}}
       - rm -f {{.OUTPUTFOLDER}}/*.ttl
       - find /data/ttl/main/ -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER}}/temp.ttl
-      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER}}/temp.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}
-      - grep -v "^@prefix" {{.OUTPUTFOLDER}}/temp.ttl >> {{.OUTPUTFOLDER}}/{{.FILENAME}}
+      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER}}/temp.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl
+      - grep -v "^@prefix" {{.OUTPUTFOLDER}}/temp.ttl >> {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl
       - rm -f {{.OUTPUTFOLDER}}/temp.ttl
+      - gzip -c {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl.gz
+      - rm -f {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl
+      - echo "Data dump created at {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl.gz"
+
 
   retrieve-iiif-data:
     desc: Downloads and prepares data related to the IIIF images
