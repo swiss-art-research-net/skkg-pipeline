@@ -9,6 +9,7 @@ vars:
   GENERATOR_POLICY: /mapping/generator-policy.xml
   MAPPING_BATCH_SIZE: 10
   NAMESPACE: https://data.skkg.ch/
+  OUTPUTFOLDER_DUMP: /data/ttl/dump
 
 output: 'prefixed'
 
@@ -39,15 +40,15 @@ tasks:
       FILENAME:
         sh: echo dump-$(date -u "+%Y-%m-%d-%H-%M-%S")
     cmds:
-      - mkdir -p {{.OUTPUTFOLDER}}
-      - rm -f {{.OUTPUTFOLDER}}/*.ttl
-      - find /data/ttl/main/ -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER}}/temp.ttl
-      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER}}/temp.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl
-      - grep -v "^@prefix" {{.OUTPUTFOLDER}}/temp.ttl >> {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl
-      - rm -f {{.OUTPUTFOLDER}}/temp.ttl
-      - gzip -c {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl.gz
-      - rm -f {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl
-      - echo "Data dump created at {{.OUTPUTFOLDER}}/{{.FILENAME}}.ttl.gz"
+      - mkdir -p {{.OUTPUTFOLDER_DUMP}}
+      - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
+      - find /data/ttl/main/ -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER_DUMP}}/temp.ttl
+      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER_DUMP}}/temp.ttl > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - grep -v "^@prefix" {{.OUTPUTFOLDER_DUMP}}/temp.ttl >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - rm -f {{.OUTPUTFOLDER_DUMP}}/temp.ttl
+      - gzip -c {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz
+      - rm -f {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - echo "Data dump created at {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz"
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus
