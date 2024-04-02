@@ -50,7 +50,7 @@ tasks:
       - gzip -c {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz
       - rm -f {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
       - # Remove old dumps
-      - ls -t {{.OUTPUTFOLDER_DUMP}}/dump-*.ttl.gz | tail -n +{{.DUMPS_TO_KEEP}} | xargs rm
+      - ls -t {{.OUTPUTFOLDER_DUMP}}/dump-*.ttl.gz | tail -n +$(({{.DUMPS_TO_KEEP}}+1)) | xargs rm -f
       - echo "Data dump created at {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz"
 
   download-source-items:
