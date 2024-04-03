@@ -1273,7 +1273,7 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>xs:gYear</type>
+                                <type>xsd:gYear</type>
                                 <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
                                 </instance_generator>
@@ -1297,7 +1297,7 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>xs:gYear</type>
+                                <type>xsd:gYear</type>
                                 <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
                                 </instance_generator>
