@@ -147,6 +147,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
+          MODULE: Address
           INPUTFILES: /data/source/address/address-item-3a7892e0-9d41-4561-9595-42070e0b9e66.xml /data/source/address/address-item-287ee736-19da-4806-a722-c3e389ab8c4a.xml /data/source/address/address-item-0a4ea0e2-f98f-4966-a0df-ab159620d3bf.xml
 
   generate-example-record-exhibition:
