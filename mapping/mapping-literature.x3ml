@@ -40,6 +40,10 @@
                                 <arg name="text" type="xpath">if (virtualField[@name='LitLiteratureVrt']/value/text()) then (virtualField[@name='LitLiteratureVrt']/value/text()) else (@id)</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
+                            <label_generator name="prefLabel">
+                                <arg name="text" type="xpath">if (virtualField[@name='LitLiteratureVrt']/value/text()) then (virtualField[@name='LitLiteratureVrt']/value/text()) else (@id)</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
                         </entity>
                     </target_node>
                 </domain>
@@ -101,9 +105,67 @@
                                         <equals value="LitYearTxt">@name</equals>
                                     </if>
                                     <if>
+                                        <equals value="4">string-length(value/text())</equals>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>frbroo:R24i_was_created_through</relationship>
+                            <entity>
+                                <type>frbroo:F30_Publication_Event</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">publication</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat("Publication of: ", ../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P4_has_time-span</relationship>
+                            <entity>
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">publication</arg>
+                                    <arg name="level2" type="constant">date</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat("Publication date of: ", ../virtualField[@name='LitLiteratureVrt']/value/text())</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P82_at_some_time_within</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:gYear</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="LitYearTxt">@name</equals>
+                                    </if>
+                                    <if>
                                         <not>
                                             <if>
-                                                <equals value="o. J.">value/text()</equals>
+                                                <equals value="4">string-length(value/text())</equals>
                                             </if>
                                         </not>
                                     </if>
@@ -143,7 +205,7 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>xsd:gYear</type>
+                                <type>rdfs:literal</type>
                                 <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
                                 </instance_generator>
@@ -898,6 +960,74 @@
                                 <instance_generator name="Literal">
                                     <arg name="text" type="xpath">value/text()</arg>
                                     <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/dataField</source_node>
+                    <target_node>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="LitYearTxt">@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="daterange">@_preprocessed_type</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <entity>
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">publication</arg>
+                                <arg name="level2" type="constant">date</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@_preprocessed_dateLower</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P82a_begin_of_the_begin</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@_preprocessed_dateLower</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:date</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">.</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@_preprocessed_dateUpper</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P82b_end_of_the_end</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@_preprocessed_dateUpper</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:date</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">.</arg>
                                 </instance_generator>
                             </entity>
                         </target_node>

@@ -17,6 +17,9 @@ RUN mkdir x3ml
 RUN wget https://github.com/isl/x3ml/releases/download/1.9.4/x3ml-engine-1.9.4-exejar.jar
 RUN mv x3ml-engine-1.9.4-exejar.jar x3ml/x3ml-engine.exejar
 
+# Install AWS CLI
+RUN pip --no-cache-dir install --upgrade awscli
+
 # Install task runner (http://taskfile.dev)
 RUN sh -c "$(curl -ssL https://taskfile.dev/install.sh)" -- -d
 

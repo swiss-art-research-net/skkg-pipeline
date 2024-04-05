@@ -9,6 +9,7 @@ vars:
   GENERATOR_POLICY: /mapping/generator-policy.xml
   MAPPING_BATCH_SIZE: 10
   NAMESPACE: https://data.skkg.ch/
+  OUTPUTFOLDER_DUMP: /data/ttl/dump
 
 output: 'prefixed'
 
@@ -37,22 +38,21 @@ tasks:
     vars:
       OUTPUTFOLDER: /data/ttl/dump
       FILENAME:
-        sh: echo dump-$(date -u "+%Y-%m-%d-%H-%M-%S").ttl
+        sh: echo dump-$(date -u "+%Y-%m-%d-%H-%M-%S")
     cmds:
-      - mkdir -p {{.OUTPUTFOLDER}}
-      - rm -f {{.OUTPUTFOLDER}}/*.ttl
-      - find /data/ttl/main/ -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER}}/temp.ttl
-      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER}}/temp.ttl > {{.OUTPUTFOLDER}}/{{.FILENAME}}
-      - grep -v "^@prefix" {{.OUTPUTFOLDER}}/temp.ttl >> {{.OUTPUTFOLDER}}/{{.FILENAME}}
-      - rm -f {{.OUTPUTFOLDER}}/temp.ttl
-
-  retrieve-iiif-data:
-    desc: Downloads and prepares data related to the IIIF images
-    vars:
-      OUTPUTFOLDER: /data/source/iiif
-    cmds:
-      - mkdir -p {{.OUTPUTFOLDER}}
-      - python /scripts/retrieveIiifData.py --input $IIIF_CSV_URL --outputFolder {{.OUTPUTFOLDER}} --filename iiifPaths
+      - mkdir -p {{.OUTPUTFOLDER_DUMP}}
+      - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
+      - find /data/ttl/main/ -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER_DUMP}}/temp.ttl
+      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.OUTPUTFOLDER_DUMP}}/temp.ttl > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - grep -v "^@prefix" {{.OUTPUTFOLDER_DUMP}}/temp.ttl >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - rm -f {{.OUTPUTFOLDER_DUMP}}/temp.ttl
+      - gzip -c {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz
+      - rm -f {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - # Remove old dumps if NUMBER_OF_DUMPS_TO_KEEP is set
+      - if [ -n "$NUMBER_OF_DUMPS_TO_KEEP" ]; then
+          ls -t {{.OUTPUTFOLDER_DUMP}}/dump-*.ttl.gz | tail -n +$(($NUMBER_OF_DUMPS_TO_KEEP+1)) | xargs rm -f;
+        fi
+      - echo "Data dump created at {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz"
 
   download-source-items:
     desc: Downloads all item records from MuseumPlus
@@ -157,6 +157,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
+          MODULE: Exhibition
           INPUTFILES: /data/source/exhibition/exhibition-item-53b63629-5c82-4614-aecc-7bf3075778a7.xml /data/source/exhibition/exhibition-item-4.xml
   
   generate-example-record-object:
@@ -167,6 +168,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
+          MODULE: Object
           INPUTFILES: /data/source/object/object-item-c6b149c2-f809-4d8c-8dc9-70acb24e0070.xml /data/source/object/object-item-3412c1a2-3c87-462a-8943-34aede5dcf5a.xml /data/source/object/object-item-2a0c8fab-5771-496c-9350-5482f50c93e2.xml /data/source/object/object-item-0a5b9c6a-2d1d-43c5-b833-6975ddfa7ded.xml /data/source/object/object-item-3c7215d0-3aba-4bb8-98e6-5da239ab0a64.xml /data/source/object/object-item-0b17827d-117b-42b7-9925-0731f6db779b.xml /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
   
   generate-example-record-literature:
@@ -177,7 +179,8 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
-          INPUTFILES: /data/source/literature/literature-item-a6fda927-827b-4824-8cfc-2f91dcea74f8.xml /data/source/literature/literature-item-118.xml /data/source/literature/literature-item-0a1ab550-dabb-4afd-be17-f0f43725be33.xml /data/source/literature/literature-item-0b7ee850-6fd8-45ba-af19-267548c9c4cf.xml
+          MODULE: Literature
+          INPUTFILES: /data/source/literature/literature-item-a50e1a84-367c-4a9f-8357-ebc4fe29badc.xml /data/source/literature/literature-item-710a0732-993d-4d4e-8611-5fe1714c2385.xml /data/source/literature/literature-item-0b6b164a-d7d2-4c58-8f94-9dcf2eb6a9dc.xml /data/source/literature/literature-item-a6fda927-827b-4824-8cfc-2f91dcea74f8.xml /data/source/literature/literature-item-118.xml /data/source/literature/literature-item-0a1ab550-dabb-4afd-be17-f0f43725be33.xml /data/source/literature/literature-item-0b7ee850-6fd8-45ba-af19-267548c9c4cf.xml
   
   generate-example-record-multimedia:
     desc: Generates an example Multimedia record for developing the mapping in the X3ML editor
@@ -187,6 +190,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
+          MODULE: Multimedia
           INPUTFILES: /data/source/multimedia/multimedia-item-08d26839-ab9f-4456-8010-69073551b7c5.xml /data/source/multimedia/multimedia-item-11252.xml /data/source/multimedia/multimedia-item-2270.xml /data/source/multimedia/multimedia-item-8727.xml
 
   generate-example-record-person:
@@ -197,6 +201,7 @@ tasks:
       - task: _generate-example-record
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
+          MODULE: Person
           INPUTFILES: /data/source/person/person-item-1111.xml /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
 
   generate-mapping-file-from-3m:
@@ -447,6 +452,17 @@ tasks:
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
       - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
 
+  push-latest-data-dump:
+    desc: Upload latest data dump to S3 endpoint for data sharing
+    vars:
+      FILEPATH:
+        sh: echo "$(ls -t {{.OUTPUTFOLDER_DUMP}}/*.ttl.gz | head -1)"
+      FILENAME:
+        sh: echo "$(basename {{.FILEPATH}})"
+    cmds:
+      - echo "Uploading {{.FILEPATH}} to S3 bucket $S3_BUCKET_PUSH..."
+      - aws s3 cp "{{.FILEPATH}}" s3://$S3_BUCKET_PUSH/{{.FILENAME}}
+  
   recreate-folder-metadata:
     desc: Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
     interactive: True
@@ -518,6 +534,14 @@ tasks:
     cmds:
       - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}}
 
+  retrieve-iiif-data:
+    desc: Downloads and prepares data related to the IIIF images
+    vars:
+      OUTPUTFOLDER: /data/source/iiif
+    cmds:
+      - mkdir -p {{.OUTPUTFOLDER}}
+      - python /scripts/retrieveIiifData.py --input $IIIF_CSV_URL --outputFolder {{.OUTPUTFOLDER}} --filename iiifPaths
+ 
   reset:
     desc: Delete all artefacts produced by the pipeline.
     prompt: This will delete all artefacts produced by the pipeline... Do you want to continue?
@@ -695,10 +719,11 @@ tasks:
   _generate-example-record:
     internal: true
     requires:
-      vars: [OUTPUTFILE, INPUTFILES]
+      vars: [OUTPUTFILE, INPUTFILES, MODULE]
     vars:
       OUTPUTFILE: "{{.OUTPUTFILE}}"
       INPUTFILES: "{{.INPUTFILES}}"
+      MODULE: "{{.MODULE}}"
     cmds:
       - cat {{.INPUTFILES}} > {{.OUTPUTFILE}}
       - sed -i 's/<application xmlns="http:\/\/www.zetcom.com\/ria\/ws\/module">//g' {{.OUTPUTFILE}}
@@ -706,6 +731,7 @@ tasks:
       - sed -i 's/<\/modules>//g' {{.OUTPUTFILE}}
       - sed -i 's/<\/application>//g' {{.OUTPUTFILE}}
       - echo '<application><modules>' | cat - {{.OUTPUTFILE}} > temp && mv temp {{.OUTPUTFILE}}; echo '</modules></application>' >> {{.OUTPUTFILE}}
+      - python /scripts/applyPreprocessingForExampleRecord.py --file {{.OUTPUTFILE}} --module {{.MODULE}}
 
   _ingest-data-from-file:
     internal: true
@@ -796,9 +822,9 @@ tasks:
         numfiles=$(find {{.INPUTFOLDER}} -type f -name '*.ttl' | wc -l)
         count=1
         for f in $(find {{.INPUTFOLDER}} -type f -name '*.ttl' ); do
-          uri=$(grep -oPm 1 '(<{{.NAMESPACE}})[0-9]+>' $f) 
-          # Strip < and > at beginning and end of uri
-          graph=${uri:1:-1}
+          uri=$(grep -oPm 1 '(<{{.NAMESPACE}})[0-9]+' $f) 
+          # Strip < at beginning and end of uri
+            graph=${uri:1}
           echo -e "Ingesting vocabulary $graph ($count of $numfiles)"
           # Drop graph
           curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" > /dev/null

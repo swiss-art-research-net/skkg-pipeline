@@ -41,6 +41,10 @@
                             <arg name="text" type="xpath">virtualField[@name='MulMultimediaVrt']/value/text()</arg>
                             <arg name="language" type="constant"/>
                         </label_generator>
+                        <label_generator name="prefLabel">
+                            <arg name="text" type="xpath">virtualField[@name='MulMultimediaVrt']/value/text()</arg>
+                            <arg name="language" type="constant"/>
+                        </label_generator>
                     </entity>
                 </target_node>
             </domain>

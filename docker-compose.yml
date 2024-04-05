@@ -41,7 +41,12 @@ services:
       - MUSEUMPLUS_URL=${MUSEUMPLUS_URL}
       - MUSEUMPLUS_USERNAME=${MUSEUMPLUS_USERNAME}
       - MUSEUMPLUS_PASSWORD=${MUSEUMPLUS_PASSWORD}
+      - NUMBER_OF_DUMPS_TO_KEEP=${NUMBER_OF_DUMPS_TO_KEEP}
       - IIIF_CSV_URL=${IIIF_CSV_URL}
+      - S3_BUCKET_PUSH=${S3_BUCKET_PUSH}
+    secrets:
+      - source: aws
+        target: /root/.aws/
     volumes:
       - ./data:/data
       - ./logs:/logs
@@ -65,7 +70,11 @@ services:
     volumes:
       - platform-data:/runtime-data
       - ./services/platform/apps:/apps
-        
+
+secrets:
+  aws:
+    file: ./secrets/aws
+
 volumes:
   blazegraph-data:
   blazegraph-data-secondary:
