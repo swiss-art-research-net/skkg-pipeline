@@ -80,6 +80,23 @@
                                         </label_generator>
                                     </entity>
                                 </additional>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300445020</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Corporate names</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Firma</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                             <relationship>crm:P190_has_symbolic_content</relationship>
                         </target_relation>
@@ -332,7 +349,7 @@
                                     <entity>
                                         <type>crm:E55_Type</type>
                                         <instance_generator name="URIwithAatId">
-                                            <arg name="id" type="constant"> 300445020 </arg>
+                                            <arg name="id" type="constant">300445020</arg>
                                         </instance_generator>
                                         <label_generator name="Literal">
                                             <arg name="text" type="constant">Corporate names</arg>
