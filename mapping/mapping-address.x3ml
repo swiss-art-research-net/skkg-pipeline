@@ -401,6 +401,26 @@
                                     <arg name="level1" type="constant">altname</arg>
                                     <arg name="level2" type="xpath">@uuid</arg>
                                 </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>alternative_name</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300264273</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">nonpreferred terms</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">alternativer Name</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                         </target_node>
                     </range>
