@@ -714,6 +714,10 @@
                                     <arg name="level1" type="constant">acquisition</arg>
                                     <arg name="level2" type="constant">reference</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('reference for acquisition of object: ', if (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
@@ -759,6 +763,45 @@
                                     <arg name="text" type="xpath">value/text()</arg>
                                     <arg name="language" type="constant"/>
                                 </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference/moduleReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ObjAcquisitionAddressRef">../@name</equals>
+                            </if>
+                            <relationship>crm:P24i_changed_ownership_through</relationship>
+                            <entity variable="object_acquisition">
+                                <type>crm:E8_Acquisition</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">acquisition</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P23_transferred_title_from</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReference/moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E39_Actor</type>
+                                <type>skkg:Address</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
