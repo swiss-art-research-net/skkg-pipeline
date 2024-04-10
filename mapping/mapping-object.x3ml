@@ -714,6 +714,10 @@
                                     <arg name="level1" type="constant">acquisition</arg>
                                     <arg name="level2" type="constant">reference</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('reference for acquisition of object: ', if (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
