@@ -1186,10 +1186,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1386,10 +1385,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1714,10 +1712,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2208,10 +2205,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2369,10 +2365,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2461,10 +2456,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2695,11 +2689,10 @@
                     <range>
                         <source_node>.</source_node>
                         <target_node>
-                            <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                            <entity variable="object_image_order_value">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">@seqNo</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
