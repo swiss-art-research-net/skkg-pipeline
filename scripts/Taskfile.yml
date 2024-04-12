@@ -170,7 +170,7 @@ tasks:
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           MODULE: Object
-          INPUTFILES: /data/source/object/object-item-c6b149c2-f809-4d8c-8dc9-70acb24e0070.xml /data/source/object/object-item-3412c1a2-3c87-462a-8943-34aede5dcf5a.xml /data/source/object/object-item-2a0c8fab-5771-496c-9350-5482f50c93e2.xml /data/source/object/object-item-0a5b9c6a-2d1d-43c5-b833-6975ddfa7ded.xml /data/source/object/object-item-3c7215d0-3aba-4bb8-98e6-5da239ab0a64.xml /data/source/object/object-item-0b17827d-117b-42b7-9925-0731f6db779b.xml /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
+          INPUTFILES: /data/source/object/object-item-0a5b480f-04d5-4053-840a-5185a2abda39.xml /data/source/object/object-item-0a4c577f-d3e3-4761-bc3c-b8143162780e.xml /data/source/object/object-item-c6b149c2-f809-4d8c-8dc9-70acb24e0070.xml /data/source/object/object-item-3412c1a2-3c87-462a-8943-34aede5dcf5a.xml /data/source/object/object-item-2a0c8fab-5771-496c-9350-5482f50c93e2.xml /data/source/object/object-item-0a5b9c6a-2d1d-43c5-b833-6975ddfa7ded.xml /data/source/object/object-item-3c7215d0-3aba-4bb8-98e6-5da239ab0a64.xml /data/source/object/object-item-0b17827d-117b-42b7-9925-0731f6db779b.xml /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
   
   generate-example-record-literature:
     desc: Generates an example Literature record for developing the mapping in the X3ML editor
