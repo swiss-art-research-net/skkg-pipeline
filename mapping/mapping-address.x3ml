@@ -514,7 +514,11 @@
                             <relationship>crm:P76_has_contact_point</relationship>
                             <entity variable="address">
                                 <type>crm:E42_Identifier</type>
-                                <instance_generator name="UUID"/>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                </instance_generator>
                             </entity>
                             <relationship>crm:P106_is_composed_of</relationship>
                             <entity>
@@ -558,6 +562,66 @@
                                     <arg name="text" type="xpath">value/text()</arg>
                                     <arg name="language" type="constant"/>
                                 </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P76_has_contact_point</relationship>
+                            <entity variable="address">
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">@name</arg>
+                                    <arg name="language" type="constant">de</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>country</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300387506</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Country</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Land</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                         </target_node>
                     </range>
