@@ -572,6 +572,9 @@
                             <relation>vocabularyReference/vocabularyReferenceItem</relation>
                         </source_relation>
                         <target_relation>
+                            <if>
+                                <equals value="AdrCountryVgr">../@instanceName</equals>
+                            </if>
                             <relationship>crm:P76_has_contact_point</relationship>
                             <entity variable="address">
                                 <type>crm:E42_Identifier</type>
