@@ -714,6 +714,10 @@
                                     <arg name="level1" type="constant">acquisition</arg>
                                     <arg name="level2" type="constant">reference</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('reference for acquisition of object: ', if (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
@@ -759,6 +763,45 @@
                                     <arg name="text" type="xpath">value/text()</arg>
                                     <arg name="language" type="constant"/>
                                 </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference/moduleReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ObjAcquisitionAddressRef">../@name</equals>
+                            </if>
+                            <relationship>crm:P24i_changed_ownership_through</relationship>
+                            <entity variable="object_acquisition">
+                                <type>crm:E8_Acquisition</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">acquisition</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P23_transferred_title_from</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReference/moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E39_Actor</type>
+                                <type>skkg:Address</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
@@ -1143,10 +1186,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1343,10 +1385,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1671,10 +1712,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2165,10 +2205,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2326,10 +2365,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2418,10 +2456,9 @@
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2652,11 +2689,10 @@
                     <range>
                         <source_node>.</source_node>
                         <target_node>
-                            <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                            <entity variable="object_image_order_value">
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">@seqNo</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -3264,6 +3300,64 @@
                                     <arg name="text" type="xpath">formattedValue/text()</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/moduleReference/moduleReferenceItem</source_node>
+                    <target_node>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="ObjObjectGroupsRef">../@name</equals>
+                                </if>
+                                <if>
+                                    <or>
+                                        <if>
+                                            <equals value="public">substring-after(formattedValue/text(),'_')</equals>
+                                        </if>
+                                        <if>
+                                            <equals value="Kooperationsprojekt Uni Basel">formattedValue/text()</equals>
+                                        </if>
+                                    </or>
+                                </if>
+                            </and>
+                        </if>
+                        <entity>
+                            <type>la:Set</type>
+                            <type>crm:E89_Propositional_Object</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">objectGroup</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">replace(formattedValue/text(),"_public","")</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@seqNo</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>la:has_member</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@seqNo</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E22_Human-Made_Object</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                </instance_generator>
                             </entity>
                         </target_node>
                     </range>
