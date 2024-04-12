@@ -569,6 +569,70 @@
                 <link>
                     <path>
                         <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrRegionTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P76_has_contact_point</relationship>
+                            <entity variable="address">
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                    <arg name="level2" type="constant">region</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>city</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300182722</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Region</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Region</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
                             <relation>vocabularyReference/vocabularyReferenceItem</relation>
                         </source_relation>
                         <target_relation>
