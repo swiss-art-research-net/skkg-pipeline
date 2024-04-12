@@ -3315,7 +3315,14 @@
                                     <equals value="ObjObjectGroupsRef">../@name</equals>
                                 </if>
                                 <if>
-                                    <equals value="public">substring-after(formattedValue/text(),'_')</equals>
+                                    <or>
+                                        <if>
+                                            <equals value="public">substring-after(formattedValue/text(),'_')</equals>
+                                        </if>
+                                        <if>
+                                            <equals value="Kooperationsprojekt Uni Basel">formattedValue/text()</equals>
+                                        </if>
+                                    </or>
                                 </if>
                             </and>
                         </if>
