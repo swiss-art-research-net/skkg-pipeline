@@ -60,7 +60,7 @@
 ###  https://ontology.skkg.ch/ObjectGroup
 <https://ontology.skkg.ch/ObjectGroup> rdf:type owl:Class ;
     rdfs:subClassOf <https://linked.art/ns/terms/Set> , <https://ontology.skkg.ch/Entity> ;
-    rdfs:label "ObjectGroup"@en, "Objektgruppe"@de .
+    rdfs:label "Object Group"@en, "Objektgruppe"@de .
 
 ###  https://ontology.skkg.ch/Person
 <https://ontology.skkg.ch/Person> rdf:type owl:Class ;
