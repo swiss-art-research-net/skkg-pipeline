@@ -16,6 +16,7 @@ Arguments:
 """
 
 import argparse
+from lib.Preprocessors import Preprocessors
 from datetime import datetime
 from os import listdir
 from os.path import join, isfile
@@ -40,23 +41,22 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, filenamePrefix='
     else:
         offset = int(offset)
 
+    preprocessor = Preprocessors.getPreprocessor(module)
+
     for file in files[offset:offset+limit]:
         if ids is not None or shouldBeMapped(file=file, metadata=metadata):
             filesToMap.append(file)
-            prepareFileForMapping(file=file, inputFolder=inputFolder, outputFolder=outputFolder)
+            prepareFileForMapping(file=file, inputFolder=inputFolder, outputFolder=outputFolder, preprocessor=preprocessor)
     if len(filesToMap) < limit:
-        print(f"Prepared {len(filesToMap)} files for mapping. {limit - len(filesToMap)} files do not need to be mapped.")
+        print(f"Prepared {len(filesToMap)} {module} items for mapping. {limit - len(filesToMap)} items do not need to be mapped.")
     else:
-        print(f"Prepared {len(filesToMap)} files for mapping")
+        print(f"Prepared {len(filesToMap)} {module} items for mapping")
 
-def prepareFileForMapping(*, file, inputFolder, outputFolder):
-    # TODO: This function currently only copies the file from the input folder to the output folder,
-    # removing the XML namespace for compatibility with the X3ML mapping.
-    # Later on this function will also take care of preprocessing the data for mapping.
+def prepareFileForMapping(*, file, inputFolder, outputFolder, preprocessor):
     with open(join(inputFolder, file), 'r') as f:
         with open(join(outputFolder, file), 'w') as g:
             contents = f.read()
-            contents = contents.replace('xmlns="http://www.zetcom.com/ria/ws/module"', '')
+            contents = preprocessor.preprocess(contents)
             g.write(contents)
 
 def shouldBeMapped(*, file, metadata):
@@ -72,15 +72,15 @@ def shouldBeMapped(*, file, metadata):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser = argparse.ArgumentParser(description = 'Prepare data for mapping')
-    parser.add_argument('--module', required= True, help='Name of the module to process the data form')
-    parser.add_argument('--inputFolder', required= True, help='Folder where the XML files are stored.')
-    parser.add_argument('--outputFolder', required= True, help='Folder to put the XML files that should be mapped.')
-    parser.add_argument('--limit', required= False, help='Limit the number of items to process.')
-    parser.add_argument('--offset', required= False, help='Offset the items to process.')
-    parser.add_argument('--ids', required= False, help='List of ids to process. If this argument is given, the script will ignore the limit and offset arguments.')
-    parser.add_argument('--filenamePrefix', required= False, help='Prefix to use for the filenames of the XML files. Required when using ids argument. Defaults to "item-"')
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(description='Prepare data for mapping', allow_abbrev=False)
+    parser.add_argument('--module', required=True, help='Name of the module to process the data form')
+    parser.add_argument('--inputFolder', required=True, help='Folder where the XML files are stored.')
+    parser.add_argument('--outputFolder', required=True, help='Folder to put the XML files that should be mapped.')
+    parser.add_argument('--limit', required=False, help='Limit the number of items to process.')
+    parser.add_argument('--offset', required=False, help='Offset the items to process.')
+    parser.add_argument('--ids', required=False, help='List of ids to process. If this argument is given, the script will ignore the limit and offset arguments.')
+    parser.add_argument('--filenamePrefix', required=False, help='Prefix to use for the filenames of the XML files. Required when using ids argument. Defaults to "item-"')
+    args, _ = parser.parse_known_args()
 
     if args.ids is not None:
         args.ids = args.ids.split(',')

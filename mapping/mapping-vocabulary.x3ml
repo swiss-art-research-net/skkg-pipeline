@@ -1,179 +1,313 @@
-
-<x3ml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" source_type="xpath" version="1.0" xsi:noNamespaceSchemaLocation="x3ml_v1.4.xsd" editor="3MEditor v3.3">
-    <namespaces>
-        <namespace prefix="resource" uri="https://data.skkg.ch/"/>
-        <namespace prefix="aat" uri="http://vocab.getty.edu/aat/" />
-        <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
-        <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
-        <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
-        <namespace prefix="dcterms" uri="http://purl.org/dc/terms/" />
-        <namespace prefix="frbroo" uri="http://iflastandards.info/ns/fr/frbr/frbroo/" />
-        <namespace prefix="gnd" uri="https://d-nb.info/gnd/"/>
-        <namespace prefix="la" uri="https://linked.art/ns/terms/"/>
-        <namespace prefix="loc" uri="http://id.loc.gov/vocabulary/relators/"/>
-        <namespace prefix="mets" uri="http://www.loc.gov/METS/"/>
-        <namespace prefix="mods" uri="http://www.loc.gov/mods/v3"/>
-        <namespace prefix="oai" uri="http://www.openarchives.org/OAI/2.0/"/>
-        <namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
-        <namespace prefix="rso" uri="http://www.researchspace.org/ontology/" />
-        <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
-        <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
-        <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/"/>
-        <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
-        <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
-        <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
-        <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
-        <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
-    </namespaces>
-    <mappings>
-        <mapping>
-            <domain>
-                <source_node>/collection/node</source_node>
-                <target_node>
-                    <entity variable="node">
-                        <type>crm:E55_Type</type>
-                        <type>skos:Concept</type>
-                        <type>skkg:Type</type>
-                        <instance_generator name="URIwithTypeIdAnd1Level">
-                            <arg name="type" type="constant">type</arg>
-                            <arg name="id" type="xpath">instance/@id</arg>
-                            <arg name="level1" type="xpath">@id</arg>
-                        </instance_generator>
-                    </entity>
-                </target_node>
-            </domain>
-            <link>
-                <path>
-                    <source_relation>
-                        <relation>terms/term/category</relation>
-                    </source_relation>
-                    <target_relation>
-                        <if>
-                            <equals value="preferred">@logicalName</equals>
-                        </if>
-                        <relationship>skos:prefLabel</relationship>
-                    </target_relation>
-                </path>
-                <range>
-                    <source_node>terms/term/category</source_node>
+<x3ml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" source_type="xpath" version="1.0" xsi:noNamespaceSchemaLocation="x3ml_v1.4.xsd" editor="3MEditor v3.3"><namespaces>
+            <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
+            <namespace prefix="resource" uri="https://data.skkg.ch/"/>
+            <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
+            <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
+            <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
+            <namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
+            <namespace prefix="frbroo" uri="http://iflastandards.info/ns/fr/frbr/frbroo/"/>
+            <namespace prefix="gnd" uri="https://d-nb.info/gnd/"/>
+            <namespace prefix="la" uri="https://linked.art/ns/terms/"/>
+            <namespace prefix="loc" uri="http://id.loc.gov/vocabulary/relators/"/>
+            <namespace prefix="mets" uri="http://www.loc.gov/METS/"/>
+            <namespace prefix="mods" uri="http://www.loc.gov/mods/v3"/>
+            <namespace prefix="oai" uri="http://www.openarchives.org/OAI/2.0/"/>
+            <namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <namespace prefix="rso" uri="http://www.researchspace.org/ontology/"/>
+            <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
+            <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
+            <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/en/sik:person-"/>
+            <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
+            <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
+            <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
+            <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
+            <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+            <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+        </namespaces>
+        <mappings>
+            <mapping>
+                <domain>
+                    <source_node>/collection/node</source_node>
                     <target_node>
-                        <entity variable="metadata">
-                            <type>rdf:Literal</type>
-                            <instance_generator name="Literal">
-                                <arg name="text" type="xpath">../content/text()</arg>
-                                <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
-                            </instance_generator>
-                        </entity>
-                    </target_node>
-                </range>
-            </link>
-            <link>
-                <path>
-                    <source_relation>
-                        <relation>instance</relation>
-                    </source_relation>
-                    <target_relation>
-                        <if>
-                            <not>
-                                <if>
-                                    <exists>../parents/parent/@nodeId</exists>
-                                </if>
-                            </not>
-                        </if>
-                        <relationship>crm:P127_has_broader_term</relationship>
-                    </target_relation>
-                </path>
-                <range>
-                    <source_node>instance</source_node>
-                    <target_node>
-                        <entity>
-                            <type>crm:E55_Type</type>
-                            <type>skos:ConceptScheme</type>
-                            <instance_generator name="URIwithTypeAndId">
-                                <arg name="type" type="constant">type</arg>
-                                <arg name="id" type="xpath">@id</arg>
-                            </instance_generator>
-                            <label_generator name="Literal">
-                                <arg name="text" type="xpath">@logicalName</arg>
-                                <arg name="language" type="constant"/>
-                            </label_generator>
-                        </entity>
-                    </target_node>
-                </range>
-            </link>
-            <link>
-                <path>
-                    <source_relation>
-                        <relation>instance</relation>
-                    </source_relation>
-                    <target_relation>
-                        <relationship>skos:inScheme</relationship>
-                    </target_relation>
-                </path>
-                <range>
-                    <source_node>instance</source_node>
-                    <target_node>
-                        <entity>
-                            <type>crm:E55_Type</type>
-                            <type>skos:ConceptScheme</type>
-                            <instance_generator name="URIwithTypeAndId">
-                                <arg name="type" type="constant">type</arg>
-                                <arg name="id" type="xpath">@id</arg>
-                            </instance_generator>
-                            <label_generator name="Literal">
-                                <arg name="text" type="xpath">@logicalName</arg>
-                                <arg name="language" type="constant"/>
-                            </label_generator>
-                        </entity>
-                    </target_node>
-                </range>
-            </link>
-            <link>
-                <path>
-                    <source_relation>
-                        <relation>parents/parent</relation>
-                    </source_relation>
-                    <target_relation>
-                        <relationship>crm:P127_has_broader_term</relationship>
-                    </target_relation>
-                </path>
-                <range>
-                    <source_node>parents/parent</source_node>
-                    <target_node>
-                        <entity>
+                        <entity variable="node">
                             <type>crm:E55_Type</type>
                             <type>skos:Concept</type>
+                            <type>skkg:Type</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
                                 <arg name="type" type="constant">type</arg>
-                                <arg name="id" type="xpath">../../instance/@id</arg>
-                                <arg name="level1" type="xpath">@nodeId</arg>
+                                <arg name="id" type="xpath">instance/@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
-                </range>
-            </link>
-            <link>
-                <path>
-                    <source_relation>
-                        <relation>terms/term/content</relation>
-                    </source_relation>
-                    <target_relation>
-                        <relationship>rdfs:label</relationship>
-                    </target_relation>
-                </path>
-                <range>
-                    <source_node>terms/term/content</source_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>terms/term/category</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="preferred">@logicalName</equals>
+                            </if>
+                            <relationship>skos:prefLabel</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>terms/term/category</source_node>
+                        <target_node>
+                            <entity variable="metadata">
+                                <type>rdf:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">../content/text()</arg>
+                                    <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>instance</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <not>
+                                    <if>
+                                        <exists>../parents/parent/@nodeId</exists>
+                                    </if>
+                                </not>
+                            </if>
+                            <relationship>crm:P127_has_broader_term</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>instance</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <type>skos:ConceptScheme</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">@logicalName</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>instance</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>skos:inScheme</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>instance</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <type>skos:ConceptScheme</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">@logicalName</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>parents/parent</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P127_has_broader_term</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>parents/parent</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <type>skos:Concept</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../../instance/@id</arg>
+                                    <arg name="level1" type="xpath">@nodeId</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>terms/term/content</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>rdfs:label</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>terms/term/content</source_node>
+                        <target_node>
+                            <entity>
+                                <type>http://www.w3.org/2000/01/rdf-schema#Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">text()</arg>
+                                    <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/collection/node</source_node>
                     <target_node>
-                        <entity>
-                            <type>http://www.w3.org/2000/01/rdf-schema#Literal</type>
-                            <instance_generator name="Literal">
-                                <arg name="text" type="xpath">text()</arg>
-                                <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="ObjDatePeriodVgr">instance/@logicalName</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="0;0">@logicalName</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
+                        </if>
+                        <entity variable="node">
+                            <type>crm:E52_Time-Span</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">type</arg>
+                                <arg name="id" type="xpath">instance/@id</arg>
+                                <arg name="level1" type="xpath">@id</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
-                </range>
-            </link>
-        </mapping>
-    </mappings>
-</x3ml>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@logicalName</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P82a_begin_of_the_begin</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@logicalName</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:gYear</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">if (starts-with(substring-before(.,';'), '-'))
+then (
+    concat('-', 
+        if (string-length(substring(substring-before(.,';'), 2)) = 4)
+        then (substring(substring-before(.,';'), 2))
+        else 
+            if (string-length(substring(substring-before(.,';'), 2)) = 3)
+            then (concat('0', substring(substring-before(.,';'), 2)))
+            else 
+                if (string-length(substring(substring-before(.,';'), 2)) = 2)
+                then (concat('00', substring(substring-before(.,';'), 2)))
+                else 
+                    if (string-length(substring(substring-before(.,';'), 2)) = 1)
+                    then (concat('000', substring(substring-before(.,';'), 2)))
+                    else ('Invalid length')
+    )
+)
+else ( 
+    if (string-length(substring-before(.,';')) = 4)
+    then (substring-before(.,';'))
+    else 
+        if (string-length(substring-before(.,';')) = 3)
+        then (concat('0', substring-before(.,';')))
+        else 
+            if (string-length(substring-before(.,';')) = 2)
+            then (concat('00', substring-before(.,';')))
+            else 
+                if (string-length(substring-before(.,';')) = 1)
+                then (concat('000', substring-before(.,';')))
+                else ('Invalid length')
+)
+</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>@logicalName</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P82b_end_of_the_end</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>@logicalName</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:gYear</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">if (starts-with(substring-after(., ';'), '-'))
+then (
+    concat(
+        '-',
+        if (string-length(substring(substring-after(., ';'), 2)) = 4)
+        then (substring(substring-after(., ';'), 2))
+        else 
+            if (string-length(substring(substring-after(., ';'), 2)) = 3)
+            then (concat('0', substring(substring-after(., ';'), 2)))
+            else 
+                if (string-length(substring(substring-after(., ';'), 2)) = 2)
+                then (concat('00', substring(substring-after(., ';'), 2)))
+                else 
+                    if (string-length(substring(substring-after(., ';'), 2)) = 1)
+                    then (concat('000', substring(substring-after(., ';'), 2)))
+                    else ('Invalid length')
+    )
+)
+else ( 
+    if (string-length(substring-after(., ';')) = 4)
+    then (substring-after(., ';'))
+    else 
+        if (string-length(substring-after(., ';')) = 3)
+        then (concat('0', substring-after(., ';')))
+        else 
+            if (string-length(substring-after(., ';')) = 2)
+            then (concat('00', substring-after(., ';')))
+            else 
+                if (string-length(substring-after(., ';')) = 1)
+                then (concat('000', substring-after(., ';')))
+                else ('Invalid length')
+)
+</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+        </mappings>
+        </x3ml>

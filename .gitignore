@@ -1,5 +1,7 @@
 # Confidential
-.env
+*.env
+secrets/aws/*
+!secrets/aws/credentials.example
 
 # Folder structure
 backup/*.*

@@ -23,14 +23,19 @@
     rdfs:label "Actor"@en, "Akteur"@de .
 
 ###  https://ontology.skkg.ch/Address
-<https://ontology.skkg.ch/Adress> rdf:type owl:Class ;
-    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <https://ontology.skkg.ch/Entity> ;
+<https://ontology.skkg.ch/Address> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E39_Actor> , <http://www.cidoc-crm.org/cidoc-crm/E53_Place>,  <https://ontology.skkg.ch/Entity> ;
     rdfs:label "Address"@en, "Adresse"@de .
 
 ###  https://ontology.skkg.ch/Entity
 <https://ontology.skkg.ch/Entity> rdf:type owl:Class ;
     rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E1_CRM_Entity> ;
     rdfs:label "Entity"@en, "Entität"@de .
+
+###  https://ontology.skkg.ch/Exhibition
+<https://ontology.skkg.ch/Exhibition> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E7_Activity> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Exhibition"@en, "Ausstellung"@de .
 
 ###  https://ontology.skkg.ch/Group
 <https://ontology.skkg.ch/Group> rdf:type owl:Class ;
@@ -51,6 +56,11 @@
 <https://ontology.skkg.ch/Object> rdf:type owl:Class ;
     rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E22_Human-Made_Object> , <https://ontology.skkg.ch/Entity> ;
     rdfs:label "Object"@en, "Objekt"@de .
+
+###  https://ontology.skkg.ch/ObjectGroup
+<https://ontology.skkg.ch/ObjectGroup> rdf:type owl:Class ;
+    rdfs:subClassOf <https://linked.art/ns/terms/Set> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Object Group"@en, "Objektgruppe"@de .
 
 ###  https://ontology.skkg.ch/Person
 <https://ontology.skkg.ch/Person> rdf:type owl:Class ;

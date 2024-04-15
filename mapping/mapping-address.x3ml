@@ -1,101 +1,829 @@
-
-<x3ml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" source_type="xpath" version="1.0" xsi:noNamespaceSchemaLocation="x3ml_v1.4.xsd" editor="3MEditor v3.3">
-    <namespaces>
-        <namespace prefix="resource" uri="https://data.skkg.ch/"/>
-        <namespace prefix="aat" uri="http://vocab.getty.edu/aat/" />
-        <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
-        <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
-        <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/" />
-        <namespace prefix="dcterms" uri="http://purl.org/dc/terms/" />
-        <namespace prefix="frbroo" uri="http://iflastandards.info/ns/fr/frbr/frbroo/" />
-        <namespace prefix="gnd" uri="https://d-nb.info/gnd/"/>
-        <namespace prefix="la" uri="https://linked.art/ns/terms/"/>
-        <namespace prefix="loc" uri="http://id.loc.gov/vocabulary/relators/"/>
-        <namespace prefix="mets" uri="http://www.loc.gov/METS/"/>
-        <namespace prefix="mods" uri="http://www.loc.gov/mods/v3"/>
-        <namespace prefix="oai" uri="http://www.openarchives.org/OAI/2.0/"/>
-        <namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
-        <namespace prefix="rso" uri="http://www.researchspace.org/ontology/" />
-        <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
-        <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
-        <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/"/>
-        <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
-        <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
-        <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
-        <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
-        <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
-        <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
-        <namespace prefix="iiif" uri="https://iiif.skkg.3ms.io/iiif/2/"/>
-    </namespaces>
-    <mappings>
-        <mapping>
-            <domain>
-                <source_node>/application/modules/module/moduleItem</source_node>
-                <target_node>
-                    <entity>
-                        <type>crm:E39_Actor</type>
-                        <type>skkg:Address</type>
-                        <instance_generator name="URIwithTypeAndId">
-                            <arg name="type" type="constant">address</arg>
-                            <arg name="id" type="xpath">@uuid</arg>
-                        </instance_generator>
-                        <label_generator name="Literal">
-                            <arg name="text" type="xpath">virtualField[@name='AdrAddressVrt']/value/text()</arg>
-                            <arg name="language" type="constant"/>
-                        </label_generator>
-                    </entity>
-                </target_node>
-            </domain>
-            <link>
-                <path>
-                    <source_relation>
-                        <relation>dataField</relation>
-                    </source_relation>
-                    <target_relation>
-                        <if>
-                            <equals value="MulOriginalFileTxt">@name</equals>
-                        </if>
-                        <relationship>crm:P1_is_identified_by</relationship>
-                        <entity>
-                            <type>crm:E33_E41_Linguistic_Appellation</type>
-                            <instance_generator name="URIwithTypeIdAnd1Level">
-                                <arg name="type" type="constant">multimedia</arg>
-                                <arg name="id" type="xpath">../@uuid</arg>
-                                <arg name="level1" type="constant">name</arg>
-                            </instance_generator>
-                            <additional>
-                                <relationship>crm:P2_has_type</relationship>
-                                <entity>
-                                    <type>crm:E55_Type</type>
-                                    <instance_info>
-                                        <constant/>
-                                    </instance_info>
-                                    <instance_generator name="URIwithAatId">
-                                        <arg name="id" type="constant">300404670</arg>
-                                    </instance_generator>
-                                    <label_generator name="Constant">
-                                        <arg name="text" type="constant">preferred terms</arg>
-                                        <arg name="language" type="constant">en</arg>
-                                    </label_generator>
-                                </entity>
-                            </additional>
-                        </entity>
-                        <relationship>crm:P190_has_symbolic_content</relationship>
-                    </target_relation>
-                </path>
-                <range>
-                    <source_node>dataField</source_node>
+<x3ml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" source_type="xpath" version="1.0" xsi:noNamespaceSchemaLocation="x3ml_v1.4.xsd" editor="3MEditor v3.3"><namespaces>
+            <namespace prefix="resource" uri="https://data.skkg.ch/"/>
+            <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
+            <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
+            <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
+            <namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
+            <namespace prefix="frbroo" uri="http://iflastandards.info/ns/fr/frbr/frbroo/"/>
+            <namespace prefix="gnd" uri="https://d-nb.info/gnd/"/>
+            <namespace prefix="la" uri="https://linked.art/ns/terms/"/>
+            <namespace prefix="loc" uri="http://id.loc.gov/vocabulary/relators/"/>
+            <namespace prefix="mets" uri="http://www.loc.gov/METS/"/>
+            <namespace prefix="mods" uri="http://www.loc.gov/mods/v3"/>
+            <namespace prefix="oai" uri="http://www.openarchives.org/OAI/2.0/"/>
+            <namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <namespace prefix="rso" uri="http://www.researchspace.org/ontology/"/>
+            <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
+            <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
+            <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/en/sik:person-"/>
+            <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
+            <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
+            <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
+            <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
+            <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+        </namespaces>
+        <mappings>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
                         <entity>
-                            <type>rdfs:Literal</type>
-                            <instance_generator name="Literal">
-                                <arg name="text" type="xpath">value/text()</arg>
+                            <type>crm:E39_Actor</type>
+                            <type>skkg:Address</type>
+                            <type>crm:E53_Place</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">address</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">virtualField[@name='AdrAddressVrt']/value/text()</arg>
                                 <arg name="language" type="constant"/>
+                            </label_generator>
+                            <label_generator name="prefLabel">
+                                <arg name="text" type="xpath">virtualField[@name='AdrAddressVrt']/value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrTypeVgr">../@instanceName</equals>
+                            </if>
+                            <relationship>crm:P2_has_type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrOrganisationTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity variable="organisation_name">
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">name</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>preferred terms</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="xpath">300404670</arg>
+                                        </instance_generator>
+                                        <label_generator name="Constant">
+                                            <arg name="text" type="constant">preferred terms</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300445020</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Corporate names</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Firma</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                        <comments>
+                            <comment type="">
+                                <rationale>If the address is an institution, this field contains its primary name</rationale>
+                                <alternatives/>
+                                <typical_mistakes/>
+                                <local_habits/>
+                                <link_to_cook_book/>
+                                <example>
+                                    <example_source/>
+                                    <example_target/>
+                                </example>
+                                <comments_last_update date="" person=""/>
+                            </comment>
+                        </comments>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <or>
+                                    <if>
+                                        <equals value="AdrSurNameTxt">@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="AdrForeNameTxt">@name</equals>
+                                    </if>
+                                </or>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity variable="person_name">
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">name</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>preferred terms</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="xpath">300404670</arg>
+                                        </instance_generator>
+                                        <label_generator name="Constant">
+                                            <arg name="text" type="constant">preferred terms</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">concat(
+    if (../dataField[@name='AdrForeNameTxt']/value/text()) then (../dataField[@name='AdrForeNameTxt']/value/text()) else (''),
+    ' ',
+    if (../dataField[@name='AdrSurNameTxt']/value/text()) then (../dataField[@name='AdrSurNameTxt']/value/text()) else ('')
+)</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrSurNameTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity variable="person_name">
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">name</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                            <entity>
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">name</arg>
+                                    <arg name="level2" type="constant">surname</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>last name</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300404652</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Family Name</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Nachname</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrForeNameTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity variable="person_name">
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">name</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                            <entity>
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">name</arg>
+                                    <arg name="level2" type="constant">firstname</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>first name</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300404651</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Given Name</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Vorname</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrOrganisationTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity variable="person_name">
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">name</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                            <entity>
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">name</arg>
+                                    <arg name="level2" type="constant">organisation</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300445020</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Corporate names</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Firma</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroup/repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrNameOtherGrp">../@name</equals>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="level1" type="constant">altname</arg>
+                                    <arg name="level2" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>alternative_name</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300264273</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">nonpreferred terms</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">alternativer Name</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>.</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P76_has_contact_point</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>.</source_node>
+                        <target_node>
+                            <entity variable="address">
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat("Address of: ", virtualField[@name='AdrAddressVrt']/value/text())</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>address</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300435687</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Address</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="position">Adresse</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrCityTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P76_has_contact_point</relationship>
+                            <entity variable="address">
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                    <arg name="level2" type="constant">place</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>city</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300008389</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">City</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Ort</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrRegionTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P76_has_contact_point</relationship>
+                            <entity variable="address">
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                    <arg name="level2" type="constant">region</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>city</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300182722</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Region</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Region</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="AdrCountryVgr">../@instanceName</equals>
+                            </if>
+                            <relationship>crm:P76_has_contact_point</relationship>
+                            <entity variable="address">
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">address</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">@name</arg>
+                                    <arg name="language" type="constant">de</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant>country</constant>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300387506</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Country</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Land</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <if>
+                            <equals value="AdrNameOtherGrp">../@name</equals>
+                        </if>
+                        <entity>
+                            <type>crm:E41_E33_Linguistic_Appellation</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">address</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">altname</arg>
+                                <arg name="level2" type="xpath">@uuid</arg>
                             </instance_generator>
                         </entity>
                     </target_node>
-                </range>
-            </link>
-        </mapping>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="SurNameTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                            <entity variable="person_altname_lastname">
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="constant">altname</arg>
+                                    <arg name="level2" type="xpath">../@uuid</arg>
+                                    <arg name="level3" type="constant">surname</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300404652</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Family Name</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Nachname</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ForeNameTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P106_is_composed_of</relationship>
+                            <entity variable="person_altname_firstname">
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="constant">altname</arg>
+                                    <arg name="level2" type="xpath">../@uuid</arg>
+                                    <arg name="level3" type="constant">firstname</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300404651</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Given Name</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Vorname</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
         </mappings>
-</x3ml>
+        </x3ml>
