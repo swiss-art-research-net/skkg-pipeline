@@ -14,8 +14,8 @@ RUN pip install chardet date-parser-sari lxml urllib3 requests edtf tqdm rdflib 
 
 # Install x3ml Mapping engine
 RUN mkdir x3ml
-RUN wget https://github.com/isl/x3ml/releases/download/1.9.4/x3ml-engine-1.9.4-exejar.jar
-RUN mv x3ml-engine-1.9.4-exejar.jar x3ml/x3ml-engine.exejar
+RUN wget https://github.com/isl/x3ml/releases/download/2.2.0/x3ml-engine-2.2.0-exejar.jar
+RUN mv x3ml-engine-2.2.0-exejar.jar x3ml/x3ml-engine.exejar
 
 # Install AWS CLI
 RUN pip --no-cache-dir install --upgrade awscli
