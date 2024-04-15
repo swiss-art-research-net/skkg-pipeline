@@ -3329,6 +3329,7 @@
                         <entity>
                             <type>la:Set</type>
                             <type>crm:E89_Propositional_Object</type>
+                            <type>skkg:ObjectGroup</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">objectGroup</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
