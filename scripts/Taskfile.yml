@@ -194,7 +194,7 @@ tasks:
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           MODULE: Multimedia
-          INPUTFILES: /data/source/multimedia/multimedia-item-08d26839-ab9f-4456-8010-69073551b7c5.xml /data/source/multimedia/multimedia-item-11252.xml /data/source/multimedia/multimedia-item-2270.xml /data/source/multimedia/multimedia-item-8727.xml
+          INPUTFILES: /data/source/multimedia/multimedia-item-2063a088-3cc2-4070-b274-fe1fb3d456ee.xml /data/source/multimedia/multimedia-item-08d26839-ab9f-4456-8010-69073551b7c5.xml /data/source/multimedia/multimedia-item-11252.xml /data/source/multimedia/multimedia-item-2270.xml /data/source/multimedia/multimedia-item-8727.xml
 
   generate-example-record-person:
     desc: Generates an example Person record for developing the mapping in the X3ML editor
