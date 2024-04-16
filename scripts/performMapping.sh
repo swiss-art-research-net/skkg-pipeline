@@ -47,18 +47,21 @@ for ((batch=1; batch<=numbatches; batch++)); do
     if ((end > numfiles)); then
         end=$numfiles
     fi
+    files=""
     for ((i=start; i<=end; i++)); do
         f=$(find $RECORDSINPUTFOLDER -type f -name '*.xml' | sed -n "${i}p")
-        echo "Mapping record $i of $numfiles ($f)"
-        o=${f/.xml/.ttl}
-        o=${o/$RECORDSINPUTFOLDER/}
-        java -jar /x3ml/x3ml-engine.exejar \
-            --input $f \
-            --x3ml $RECORDMAPPING \
-            --policy $GENERATOR \
-            --output $RECORDSOUTPUTFOLDER/$o \
-            --format text/turtle
+        files+=",$f"
     done
+    files=${files:1} # remove leading comma
+    echo "Mapping records $start to $end of $numfiles"
+    o=${f/.xml/.ttl}
+    o=${o/$RECORDSINPUTFOLDER/}
+    java -jar /x3ml/x3ml-engine.exejar \
+        --input "$files" \
+        --x3ml $RECORDMAPPING \
+        --policy $GENERATOR \
+        --output $RECORDSOUTPUTFOLDER/$o \
+        --format text/turtle
     ) &
 done
 wait
