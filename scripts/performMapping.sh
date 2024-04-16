@@ -40,7 +40,6 @@ fi
 
 # Loop through the files in batches
 for ((batch=1; batch<=numbatches; batch++)); do
-    echo "Processing batch $batch of $numbatches"
     (
     start=$(( (batch - 1) * BATCHSIZE + 1 ))
     end=$(( batch * BATCHSIZE ))
@@ -53,7 +52,7 @@ for ((batch=1; batch<=numbatches; batch++)); do
         files+=",$f"
     done
     files=${files:1} # remove leading comma
-    echo "Mapping records $start to $end of $numfiles"
+    echo "Processing batch $batch of $numbatches ($start - $end / $numfiles)"
     o=${f/.xml/.ttl}
     o=${o/$RECORDSINPUTFOLDER/}
     java -jar /x3ml/x3ml-engine.exejar \
@@ -62,6 +61,6 @@ for ((batch=1; batch<=numbatches; batch++)); do
         --policy $GENERATOR \
         --output $RECORDSOUTPUTFOLDER/$o \
         --format text/turtle
-    ) &
+    )
 done
 wait
