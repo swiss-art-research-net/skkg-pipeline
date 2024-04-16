@@ -37,11 +37,7 @@ for f in $(find $RECORDSINPUTFOLDER -type f -name '*.xml' ); do
   echo "Mapping record $count of $numfiles ($f)"
   o=${f/.xml/.ttl}
   o=${o/$RECORDSINPUTFOLDER/}
-  java --add-opens java.base/java.lang.reflect=ALL-UNNAMED \
-    --add-opens java.base/java.util=ALL-UNNAMED \
-    --add-opens java.base/java.text=ALL-UNNAMED \
-    --add-opens java.desktop/java.awt.font=ALL-UNNAMED \
-    -jar /x3ml/x3ml-engine.exejar \
+  java -jar /x3ml/x3ml-engine.exejar \
     --input $f \
     --x3ml $RECORDMAPPING \
     --policy $GENERATOR \
