@@ -40,14 +40,13 @@ fi
 
 # Loop through the files in batches
 for ((batch=1; batch<=numbatches; batch++)); do
-    echo "Processing batch $batch"
+    echo "Processing batch $batch of $numbatches"
     (
     start=$(( (batch - 1) * BATCHSIZE + 1 ))
     end=$(( batch * BATCHSIZE ))
     if ((end > numfiles)); then
         end=$numfiles
     fi
-
     for ((i=start; i<=end; i++)); do
         f=$(find $RECORDSINPUTFOLDER -type f -name '*.xml' | sed -n "${i}p")
         echo "Mapping record $i of $numfiles ($f)"
