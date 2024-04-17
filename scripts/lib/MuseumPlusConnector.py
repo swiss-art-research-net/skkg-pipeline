@@ -198,5 +198,10 @@ class MPWrapper:
             response = self._get(url, params=params)
         except requests.exceptions.HTTPError as e:
             raise e
-        nodes = etree.fromstring(response.content)
+        content = response.content
+        try:
+            nodes = etree.fromstring(content)
+        except etree.XMLSyntaxError as e:
+            print("Error parsing XML response from MuseumPlus")
+            raise e
         return nodes
