@@ -87,6 +87,7 @@ tasks:
           - LitPlaceVgr
           - MulTypeVgr
           - ObjCategoryVgr
+          - ObjConditionShortVgr
           - ObjDatePeriodVgr
           - ObjDatePrefixVgr
           - ObjDateSourceVgr
