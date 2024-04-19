@@ -33,7 +33,7 @@
                             <type>crm:E39_Actor</type>
                             <type>skkg:Actor</type>
                             <instance_generator name="URIwithTypeAndId">
-                                <arg name="type" type="constant">actor</arg>
+                                <arg name="type" type="constant">person</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                             <label_generator name="Literal">
@@ -62,7 +62,7 @@
                             <entity variable="metadata">
                                 <type>crm:E31_Document</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                     <arg name="level1" type="constant">meta</arg>
                                 </instance_generator>
@@ -111,7 +111,7 @@
                             <entity variable="person_name">
                                 <type>crm:E33_E41_Linguistic_Appellation</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">name</arg>
                                 </instance_generator>
@@ -187,7 +187,7 @@
                             <entity>
                                 <type>crm:E67_Birth</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../@uuid</arg>
                                     <arg name="level1" type="constant">birth</arg>
                                 </instance_generator>
@@ -241,7 +241,7 @@
                             <entity>
                                 <type>crm:E69_Death</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../@uuid</arg>
                                     <arg name="level1" type="constant">death</arg>
                                 </instance_generator>
@@ -295,7 +295,7 @@
                             <entity>
                                 <type>crm:E66_Formation</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../@uuid</arg>
                                     <arg name="level1" type="constant">formation</arg>
                                 </instance_generator>
@@ -349,7 +349,7 @@
                             <entity>
                                 <type>crm:E68_Dissolution</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../@uuid</arg>
                                     <arg name="level1" type="constant">dissolution</arg>
                                 </instance_generator>
@@ -445,7 +445,7 @@
                         <entity variable="person_name">
                             <type>crm:E33_E41_Linguistic_Appellation</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
-                                <arg name="type" type="constant">actor</arg>
+                                <arg name="type" type="constant">person</arg>
                                 <arg name="id" type="xpath">../@uuid</arg>
                                 <arg name="level1" type="constant">name</arg>
                             </instance_generator>
@@ -472,7 +472,7 @@
                             <entity>
                                 <type>crm:E33_E41_Linguistic_Appellation</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">lastname</arg>
                                 </instance_generator>
@@ -529,7 +529,7 @@
                             <entity>
                                 <type>crm:E33_E41_Linguistic_Appellation</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">firstname</arg>
                                 </instance_generator>
@@ -590,7 +590,7 @@
                             <entity>
                                 <type>crm:E65_Creation</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">meta</arg>
                                     <arg name="level2" type="constant">update</arg>
@@ -609,7 +609,7 @@
                             <entity variable="metadata_creation">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd3Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">meta</arg>
                                     <arg name="level2" type="constant">update</arg>
@@ -656,7 +656,7 @@
                         <entity>
                             <type>crm:E67_Birth</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
-                                <arg name="type" type="constant">actor</arg>
+                                <arg name="type" type="constant">person</arg>
                                 <arg name="id" type="xpath">../../@uuid</arg>
                                 <arg name="level1" type="constant">birth</arg>
                             </instance_generator>
@@ -688,7 +688,7 @@
                             <entity variable="birth_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">birth</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -714,7 +714,7 @@
                             <entity variable="birth_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">birth</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -749,7 +749,7 @@
                             <entity variable="birth_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">birth</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -789,7 +789,7 @@
                             <entity>
                                 <type>crm:E53_Place</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">birth</arg>
                                     <arg name="level2" type="constant">place</arg>
@@ -815,7 +815,7 @@
                             <entity>
                                 <type>crm:E53_Place</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../../@uuid</arg>
                                     <arg name="level1" type="constant">birth</arg>
                                     <arg name="level2" type="constant">place</arg>
@@ -881,7 +881,7 @@
                             <entity>
                                 <type>crm:E42_Identifier</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../../@uuid</arg>
                                     <arg name="level1" type="constant">birth</arg>
                                     <arg name="level2" type="constant">sortlnu</arg>
@@ -937,7 +937,7 @@
                         <entity>
                             <type>crm:E69_Death</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
-                                <arg name="type" type="constant">actor</arg>
+                                <arg name="type" type="constant">person</arg>
                                 <arg name="id" type="xpath">../../@uuid</arg>
                                 <arg name="level1" type="constant">death</arg>
                             </instance_generator>
@@ -969,7 +969,7 @@
                             <entity variable="death_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">death</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -995,7 +995,7 @@
                             <entity variable="death_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">death</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -1030,7 +1030,7 @@
                             <entity variable="death_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">death</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -1070,7 +1070,7 @@
                             <entity>
                                 <type>crm:E53_Place</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">death</arg>
                                     <arg name="level2" type="constant">place</arg>
@@ -1096,7 +1096,7 @@
                             <entity>
                                 <type>crm:E53_Place</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../../@uuid</arg>
                                     <arg name="level1" type="constant">death</arg>
                                     <arg name="level2" type="constant">place</arg>
@@ -1162,7 +1162,7 @@
                             <entity>
                                 <type>crm:E42_Identifier</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../../@uuid</arg>
                                     <arg name="level1" type="constant">death</arg>
                                     <arg name="level2" type="constant">sortlnu</arg>
@@ -1218,7 +1218,7 @@
                         <entity>
                             <type>crm:E66_Formation</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
-                                <arg name="type" type="constant">actor</arg>
+                                <arg name="type" type="constant">person</arg>
                                 <arg name="id" type="xpath">../../@uuid</arg>
                                 <arg name="level1" type="constant">formation</arg>
                             </instance_generator>
@@ -1250,7 +1250,7 @@
                             <entity variable="formation_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">formation</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -1276,7 +1276,7 @@
                             <entity variable="formation_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">formation</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -1311,7 +1311,7 @@
                             <entity variable="formation_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">formation</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -1351,7 +1351,7 @@
                             <entity>
                                 <type>crm:E53_Place</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">formation</arg>
                                     <arg name="level2" type="constant">place</arg>
@@ -1377,7 +1377,7 @@
                             <entity>
                                 <type>crm:E53_Place</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../../@uuid</arg>
                                     <arg name="level1" type="constant">formation</arg>
                                     <arg name="level2" type="constant">place</arg>
@@ -1443,7 +1443,7 @@
                             <entity>
                                 <type>crm:E42_Identifier</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../../@uuid</arg>
                                     <arg name="level1" type="constant">formation</arg>
                                     <arg name="level2" type="constant">sortlnu</arg>
@@ -1499,7 +1499,7 @@
                         <entity>
                             <type>crm:E68_Dissolution</type>
                             <instance_generator name="URIwithTypeIdAnd1Level">
-                                <arg name="type" type="constant">actor</arg>
+                                <arg name="type" type="constant">person</arg>
                                 <arg name="id" type="xpath">../../@uuid</arg>
                                 <arg name="level1" type="constant">dissolution</arg>
                             </instance_generator>
@@ -1531,7 +1531,7 @@
                             <entity variable="dissolution_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">dissolution</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -1557,7 +1557,7 @@
                             <entity variable="dissolution_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">dissolution</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -1592,7 +1592,7 @@
                             <entity variable="dissolution_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">dissolution</arg>
                                     <arg name="level2" type="constant">date</arg>
@@ -1632,7 +1632,7 @@
                             <entity>
                                 <type>crm:E53_Place</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">dissolution</arg>
                                     <arg name="level2" type="constant">place</arg>
@@ -1658,7 +1658,7 @@
                             <entity>
                                 <type>crm:E53_Place</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../../@uuid</arg>
                                     <arg name="level1" type="constant">dissolution</arg>
                                     <arg name="level2" type="constant">place</arg>
@@ -1724,7 +1724,7 @@
                             <entity>
                                 <type>crm:E42_Identifier</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
-                                    <arg name="type" type="constant">actor</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../../@uuid</arg>
                                     <arg name="level1" type="constant">dissolution</arg>
                                     <arg name="level2" type="constant">sortlnu</arg>
