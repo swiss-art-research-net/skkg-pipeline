@@ -1683,7 +1683,7 @@
                                 <instance_generator name="URIwithTypeIdAnd3Levels">
                                     <arg name="type" type="constant">object</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
-                                    <arg name="level1" type="constant">title</arg>
+                                    <arg name="level1" type="constant">part</arg>
                                     <arg name="level2" type="xpath">../@uuid</arg>
                                     <arg name="level3" type="constant">sortlnu</arg>
                                 </instance_generator>
