@@ -636,6 +636,35 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="LitInTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P165i_is_incorporated_in</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>frbroo:F24_Publication_Expression</type>
+                                <instance_generator name="URIwithTypeAnId_IdHashed">
+                                    <arg name="type" type="constant">publication</arg>
+                                    <arg name="id_HASHED_CONTENTS" type="xpath">value/text()</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
             <mapping>
                 <domain>
