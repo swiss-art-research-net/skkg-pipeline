@@ -63,6 +63,26 @@ class BasePreprocessor(Preprocessor):
                     datafield.set(f'{self.PREFIX}dateLower', daterange['lower'])
                     datafield.set(f'{self.PREFIX}dateUpper', daterange['upper'])
         return root
+    
+    def processYearFields(self, root: ET.Element, yearFieldSelectors: list) -> ET.Element:
+        """
+        This function takes an XML root element and a list of field selectors that contain years.
+        If necessary, it converts the year fields into a xsd:gYear compliant format. e.g. at least
+        4 digits and optionally prefixed with a '-' sign for BCE years.
+        """
+        for yearFieldSelector in yearFieldSelectors:
+            datafields = root.findall(yearFieldSelector)
+            for datafield in datafields:
+                value = datafield.find('value').text
+                if value is not None:
+                    if value.isnumeric():
+                        if int(value) < 0:
+                            processedValue = f'-{abs(int(value)):04}'
+                        else:
+                            processedValue = f'{int(value):04}'
+                        datafield.set(f'{self.PREFIX}type', 'gYear')
+                        datafield.set(f'{self.PREFIX}year', processedValue)
+        return root
 class LiteraturePreprocessor(BasePreprocessor):
     """
     Preprocessor for the Literature module.
@@ -80,7 +100,10 @@ class ObjectPreprocessor(BasePreprocessor):
     """
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
-        return content
+        root = super().parseXML(content)
+        yearFieldSelectors = [".//dataField[@dataType='Long'][@name='DateFromLnu']", ".//dataField[@dataType='Long'][@name='DateToLnu']"]
+        root = super().processYearFields(root, yearFieldSelectors)
+        return super().dumpXML(root)
     
 class Preprocessors:
     @staticmethod
