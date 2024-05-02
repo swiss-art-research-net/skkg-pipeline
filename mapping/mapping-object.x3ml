@@ -1306,7 +1306,14 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="DateFromLnu">@name</equals>
+                                <and>
+                                    <if>
+                                        <equals value="DateFromLnu">@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="gYear">@_preprocessed_type</equals>
+                                    </if>
+                                </and>
                             </if>
                             <relationship>crm:P82a_begin_of_the_begin</relationship>
                         </target_relation>
@@ -1317,7 +1324,7 @@
                             <entity>
                                 <type>xsd:gYear</type>
                                 <instance_generator name="typedLiteralGen">
-                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="text" type="xpath">@_preprocessed_year</arg>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1330,7 +1337,14 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="DateToLnu">@name</equals>
+                                <and>
+                                    <if>
+                                        <equals value="DateToLnu">@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="gYear">@_preprocessed_type</equals>
+                                    </if>
+                                </and>
                             </if>
                             <relationship>crm:P82b_end_of_the_end</relationship>
                         </target_relation>
@@ -1341,7 +1355,7 @@
                             <entity>
                                 <type>xsd:gYear</type>
                                 <instance_generator name="typedLiteralGen">
-                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="text" type="xpath">@_preprocessed_year</arg>
                                 </instance_generator>
                             </entity>
                         </target_node>
