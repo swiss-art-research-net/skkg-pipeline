@@ -18,6 +18,7 @@ tasks:
   default:
     desc: Runs the entire pipeline
     cmds:
+      - '[ $(pgrep -cx "task") -gt 1 ] && echo "Another task is currently being executed. Wait for it to complete before running the pipeline." && exit 1 || echo "Running pipeline..." && exit 0'
       - task: download-source-items
       - task: prepare-and-perform-mapping-for-items
       - task: ingest-items
