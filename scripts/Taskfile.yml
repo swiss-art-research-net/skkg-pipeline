@@ -74,6 +74,7 @@ tasks:
       - for:
           - AdrCountryVgr
           - AdrTypeVgr
+          - ExhExternalInternalVgr
           - ExhOrganiserTypeVgr
           - ExhTypeVgr
           - ExhStatusVgr
@@ -93,6 +94,7 @@ tasks:
           - ObjDateSourceVgr
           - ObjDateSuffixVgr
           - ObjDateTypeVgr
+          - ObjDim3DTypeVgr
           - ObjIconographyVgr
           - ObjIconographyTypeVgr
           - ObjInscriptionDialogTypeVgr
@@ -107,6 +109,7 @@ tasks:
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
           - PerTypeVgr
+          - Standortthesaurus
         task: _download-vocabulary-from-museumplus
         vars:
           VOCABULARY: "{{.ITEM}}"
