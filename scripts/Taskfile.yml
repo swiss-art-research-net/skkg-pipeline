@@ -109,7 +109,6 @@ tasks:
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
           - PerTypeVgr
-          - Standortthesaurus
         task: _download-vocabulary-from-museumplus
         vars:
           VOCABULARY: "{{.ITEM}}"
