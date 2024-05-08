@@ -75,7 +75,7 @@ class BasePreprocessor(Preprocessor):
             for datafield in datafields:
                 value = datafield.find('value').text
                 if value is not None:
-                    if value.isnumeric():
+                    if int(value):
                         if int(value) < 0:
                             processedValue = f'-{abs(int(value)):04}'
                         else:
