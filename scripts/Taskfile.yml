@@ -565,8 +565,7 @@ tasks:
         task: reset-module
         vars:
           MODULE: "{{.ITEM}}"
-      - task: reset-vocabularies
-      - task: reset-iiif
+      - task: _reset-iiif-and-vocabularies
       - echo "Done!"
 
   reset-iiif:
@@ -924,8 +923,16 @@ tasks:
           INPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
-  _suggest-alignments:
+  _reset-iiif-and-vocabularies:
     internal: true
+    desc: Subtask to reset the IIIF and vocabularies data
+    prompt: Do you also want to reset the IIIF and vocabularies data?
+    cmds:
+      - task: reset-vocabularies
+      - task: reset-iiif
+
+  _suggest-alignments:
+    internal: True
     interactive: True
     requires:
       vars: [INPUT_FILE, RECONCILIATION_TYPE, BASE_TYPE, RECONCILIATION_TYPE]
