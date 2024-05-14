@@ -965,6 +965,10 @@
                                     <arg name="id" type="xpath">../../@uuid</arg>
                                     <arg name="level1" type="constant">conditionAssessment</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('Condition assessment of object: ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
@@ -1531,6 +1535,10 @@
                                     <arg name="level3" type="constant">dimension</arg>
                                     <arg name="level4" type="constant">1</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('Height of object part: ', if (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
@@ -1588,6 +1596,10 @@
                                     <arg name="level3" type="constant">dimension</arg>
                                     <arg name="level4" type="constant">2</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('Width of object part: ', if (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
@@ -1645,6 +1657,10 @@
                                     <arg name="level3" type="constant">dimension</arg>
                                     <arg name="level4" type="constant">3</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('Depth of object part: ', if (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
@@ -3244,6 +3260,10 @@
                                     <arg name="level1" type="constant">conditionAssessment</arg>
                                     <arg name="level2" type="constant">date</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('Date of condition assessment of object: ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P82_at_some_time_within</relationship>
                         </target_relation>
