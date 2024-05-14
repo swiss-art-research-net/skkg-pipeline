@@ -2724,7 +2724,7 @@
                                         <equals value="ThumbnailBoo">@name</equals>
                                     </if>
                                     <if>
-                                        <equals value="yes">formattedValue/text()</equals>
+                                        <equals value="true">value/text()</equals>
                                     </if>
                                 </and>
                             </if>
@@ -2755,14 +2755,15 @@
                         <if>
                             <equals value="ObjMultimediaRef">../@name</equals>
                         </if>
-                        <entity variable="object_image_assignment">
+                        <entity variable="object_image_order_assignment">
                             <type>crm:E13_Attribute_Assignment</type>
-                            <instance_generator name="URIwithTypeIdAnd3Levels">
+                            <instance_generator name="URIwithTypeIdAnd4Levels">
                                 <arg name="type" type="constant">object</arg>
                                 <arg name="id" type="xpath">../../@uuid</arg>
                                 <arg name="level1" type="constant">multimedia</arg>
                                 <arg name="level2" type="xpath">@uuid</arg>
                                 <arg name="level3" type="constant">assignment</arg>
+                                <arg name="level4" type="constant">order</arg>
                             </instance_generator>
                             <label_generator name="Literal">
                                 <arg name="text" type="constant">Assignment of order of multimedia item in relation to object item</arg>
@@ -2830,6 +2831,104 @@
                                     <arg name="level2" type="xpath">@uuid</arg>
                                     <arg name="level3" type="constant">order</arg>
                                 </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/moduleReference/moduleReferenceItem</source_node>
+                    <target_node>
+                        <if>
+                            <equals value="ObjMultimediaRef">../@name</equals>
+                        </if>
+                        <entity variable="object_image_primary_assignment">
+                            <type>crm:E13_Attribute_Assignment</type>
+                            <instance_generator name="URIwithTypeIdAnd4Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">multimedia</arg>
+                                <arg name="level2" type="xpath">@uuid</arg>
+                                <arg name="level3" type="constant">assignment</arg>
+                                <arg name="level4" type="constant">primary</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="constant">Assignment of primary multimedia item in relation to object item</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P140_assigned_attribute_to</relationship>
+                                <entity>
+                                    <type>crm:E36_Visual_Item</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">multimedia</arg>
+                                        <arg name="id" type="xpath">@uuid</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P177_assigned_property_of_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithCidocCrmId">
+                                        <arg name="id" type="constant">P2_has_type</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P16_used_specific_object</relationship>
+                                <entity>
+                                    <type>crm:E22_Human-Made_Object</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">object</arg>
+                                        <arg name="id" type="xpath">../../@uuid</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>datafield</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P141_assigned</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>datafield</source_node>
+                        <target_node>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="ThumbnailBoo">@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="true">value/text()</equals>
+                                    </if>
+                                </and>
+                            </if>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_generator name="URIwithAatId">
+                                    <arg name="id" type="constant">300404450</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="constant">primary</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
