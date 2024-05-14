@@ -2841,7 +2841,14 @@
                     <source_node>/application/modules/module/moduleItem/moduleReference/moduleReferenceItem</source_node>
                     <target_node>
                         <if>
-                            <equals value="ObjMultimediaRef">../@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="ObjMultimediaRef">../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="true">dataField[@name='ThumbnailBoo']/value/text()</equals>
+                                </if>
+                            </and>
                         </if>
                         <entity variable="object_image_primary_assignment">
                             <type>crm:E13_Attribute_Assignment</type>
@@ -2904,12 +2911,6 @@
                             <relation>dataField</relation>
                         </source_relation>
                         <target_relation>
-                            <relationship>crm:P141_assigned</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>dataField</source_node>
-                        <target_node>
                             <if>
                                 <and>
                                     <if>
@@ -2920,6 +2921,12 @@
                                     </if>
                                 </and>
                             </if>
+                            <relationship>crm:P141_assigned</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
                             <entity>
                                 <type>crm:E55_Type</type>
                                 <instance_generator name="URIwithAatId">
