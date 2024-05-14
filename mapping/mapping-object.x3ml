@@ -2901,14 +2901,14 @@
                 <link>
                     <path>
                         <source_relation>
-                            <relation>datafield</relation>
+                            <relation>dataField</relation>
                         </source_relation>
                         <target_relation>
                             <relationship>crm:P141_assigned</relationship>
                         </target_relation>
                     </path>
                     <range>
-                        <source_node>datafield</source_node>
+                        <source_node>dataField</source_node>
                         <target_node>
                             <if>
                                 <and>
