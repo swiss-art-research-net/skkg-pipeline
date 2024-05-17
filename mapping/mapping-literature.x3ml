@@ -32,6 +32,7 @@
                         <entity>
                             <type>frbroo:F24_Publication_Expression</type>
                             <type>skkg:Literature</type>
+                            <type>crm:E33_Linguistic_Object</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">literature</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
@@ -710,6 +711,36 @@
                                         </label_generator>
                                     </entity>
                                 </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="LitLanguageVgr">../@instanceName</equals>
+                            </if>
+                            <relationship>crm:P72_has_language</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E56_Language</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
