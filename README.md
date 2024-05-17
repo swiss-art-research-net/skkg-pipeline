@@ -98,12 +98,8 @@ task: Available tasks for this project:
 * prepare-mapping-for-module-items:            Prepares the mapping for a specific module. The module name should be passed as an argument or via the MODULE variable.
 * push-latest-data-dump:                       Upload latest data dump to S3 endpoint for data sharing
 * recreate-folder-metadata:                    Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
-* remove-deleted-address-items:                Removes address item records that have been deleted from MuseumPlus
-* remove-deleted-literature-items:             Removes literature item records that have been deleted from MuseumPlus
-* remove-deleted-multimedia-items:             Removes multimedia item records that have been deleted from MuseumPlus
-* remove-deleted-object-items:                 Removes object item records that have been deleted from MuseumPlus
-* remove-deleted-person-items:                 Removes person item records that have been deleted from MuseumPlus
-* remove-deleted-source-items:                 Removes item records that have been deleted from MuseumPlus
+* remove-deleted-items:                        Removes all item records that have been deleted from MuseumPlus
+* remove-deleted-module-items:                 Removes item records that have been deleted from MuseumPlus for a specific module. The module name should be passed as an argument or via the MODULE variable.
 * reset:                                       Delete all artefacts produced by the pipeline.
 * reset-iiif:                                  Delete all artefacts produced by the pipeline for the iiif data.
 * reset-last-ingested-metadata:                Resets the last ingested metadata for a specific module. The module name should be passed as an argument.

@@ -493,48 +493,38 @@ tasks:
       - rm -f /data/source/{{.MODULE}}/metadata.json
       - python /scripts/recreateMetadata.py --folder /data/source/{{.MODULE}}
 
-  remove-deleted-address-items:
-    desc: Removes address item records that have been deleted from MuseumPlus
+  remove-deleted-module-items:
+    desc: Removes item records that have been deleted from MuseumPlus for a specific module. The module name should be passed as an argument or via the MODULE variable.
+    interactive: True
+    vars:
+      MODULE:
+        sh: |
+          if [ -z "{{.MODULE}}" ]; then
+            echo "{{.CLI_ARGS}}"
+          else
+            echo "{{.MODULE}}"
+          fi
+      MODULE_UCFIRST: 
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
     cmds:
+      - echo "Removing deleted {{.MODULE}} items..."
       - task: _remove-deleted-module-items
         vars:
-          MODULE: Address
+          MODULE: "{{.MODULE_UCFIRST}}"
 
-  remove-deleted-literature-items:
-    desc: Removes literature item records that have been deleted from MuseumPlus
+  remove-deleted-items:
+    desc: Removes all item records that have been deleted from MuseumPlus
     cmds:
-      - task: _remove-deleted-module-items
+      - for:
+          - Address
+          - Exhibition
+          - Literature
+          - Multimedia
+          - Object
+          - Person
+        task: _remove-deleted-module-items
         vars:
-          MODULE: Literature
-
-  remove-deleted-multimedia-items:
-    desc: Removes multimedia item records that have been deleted from MuseumPlus
-    cmds:
-      - task: _remove-deleted-module-items
-        vars:
-          MODULE: Multimedia
-
-  remove-deleted-object-items:
-    desc: Removes object item records that have been deleted from MuseumPlus
-    cmds:
-      - task: _remove-deleted-module-items
-        vars:
-          MODULE: Object
-
-  remove-deleted-person-items:
-    desc: Removes person item records that have been deleted from MuseumPlus
-    cmds:
-      - task: _remove-deleted-module-items
-        vars:
-          MODULE: Person
-
-  remove-deleted-source-items:
-    desc: Removes item records that have been deleted from MuseumPlus
-    deps:
-      - remove-deleted-address-items
-      - remove-deleted-literature-items
-      - remove-deleted-object-items
-      - remove-deleted-person-items
+          MODULE: "{{.ITEM}}"
 
   retrieve-and-ingest-additional-data:
     desc: Retrieve and ingest additional data for external URIs in the Triple Store 
