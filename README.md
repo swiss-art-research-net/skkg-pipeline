@@ -43,13 +43,6 @@ To include the [SKKG App](https://github.com/swiss-art-research-net/skkg-app) wh
 git clone --recurse-submodules git@github.com:swiss-art-research-net/skkg-pipeline.git
 ```
 
-To download the source data create a [GitHub personal access token](https://github.com/settings/tokens) and add it to the `.env` file, along with your username.
-
-Download the source files by runnning
-```sh
-bash downloadSources.sh
-```
-
 ### Running the pipeline
 
 The pipeline can be controlled by the Task runner. When running the pipeline for the first time, run
@@ -76,53 +69,53 @@ docker compose exec jobs task --list
 This will output a list of tasks:
 ```
 task: Available tasks for this project:
-* create-blazegraph-backup:                   Creates a compressed Blazegraph backup
-* default:                                    Runs the entire pipeline
-* download-address-items:                     Download the address item records from MuseumPlus
-* download-literature-items:                  Download the literature item records from MuseumPlus
-* download-multimedia-items:                  Download the multimedia item records from MuseumPlus
-* download-object-items:                      Download the object item records from MuseumPlus
-* download-person-items:                      Download the person item records from MuseumPlus
-* download-source-items:                      Downloads all item records from MuseumPlus
-* download-source-vocabularies:               Downloads all vocabularies from MuseumPlus
-* execute-query-from-file:                    Execute a query against the main Blazegraph instance. Pass the path to the file as command line argument
-* first-run:                                  Task to run when the pipeline is run for the first time
-* generate-example-record-multimedia:         Generates an example record for developing the mapping in the X3ML editor
-* generate-example-record-object:             Generates an example record for developing the mapping in the X3ML editor
-* generate-example-record-person:             Generates an example record for developing the mapping in the X3ML editor
-* generate-field-definitions:                 Generates the field definitions for the platform based on the fieldDefinitions.yml file
-* ingest-classifications:                     Ingest classifications into the triplestore
-* ingest-items:                               Ingest items for all modules. Add --debug true To see the response from the triplestore
-* ingest-multimedia-items:                    Ingests the multimedia items into the triplestore
-* ingest-object-items:                        Ingests the object items into the triplestore
-* ingest-ontologies:                          Ingests the ontologies into individual named Graphs
-* ingest-person-items:                        Ingests the person items into the triplestore
-* ingest-platform-data:                       Ingests the data used for the operation of the platform
-* perform-mapping-for-multimedia-items:       Performs the mapping for the multimedia items
-* perform-mapping-for-object-items:           Performs the mapping for the object items
-* perform-mapping-for-person-items:           Performs the mapping for the person items
-* perform-mapping-for-vocabularies:           Performs the mapping for the vocabularies
-* prepare-and-perform-mapping:                Prepares and performs the mapping for all modules
-* prepare-mapping-for-address-items:          Prepares the mapping for the object items
-* prepare-mapping-for-multimedia-items:       Prepares the mapping for the multimedia items
-* prepare-mapping-for-object-items:           Prepares the mapping for the object items
-* prepare-mapping-for-person-items:           Prepares the mapping for the person items
-* recreate-folder-metadata:                   Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
-* remove-deleted-address-items:               Removes address item records that have been deleted from MuseumPlus
-* remove-deleted-literature-items:            Removes literature item records that have been deleted from MuseumPlus
-* remove-deleted-multimedia-items:            Removes multimedia item records that have been deleted from MuseumPlus
-* remove-deleted-object-items:                Removes object item records that have been deleted from MuseumPlus
-* remove-deleted-person-items:                Removes person item records that have been deleted from MuseumPlus
-* remove-deleted-source-items:                Removes item records that have been deleted from MuseumPlus
-* reset:                                      Delete all artefacts produced by the pipeline.
-* reset-last-ingested-metadata:               Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
-* reset-last-mapped-metadata:                 Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
-* reset-module:                               Delete all artefacts produced by the pipeline for a given module. The module name should be passed as an argument or via the MODULE variable.
-* reset-vocabularies:                         Delete all artefacts produced by the pipeline for the vocabularies.
-* retrieve-and-ingest-additional-data:        Retrieve and ingest additional data for external URIs in the Triple Store
-* suggest-alignments-for-vocabularies:        Suggest alignments for all vocabularies with GND data
-* update-vocabularies:                        Downloads, maps, and ingests the vocabularies
-* validate-turtle-file:                       Validate a Turtle file using SHACL. Pass the file to validate through command line argument
+* create-blazegraph-backup:                    Creates a compressed Blazegraph backup
+* create-data-dump:                            Creates a TTL dump of the data generated by the pipeline
+* default:                                     Runs the entire pipeline
+* download-items-for-module:                   Downloads the item records for a specific module from MuseumPlus. Pass the module name as command line argument
+* download-source-items:                       Downloads all item records from MuseumPlus
+* download-source-vocabularies:                Downloads all vocabularies from MuseumPlus
+* execute-query-from-file:                     Execute a query against the main Blazegraph instance. Pass the path to the file as command line argument
+* first-run:                                   Task to run when the pipeline is run for the first time
+* generate-example-record-address:             Generates an example Address record for developing the mapping in the X3ML editor
+* generate-example-record-exhibition:          Generates an example Exhibition record for developing the mapping in the X3ML editor
+* generate-example-record-literature:          Generates an example Literature record for developing the mapping in the X3ML editor
+* generate-example-record-multimedia:          Generates an example Multimedia record for developing the mapping in the X3ML editor
+* generate-example-record-object:              Generates an example Object record for developing the mapping in the X3ML editor
+* generate-example-record-person:              Generates an example Person record for developing the mapping in the X3ML editor
+* generate-field-definitions:                  Generates the field definitions for the platform based on the fieldDefinitions.yml file
+* generate-mapping-file-from-3m:               Generates a mapping file from data stored in the 3M Editor.
+* ingest-classifications:                      Ingest classifications into the triplestore
+* ingest-iiif:                                 Ingest IIIF data into the triplestore
+* ingest-items:                                Ingest items for all modules. Add --debug true To see the response from the triplestore
+* ingest-module-items:                         Ingests the items for a specific module. The module name should be passed as an argument or via the MODULE variable.
+* ingest-ontologies:                           Ingests the ontologies into individual named Graphs
+* ingest-platform-data:                        Ingests the data used for the operation of the platform
+* perform-mapping-for-module-items:            Performs the mapping for a specific module. The module name should be passed as an argument or via the MODULE variable.
+* perform-mapping-for-vocabularies:            Performs the mapping for the vocabularies
+* prepare-and-perform-mapping-for-iiif:        Performs the mapping for the IIIF data
+* prepare-and-perform-mapping-for-items:       Prepares and performs the mapping for all modules
+* prepare-mapping-for-module-items:            Prepares the mapping for a specific module. The module name should be passed as an argument or via the MODULE variable.
+* push-latest-data-dump:                       Upload latest data dump to S3 endpoint for data sharing
+* recreate-folder-metadata:                    Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
+* remove-deleted-address-items:                Removes address item records that have been deleted from MuseumPlus
+* remove-deleted-literature-items:             Removes literature item records that have been deleted from MuseumPlus
+* remove-deleted-multimedia-items:             Removes multimedia item records that have been deleted from MuseumPlus
+* remove-deleted-object-items:                 Removes object item records that have been deleted from MuseumPlus
+* remove-deleted-person-items:                 Removes person item records that have been deleted from MuseumPlus
+* remove-deleted-source-items:                 Removes item records that have been deleted from MuseumPlus
+* reset:                                       Delete all artefacts produced by the pipeline.
+* reset-iiif:                                  Delete all artefacts produced by the pipeline for the iiif data.
+* reset-last-ingested-metadata:                Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
+* reset-last-mapped-metadata:                  Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
+* reset-module:                                Delete all artefacts produced by the pipeline for a given module. The module name should be passed as an argument or via the MODULE variable.
+* reset-vocabularies:                          Delete all artefacts produced by the pipeline for the vocabularies.
+* retrieve-and-ingest-additional-data:         Retrieve and ingest additional data for external URIs in the Triple Store
+* retrieve-iiif-data:                          Downloads and prepares data related to the IIIF images
+* suggest-alignments-for-vocabularies:         Suggest alignments for all vocabularies with GND data
+* update-iiif:                                 Downloads, maps, and ingests the IIIF data
+* update-vocabularies:                         Downloads, maps, and ingests the vocabularies
+* validate-turtle-file:                        Validate a Turtle file using SHACL. Pass the file to validate through command line argument
 ```
 
 To run a specific task type `task` followed by the task name, e.g.:
@@ -147,8 +140,9 @@ docker compose exec jobs task reset-last-mapped-metadata -- object
 
 | Name | Description | Usage
 --- | --- | ---
-| `reset-last-ingested-metadata` | Resets the last ingested metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-ingested-metadata -- {module}` where `{module}` can be `object`, `person` or `address`
-| `reset-last-mapped-metadata` | Resets the last mapped metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-mapped-metadata -- {module}` where `{module}` can be `object`, `person` or `address`
+| `reset-last-ingested-metadata` | Resets the last ingested metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-ingested-metadata -- {module}` where `{module}` is the name of the module (e.g. `object`, `person`, `address`)
+| `reset-last-mapped-metadata` | Resets the last mapped metadata for a specific module. The module name should be passed as an argument. | `docker compose exec jobs task reset-last-mapped-metadata -- {module}` where `{module}` is the name of the module
+| `reset-module -- {module}` | Deletes all artefacts generated by the pipeline for a given module, leaving the source data intact.
 | `update-vocabularies` | Downloads, maps, and ingests the vocabularies | `docker compose exec jobs task update-vocabularies` |
 | `recreate-folder-metadata` | If the folder metadata is lost or gets corrupted, it can be recreated using this tasks | `docker compose exec jobs task recreate-folder-metadata -- {module}` where `{module}` is the name of the folder to recreate the metadata for, e.g. `object`, `person` or `address`
 | `generate-field-definitions` | Generates the field definitions for the platform based on the fieldDefinitions.yml file | `docker compose exec jobs task generate-field-definitions`
@@ -181,4 +175,5 @@ The pipeline stores everything as individual files (instead of relying on a data
     - ***{module}*** Temporary storage for the mapping output data for each module. There is an individual folder per module. Sucessfully mapped data will be moved to *data/ttl/main/{module}*
   - **schemas** Contains RDFS schemas for the ontologies used in the mapping
 - **scripts** Contains scripts, mostly in Python or bash, used for more complex tasks in the pipeline. This folder also contains the Task definitions.
+- **secrets** Contains secrets, e.g. the aws access credentials for uploading the data to S3
 - **services** Contains relevant files for the Docker-based services used in the Pipeline
