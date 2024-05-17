@@ -87,6 +87,7 @@ tasks:
           - LitLanguageVgr
           - LitTypeVgr
           - LitPlaceVgr
+          - LitPersonTypeVgr
           - MulTypeVgr
           - ObjAcquisitionModeVgr
           - ObjCategoryVgr
