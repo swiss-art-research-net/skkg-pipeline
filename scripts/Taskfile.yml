@@ -314,9 +314,9 @@ tasks:
       - task: _ingest-data-from-file
         vars:
           NAME: CIDOC-CRM PC
-          FILE: /mapping/schemas/CIDOC_CRM_v7.1.3_PC.rdfs
+          FILE: /mapping/schemas/CIDOC_CRM_v7.1.3_PC.rdf
           TYPE: application/rdf+xml
-          GRAPH: http://www.cidoc-crm.org/cidoc-crm/
+          GRAPH: http://www.cidoc-crm.org/cidoc-crm/pc/
       - task: _ingest-data-from-file
         vars:
           NAME: CRMdig
