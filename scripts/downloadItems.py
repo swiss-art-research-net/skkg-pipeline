@@ -49,8 +49,14 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     zurich_timezone = pytz.timezone('Europe/Zurich')
     downloadStarted = downloadStarted_utc.astimezone(zurich_timezone)
     
+    # Define query additions for specific modules
+    moduleQueryAdditions = {
+        'Exhibition': '<expert><notEqualsField fieldPath="vocabularyReference.ExhTypeVoc"/></expert>'
+    }
+    queryAddition = moduleQueryAdditions.get(module, None)
+    
     # Get the number of items
-    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated)
+    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=queryAddition)
     if numItems > 0:
         if lastUpdated is not None:
             print(f"Retrieving {numItems} items for module {module} (updated after {datetime.strptime(lastUpdated, '%Y-%m-%dT%H:%M:%S.%f').strftime('%d.%m.%Y %H:%M:%S')})")
@@ -73,7 +79,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         # Check if the file already exists
         if not exists(filename):
             try:
-                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated)
+                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated, queryAddition=queryAddition)
             except:
                 log['omitted'].append(filename)
                 continue

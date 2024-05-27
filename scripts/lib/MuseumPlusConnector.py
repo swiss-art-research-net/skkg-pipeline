@@ -149,7 +149,7 @@ class MPWrapper:
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size > 0
     
-    def getNumberOfItems(self, *, module: str, lastUpdated = None) -> int:
+    def getNumberOfItems(self, *, module: str, lastUpdated = None, queryAddition = None) -> int:
         """
         Returns the number of items in the module
 
@@ -157,6 +157,7 @@ class MPWrapper:
             module (str): The module name
             lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.            
         """
+        print(queryAddition)
         query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
         search = query.find('.//search')
         select = etree.SubElement(search, 'select')
@@ -170,7 +171,7 @@ class MPWrapper:
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size
         
-    def getItemByOffset(self, offset: int, *, module: str, lastUpdated = None) -> etree.Element:
+    def getItemByOffset(self, offset: int, *, module: str, lastUpdated = None, queryAddition = None) -> etree.Element:
         """
         Returns the item at the given offset
 
