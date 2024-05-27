@@ -149,19 +149,22 @@ class MPWrapper:
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size > 0
     
-    def getNumberOfItems(self, *, module: str, lastUpdated = None) -> int:
+    def getNumberOfItems(self, *, module: str, lastUpdated = None, queryAddition = None) -> int:
         """
         Returns the number of items in the module
 
         Args:
             module (str): The module name
-            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.            
+            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.       
+            queryAddition (etree.Element, optional): Additional search query elements. Defaults to None.     
         """
         query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
         search = query.find('.//search')
         select = etree.SubElement(search, 'select')
         field = etree.SubElement(select, 'field')
         field.set('fieldPath', '__id')
+        if queryAddition is not None:
+            search.append(queryAddition)
         url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
         if not response.content:
@@ -170,7 +173,7 @@ class MPWrapper:
         size = int(tree.find('.//{http://www.zetcom.com/ria/ws/module}module').get('totalSize'))
         return size
         
-    def getItemByOffset(self, offset: int, *, module: str, lastUpdated = None) -> etree.Element:
+    def getItemByOffset(self, offset: int, *, module: str, lastUpdated = None, queryAddition = None) -> etree.Element:
         """
         Returns the item at the given offset
 
@@ -178,9 +181,13 @@ class MPWrapper:
             offset (int): The offset of the item
             module (str): The module name
             lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.
+            queryAddition (etree.Element, optional): Additional search query elements. Defaults to None.
         """
         url = self._getModuleSearchUrl(module)
         query = self._getAllItemsQuery(module=module, limit=1, offset=offset, lastUpdated=lastUpdated)
+        if queryAddition is not None:
+            search = query.find('.//search')
+            search.append(queryAddition)
         try:
             response = self._post(url, query)
         except requests.exceptions.HTTPError as e:
