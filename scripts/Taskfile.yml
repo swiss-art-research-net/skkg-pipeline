@@ -544,6 +544,9 @@ tasks:
       - task: _remove-module-items-from-triplestore
         vars:
           MODULE: "{{.MODULE_UCFIRST}}"
+      - task: reset-last-ingested-metadata
+        vars:
+          MODULE: "{{.MODULE_UCFIRST}}"
 
   retrieve-and-ingest-additional-data:
     desc: Retrieve and ingest additional data for external URIs in the Triple Store 
@@ -631,9 +634,15 @@ tasks:
       - rm -rf /mapping/output/vocabularies
 
   reset-last-ingested-metadata:
-    desc: Resets the last ingested metadata for a specific module. The module name should be passed as an argument.
+    desc: Resets the last ingested metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
     vars:
-      MODULE: "{{.CLI_ARGS}}"
+      MODULE:
+        sh: |
+          if [ -z "{{.MODULE}}" ]; then
+            echo "{{.CLI_ARGS}}"
+          else
+            echo "{{.MODULE}}"
+          fi
       SOURCEFOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
     cmds:
@@ -646,9 +655,15 @@ tasks:
           FILEEXTENSION: .xml
 
   reset-last-mapped-metadata:
-    desc: Resets the last mapped metadata for a specific module. The module name should be passed as an argument.
+    desc: Resets the last mapped metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
     vars:
-      MODULE: "{{.CLI_ARGS}}"
+      MODULE:
+        sh: |
+          if [ -z "{{.MODULE}}" ]; then
+            echo "{{.CLI_ARGS}}"
+          else
+            echo "{{.MODULE}}"
+          fi
       SOURCEFOLDER:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
     cmds:
