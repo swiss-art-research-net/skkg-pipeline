@@ -155,7 +155,8 @@ class MPWrapper:
 
         Args:
             module (str): The module name
-            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.            
+            lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.       
+            queryAddition (etree.Element, optional): Additional search query elements. Defaults to None.     
         """
         query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
         search = query.find('.//search')
@@ -180,6 +181,7 @@ class MPWrapper:
             offset (int): The offset of the item
             module (str): The module name
             lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.
+            queryAddition (etree.Element, optional): Additional search query elements. Defaults to None.
         """
         url = self._getModuleSearchUrl(module)
         query = self._getAllItemsQuery(module=module, limit=1, offset=offset, lastUpdated=lastUpdated)
