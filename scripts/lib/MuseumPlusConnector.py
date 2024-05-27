@@ -157,12 +157,13 @@ class MPWrapper:
             module (str): The module name
             lastUpdated (str, optional): The date from which on the items should be counted. Defaults to None.            
         """
-        print(queryAddition)
         query = self._getAllItemsQuery(module=module, limit=1, offset=0, lastUpdated=lastUpdated)
         search = query.find('.//search')
         select = etree.SubElement(search, 'select')
         field = etree.SubElement(select, 'field')
         field.set('fieldPath', '__id')
+        if queryAddition is not None:
+            search.append(queryAddition)
         url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
         if not response.content:
@@ -182,6 +183,9 @@ class MPWrapper:
         """
         url = self._getModuleSearchUrl(module)
         query = self._getAllItemsQuery(module=module, limit=1, offset=offset, lastUpdated=lastUpdated)
+        if queryAddition is not None:
+            search = query.find('.//search')
+            search.append(queryAddition)
         try:
             response = self._post(url, query)
         except requests.exceptions.HTTPError as e:

@@ -51,10 +51,11 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     
     # Define query additions for specific modules
     moduleQueryAdditions = {
-        'Exhibition': '<expert><notEqualsField fieldPath="vocabularyReference.ExhTypeVoc"/></expert>'
+        'Exhibition': '''<expert><notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/></expert>'''
     }
     queryAddition = moduleQueryAdditions.get(module, None)
-    
+    queryAddition = etree.fromstring(queryAddition) if queryAddition else None
+
     # Get the number of items
     numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=queryAddition)
     if numItems > 0:
