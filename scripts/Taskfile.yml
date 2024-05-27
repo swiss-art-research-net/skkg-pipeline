@@ -526,6 +526,25 @@ tasks:
         vars:
           MODULE: "{{.ITEM}}"
 
+  remove-module-items-from-triplestore:
+    desc: Removes all item records for a specific module from the triplestore. The module name should be passed as an argument or via the MODULE variable.
+    prompt: This will remove all item records for the module {{.MODULE_UCFIRST}} from the triplestore. Do you want to continue?
+    interactive: True
+    vars:
+      MODULE:
+        sh: |
+          if [ -z "{{.MODULE}}" ]; then
+            echo "{{.CLI_ARGS}}"
+          else
+            echo "{{.MODULE}}"
+          fi
+      MODULE_UCFIRST:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+    cmds:
+      - task: _remove-module-items-from-triplestore
+        vars:
+          MODULE: "{{.MODULE_UCFIRST}}"
+
   retrieve-and-ingest-additional-data:
     desc: Retrieve and ingest additional data for external URIs in the Triple Store 
     interactive: True
@@ -919,6 +938,29 @@ tasks:
           MODULE: "{{.MODULE}}"
           INPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
+
+  _remove-module-items-from-triplestore:
+    internal: true
+    requires:
+      vars: [MODULE]
+    vars:
+      NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
+      ITEMPREFIX:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+      QUERY: |
+        DELETE {
+          GRAPH ?g {
+            ?s ?p ?o .
+          }
+        } WHERE {
+          GRAPH ?g {
+            ?s ?p ?o .
+          }
+          FILTER(STRSTARTS(STR(?g), \"{{.NAMEDGRAPHBASE}}{{.ITEMPREFIX}}\"))
+        }
+    cmds:
+      - echo "Removing {{.MODULE}} items from the triplestore"
+      - curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update={{.QUERY}}"
 
   _reset-iiif-and-vocabularies:
     internal: true
