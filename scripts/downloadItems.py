@@ -51,7 +51,8 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     
     # Define query additions for specific modules
     moduleQueryAdditions = {
-        'Exhibition': '''<expert><notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/></expert>'''
+        'Exhibition': '''<expert><notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/></expert>''',
+        'Multimedia': '''<expert><notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="20502"/></expert>'''
     }
     queryAddition = moduleQueryAdditions.get(module, None)
     queryAddition = etree.fromstring(queryAddition) if queryAddition else None
