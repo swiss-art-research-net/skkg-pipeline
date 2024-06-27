@@ -23,11 +23,11 @@
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
             <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
             <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
-            <namespace uri="https://data.skkg.ch/object/" prefix="object"/>
-            <namespace uri="https://data.skkg.ch/type/" prefix="type"/>
-            <namespace uri="https://data.skkg.ch/timespan/" prefix="timespan"/>
-            <namespace uri="https://data.skkg.ch/multimedia/" prefix="multimedia"/>
-            <namespace uri="https://data.skkg.ch/person/" prefix="person"/>
+            <namespace prefix="object" uri="https://data.skkg.ch/object/"/>
+            <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+            <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
+            <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
+            <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
         </namespaces>
         <mappings>
             <mapping>
