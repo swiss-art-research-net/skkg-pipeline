@@ -311,43 +311,43 @@ tasks:
           NAME: CIDOC-CRM
           FILE: /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
           TYPE: application/rdf+xml
-          GRAPH: http://www.cidoc-crm.org/cidoc-crm/
+          GRAPH: http://www.cidoc-crm.org/cidoc-crm
       - task: _ingest-data-from-file
         vars:
           NAME: CIDOC-CRM PC
           FILE: /mapping/schemas/CIDOC_CRM_v7.1.3_PC.rdf
           TYPE: application/rdf+xml
-          GRAPH: http://www.cidoc-crm.org/cidoc-crm/pc/
+          GRAPH: http://www.cidoc-crm.org/cidoc-crm/pc
       - task: _ingest-data-from-file
         vars:
           NAME: CRMdig
           FILE: /mapping/schemas/CRMdig_v3.2.1.rdfs
           TYPE: application/rdf+xml
-          GRAPH: http://www.ics.forth.gr/isl/CRMdig/
+          GRAPH: http://www.ics.forth.gr/isl/CRMdig
       - task: _ingest-data-from-file
         vars:
           NAME: CRMsci
           FILE: /mapping/schemas/CRMsci_v2.0.rdfs
           TYPE: application/rdf+xml
-          GRAPH: http://www.cidoc-crm.org/extensions/crmsci/
+          GRAPH: http://www.cidoc-crm.org/extensions/crmsci
       - task: _ingest-data-from-file
         vars:
           NAME: FRBRoo
           FILE: /mapping/schemas/FRBR2.4.rdfs
           TYPE: application/rdf+xml
-          GRAPH: http://iflastandards.info/ns/fr/frbr/frbroo/
+          GRAPH: http://iflastandards.info/ns/fr/frbr/frbroo
       - task: _ingest-data-from-file
         vars:
           NAME: Linked.Art
           FILE: /mapping/schemas/LinkedArt.rdfs
           TYPE: application/rdf+xml
-          GRAPH: https://linked.art/ns/terms/
+          GRAPH: https://linked.art/ns/terms
       - task: _ingest-data-from-file
         vars:
           NAME: SKKG Ontology
           FILE: /mapping/schemas/skkg-ontology.ttl
           TYPE: application/x-turtle
-          GRAPH: http://ontology.skkg.ch/ontology/
+          GRAPH: http://ontology.skkg.ch/ontology
 
   ingest-platform-data:
     desc: Ingests the data used for the operation of the platform
