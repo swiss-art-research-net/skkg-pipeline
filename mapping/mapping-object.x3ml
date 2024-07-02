@@ -23,11 +23,11 @@
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
             <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
             <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
-            <namespace uri="https://data.skkg.ch/object/" prefix="object"/>
-            <namespace uri="https://data.skkg.ch/type/" prefix="type"/>
-            <namespace uri="https://data.skkg.ch/timespan/" prefix="timespan"/>
-            <namespace uri="https://data.skkg.ch/multimedia/" prefix="multimedia"/>
-            <namespace uri="https://data.skkg.ch/person/" prefix="person"/>
+            <namespace prefix="object" uri="https://data.skkg.ch/object/"/>
+            <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+            <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
+            <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
+            <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -318,6 +318,43 @@
                         <target_node>
                             <entity>
                                 <type>crm:E57_Material</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroup/repeatableGroupItem/vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="ObjMaterialTechniqueGrp">../../../@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="ObjTechniqueVgr">../@instanceName</equals>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>crm:P32_used_general_technique</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroup/repeatableGroupItem/vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
                                     <arg name="type" type="constant">type</arg>
                                     <arg name="id" type="xpath">../@id</arg>
