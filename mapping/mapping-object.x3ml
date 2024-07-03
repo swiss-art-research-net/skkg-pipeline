@@ -3092,6 +3092,31 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="NotesClb">@name</equals>
+                            </if>
+                            <relationship>crm:P3_has_note</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
             <mapping>
                 <domain>
