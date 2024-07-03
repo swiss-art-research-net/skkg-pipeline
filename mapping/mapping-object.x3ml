@@ -836,7 +836,7 @@
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="text" type="xpath">if (formattedValue/text()) then (formattedValue/text()) else (concat("Anonymous ", @uuid))</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
                             </entity>
