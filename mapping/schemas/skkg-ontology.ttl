@@ -97,3 +97,8 @@ type:pageref rdf:type skkg:Type, skos:Concept ;
 type:catalogueno rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Kat. Nr."@de ;
     skos:prefLabel "Katalognummer"@de .
+
+type:conversionrate rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Umrechnungskurs"@de, "Conversion rate"@en;
+    skos:prefLabel "Umrechnungskurs"@de, "Conversion rate"@en ;
+    crm:P127_has_broader_term aat:300055662 .
