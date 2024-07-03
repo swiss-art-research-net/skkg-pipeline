@@ -836,7 +836,7 @@
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="text" type="xpath">if (formattedValue/text()) then (formattedValue/text()) else (concat("Anonymous ", @uuid))</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
                             </entity>
@@ -3092,6 +3092,31 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="NotesClb">@name</equals>
+                            </if>
+                            <relationship>crm:P3_has_note</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
             <mapping>
                 <domain>
@@ -3216,14 +3241,44 @@
                             <relation>value</relation>
                         </source_relation>
                         <target_relation>
-                            <relationship>crm:P16_used_specific_object</relationship>
+                            <relationship>crm:P15_was_influenced_by</relationship>
+                            <entity>
+                                <type>crm:E54_Dimension</type>
+                                <instance_generator name="URIwithTypeIdAnd5Levels">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../../../../@uuid</arg>
+                                    <arg name="level1" type="constant">acquisition</arg>
+                                    <arg name="level2" type="constant">payment</arg>
+                                    <arg name="level3" type="xpath">../../@uuid</arg>
+                                    <arg name="level4" type="constant">conversion</arg>
+                                    <arg name="level5" type="constant">rate</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">conversionrate</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Conversion rate</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P90_has_value</relationship>
                         </target_relation>
                     </path>
                     <range>
                         <source_node>value</source_node>
                         <target_node>
                             <entity>
-                                <type>xsd:decimal</type>
+                                <type>xsd:float</type>
                                 <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">text()</arg>
                                 </instance_generator>
