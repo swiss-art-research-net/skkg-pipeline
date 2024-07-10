@@ -81,7 +81,6 @@ tasks:
           - ExhStatusVgr
           - GenCurrencyVgr
           - GenLanguageVgr
-          - GenLocationVgr
           - GenMoveStatusVgr
           - LitAuthorTypeVgr
           - LitLanguageVgr
