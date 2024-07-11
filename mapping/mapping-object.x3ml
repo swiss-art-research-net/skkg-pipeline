@@ -1025,7 +1025,7 @@
                                         <equals value="current">vocabularyReference[@name='StatusVoc']/vocabularyReferenceItem/@name</equals>
                                     </if>
                                     <if>
-                                        <exists>../../virtualField[@name='ObjCurrentLocationVrt']/value[     ends-with(text(), '.Aussenraum') or      ends-with(text(), '.Restaurierungsregal') or      starts-with(text(), 'extern.') ]</exists>
+                                        <exists>../../virtualField[@name='ObjCurrentLocationVrt']/value[ends-with(text(), '.Aussenraum') or ends-with(text(), '.Restaurierungsregal') or starts-with(text(), 'extern.') ]</exists>
                                     </if>
                                 </and>
                             </if>
