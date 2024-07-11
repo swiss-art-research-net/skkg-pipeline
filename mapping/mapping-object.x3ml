@@ -1054,6 +1054,46 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroup/repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="ObjCurrentLocationGrp">../@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="current">vocabularyReference[@name='StatusVoc']/vocabularyReferenceItem/@name</equals>
+                                    </if>
+                                    <if>
+                                        <exists>../../virtualField[@name='ObjCurrentLocationVrt']/value[contains(text(), 'Depot') or contains(text(), 'depot')]</exists>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>crm:P55_has_current_location</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E53_Place</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">vocabularyReference[@name='LocationVoc']/@id</arg>
+                                    <arg name="level1" type="constant">depot_generic</arg>
+                                </instance_generator>
+                                <label_generator name="prefLabel">
+                                    <arg name="text" type="constant">Depot</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
             <mapping>
                 <domain>
