@@ -29,38 +29,6 @@
                 <domain>
                     <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
-                        <if>
-                            <and>
-                                <if>
-                                    <not>
-                                        <if>
-                                            <equals value="151965">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </not>
-                                </if>
-                                <if>
-                                    <not>
-                                        <if>
-                                            <equals value="25578">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </not>
-                                </if>
-                                <if>
-                                    <not>
-                                        <if>
-                                            <equals value="vocabularyReference[@instanceName=&quot;ExhStatusVgr&quot;]/vocabularyReferenceItem/@id">177046</equals>
-                                        </if>
-                                    </not>
-                                </if>
-                                <if>
-                                    <not>
-                                        <if>
-                                            <equals value="148975">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </not>
-                                </if>
-                            </and>
-                        </if>
                         <entity>
                             <type>crm:E7_Activity</type>
                             <type>skkg:Exhibition</type>

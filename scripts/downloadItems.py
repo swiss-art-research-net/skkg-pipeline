@@ -53,7 +53,13 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     moduleQueryAdditions = {
         'Exhibition': '''
             <expert>
-                <notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/>
+                <and>
+                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/>
+                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="151965"/>
+                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="25578"/>
+                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="177046"/>
+                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="148975"/>
+                </and>
             </expert>
             ''',
         'Multimedia': '''
