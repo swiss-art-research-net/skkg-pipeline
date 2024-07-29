@@ -49,20 +49,23 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     zurich_timezone = pytz.timezone('Europe/Zurich')
     downloadStarted = downloadStarted_utc.astimezone(zurich_timezone)
     
-    # Define query additions for specific modules
+    # Define query additions for specific modules as a MuseumPlus search query
     moduleQueryAdditions = {
         'Exhibition': '''
-            <expert>
-                <and>
-                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/>
-                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="151965"/>
-                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="25578"/>
-                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="177046"/>
-                    <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="148975"/>
-                </and>
-            </expert>
+            <search>
+                <expert>
+                    <and>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="151965"/>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="25578"/>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="177046"/>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="148975"/>
+                    </and>
+                </expert>
+            </search>
             ''',
         'Multimedia': '''
+            <search>
                 <expert>
                     <and>
                         <notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="20502"/>
@@ -70,11 +73,14 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
                         <notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237966"/>
                     </and>
                 </expert>
+            </search>
             ''',
         'Object': '''
-            <expert>
-                <equalsVocNodeExcludingHierarchy fieldPath="ObjInternetVoc" operand="20436"/>
-            </expert>
+            <search>
+                <expert>
+                    <equalsVocNodeExcludingHierarchy fieldPath="ObjInternetVoc" operand="20436"/>
+                </expert>
+            </search>
             '''
     }
     queryAddition = moduleQueryAdditions.get(module, None)
@@ -82,6 +88,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
 
     # Get the number of items
     numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=queryAddition)
+    print(f"Found {numItems} items for module {module}")
     if numItems > 0:
         if lastUpdated is not None:
             print(f"Retrieving {numItems} items for module {module} (updated after {datetime.strptime(lastUpdated, '%Y-%m-%dT%H:%M:%S.%f').strftime('%d.%m.%Y %H:%M:%S')})")

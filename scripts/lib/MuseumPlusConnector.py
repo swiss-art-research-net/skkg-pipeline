@@ -32,6 +32,35 @@ class MPWrapper:
             "Accept-Language": "de"
         })
         self.session = session
+
+    def _addQueryAdditionToSearch(self, query: etree.Element, queryAddition: etree.Element) -> etree.Element:
+        """
+        Adds a query addition to the search element of the given query
+
+        Args:
+            query (etree.Element): The query to add the addition to
+            queryAddition (etree.Element): The addition to add
+        """
+        queryExpert = query.find('.//expert')
+        additionExpert = queryAddition.find('.//expert')
+        if queryExpert is None and additionExpert is not None:
+            query.find('.//search').append(additionExpert)
+        elif queryExpert is not None and additionExpert is not None:
+            existingChildren = list(queryExpert)
+            newChildren = list(additionExpert)
+            andElement = etree.SubElement(queryExpert, 'and')
+            for child in existingChildren:
+                queryExpert.remove(child)
+                andElement.append(child)
+            for child in newChildren:
+                andElement.append(child)
+        else:
+            print("Query:")
+            print(etree.tostring(query, pretty_print=True).decode())
+            print("Query Addition:")
+            print(etree.tostring(queryAddition, pretty_print=True).decode())
+            raise ValueError("Could not add query addition to search query")
+        return query
         
     def _get(self, url: str, *, params: dict = {}, timeout=300) -> requests.Request:
         """
@@ -164,7 +193,7 @@ class MPWrapper:
         field = etree.SubElement(select, 'field')
         field.set('fieldPath', '__id')
         if queryAddition is not None:
-            search.append(queryAddition)
+            query = self._addQueryAdditionToSearch(query, queryAddition)
         url = self._getModuleSearchUrl(module)
         response = self._post(url, query)
         if not response.content:
@@ -186,8 +215,7 @@ class MPWrapper:
         url = self._getModuleSearchUrl(module)
         query = self._getAllItemsQuery(module=module, limit=1, offset=offset, lastUpdated=lastUpdated)
         if queryAddition is not None:
-            search = query.find('.//search')
-            search.append(queryAddition)
+            query = self._addQueryAdditionToSearch(query, queryAddition)
         try:
             response = self._post(url, query)
         except requests.exceptions.HTTPError as e:
