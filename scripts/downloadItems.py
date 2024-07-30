@@ -87,7 +87,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     queryAddition = etree.fromstring(queryAddition) if queryAddition else None
 
     # Get the number of items
-    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=queryAddition)
+    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=_createXMLCopy(queryAddition))
     print(f"Found {numItems} items for module {module}")
     if numItems > 0:
         if lastUpdated is not None:
@@ -111,7 +111,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         # Check if the file already exists
         if not exists(filename):
             try:
-                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated, queryAddition=queryAddition)
+                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated, queryAddition=_createXMLCopy(queryAddition))
             except:
                 log['omitted'].append(filename)
                 continue
@@ -155,7 +155,11 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
             # Update last modified for file
             metadata.setLastUpdatedForFile(filename, lastModified, write=False)
     metadata.writeMetadata()
-        
+
+def _createXMLCopy(element):
+    if element is None:
+        return None
+    return etree.fromstring(etree.tostring(element))        
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
