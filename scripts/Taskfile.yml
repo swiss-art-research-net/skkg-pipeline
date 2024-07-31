@@ -963,19 +963,24 @@ tasks:
       ITEMPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
       QUERY: |
-        DELETE {
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT ?g WHERE {
           GRAPH ?g {
-            ?s ?p ?o .
-          }
-        } WHERE {
-          GRAPH ?g {
-            ?s ?p ?o .
+            ?s a/rdfs:subClassOf* skkg:Entity
           }
           FILTER(STRSTARTS(STR(?g), \"{{.NAMEDGRAPHBASE}}{{.ITEMPREFIX}}\"))
         }
     cmds:
       - echo "Removing {{.MODULE}} items from the triplestore"
-      - curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update={{.QUERY}}"
+      - |
+        RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
+        GRAPHS=$(echo $RESPONSE | jq -r '.results.bindings[].g.value')
+        for GRAPH in $GRAPHS; do
+          DROP_QUERY="DROP GRAPH <$GRAPH>"
+          echo "Dropping graph $GRAPH"
+          curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null
+        done
 
   _reset-iiif-and-vocabularies:
     internal: true
