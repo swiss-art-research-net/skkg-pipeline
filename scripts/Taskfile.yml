@@ -963,19 +963,39 @@ tasks:
       ITEMPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
       QUERY: |
-        DELETE {
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT DISTINCT ?g WHERE {
           GRAPH ?g {
-            ?s ?p ?o .
-          }
-        } WHERE {
-          GRAPH ?g {
-            ?s ?p ?o .
+            ?s a/rdfs:subClassOf* skkg:Entity
           }
           FILTER(STRSTARTS(STR(?g), \"{{.NAMEDGRAPHBASE}}{{.ITEMPREFIX}}\"))
         }
     cmds:
       - echo "Removing {{.MODULE}} items from the triplestore"
-      - curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update={{.QUERY}}"
+      - |
+        MAX_RETRIES=5
+        RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
+        GRAPHS=$(echo $RESPONSE | jq -r '.results.bindings[].g.value')
+        CURRENT_GRAPH_INDEX=1
+        TOTAL_NUM_GRAPHS=$(echo $GRAPHS | wc -w)
+        RETRY_COUNT=1
+        for GRAPH in $GRAPHS; do
+          DROP_QUERY="DROP GRAPH <$GRAPH>"
+          echo "Dropping graph $CURRENT_GRAPH_INDEX/$TOTAL_NUM_GRAPHS ($GRAPH)"
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null || true
+            if [ $? -eq 0 ]; then
+              RETRY_COUNT=1
+              CURRENT_GRAPH_INDEX=$((CURRENT_GRAPH_INDEX+1))
+              break
+            else
+              echo "Retrying..."
+              RETRY_COUNT=$((RETRY_COUNT+1))
+              sleep 2
+            fi
+          done
+        done
 
   _reset-iiif-and-vocabularies:
     internal: true
