@@ -974,12 +974,26 @@ tasks:
     cmds:
       - echo "Removing {{.MODULE}} items from the triplestore"
       - |
+        MAX_RETRIES=5
         RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
         GRAPHS=$(echo $RESPONSE | jq -r '.results.bindings[].g.value')
+        CURRENT_GRAPH_INDEX=1
+        TOTAL_NUM_GRAPHS=$(echo $GRAPHS | wc -w)
+        RETRY_COUNT=1
         for GRAPH in $GRAPHS; do
           DROP_QUERY="DROP GRAPH <$GRAPH>"
-          echo "Dropping graph $GRAPH"
-          curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null
+          echo "Dropping graph $CURRENT_GRAPH_INDEX/$TOTAL_NUM_GRAPHS ($GRAPH)"
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null
+            if [ $? -eq 0 ]; then
+              RETRY_COUNT=1
+              break
+            else
+              echo "Retrying..."
+              RETRY_COUNT=$((RETRY_COUNT+1))
+              sleep 2
+            fi
+          done
         done
 
   _reset-iiif-and-vocabularies:
