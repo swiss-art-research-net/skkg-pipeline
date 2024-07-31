@@ -984,7 +984,7 @@ tasks:
           DROP_QUERY="DROP GRAPH <$GRAPH>"
           echo "Dropping graph $CURRENT_GRAPH_INDEX/$TOTAL_NUM_GRAPHS ($GRAPH)"
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-            curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null
+            curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null || true
             if [ $? -eq 0 ]; then
               RETRY_COUNT=1
               CURRENT_GRAPH_INDEX=$((CURRENT_GRAPH_INDEX+1))
