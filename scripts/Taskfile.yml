@@ -987,6 +987,7 @@ tasks:
             curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null
             if [ $? -eq 0 ]; then
               RETRY_COUNT=1
+              CURRENT_GRAPH_INDEX=$((CURRENT_GRAPH_INDEX+1))
               break
             else
               echo "Retrying..."
