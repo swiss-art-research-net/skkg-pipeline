@@ -965,7 +965,7 @@ tasks:
       QUERY: |
         PREFIX skkg: <https://ontology.skkg.ch/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        SELECT ?g WHERE {
+        SELECT DISTINCT ?g WHERE {
           GRAPH ?g {
             ?s a/rdfs:subClassOf* skkg:Entity
           }
