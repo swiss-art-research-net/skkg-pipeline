@@ -548,6 +548,24 @@ tasks:
         vars:
           MODULE: "{{.MODULE_UCFIRST}}"
 
+  remove-module-items-without-equivalent-ttl-from-triplestore:
+    desc: Removes all item records for a specific module from the triplestore that do not have an equivalent TTL file. The module name should be passed as an argument or via the MODULE variable.
+    interactive: True
+    vars:
+      MODULE:
+        sh: |
+          if [ -z "{{.MODULE}}" ]; then
+            echo "{{.CLI_ARGS}}"
+          else
+            echo "{{.MODULE}}"
+          fi
+      MODULE_UCFIRST:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+    cmds:
+      - task: _remove-module-items-without-equivalent-ttl-from-triplestore
+        vars:
+          MODULE: "{{.MODULE_UCFIRST}}"
+
   retrieve-and-ingest-additional-data:
     desc: Retrieve and ingest additional data for external URIs in the Triple Store 
     interactive: True
@@ -996,6 +1014,32 @@ tasks:
             fi
           done
         done
+
+  _remove-module-items-without-equivalent-ttl-from-triplestore:
+    internal: true
+    requires:
+      vars: [MODULE]
+    vars:
+      NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
+      ITEMPREFIX:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+      QUERY: |
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT DISTINCT ?g WHERE {
+          GRAPH ?g {
+            ?s a/rdfs:subClassOf* skkg:Entity
+          }
+          FILTER(STRSTARTS(STR(?g), \"{{.NAMEDGRAPHBASE}}{{.ITEMPREFIX}}\"))
+        }
+    cmds:
+      - |
+        MAX_RETRIES=5
+        RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
+        GRAPHS=$(echo $RESPONSE | jq -r '.results.bindings[].g.value')
+        CURRENT_GRAPH_INDEX=1
+        TOTAL_NUM_GRAPHS=$(echo $GRAPHS | wc -w)
+        echo "Total number of graphs: $TOTAL_NUM_GRAPHS"
 
   _reset-iiif-and-vocabularies:
     internal: true
