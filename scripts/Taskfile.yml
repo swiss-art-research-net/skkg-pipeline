@@ -548,6 +548,39 @@ tasks:
         vars:
           MODULE: "{{.MODULE_UCFIRST}}"
 
+  remove-items-without-equivalent-ttl-from-triplestore:
+    desc: Removes all item records from the triplestore that do not have an equivalent TTL file
+    prompt: This will remove all item records from the triplestore that do not have an equivalent TTL file. Do you want to continue?
+    cmds:
+      - for:
+          - Address
+          - Exhibition
+          - Literature
+          - Multimedia
+          - Object
+          - Person
+        task: _remove-module-items-without-equivalent-ttl-from-triplestore
+        vars:
+          MODULE: "{{.ITEM}}"
+
+  remove-module-items-without-equivalent-ttl-from-triplestore:
+    desc: Removes all item records for a specific module from the triplestore that do not have an equivalent TTL file. The module name should be passed as an argument or via the MODULE variable.
+    interactive: True
+    vars:
+      MODULE:
+        sh: |
+          if [ -z "{{.MODULE}}" ]; then
+            echo "{{.CLI_ARGS}}"
+          else
+            echo "{{.MODULE}}"
+          fi
+      MODULE_UCFIRST:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+    cmds:
+      - task: _remove-module-items-without-equivalent-ttl-from-triplestore
+        vars:
+          MODULE: "{{.MODULE_UCFIRST}}"
+
   retrieve-and-ingest-additional-data:
     desc: Retrieve and ingest additional data for external URIs in the Triple Store 
     interactive: True
@@ -995,6 +1028,61 @@ tasks:
               sleep 2
             fi
           done
+        done
+
+  _remove-module-items-without-equivalent-ttl-from-triplestore:
+    internal: true
+    requires:
+      vars: [MODULE]
+    silent: true
+    vars:
+      NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
+      ITEMPREFIX:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+      TTLFOLDER:
+        sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      QUERY: |
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT DISTINCT ?g WHERE {
+          GRAPH ?g {
+            ?s a/rdfs:subClassOf* skkg:Entity
+          }
+          FILTER(STRSTARTS(STR(?g), \"{{.NAMEDGRAPHBASE}}{{.ITEMPREFIX}}\"))
+        }
+    cmds:
+      - echo "Checking for {{.MODULE}} items in the triplestore that do not have an equivalent TTL file..."
+      - |
+        MAX_RETRIES=5
+        RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
+        GRAPHS=$(echo $RESPONSE | jq -r '.results.bindings[].g.value')
+        TOTAL_NUM_GRAPHS=$(echo $GRAPHS | wc -w)
+        echo "Total number of graphs: $TOTAL_NUM_GRAPHS"
+        TTL_FILES=$(find {{.TTLFOLDER}} -type f -name "*.ttl" | xargs -n 1 basename | sed 's/.ttl//')
+        TOTAL_NUM_TTL_FILES=$(echo $TTL_FILES | wc -w)
+        echo "Total number of TTL files: $TOTAL_NUM_TTL_FILES"
+        # For each GRAPH in the triplestore check if there is a corresponding TTL file. If not remove the GRAPH
+        RETRY_COUNT=1
+        for GRAPH in $GRAPHS; do
+          # Extract the GRAPH name from the full URI by removing the NAMEDGRAPHBASE
+          GRAPH_NAME="${GRAPH#{{.NAMEDGRAPHBASE}}}"
+          if [[ $TTL_FILES == *$GRAPH_NAME* ]]; then
+            continue
+          else
+            DROP_QUERY="DROP GRAPH <$GRAPH>"
+            echo "Dropping graph $GRAPH"
+            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+              curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null || true
+              if [ $? -eq 0 ]; then
+                RETRY_COUNT=1
+                break
+              else
+                echo "Retrying..."
+                RETRY_COUNT=$((RETRY_COUNT+1))
+                sleep 2
+              fi
+            done
+          fi
         done
 
   _reset-iiif-and-vocabularies:
