@@ -1040,11 +1040,33 @@ tasks:
         MAX_RETRIES=5
         RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
         GRAPHS=$(echo $RESPONSE | jq -r '.results.bindings[].g.value')
-        CURRENT_GRAPH_INDEX=1
         TOTAL_NUM_GRAPHS=$(echo $GRAPHS | wc -w)
         echo "Total number of graphs: $TOTAL_NUM_GRAPHS"
-        TOTAL_NUM_TTL_FILES=$(find {{.TTLFOLDER}} -type f -name "*.ttl" | wc -l)
+        TTL_FILES=$(find {{.TTLFOLDER}} -type f -name "*.ttl" | xargs -n 1 basename | sed 's/.ttl//')
+        TOTAL_NUM_TTL_FILES=$(echo $TTL_FILES | wc -w)
         echo "Total number of TTL files: $TOTAL_NUM_TTL_FILES"
+        # For each GRAPH in the triplestore check if there is a corresponding TTL file. If not remove the GRAPH
+        RETRY_COUNT=1
+        for GRAPH in $GRAPHS; do
+          GRAPH_NAME="${GRAPH#{{.NAMEDGRAPHBASE}}}"
+          if [[ $TTL_FILES == *$GRAPH_NAME* ]]; then
+            continue
+          else
+            DROP_QUERY="DROP GRAPH <$GRAPH>"
+            echo "Dropping graph $GRAPH"
+            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+              curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null || true
+              if [ $? -eq 0 ]; then
+                RETRY_COUNT=1
+                break
+              else
+                echo "Retrying..."
+                RETRY_COUNT=$((RETRY_COUNT+1))
+                sleep 2
+              fi
+            done
+          fi
+        done
 
   _reset-iiif-and-vocabularies:
     internal: true
