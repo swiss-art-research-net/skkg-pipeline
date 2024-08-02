@@ -548,6 +548,21 @@ tasks:
         vars:
           MODULE: "{{.MODULE_UCFIRST}}"
 
+  remove-items-without-equivalent-ttl-from-triplestore:
+    desc: Removes all item records from the triplestore that do not have an equivalent TTL file
+    prompt: This will remove all item records from the triplestore that do not have an equivalent TTL file. Do you want to continue?
+    cmds:
+      - for:
+          - Address
+          - Exhibition
+          - Literature
+          - Multimedia
+          - Object
+          - Person
+        task: _remove-module-items-without-equivalent-ttl-from-triplestore
+        vars:
+          MODULE: "{{.ITEM}}"
+
   remove-module-items-without-equivalent-ttl-from-triplestore:
     desc: Removes all item records for a specific module from the triplestore that do not have an equivalent TTL file. The module name should be passed as an argument or via the MODULE variable.
     interactive: True
@@ -1019,6 +1034,7 @@ tasks:
     internal: true
     requires:
       vars: [MODULE]
+    silent: true
     vars:
       NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
       ITEMPREFIX:
@@ -1035,7 +1051,7 @@ tasks:
           FILTER(STRSTARTS(STR(?g), \"{{.NAMEDGRAPHBASE}}{{.ITEMPREFIX}}\"))
         }
     cmds:
-      - echo "Removing {{.MODULE}} items from the triplestore that do not have an equivalent TTL file"
+      - echo "Checking for {{.MODULE}} items in the triplestore that do not have an equivalent TTL file..."
       - |
         MAX_RETRIES=5
         RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
@@ -1048,6 +1064,7 @@ tasks:
         # For each GRAPH in the triplestore check if there is a corresponding TTL file. If not remove the GRAPH
         RETRY_COUNT=1
         for GRAPH in $GRAPHS; do
+          # Extract the GRAPH name from the full URI by removing the NAMEDGRAPHBASE
           GRAPH_NAME="${GRAPH#{{.NAMEDGRAPHBASE}}}"
           if [[ $TTL_FILES == *$GRAPH_NAME* ]]; then
             continue
