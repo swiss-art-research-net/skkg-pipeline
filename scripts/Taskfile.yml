@@ -1023,6 +1023,8 @@ tasks:
       NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
       ITEMPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+      TTLFOLDER:
+        sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       QUERY: |
         PREFIX skkg: <https://ontology.skkg.ch/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -1033,6 +1035,7 @@ tasks:
           FILTER(STRSTARTS(STR(?g), \"{{.NAMEDGRAPHBASE}}{{.ITEMPREFIX}}\"))
         }
     cmds:
+      - echo "Removing {{.MODULE}} items from the triplestore that do not have an equivalent TTL file"
       - |
         MAX_RETRIES=5
         RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
@@ -1040,6 +1043,8 @@ tasks:
         CURRENT_GRAPH_INDEX=1
         TOTAL_NUM_GRAPHS=$(echo $GRAPHS | wc -w)
         echo "Total number of graphs: $TOTAL_NUM_GRAPHS"
+        TOTAL_NUM_TTL_FILES=$(find {{.TTLFOLDER}} -type f -name "*.ttl" | wc -l)
+        echo "Total number of TTL files: $TOTAL_NUM_TTL_FILES"
 
   _reset-iiif-and-vocabularies:
     internal: true
