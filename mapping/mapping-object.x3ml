@@ -1047,7 +1047,23 @@
                                     <arg name="language" type="xpath">vocabularyReference[@name='LocationVoc']/vocabularyReferenceItem/formattedValue/@language</arg>
                                 </label_generator>
                                 <label_generator name="prefLabel">
-                                    <arg name="text" type="xpath">../../virtualField[@name='ObjCurrentLocationVrt']/value/text()</arg>
+                                    <arg name="text" type="xpath">if ( ../../virtualField[@name='ObjCurrentLocationVrt']/value/text() = 'Brestenberg.Aussenraum')
+then ('Schloss Brestenberg, Brestenbergstrasse 8, Seengen')
+else (
+  if ( ../../virtualField[@name='ObjCurrentLocationVrt']/value/text() = 'Tower.Aussenraum')
+  then ('Wintower, Neuwiesenstrasse 15, Winterthur')
+  else (
+    if ( ../../virtualField[@name='ObjCurrentLocationVrt']/value/text() = 'Tower.2.Restaurierungsregal')
+    then ('Depot, Restaurierungsregal')
+    else (
+      if ( ../../virtualField[@name='ObjCurrentLocationVrt']/value/text() = 'Tower.3, B&#252;ro')
+      then ('Stiftung f&#252;r Kunst, Kultur und Geschichte, Neuwiesenstrasse 15, Winterthur, B&#252;ro')
+      else (replace(../../virtualField[@name='ObjCurrentLocationVrt']/value/text(), 'extern.', ''))
+    )
+  )
+)
+
+</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
                             </entity>
