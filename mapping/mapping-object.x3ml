@@ -1047,7 +1047,7 @@
                                     <arg name="language" type="xpath">vocabularyReference[@name='LocationVoc']/vocabularyReferenceItem/formattedValue/@language</arg>
                                 </label_generator>
                                 <label_generator name="prefLabel">
-                                    <arg name="text" type="xpath">../../virtualField[@name='ObjCurrentLocationVrt']/value/text()</arg>
+                                    <arg name="text" type="xpath">replace(../../virtualField[@name='ObjCurrentLocationVrt']/value/text(), 'extern.', '')</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
                             </entity>
