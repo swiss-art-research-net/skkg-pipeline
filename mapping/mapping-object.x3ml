@@ -3738,7 +3738,7 @@ else (
                         <if>
                             <equals value="ObjObjectARef">../@name</equals>
                         </if>
-                        <entity>
+                        <entity variable="reference_objObjectARef">
                             <type>crm:E33_Linguistic_Object</type>
                             <instance_generator name="URIwithTypeIdAnd3Levels">
                                 <arg name="type" type="constant">object</arg>
@@ -3762,23 +3762,6 @@ else (
                                         <arg name="type" type="constant">object</arg>
                                         <arg name="id" type="xpath">../../../../@uuid</arg>
                                     </instance_generator>
-                                </entity>
-                            </additional>
-                            <additional>
-                                <relationship>crm:P2_has_type</relationship>
-                                <entity>
-                                    <type>crm:E55_Type</type>
-                                    <instance_info>
-                                        <constant/>
-                                    </instance_info>
-                                    <instance_generator name="URIwithTypeAndId">
-                                        <arg name="type" type="constant">type</arg>
-                                        <arg name="id" type="constant">21116</arg>
-                                    </instance_generator>
-                                    <label_generator name="Literal">
-                                        <arg name="text" type="xpath">vocabularyReference[@name='TypeAVoc']/@instanceName</arg>
-                                        <arg name="language" type="constant"/>
-                                    </label_generator>
                                 </entity>
                             </additional>
                         </entity>
