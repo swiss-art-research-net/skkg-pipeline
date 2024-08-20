@@ -930,6 +930,7 @@ tasks:
             sh: date -u "+%Y-%m-%d %H:%M:%S.000"
           SOURCEFOLDER: "{{.INPUTFOLDER}}"
           FILEEXTENSION: .xml
+      - find {{.INPUTFOLDER}} -maxdepth 1 -name "*.xml" -delete
       - task: _perform-post-mapping-tasks
         vars:
           MODULE: "{{.MODULE}}"
