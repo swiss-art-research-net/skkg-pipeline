@@ -1,4 +1,5 @@
 @prefix aat: <http://vocab.getty.edu/aat/> .
+@prefix address: <https://data.skkg.ch/address/> .
 @prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -102,3 +103,7 @@ type:conversionrate rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Umrechnungskurs"@de, "Conversion rate"@en;
     skos:prefLabel "Umrechnungskurs"@de, "Conversion rate"@en ;
     crm:P127_has_broader_term aat:300055662 .
+
+address:privateIndividual rdf:type skkg:Address ;
+    rdfs:label "Private Individual"@en, "Privatperson"@de ;
+    skos:prefLabel "Private Individual"@en, "Privatperson"@de .
