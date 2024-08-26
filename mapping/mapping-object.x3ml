@@ -833,10 +833,10 @@
                                 <type>skkg:Address</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">address</arg>
-                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="id" type="xpath">if (../../dataField[@name='_UserObj4487Boo']/value/text() = 'true') then ('privateIndividual') else (@uuid)</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">if (formattedValue/text()) then (formattedValue/text()) else (concat("Anonymous ", @uuid))</arg>
+                                    <arg name="text" type="xpath">if (formattedValue/text()) then (formattedValue/text()) else ("Anonymous")</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
                             </entity>
