@@ -65,6 +65,7 @@ tasks:
           - Multimedia
           - Object
           - Person
+          - Registrar
         task: _download-module-items-from-museumplus
         vars:
           MODULE: "{{.ITEM}}"
