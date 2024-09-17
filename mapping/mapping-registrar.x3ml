@@ -88,7 +88,14 @@
                     <source_node>/application/modules/module/moduleItem/moduleReference</source_node>
                     <target_node>
                         <if>
-                            <equals value="RegObjectRef">@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="RegObjectRef">@name</equals>
+                                </if>
+                                <if>
+                                    <exists>../moduleReference[@name='RegExhibitionRef']/moduleReferenceItem/@uuid</exists>
+                                </if>
+                            </and>
                         </if>
                         <entity variable="exhibited_objects">
                             <type>la:Set</type>
