@@ -81,7 +81,17 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
                     <equalsVocNodeExcludingHierarchy fieldPath="ObjInternetVoc" operand="20436"/>
                 </expert>
             </search>
-            '''
+            ''',
+        'Registrar': '''
+            <search>
+                <expert>
+                    <or>
+                        <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="140176"/>
+                        <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="199969"/>
+                    </or>
+                </expert>
+            </search>
+        '''
     }
     queryAddition = moduleQueryAdditions.get(module, None)
     queryAddition = etree.fromstring(queryAddition) if queryAddition else None
