@@ -721,7 +721,26 @@ tasks:
           VALUE: "1970-01-01 00:00:00.000"
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
-  
+
+  run-pipeline-cycles:
+    cmds:
+      - task: _run-task-according-to-interval
+        vars:
+          TASK: default
+          INTERVAL: 1d
+      - task:  _run-task-according-to-interval
+        vars:
+          TASK: update-vocabularies
+          INTERVAL: 1w
+      - task: _run-task-according-to-interval
+        vars:
+          TASK: create-data-dump
+          INTERVAL: 1w
+      - task: _run-task-according-to-interval
+        vars:
+          TASK: push-latest-data-dump
+          INTERVAL: 1w
+
   suggest-alignments-for-vocabularies:
     desc: Suggest alignments for all vocabularies with GND data
     sources:
@@ -1107,6 +1126,47 @@ tasks:
     cmds:
       - task: reset-vocabularies
       - task: reset-iiif
+
+  _run-task-according-to-interval:
+    internal: true
+    desc: Run a task according to a specified interval
+    requires:
+      vars: [TASK, INTERVAL]
+    vars:
+      LAST_RUN:
+        sh: cat /scripts/.task/lastrun/{{.TASK}} 2>/dev/null || echo 0
+      INTERVAL_IN_SECONDS:
+        sh: |
+          FREQUENCY="{{.INTERVAL}}"
+          case "${FREQUENCY: -1}" in
+            "s") INTERVAL=${FREQUENCY%?} ;;   # Seconds
+            "m") INTERVAL=$((${FREQUENCY%?} * 60)) ;;   # Minutes
+            "h") INTERVAL=$((${FREQUENCY%?} * 3600)) ;; # Hours
+            "d") INTERVAL=$((${FREQUENCY%?} * 86400)) ;; # Days
+            "w") INTERVAL=$((${FREQUENCY%?} * 604800)) ;; # Weeks
+            "M") INTERVAL=$((${FREQUENCY%?} * 2592000)) ;; # Months (approx 30 days)
+            "y") INTERVAL=$((${FREQUENCY%?} * 31536000)) ;; # Years (365 days)
+            *)
+              echo "Invalid frequency format."
+              exit 1
+              ;;
+          esac
+          echo $INTERVAL
+      CURRENT_TIME: 
+        sh: date +%s
+    status:
+      - |
+          CURRENT_TIME={{.CURRENT_TIME}}
+          LAST_RUN={{.LAST_RUN}}
+          INTERVAL_IN_SECONDS={{.INTERVAL_IN_SECONDS}}
+          if [ $(($CURRENT_TIME - $LAST_RUN)) -ge $INTERVAL_IN_SECONDS ]; then
+            exit 1
+          else
+            exit 0
+          fi
+    cmds:
+      - task: "{{.TASK}}"
+      - echo "{{.CURRENT_TIME}}" > /scripts/.task/lastrun/{{.TASK}}
 
   _suggest-alignments:
     internal: True
