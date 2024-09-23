@@ -723,6 +723,7 @@ tasks:
           FILEEXTENSION: .xml
 
   run-pipeline-cycles:
+    desc: Runs the entire pipeline as well as certain tasks according to a specific interval. When this task is executed, each step of the pipeline will be run if the interval has passed since the last execution of the task. The interval is defined in the vars section of each task.
     cmds:
       - task: _run-task-according-to-interval
         vars:
@@ -1166,6 +1167,7 @@ tasks:
           fi
     cmds:
       - task: "{{.TASK}}"
+      - mkdir -p /scripts/.task/lastrun
       - echo "{{.CURRENT_TIME}}" > /scripts/.task/lastrun/{{.TASK}}
 
   _suggest-alignments:
