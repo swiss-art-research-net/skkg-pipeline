@@ -1166,6 +1166,7 @@ tasks:
           fi
     cmds:
       - task: "{{.TASK}}"
+      - mkdir -p /scripts/.task/lastrun
       - echo "{{.CURRENT_TIME}}" > /scripts/.task/lastrun/{{.TASK}}
 
   _suggest-alignments:
