@@ -1145,7 +1145,7 @@ tasks:
     deps:
       - task: _output_message
         vars:
-          MESSAGE: "Checking if task '{{.TASK}}' sould be run..."
+          MESSAGE: "Checking if task '{{.TASK}}' has been run in the last {{.INTERVAL}}"
     vars:
       LAST_RUN:
         sh: cat /scripts/.task/lastrun/{{.TASK}} 2>/dev/null || echo 0
