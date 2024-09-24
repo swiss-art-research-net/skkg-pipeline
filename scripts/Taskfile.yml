@@ -938,6 +938,15 @@ tasks:
           count=$((count+1)) 
         done
 
+  _output_message:
+    internal: true
+    decs: Output a message to the console
+    silent: true
+    requires:
+      vars: [MESSAGE]
+    cmds:
+      - echo "{{.MESSAGE}}"
+
   _perform-mapping-for-module-items:
     internal: true
     requires:
@@ -1133,6 +1142,10 @@ tasks:
     desc: Run a task according to a specified interval
     requires:
       vars: [TASK, INTERVAL]
+    deps:
+      - task: _output_message
+        vars:
+          MESSAGE: "Checking if task '{{.TASK}}' sould be run..."
     vars:
       LAST_RUN:
         sh: cat /scripts/.task/lastrun/{{.TASK}} 2>/dev/null || echo 0
