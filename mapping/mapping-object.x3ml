@@ -1827,7 +1827,7 @@ else (
                                     <arg name="level3" type="constant">dimension</arg>
                                     <arg name="level4" type="constant">1</arg>
                                 </instance_generator>
-                                <label_generator name="Literal">
+                                <label_generator name="prefLabel">
                                     <arg name="text" type="xpath">concat('Height of object part: ', if (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../@uuid))</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
@@ -1908,7 +1908,7 @@ else (
                                     <arg name="level3" type="constant">dimension</arg>
                                     <arg name="level4" type="constant">2</arg>
                                 </instance_generator>
-                                <label_generator name="Literal">
+                                <label_generator name="prefLabel">
                                     <arg name="text" type="xpath">concat('Width of object part: ', if (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../@uuid))</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
@@ -1989,7 +1989,7 @@ else (
                                     <arg name="level3" type="constant">dimension</arg>
                                     <arg name="level4" type="constant">3</arg>
                                 </instance_generator>
-                                <label_generator name="Literal">
+                                <label_generator name="prefLabel">
                                     <arg name="text" type="xpath">concat('Depth of object part: ', if (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../@uuid))</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
