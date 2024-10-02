@@ -1,4 +1,4 @@
-name: Run pipeline tasks on STAGING
+name: Run pipeline task on STAGING
 
 on:
   workflow_dispatch:
