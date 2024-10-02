@@ -1,0 +1,20 @@
+name: Update PROD pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: SSH into server and git pull
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEPLOY_HOST_PROD }}
+        username: ${{ secrets.SSH_USER_PROD }}
+        key: ${{ secrets.DEPLOY_KEY_PROD }}
+        passphrase: ${{ secrets.DEPLOY_KEY_PASS_PROD }}
+        script: |
+          cd ${{ secrets.DEPLOY_PATH_PROD }}
+          git pull

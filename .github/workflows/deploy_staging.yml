@@ -1,0 +1,23 @@
+name: Update STAGING pipeline
+
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: SSH into server and git pull
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEPLOY_HOST_STAGING }}
+        username: ${{ secrets.SSH_USER_STAGING }}
+        key: ${{ secrets.DEPLOY_KEY_STAGING }}
+        passphrase: ${{ secrets.DEPLOY_KEY_PASS_STAGING }}
+        script: |
+          cd ${{ secrets.DEPLOY_PATH_STAGING }}
+          git pull
