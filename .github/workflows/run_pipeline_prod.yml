@@ -1,0 +1,29 @@
+name: Run pipeline task on PROD
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        type: choice
+        description: Which task would you like to run?
+        options:
+          - default
+          - run-pipeline-cycles
+          - update-vocabularies
+          - update-iiif
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: SSH into server and run pipeline
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEPLOY_HOST_PROD }}
+        username: ${{ secrets.SSH_USER_PROD }}
+        key: ${{ secrets.DEPLOY_KEY_PROD }}
+        command_timeout: 200m
+        script: |
+          cd ${{ secrets.DEPLOY_PATH_PROD }}
+          docker compose exec jobs task ${{ github.event.inputs.task }}
