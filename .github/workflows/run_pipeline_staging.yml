@@ -3,7 +3,7 @@ name: Run pipeline task on STAGING
 on:
   workflow_dispatch:
     inputs:
-      name:
+      task:
         type: choice
         description: Which task would you like to run?
         options:
@@ -26,4 +26,4 @@ jobs:
         command_timeout: 200m
         script: |
           cd ${{ secrets.DEPLOY_PATH_STAGING }}
-          docker compose exec jobs task
+          docker compose exec jobs task ${{ github.event.inputs.task }}
