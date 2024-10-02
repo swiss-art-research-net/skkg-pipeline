@@ -1,7 +1,16 @@
-name: Update and run pipeline on Staging
+name: Run pipeline task on STAGING
 
 on:
   workflow_dispatch:
+    inputs:
+      name:
+        type: choice
+        description: Which task would you like to run?
+        options:
+          - default
+          - run-pipeline-cycles
+          - update-vocabularies
+          - update-iiif
 
 jobs:
   run:
