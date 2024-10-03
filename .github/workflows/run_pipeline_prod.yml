@@ -11,6 +11,7 @@ on:
           - run-pipeline-cycles
           - update-vocabularies
           - update-iiif
+          - reset-last-mapped-metadata -- object
 
 jobs:
   run:
