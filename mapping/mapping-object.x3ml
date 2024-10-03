@@ -3697,7 +3697,7 @@ else (
                                 </if>
                             </and>
                         </if>
-                        <entity>
+                        <entity variable="dimension_unit_first">
                             <type>crm:E54_Dimension</type>
                             <instance_generator name="URIwithTypeIdAnd4Levels">
                                 <arg name="type" type="constant">object</arg>
@@ -3783,7 +3783,7 @@ else (
                     <range>
                         <source_node>../vocabularyReference/vocabularyReferenceItem</source_node>
                         <target_node>
-                            <entity>
+                            <entity variable="dimension_unit_second">
                                 <type>crm:E58_Measurement_Unit</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
                                     <arg name="type" type="constant">type</arg>
@@ -3841,7 +3841,7 @@ else (
                     <range>
                         <source_node>../vocabularyReference/vocabularyReferenceItem</source_node>
                         <target_node>
-                            <entity>
+                            <entity variable="dimension_unit_third">
                                 <type>crm:E58_Measurement_Unit</type>
                                 <instance_generator name="URIwithTypeIdAnd1Level">
                                     <arg name="type" type="constant">type</arg>
