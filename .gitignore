@@ -28,6 +28,10 @@ mapping/example-*.xml
 # Taskfile specific
 scripts/.task/**/*
 
+# Qlever specific
+services/qlever/**/*.*
+!services/qlever/Qleverfile
+
 # Local
 *.zip
 docker-compose.override.yml

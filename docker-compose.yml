@@ -69,6 +69,13 @@ services:
     volumes:
       - platform-data:/runtime-data
       - ./services/platform/apps:/apps
+  
+  qlever:
+    build: ./services/qlever
+    container_name: ${PROJECT_NAME}_qlever
+    volumes:
+      - ./data:/index/skkg/data
+      - ./services/qlever/skkg:/index/skkg
 
 secrets:
   aws:
