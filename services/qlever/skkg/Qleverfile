@@ -12,13 +12,13 @@ DESCRIPTION      = SKKG Data
 TEXT_DESCRIPTION = All literals, search with FILTER KEYWORDS(?text, "...")
 
 [index]
-INPUT_FILES     = data/ttl/dump/dump-2024-09-23-16-00-37.ttl.gz
-CAT_INPUT_FILES = zcat ${INPUT_FILES}
-SETTINGS_JSON   = { "ascii-prefixes-only": true, "num-triples-per-batch": 1000000 }
+INPUT_FILES     = data/ttl/main/address/*.ttl
+CAT_INPUT_FILES = cat ${INPUT_FILES}
+SETTINGS_JSON   = { "num-triples-per-batch": 1000000 }
 TEXT_INDEX      = from_literals
 
 [server]
-PORT               = 7041
+PORT               = 7001
 ACCESS_TOKEN       = ${data:NAME}_8736426534
 MEMORY_FOR_QUERIES = 10G
 
