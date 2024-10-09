@@ -606,7 +606,14 @@ tasks:
       INGESTUPDATE: True
       INGESTNAMESPACE: https://data.skkg.ch/graph/externalData/
     cmds:
-      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}}
+      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}} --sources "{{.SOURCES}}"
+      - for:
+          - gnd
+          - aat
+        task: _clean_turtle_file_from_extra_prefixes
+        vars:
+          FILE: "/data/ttl/additional/external/{{.ITEM}}.ttl"
+
 
   retrieve-iiif-data:
     desc: Downloads and prepares data related to the IIIF images
