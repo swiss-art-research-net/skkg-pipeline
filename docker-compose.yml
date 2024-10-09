@@ -69,22 +69,6 @@ services:
     volumes:
       - platform-data:/runtime-data
       - ./services/platform/apps:/apps
-  
-  qlever:
-    build: ./services/qlever
-    container_name: ${PROJECT_NAME}_qlever
-    ports:
-      - 7001:7001
-    volumes:
-      - ./data:/index/skkg/data
-      - ./services/qlever/skkg:/index/skkg
-    
-  qlever-ui:
-    image: docker.io/adfreiburg/qlever-ui
-    container_name: ${PROJECT_NAME}_qlever_ui
-    command: ["tail", "-f", "/dev/null"]
-    ports:
-      - 7000:7000
 
 secrets:
   aws:
