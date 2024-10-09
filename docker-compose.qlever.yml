@@ -6,6 +6,7 @@ services:
       - 7001:7001
     volumes:
       - ./data:/index/skkg/data
+      - ./mapping/schemas:/index/skkg/schemas
       - ./services/qlever/skkg:/index/skkg
     
   qlever-ui:
