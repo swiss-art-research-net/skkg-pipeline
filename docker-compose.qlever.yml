@@ -1,5 +1,6 @@
 services:  
   qlever:
+    # First start: build index with `qlever index` (to override existing, use `qlever index --overwrite-existing)
     build: ./services/qlever
     container_name: ${PROJECT_NAME}_qlever
     ports:
