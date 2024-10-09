@@ -9,6 +9,6 @@ RUN mkdir /input
 RUN mkdir /index
 
 VOLUME ["/input", "/index"]
-WORKDIR /index
+WORKDIR /index/skkg
 # Run idling
-ENTRYPOINT tail -f /dev/null
+ENTRYPOINT qlever start & tail -f /dev/null
