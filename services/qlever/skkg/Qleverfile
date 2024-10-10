@@ -13,7 +13,7 @@ TEXT_DESCRIPTION = All literals, search with FILTER KEYWORDS(?text, "...")
 
 [index]
 INPUT_FILES     = data/ttl/main data/ttl/additional/external schemas
-CAT_INPUT_FILES = find ${INPUT_FILES} -name "*.ttl" -exec cat {} +
+CAT_INPUT_FILES = find ${INPUT_FILES} -type f -regex ".*\.\(ttl\|rdf\|rdfs\)" -exec rapper -gq -o turtle {} \;
 SETTINGS_JSON   = { "num-triples-per-batch": 1000000, "parallel-parsing": false }
 TEXT_INDEX      = from_literals
 
