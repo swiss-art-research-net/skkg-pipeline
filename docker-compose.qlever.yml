@@ -5,6 +5,7 @@ services:
     container_name: ${PROJECT_NAME}_qlever
     ports:
       - 7001:7001
+    command: ["qlever index", "&", "qlever start"]
     volumes:
       - ./data:/index/skkg/data
       - ./mapping/schemas:/index/skkg/schemas
@@ -13,6 +14,6 @@ services:
   qlever-ui:
     image: docker.io/adfreiburg/qlever-ui
     container_name: ${PROJECT_NAME}_qlever_ui
-    command: ["tail", "-f", "/dev/null"]
+    command: ["python", "manage.py", "runserver", "0.0.0.0:7000"]
     ports:
       - 7000:7000
