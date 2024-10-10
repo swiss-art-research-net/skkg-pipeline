@@ -12,7 +12,7 @@ DESCRIPTION      = SKKG Data
 TEXT_DESCRIPTION = All literals, search with FILTER KEYWORDS(?text, "...")
 
 [index]
-INPUT_FILES     = data/ttl/main
+INPUT_FILES     = data/ttl/main data/ttl/additional/external schemas
 CAT_INPUT_FILES = find ${INPUT_FILES} -name "*.ttl" -exec cat {} +
 SETTINGS_JSON   = { "num-triples-per-batch": 1000000, "parallel-parsing": false }
 TEXT_INDEX      = from_literals
