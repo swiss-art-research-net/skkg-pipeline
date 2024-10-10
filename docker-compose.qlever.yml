@@ -1,6 +1,5 @@
 services:  
   qlever:
-    # First start: build index with `qlever index` (to override existing, use `qlever index --overwrite-existing)
     build: ./services/qlever
     container_name: ${PROJECT_NAME}_qlever
     ports:
@@ -12,8 +11,13 @@ services:
       - ./services/qlever/skkg:/index/skkg
     
   qlever-ui:
+    # First start: create database using `python manage.py migrate` and superuser using `python manage.py createsuperuser`
     image: docker.io/adfreiburg/qlever-ui
     container_name: ${PROJECT_NAME}_qlever_ui
-    command: ["python", "manage.py", "runserver", "0.0.0.0:7000"]
     ports:
       - 7000:7000
+    volumes:
+      - qlever-ui-db:/app/db
+
+volumes:
+  qlever-ui-db:
