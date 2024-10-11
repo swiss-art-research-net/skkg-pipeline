@@ -13,8 +13,8 @@ TEXT_DESCRIPTION = All literals, search with FILTER KEYWORDS(?text, "...")
 
 [index]
 INPUT_FILES     = data/ttl/main data/ttl/additional/external schemas
-CAT_INPUT_FILES = find ${INPUT_FILES} -type f -regex ".*\.\(ttl\|rdf\|rdfs\)" -exec rapper -gq -o ntriples {} \;
-SETTINGS_JSON   = { "num-triples-per-batch": 1000000, "parallel-parsing": true }
+CAT_INPUT_FILES = find ${INPUT_FILES} -type f -regex ".*\.\(ttl\|rdf\|rdfs\)" -exec sh -c 'ext=`echo "{}" | sed "s|.*\.||"`; if [ "ext" = "ttl" ]; then cat "{}"; else rapper -gq -o turtle "{}"; fi' \;
+SETTINGS_JSON   = { "num-triples-per-batch": 1000000, "parallel-parsing": false }
 TEXT_INDEX      = from_literals
 
 [server]
@@ -25,4 +25,4 @@ MEMORY_FOR_QUERIES = 10G
 [runtime]
 SYSTEM = native
 
-UI_CONFIG = vvz
+UI_CONFIG = skkg
