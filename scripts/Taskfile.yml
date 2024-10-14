@@ -15,6 +15,13 @@ output: 'prefixed'
 
 tasks:
 
+
+  debug:
+    cmds:
+      - task: _validate-turtle-files-in-folder
+        vars:
+          FOLDER: "/mapping/output/object"
+
   default:
     desc: Runs the entire pipeline
     cmds:
@@ -781,7 +788,7 @@ tasks:
   validate-turtle-file:
     desc: Validate a Turtle file using SHACL. Pass the file to validate through command line argument
     cmds:
-      - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f human {{.CLI_ARGS}}
+      - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f turtle {{.CLI_ARGS}}
 
   _download-vocabulary-from-museumplus:
     internal: true
@@ -1252,10 +1259,9 @@ tasks:
           pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -m -i rdfs -a -j -f turtle $f -o {{.TEMP_FOLDER}}/validate-$(basename $f) || true
           count=$((count+1))
         done
-      - |
-        for f in $(find {{.TEMP_FOLDER}} -type f -name '*.ttl' ); do
-          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
-        done
+      - rm -f {{.TEMP_FOLDER}}/validation_output.nt
+      - find {{.TEMP_FOLDER}} -name '*.ttl' -exec rapper -q -i turtle -o ntriples {} >> {{.TEMP_FOLDER}}/validation_output.nt \;
+      - "curl -X POST -H 'Content-Type: application/n-triples'  --data-binary @{{.TEMP_FOLDER}}/validation_output.nt {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       - |
         if [ "$(find {{.TEMP_FOLDER}} -type f -name '*.ttl' -size +0c | wc -l)" -gt 0 ]; then
           echo "Validation errors found. Check the SHACL reports in the triplestore."
