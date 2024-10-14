@@ -1280,5 +1280,8 @@ tasks:
       - sed -e "s/_:genid_validate-/validation:/g" {{.TEMP_FOLDER}}/validation_output.nt > {{.TEMP_FOLDER}}/validation_output_temp.ttl
       # Add the PREFIX line to the top of the file
       - 'echo "PREFIX validation: <http://data.skkg.ch/validation/>" | cat - {{.TEMP_FOLDER}}/validation_output_temp.ttl > {{.TEMP_FOLDER}}/validation_output.ttl'
+      # Remove in-between files
+      - rm -f {{.TEMP_FOLDER}}/validation_output_temp.ttl
+      - rm -f {{.TEMP_FOLDER}}/validation_output.nt
       - #"curl -X POST -H 'Content-Type: application/n-triples'  --data-binary @{{.TEMP_FOLDER}}/validation_output.nt {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       
