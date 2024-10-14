@@ -1243,13 +1243,23 @@ tasks:
     interactive: True
     cmds:
       - mkdir -p {{.TEMP_FOLDER}}
+      - find {{.TEMP_FOLDER}} -type f -name '*.ttl' -delete
       - |
         numfiles=$(find {{.FOLDER}} -type f -name '*.ttl' | wc -l)
         count=1
         for f in $(find {{.FOLDER}} -type f -name '*.ttl' | head -n {{.LIMIT}}); do
           echo "Validating file $count of $numfiles: $f"
-          pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -m -i rdfs -a -j -f turtle $f > {{.TEMP_FOLDER}}$(basename $f).ttl || true
-          curl -X POST -H 'Content-Type:text/turtle' --silent --data-binary @{{.TEMP_FOLDER}}$(basename $f).ttl "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
-          rm -f {{.TEMP_FOLDER}}$(basename $f).ttl
+          pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -m -i rdfs -a -j -f turtle $f -o {{.TEMP_FOLDER}}/validate-$(basename $f) || true
           count=$((count+1))
         done
+      - |
+        for f in $(find {{.TEMP_FOLDER}} -type f -name '*.ttl' ); do
+          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
+        done
+      - |
+        if [ "$(find {{.TEMP_FOLDER}} -type f -name '*.ttl' -size +0c | wc -l)" -gt 0 ]; then
+          echo "Validation errors found. Check the SHACL reports in the triplestore."
+        else
+          echo "Validation successful."
+        fi
+      - find {{.TEMP_FOLDER}} -type f -name '*.ttl' -delete
