@@ -1236,8 +1236,20 @@ tasks:
     vars:
       SHAPES_GRAPH: /mapping/shapesGraph.ttl
       SCHEMA_SKKG: /mapping/schemas/skkg-ontology.ttl
+      SCHEMA_CRM: https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs
       REPORTS_GRAPH: "{{.NAMESPACE}}graph/shaclReports"
       LIMIT: 100
+      TEMP_FOLDER: /data/temp/validate
     interactive: True
     cmds:
-      - python /scripts/validateTurtleWithShacl.py --directory "{{.FOLDER}}" --shapesGraph {{.SHAPES_GRAPH}} --ontologyFile {{.SCHEMA_SKKG}} --endpoint {{.BLAZEGRAPH_ENDPOINT}} --namedGraph {{.REPORTS_GRAPH}} --limit {{.LIMIT}} {{if .DEBUG}}--debug{{end}}
+      - mkdir -p {{.TEMP_FOLDER}}
+      - |
+        numfiles=$(find {{.FOLDER}} -type f -name '*.ttl' | wc -l)
+        count=1
+        for f in $(find {{.FOLDER}} -type f -name '*.ttl' | head -n {{.LIMIT}}); do
+          echo "Validating file $count of $numfiles: $f"
+          pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -m -i rdfs -a -j -f turtle $f > {{.TEMP_FOLDER}}$(basename $f).ttl || true
+          curl -X POST -H 'Content-Type:text/turtle' --silent --data-binary @{{.TEMP_FOLDER}}$(basename $f).ttl "{{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
+          rm -f {{.TEMP_FOLDER}}$(basename $f).ttl
+          count=$((count+1))
+        done
