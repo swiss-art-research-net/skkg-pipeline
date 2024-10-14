@@ -1260,7 +1260,11 @@ tasks:
           count=$((count+1))
         done
       - rm -f {{.TEMP_FOLDER}}/validation_output.nt
-      - find {{.TEMP_FOLDER}} -name '*.ttl' -exec rapper -q -i turtle -o ntriples {} >> {{.TEMP_FOLDER}}/validation_output.nt \;
+      - |
+        find {{.TEMP_FOLDER}} -name '*.ttl' -exec sh -c '
+          filename=$(basename "{}" .ttl)
+          rapper -q -i turtle -o ntriples "{}" | sed "s/_:genid/_:genid_${filename}_/g" >> {{.TEMP_FOLDER}}/validation_output.nt
+        ' \;
       - "curl -X POST -H 'Content-Type: application/n-triples'  --data-binary @{{.TEMP_FOLDER}}/validation_output.nt {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       - |
         if [ "$(find {{.TEMP_FOLDER}} -type f -name '*.ttl' -size +0c | wc -l)" -gt 0 ]; then
