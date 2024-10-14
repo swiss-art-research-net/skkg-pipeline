@@ -703,6 +703,10 @@
                                     <arg name="id" type="xpath">../../@uuid</arg>
                                     <arg name="level1" type="constant">acquisition</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('acquisition of object ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P9_consists_of</relationship>
                         </target_relation>
@@ -745,6 +749,10 @@
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">acquisition</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('acquisition of object ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P67i_is_referred_to_by</relationship>
                             <entity>
@@ -825,6 +833,10 @@
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">acquisition</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('acquisition of object ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P23_transferred_title_from</relationship>
                         </target_relation>
