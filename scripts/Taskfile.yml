@@ -1273,6 +1273,9 @@ tasks:
       - |
         if [ "$(find {{.TEMP_FOLDER}} -type f -name '*.ttl' -size +0c | wc -l)" -gt 0 ]; then
           echo "Validation errors found. Check the SHACL reports in the triplestore."
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"Validation errors found when mapping files in {{.FOLDER}}. Check the SHACL reports in the triplestore."}' "$SLACK_WEBHOOK_URL"
+          fi
         else
           echo "Validation successful."
         fi
