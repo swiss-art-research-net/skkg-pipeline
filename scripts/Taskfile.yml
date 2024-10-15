@@ -1278,6 +1278,7 @@ tasks:
         vars:
           TEMP_FOLDER: "{{.TEMP_FOLDER}}"
           REPORTS_GRAPH: "{{.REPORTS_GRAPH}}"
+          REPORT_SOURCEFOLDER: "{{.FOLDER}}"
           REPORT_IRI: "{{.REPORT_IRI}}"
     
   _combine_and_ingest_shacl_reports:
@@ -1312,6 +1313,8 @@ tasks:
         done
       - rm {{.TEMP_FOLDER}}/iri_list.txt
       - echo "{{.REPORT_IRI}} <http://www.w3.org/ns/prov#endedAtTime> \"$(date -u "+%Y-%m-%dT%H:%M:%S")\"^^<http://www.w3.org/2001/XMLSchema#dateTime> ." >> {{.TEMP_FOLDER}}/validation_output.ttl
+      # Add a rdfs:label based on the source folder
+      - echo "{{.REPORT_IRI}} <http://www.w3.org/2000/01/rdf-schema#label> \"Validation report {{.REPORT_SOURCEFOLDER}}\" ." >> {{.TEMP_FOLDER}}/validation_output.ttl
       # Ingest to graph 
       - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       
