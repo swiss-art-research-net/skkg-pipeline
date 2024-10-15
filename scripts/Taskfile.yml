@@ -1311,6 +1311,7 @@ tasks:
           sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
         done < {{.TEMP_FOLDER}}/iri_list.txt
       - rm {{.TEMP_FOLDER}}/iri_list.txt
+      - echo "{{.REPORT_IRI}} <http://www.w3.org/ns/prov#endedAtTime> \"$(date -u "+%Y-%m-%dT%H:%M:%S")\"^^<http://www.w3.org/2001/XMLSchema#dateTime> ." >> {{.TEMP_FOLDER}}/validation_output.ttl
       # Ingest to graph 
       - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       
