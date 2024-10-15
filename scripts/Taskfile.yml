@@ -1274,13 +1274,13 @@ tasks:
         else
           echo "Validation successful."
         fi
-      - task: _combine_and ingest_shacl_reports
+      - task: _combine_and_ingest_shacl_reports
         vars:
           TEMP_FOLDER: "{{.TEMP_FOLDER}}"
           REPORTS_GRAPH: "{{.REPORTS_GRAPH}}"
           REPORT_IRI: "{{.REPORT_IRI}}"
     
-  _combine_and ingest_shacl_reports:
+  _combine_and_ingest_shacl_reports:
     internal: true
     requires:
       vars: [TEMP_FOLDER, REPORTS_GRAPH, REPORT_IRI]
@@ -1311,6 +1311,6 @@ tasks:
           sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
         done < {{.TEMP_FOLDER}}/iri_list.txt
       - rm {{.TEMP_FOLDER}}/iri_list.txt
-      # Ingest to graph (TODO: ingest into tests repository)
+      # Ingest to graph 
       - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       
