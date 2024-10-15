@@ -1261,6 +1261,10 @@ tasks:
         for f in $(find {{.FOLDER}} -type f -name '*.ttl' | head -n {{.LIMIT}}); do
           echo "Validating file $count of $numfiles: $f"
           pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -m -i rdfs -a -j -f turtle $f -o {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f) || true
+          # if pyshacl exits with 0, delete the file
+          if [ $? -eq 0 ]; then
+            rm {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f)
+          fi
           count=$((count+1))
         done
       # If tests have failed there will be files in the temp folder, output a message to the console
@@ -1270,7 +1274,21 @@ tasks:
         else
           echo "Validation successful."
         fi
+      - task: _combine_and ingest_shacl_reports
+        vars:
+          TEMP_FOLDER: "{{.TEMP_FOLDER}}"
+          REPORTS_GRAPH: "{{.REPORTS_GRAPH}}"
+    
+  _combine_and ingest_shacl_reports:
+    internal: true
+    requires:
+      vars: [TEMP_FOLDER, REPORTS_GRAPH]
+    status:
+      - '[ "$(find {{.TEMP_FOLDER}} -name "*.ttl" -type f)" ] || exit 0 && exit 1'
+    cmds:
+      # TODO: add possibility of Slack notification
       # Combine the failed tests into a single N-Triples file. We use N-Triples so we have a single line per triple
+      - '[ "$(find {{.TEMP_FOLDER}} -name "*.ttl" -type f)" ] || exit 1'
       - rm -f {{.TEMP_FOLDER}}/validation_output.nt
       - |
         find {{.TEMP_FOLDER}} -name '*.ttl' -exec sh -c '
@@ -1292,5 +1310,6 @@ tasks:
           sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
         done < {{.TEMP_FOLDER}}/iri_list.txt
       - rm {{.TEMP_FOLDER}}/iri_list.txt
-      - #"curl -X POST -H 'Content-Type: application/n-triples'  --data-binary @{{.TEMP_FOLDER}}/validation_output.nt {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
+      # Ingest to graph (TODO: ingest into tests repository)
+      - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       
