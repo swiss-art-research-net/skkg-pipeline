@@ -1248,6 +1248,8 @@ tasks:
       LIMIT: 100
       TEMP_FOLDER: /data/temp/validate
       FILE_PREFIX: validate-
+      REPORT_IRI:
+          sh: echo "validation:validation-report-$(date -u "+%Y-%m-%d-%H-%M-%S")"
     interactive: True
     cmds:
       - mkdir -p {{.TEMP_FOLDER}}
@@ -1286,7 +1288,7 @@ tasks:
       - grep '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport>' "{{.TEMP_FOLDER}}/validation_output.ttl" | awk '{print $1}' > {{.TEMP_FOLDER}}/iri_list.txt
       - |
         while read -r iri; do
-          sed -i "s|$iri|validation:validationReport|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
+          sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
         done < {{.TEMP_FOLDER}}/iri_list.txt
       - #rm {{.TEMP_FOLDER}}/iri_list.txt
       - #"curl -X POST -H 'Content-Type: application/n-triples'  --data-binary @{{.TEMP_FOLDER}}/validation_output.nt {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
