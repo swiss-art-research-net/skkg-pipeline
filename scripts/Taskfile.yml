@@ -1285,11 +1285,12 @@ tasks:
       # Remove in-between files
       - rm -f {{.TEMP_FOLDER}}/validation_output_temp.ttl
       - rm -f {{.TEMP_FOLDER}}/validation_output.nt
+      # Combine individual reports into a single report
       - grep '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport>' "{{.TEMP_FOLDER}}/validation_output.ttl" | awk '{print $1}' > {{.TEMP_FOLDER}}/iri_list.txt
       - |
         while read -r iri; do
           sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
         done < {{.TEMP_FOLDER}}/iri_list.txt
-      - #rm {{.TEMP_FOLDER}}/iri_list.txt
+      - rm {{.TEMP_FOLDER}}/iri_list.txt
       - #"curl -X POST -H 'Content-Type: application/n-triples'  --data-binary @{{.TEMP_FOLDER}}/validation_output.nt {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       
