@@ -8,9 +8,9 @@ RUN locale-gen en_US.UTF-8
 
 RUN apt clean
 RUN apt update
-RUN apt install -y default-jre jq
+RUN apt install -y default-jre jq raptor2-utils
 # Install Python packages
-RUN pip install chardet date-parser-sari lxml urllib3 requests edtf tqdm rdflib sari-field-definitions-generator sparqlwrapper PyYAML Pillow beautifulsoup4 Sickle dicttoxml Pillow pytz pyshacl pandas semantic-field-definition-generator pyexistdb
+RUN pip install chardet date-parser-sari lxml urllib3 requests edtf tqdm rdflib sari-field-definitions-generator sparqlwrapper PyYAML Pillow beautifulsoup4 Sickle dicttoxml Pillow pytz pyshacl pandas semantic-field-definition-generator pyexistdb pyduktape2
 
 # Install x3ml Mapping engine
 RUN mkdir x3ml

@@ -781,7 +781,7 @@ tasks:
   validate-turtle-file:
     desc: Validate a Turtle file using SHACL. Pass the file to validate through command line argument
     cmds:
-      - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f human {{.CLI_ARGS}}
+      - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f turtle {{.CLI_ARGS}}
 
   _download-vocabulary-from-museumplus:
     internal: true
@@ -1021,7 +1021,6 @@ tasks:
       OUTPUTFOLDER:
         sh: echo "/mapping/input/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
     cmds:
-      - # TODO: separate preparation script (e.g. enrichment of data) from mapping preparation (i.e. moving relevant xml files to a place where they should be mapped)
       - mkdir -p {{.OUTPUTFOLDER}}
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.xml" -delete
       - python /scripts/prepareDataForMapping.py --module {{.MODULE}} --inputFolder {{.INPUTFOLDER}} --outputFolder {{.OUTPUTFOLDER}} {{.CLI_ARGS}}
@@ -1236,8 +1235,85 @@ tasks:
     vars:
       SHAPES_GRAPH: /mapping/shapesGraph.ttl
       SCHEMA_SKKG: /mapping/schemas/skkg-ontology.ttl
+      SCHEMA_CRM: https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs
       REPORTS_GRAPH: "{{.NAMESPACE}}graph/shaclReports"
       LIMIT: 100
+      TEMP_FOLDER: /data/temp/validate
+      FILE_PREFIX: validate-
+      REPORT_IRI:
+        sh: echo "validation:validation-report-$(echo {{.FOLDER}} | sed 's|/|-|g')-$(date -u "+%Y-%m-%d-%H-%M-%S")"
     interactive: True
     cmds:
-      - python /scripts/validateTurtleWithShacl.py --directory "{{.FOLDER}}" --shapesGraph {{.SHAPES_GRAPH}} --ontologyFile {{.SCHEMA_SKKG}} --endpoint {{.BLAZEGRAPH_ENDPOINT}} --namedGraph {{.REPORTS_GRAPH}} --limit {{.LIMIT}} {{if .DEBUG}}--debug{{end}}
+      - mkdir -p {{.TEMP_FOLDER}}
+      - find {{.TEMP_FOLDER}} -type f -name '*.ttl' -delete
+      # Validate each file in the folder, outputting the failed tests to temporary turtle files
+      - |
+        numfiles=$(find {{.FOLDER}} -type f -name '*.ttl' | wc -l)
+        count=1
+        for f in $(find {{.FOLDER}} -type f -name '*.ttl' | head -n {{.LIMIT}}); do
+          echo "Validating file $count of $numfiles: $f"
+          pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -m -i rdfs -a -j -f turtle $f -o {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f) || true
+          # Delete the report output file if it does conform
+          if grep -q 'sh:conforms true' {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f); then
+            rm {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f)
+          fi
+          count=$((count+1))
+          if [ $count -gt {{.LIMIT}} ]; then
+            echo "Notice: Validation is limited to {{.LIMIT}} files. Only the first {{.LIMIT}} files have been validated."
+            break
+          fi
+        done
+      # If tests have failed there will be files in the temp folder, output a message to the console
+      - |
+        if [ "$(find {{.TEMP_FOLDER}} -type f -name '*.ttl' -size +0c | wc -l)" -gt 0 ]; then
+          echo "Validation errors found. Check the SHACL reports in the triplestore."
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"Validation errors found when mapping files in {{.FOLDER}}. Check the SHACL reports in the triplestore."}' "$SLACK_WEBHOOK_URL"
+          fi
+        else
+          echo "Validation successful."
+        fi
+      - task: _combine_and_ingest_shacl_reports
+        vars:
+          TEMP_FOLDER: "{{.TEMP_FOLDER}}"
+          REPORTS_GRAPH: "{{.REPORTS_GRAPH}}"
+          REPORT_SOURCEFOLDER: "{{.FOLDER}}"
+          REPORT_IRI: "{{.REPORT_IRI}}"
+    
+  _combine_and_ingest_shacl_reports:
+    internal: true
+    requires:
+      vars: [TEMP_FOLDER, REPORTS_GRAPH, REPORT_IRI]
+    status:
+      - '[ "$(find {{.TEMP_FOLDER}} -name "*.ttl" -type f)" ] || exit 0 && exit 1'
+    cmds:
+      # TODO: add possibility of Slack notification
+      # Combine the failed tests into a single N-Triples file. We use N-Triples so we have a single line per triple
+      - rm -f {{.TEMP_FOLDER}}/validation_output.nt
+      - |
+        find {{.TEMP_FOLDER}} -name '*.ttl' -exec sh -c '
+          filename=$(basename "{}" .ttl)
+          rapper -q -i turtle -o ntriples "{}" | sed "s/_:genid/_:genid_${filename}_/g" >> {{.TEMP_FOLDER}}/validation_output.nt
+        ' \;
+      - find {{.TEMP_FOLDER}} -type f -name '*.ttl' -delete
+      # Replace the blank nodes with named nodes based on the filename. We add a validation: prefix
+      - sed -e "s/_:genid_validate-/validation:/g" {{.TEMP_FOLDER}}/validation_output.nt > {{.TEMP_FOLDER}}/validation_output_temp.ttl
+      # Add the PREFIX line to the top of the file
+      - 'echo "@prefix validation: <http://data.skkg.ch/validation/> ." | cat - {{.TEMP_FOLDER}}/validation_output_temp.ttl > {{.TEMP_FOLDER}}/validation_output.ttl'
+      # Remove in-between files
+      - rm -f {{.TEMP_FOLDER}}/validation_output_temp.ttl
+      - rm -f {{.TEMP_FOLDER}}/validation_output.nt
+      # Combine individual reports into a single report by extracting the IRI of the report and replacing it with a single IRI
+      - grep '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport>' "{{.TEMP_FOLDER}}/validation_output.ttl" | awk '{print $1}' > {{.TEMP_FOLDER}}/iri_list.txt
+      - cat "{{.TEMP_FOLDER}}/iri_list.txt"
+      - |
+        for iri in $(cat "{{.TEMP_FOLDER}}/iri_list.txt"); do
+          sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
+        done
+      - rm {{.TEMP_FOLDER}}/iri_list.txt
+      - echo "{{.REPORT_IRI}} <http://www.w3.org/ns/prov#endedAtTime> \"$(date -u "+%Y-%m-%dT%H:%M:%S")\"^^<http://www.w3.org/2001/XMLSchema#dateTime> ." >> {{.TEMP_FOLDER}}/validation_output.ttl
+      # Add a rdfs:label based on the source folder
+      - echo "{{.REPORT_IRI}} <http://www.w3.org/2000/01/rdf-schema#label> \"Validation report {{.REPORT_SOURCEFOLDER}}\" ." >> {{.TEMP_FOLDER}}/validation_output.ttl
+      # Ingest to graph 
+      - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
+      

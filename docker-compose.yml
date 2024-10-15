@@ -43,6 +43,7 @@ services:
       - NUMBER_OF_DUMPS_TO_KEEP=${NUMBER_OF_DUMPS_TO_KEEP}
       - IIIF_CSV_URL=${IIIF_CSV_URL}
       - S3_BUCKET_PUSH=${S3_BUCKET_PUSH}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
     secrets:
       - source: aws
         target: /root/.aws/
