@@ -1289,7 +1289,6 @@ tasks:
     cmds:
       # TODO: add possibility of Slack notification
       # Combine the failed tests into a single N-Triples file. We use N-Triples so we have a single line per triple
-      - '[ "$(find {{.TEMP_FOLDER}} -name "*.ttl" -type f)" ] || exit 1'
       - rm -f {{.TEMP_FOLDER}}/validation_output.nt
       - |
         find {{.TEMP_FOLDER}} -name '*.ttl' -exec sh -c '
@@ -1306,10 +1305,11 @@ tasks:
       - rm -f {{.TEMP_FOLDER}}/validation_output.nt
       # Combine individual reports into a single report by extracting the IRI of the report and replacing it with a single IRI
       - grep '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport>' "{{.TEMP_FOLDER}}/validation_output.ttl" | awk '{print $1}' > {{.TEMP_FOLDER}}/iri_list.txt
+      - cat "{{.TEMP_FOLDER}}/iri_list.txt"
       - |
-        while read -r iri; do
+        for iri in $(cat "{{.TEMP_FOLDER}}/iri_list.txt"); do
           sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
-        done < {{.TEMP_FOLDER}}/iri_list.txt
+        done
       - rm {{.TEMP_FOLDER}}/iri_list.txt
       - echo "{{.REPORT_IRI}} <http://www.w3.org/ns/prov#endedAtTime> \"$(date -u "+%Y-%m-%dT%H:%M:%S")\"^^<http://www.w3.org/2001/XMLSchema#dateTime> ." >> {{.TEMP_FOLDER}}/validation_output.ttl
       # Ingest to graph 
