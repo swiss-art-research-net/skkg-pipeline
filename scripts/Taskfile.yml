@@ -15,12 +15,6 @@ output: 'prefixed'
 
 tasks:
 
-  debug:
-    cmds:
-      - task: _validate-turtle-files-in-folder
-        vars:
-          FOLDER: /mapping/output/object
-
   default:
     desc: Runs the entire pipeline
     cmds:
