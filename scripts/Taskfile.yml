@@ -1261,8 +1261,8 @@ tasks:
         for f in $(find {{.FOLDER}} -type f -name '*.ttl' | head -n {{.LIMIT}}); do
           echo "Validating file $count of $numfiles: $f"
           pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -m -i rdfs -a -j -f turtle $f -o {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f) || true
-          # if pyshacl exits with 0, delete the file
-          if [ $? -eq 0 ]; then
+          # Delete the report output file if it does conform
+          if grep -q 'sh:conforms true' {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f); then
             rm {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f)
           fi
           count=$((count+1))
@@ -1278,11 +1278,12 @@ tasks:
         vars:
           TEMP_FOLDER: "{{.TEMP_FOLDER}}"
           REPORTS_GRAPH: "{{.REPORTS_GRAPH}}"
+          REPORT_IRI: "{{.REPORT_IRI}}"
     
   _combine_and ingest_shacl_reports:
     internal: true
     requires:
-      vars: [TEMP_FOLDER, REPORTS_GRAPH]
+      vars: [TEMP_FOLDER, REPORTS_GRAPH, REPORT_IRI]
     status:
       - '[ "$(find {{.TEMP_FOLDER}} -name "*.ttl" -type f)" ] || exit 0 && exit 1'
     cmds:
@@ -1303,7 +1304,7 @@ tasks:
       # Remove in-between files
       - rm -f {{.TEMP_FOLDER}}/validation_output_temp.ttl
       - rm -f {{.TEMP_FOLDER}}/validation_output.nt
-      # Combine individual reports into a single report
+      # Combine individual reports into a single report by extracting the IRI of the report and replacing it with a single IRI
       - grep '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport>' "{{.TEMP_FOLDER}}/validation_output.ttl" | awk '{print $1}' > {{.TEMP_FOLDER}}/iri_list.txt
       - |
         while read -r iri; do
