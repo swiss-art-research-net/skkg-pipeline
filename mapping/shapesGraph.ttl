@@ -5,6 +5,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix ex: <http://example.com/ns#> .
 @prefix skkg:  <https://ontology.skkg.ch/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 
 skkg:EntityShape a sh:NodeShape ;
@@ -12,6 +13,10 @@ skkg:EntityShape a sh:NodeShape ;
     sh:or (
         [ 
             sh:path rdfs:label ;
+            sh:minCount 1;
+        ]
+        [ 
+            sh:path skos:prefLabel ;
             sh:minCount 1;
         ]
         [ 
