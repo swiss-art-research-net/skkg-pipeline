@@ -1243,6 +1243,8 @@ tasks:
       REPORT_IRI:
         sh: echo "validation:validation-report-$(echo {{.FOLDER}} | sed 's|/|-|g')-$(date -u "+%Y-%m-%d-%H-%M-%S")"
     interactive: True
+    status:
+      - '[ "$(find {{.FOLDER}} -name "*.ttl" -type f)" ] || exit 0 && exit 1'
     cmds:
       - mkdir -p {{.TEMP_FOLDER}}
       - find {{.TEMP_FOLDER}} -type f -name '*.ttl' -delete
