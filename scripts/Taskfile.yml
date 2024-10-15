@@ -1259,6 +1259,10 @@ tasks:
             rm {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f)
           fi
           count=$((count+1))
+          if [ $count -gt {{.LIMIT}} ]; then
+            echo "Notice: Validation is limited to {{.LIMIT}} files. Only the first {{.LIMIT}} files have been validated."
+            break
+          fi
         done
       # If tests have failed there will be files in the temp folder, output a message to the console
       - |
