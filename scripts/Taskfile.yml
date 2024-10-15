@@ -980,6 +980,8 @@ tasks:
         sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       MAPPINGFILE:
         sh: echo "/mapping/mapping-$(echo "{{.MODULE}}" | awk '{print tolower($0)}').x3ml"
+    status:
+      - '[ "$(find {{.INPUTFOLDER}} -name "*.xml" -type f)" ] || exit 0 && exit 1'
     cmds:
       - mkdir -p {{.OUTPUTFOLDER}}
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
