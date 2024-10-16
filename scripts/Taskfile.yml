@@ -783,6 +783,45 @@ tasks:
     cmds:
       - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f turtle {{.CLI_ARGS}}
 
+  _combine_and_ingest_shacl_reports:
+    internal: true
+    requires:
+      vars: [TEMP_FOLDER, REPORTS_GRAPH, REPORT_IRI]
+    status:
+      - '[ "$(find {{.TEMP_FOLDER}} -name "*.ttl" -type f)" ] || exit 0 && exit 1'
+    vars:
+      ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT_SECONDARY}}"
+    cmds:
+      # Combine the failed tests into a single N-Triples file. We use N-Triples so we have a single line per triple
+      - rm -f {{.TEMP_FOLDER}}/validation_output.nt
+      - |
+        find {{.TEMP_FOLDER}} -name '*.ttl' -exec sh -c '
+          filename=$(basename "{}" .ttl)
+          rapper -q -i turtle -o ntriples "{}" | sed "s/_:genid/_:genid_${filename}_/g" >> {{.TEMP_FOLDER}}/validation_output.nt
+        ' \;
+      - find {{.TEMP_FOLDER}} -type f -name '*.ttl' -delete
+      # Replace the blank nodes with named nodes based on the filename. We add a validation: prefix
+      - sed -e "s/_:genid_validate-/validation:/g" {{.TEMP_FOLDER}}/validation_output.nt > {{.TEMP_FOLDER}}/validation_output_temp.ttl
+      # Add the PREFIX line to the top of the file
+      - 'echo "@prefix validation: <http://data.skkg.ch/validation/> ." | cat - {{.TEMP_FOLDER}}/validation_output_temp.ttl > {{.TEMP_FOLDER}}/validation_output.ttl'
+      # Remove in-between files
+      - rm -f {{.TEMP_FOLDER}}/validation_output_temp.ttl
+      - rm -f {{.TEMP_FOLDER}}/validation_output.nt
+      # Combine individual reports into a single report by extracting the IRI of the report and replacing it with a single IRI
+      - grep '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport>' "{{.TEMP_FOLDER}}/validation_output.ttl" | awk '{print $1}' > {{.TEMP_FOLDER}}/iri_list.txt
+      - cat "{{.TEMP_FOLDER}}/iri_list.txt"
+      - |
+        for iri in $(cat "{{.TEMP_FOLDER}}/iri_list.txt"); do
+          sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
+        done
+      - rm {{.TEMP_FOLDER}}/iri_list.txt
+      - echo "{{.REPORT_IRI}} <http://www.w3.org/ns/prov#endedAtTime> \"$(date -u "+%Y-%m-%dT%H:%M:%S")\"^^<http://www.w3.org/2001/XMLSchema#dateTime> ." >> {{.TEMP_FOLDER}}/validation_output.ttl
+      # Add a rdfs:label based on the source folder
+      - echo "{{.REPORT_IRI}} <http://www.w3.org/2000/01/rdf-schema#label> \"Validation report {{.REPORT_SOURCEFOLDER}}\" ." >> {{.TEMP_FOLDER}}/validation_output.ttl
+      # Ingest to graph 
+      - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
+      - rm -f {{.TEMP_FOLDER}}/validation_output.ttl
+      
   _download-vocabulary-from-museumplus:
     internal: true
     requires:
@@ -1283,44 +1322,3 @@ tasks:
           REPORTS_GRAPH: "{{.REPORTS_GRAPH}}"
           REPORT_SOURCEFOLDER: "{{.FOLDER}}"
           REPORT_IRI: "{{.REPORT_IRI}}"
-    
-  _combine_and_ingest_shacl_reports:
-    internal: true
-    requires:
-      vars: [TEMP_FOLDER, REPORTS_GRAPH, REPORT_IRI]
-    status:
-      - '[ "$(find {{.TEMP_FOLDER}} -name "*.ttl" -type f)" ] || exit 0 && exit 1'
-    vars:
-      ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT_SECONDARY}}"
-    cmds:
-      # TODO: add possibility of Slack notification
-      # Combine the failed tests into a single N-Triples file. We use N-Triples so we have a single line per triple
-      - rm -f {{.TEMP_FOLDER}}/validation_output.nt
-      - |
-        find {{.TEMP_FOLDER}} -name '*.ttl' -exec sh -c '
-          filename=$(basename "{}" .ttl)
-          rapper -q -i turtle -o ntriples "{}" | sed "s/_:genid/_:genid_${filename}_/g" >> {{.TEMP_FOLDER}}/validation_output.nt
-        ' \;
-      - find {{.TEMP_FOLDER}} -type f -name '*.ttl' -delete
-      # Replace the blank nodes with named nodes based on the filename. We add a validation: prefix
-      - sed -e "s/_:genid_validate-/validation:/g" {{.TEMP_FOLDER}}/validation_output.nt > {{.TEMP_FOLDER}}/validation_output_temp.ttl
-      # Add the PREFIX line to the top of the file
-      - 'echo "@prefix validation: <http://data.skkg.ch/validation/> ." | cat - {{.TEMP_FOLDER}}/validation_output_temp.ttl > {{.TEMP_FOLDER}}/validation_output.ttl'
-      # Remove in-between files
-      - rm -f {{.TEMP_FOLDER}}/validation_output_temp.ttl
-      - rm -f {{.TEMP_FOLDER}}/validation_output.nt
-      # Combine individual reports into a single report by extracting the IRI of the report and replacing it with a single IRI
-      - grep '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/shacl#ValidationReport>' "{{.TEMP_FOLDER}}/validation_output.ttl" | awk '{print $1}' > {{.TEMP_FOLDER}}/iri_list.txt
-      - cat "{{.TEMP_FOLDER}}/iri_list.txt"
-      - |
-        for iri in $(cat "{{.TEMP_FOLDER}}/iri_list.txt"); do
-          sed -i "s|$iri|{{.REPORT_IRI}}|g" "{{.TEMP_FOLDER}}/validation_output.ttl"
-        done
-      - rm {{.TEMP_FOLDER}}/iri_list.txt
-      - echo "{{.REPORT_IRI}} <http://www.w3.org/ns/prov#endedAtTime> \"$(date -u "+%Y-%m-%dT%H:%M:%S")\"^^<http://www.w3.org/2001/XMLSchema#dateTime> ." >> {{.TEMP_FOLDER}}/validation_output.ttl
-      # Add a rdfs:label based on the source folder
-      - echo "{{.REPORT_IRI}} <http://www.w3.org/2000/01/rdf-schema#label> \"Validation report {{.REPORT_SOURCEFOLDER}}\" ." >> {{.TEMP_FOLDER}}/validation_output.ttl
-      # Ingest to graph 
-      - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
-      - rm -f {{.TEMP_FOLDER}}/validation_output.ttl
-      
