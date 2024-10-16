@@ -1290,6 +1290,8 @@ tasks:
       vars: [TEMP_FOLDER, REPORTS_GRAPH, REPORT_IRI]
     status:
       - '[ "$(find {{.TEMP_FOLDER}} -name "*.ttl" -type f)" ] || exit 0 && exit 1'
+    vars:
+      ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT_SECONDARY}}"
     cmds:
       # TODO: add possibility of Slack notification
       # Combine the failed tests into a single N-Triples file. We use N-Triples so we have a single line per triple
@@ -1319,6 +1321,6 @@ tasks:
       # Add a rdfs:label based on the source folder
       - echo "{{.REPORT_IRI}} <http://www.w3.org/2000/01/rdf-schema#label> \"Validation report {{.REPORT_SOURCEFOLDER}}\" ." >> {{.TEMP_FOLDER}}/validation_output.ttl
       # Ingest to graph 
-      - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
+      - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
       - rm -f {{.TEMP_FOLDER}}/validation_output.ttl
       
