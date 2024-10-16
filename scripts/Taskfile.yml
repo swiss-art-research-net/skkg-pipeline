@@ -1320,4 +1320,5 @@ tasks:
       - echo "{{.REPORT_IRI}} <http://www.w3.org/2000/01/rdf-schema#label> \"Validation report {{.REPORT_SOURCEFOLDER}}\" ." >> {{.TEMP_FOLDER}}/validation_output.ttl
       # Ingest to graph 
       - "curl -X POST -H 'Content-Type: application/x-turtle'  --data-binary @{{.TEMP_FOLDER}}/validation_output.ttl {{.BLAZEGRAPH_ENDPOINT}}?context-uri={{.REPORTS_GRAPH}}"
+      - rm -f {{.TEMP_FOLDER}}/validation_output.ttl
       
