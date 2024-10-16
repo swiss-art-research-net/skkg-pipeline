@@ -1293,7 +1293,6 @@ tasks:
     vars:
       ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT_SECONDARY}}"
     cmds:
-      # TODO: add possibility of Slack notification
       # Combine the failed tests into a single N-Triples file. We use N-Triples so we have a single line per triple
       - rm -f {{.TEMP_FOLDER}}/validation_output.nt
       - |
