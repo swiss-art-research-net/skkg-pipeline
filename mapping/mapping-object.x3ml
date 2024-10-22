@@ -4017,7 +4017,7 @@ else (
                                     <arg name="id" type="xpath">.</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">replace(formattedValue/text(),'.*: \d*\n,','')</arg>
+                                    <arg name="text" type="xpath">replace(../formattedValue/text(),'.*: \d*\n,','')</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
                             </entity>

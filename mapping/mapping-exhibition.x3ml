@@ -23,6 +23,12 @@
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
             <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
             <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+            <namespace prefix="object" uri="https://data.skkg.ch/object/"/>
+            <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+            <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
+            <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
+            <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
+            <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -243,6 +249,9 @@
                                             <arg name="type" type="constant">type</arg>
                                             <arg name="id" type="constant">21102</arg>
                                         </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">ExhTypeVgr</arg>
+                                        </label_generator>
                                     </entity>
                                 </additional>
                             </entity>
@@ -271,6 +280,10 @@
                                     <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
@@ -396,6 +409,9 @@
                                             <arg name="type" type="constant">type</arg>
                                             <arg name="id" type="constant">43086</arg>
                                         </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">ExhExternalInternalVgr</arg>
+                                        </label_generator>
                                     </entity>
                                 </additional>
                             </entity>
