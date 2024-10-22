@@ -249,6 +249,9 @@
                                             <arg name="type" type="constant">type</arg>
                                             <arg name="id" type="constant">21102</arg>
                                         </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">ExhTypeVgr</arg>
+                                        </label_generator>
                                     </entity>
                                 </additional>
                             </entity>
@@ -406,6 +409,9 @@
                                             <arg name="type" type="constant">type</arg>
                                             <arg name="id" type="constant">43086</arg>
                                         </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">ExhExternalInternalVgr</arg>
+                                        </label_generator>
                                     </entity>
                                 </additional>
                             </entity>
