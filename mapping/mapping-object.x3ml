@@ -3335,6 +3335,10 @@ else (
                                     <arg name="level3" type="xpath">../@uuid</arg>
                                     <arg name="level4" type="constant">price</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('price paid for object ', if (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P90_has_value</relationship>
                         </target_relation>
@@ -3371,6 +3375,10 @@ else (
                                     <arg name="level3" type="xpath">../../@uuid</arg>
                                     <arg name="level4" type="constant">price</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('price paid for object ', if (../../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../../../@uuid))</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P180_has_currency</relationship>
                         </target_relation>
