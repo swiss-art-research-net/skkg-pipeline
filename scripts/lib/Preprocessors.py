@@ -77,7 +77,7 @@ class BasePreprocessor(Preprocessor):
                 if value is not None:
                     if int(value):
                         if int(value) < 0:
-                            processedValue = f'-{abs(int(value)):04}'
+                            processedValue = f'-{abs(int(value)):05}'
                         else:
                             processedValue = f'{int(value):04}'
                         datafield.set(f'{self.PREFIX}type', 'gYear')

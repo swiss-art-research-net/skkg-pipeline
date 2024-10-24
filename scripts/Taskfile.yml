@@ -834,6 +834,7 @@ tasks:
 
   _clean_turtle_file_from_extra_prefixes:
     desc: Removes additional prefix statements in a Turtle file
+    internal: true
     requires:
       vars: [FILE]
     vars:
