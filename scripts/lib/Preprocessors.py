@@ -110,21 +110,23 @@ class ObjectPreprocessor(BasePreprocessor):
     
     def markLatestObjectDocumentationStatusAssignment(self, root: ET.Element) -> ET.Element:
         """
-        This function marks the latest Object Documentation Status assignment with a flag.
+        This function marks the latest Object Documentation Status assignments with a flag.
         """
         repeatableGroup = root.find(".//repeatableGroup[@name='ObjDocumentationStatusGrp']")
         if repeatableGroup is not None:
             repeatableGroupItems = repeatableGroup.findall('.//repeatableGroupItem')
             latestDate = ''
-            latestItem = None
+            latestItems = []
             for item in repeatableGroupItems:
                 dateField = item.find(".//dataField[@name='DateDat']")
                 if dateField is not None:
                     date = dateField.find('value').text
                     if date > latestDate:
                         latestDate = date
-                        latestItem = item
-            if latestItem is not None:
+                        latestItems = [item]
+                    elif date == latestDate:
+                        latestItems.append(item)
+            for latestItem in latestItems:
                 latestItem.set(f'{self.PREFIX}latest', 'true')
         return root
     
