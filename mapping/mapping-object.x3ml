@@ -4064,6 +4064,22 @@ else (
                                     <if>
                                         <equals value="true">../../@_preprocessed_latest</equals>
                                     </if>
+                                    <if>
+                                        <or>
+                                            <if>
+                                                <equals value="255964">@id</equals>
+                                            </if>
+                                            <if>
+                                                <equals value="255965">@id</equals>
+                                            </if>
+                                            <if>
+                                                <equals value="255966">@id</equals>
+                                            </if>
+                                            <if>
+                                                <equals value="255967">@id</equals>
+                                            </if>
+                                        </or>
+                                    </if>
                                 </and>
                             </if>
                             <relationship>crm:P2_has_type</relationship>
