@@ -355,6 +355,12 @@ tasks:
           GRAPH: https://linked.art/ns/terms
       - task: _ingest-data-from-file
         vars:
+          NAME: ResearchSpace Ontology
+          FILE: /mapping/schemas/rs-ontology.ttl
+          TYPE: application/x-turtle
+          GRAPH: http://www.researchspace.org/ontology
+      - task: _ingest-data-from-file
+        vars:
           NAME: SKKG Ontology
           FILE: /mapping/schemas/skkg-ontology.ttl
           TYPE: application/x-turtle
