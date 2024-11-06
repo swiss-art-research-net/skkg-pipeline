@@ -97,6 +97,7 @@ tasks:
           - ObjDateSuffixVgr
           - ObjDateTypeVgr
           - ObjDim3DTypeVgr
+          - ObjDocumentationStatusVgr
           - ObjIconographyVgr
           - ObjIconographyTypeVgr
           - ObjInscriptionDialogTypeVgr
