@@ -101,9 +101,33 @@ class ObjectPreprocessor(BasePreprocessor):
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
         root = super().parseXML(content)
+        # Process year fields
         yearFieldSelectors = [".//dataField[@dataType='Long'][@name='DateFromLnu']", ".//dataField[@dataType='Long'][@name='DateToLnu']"]
         root = super().processYearFields(root, yearFieldSelectors)
+        # Mark latest Object Documentation Status assignment
+        root = self.markLatestObjectDocumentationStatusAssignment(root)
         return super().dumpXML(root)
+    
+    def markLatestObjectDocumentationStatusAssignment(self, root: ET.Element) -> ET.Element:
+        """
+        This function marks the latest Object Documentation Status assignment with a flag.
+        """
+        repeatableGroup = root.find(".//repeatableGroup[@name='ObjDocumentationStatusGrp']")
+        print("ok")
+        if repeatableGroup is not None:
+            repeatableGroupItems = repeatableGroup.findall('.//repeatableGroupItem')
+            latestDate = ''
+            latestItem = None
+            for item in repeatableGroupItems:
+                dateField = item.find(".//dataField[@name='DateDat']")
+                if dateField is not None:
+                    date = dateField.find('value').text
+                    if date > latestDate:
+                        latestDate = date
+                        latestItem = item
+            if latestItem is not None:
+                latestItem.set(f'{self.PREFIX}latest', 'true')
+        return root
     
 class Preprocessors:
     @staticmethod
