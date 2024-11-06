@@ -112,22 +112,24 @@ class ObjectPreprocessor(BasePreprocessor):
         """
         This function marks the latest Object Documentation Status assignments with a flag.
         """
-        repeatableGroup = root.find(".//repeatableGroup[@name='ObjDocumentationStatusGrp']")
-        if repeatableGroup is not None:
-            repeatableGroupItems = repeatableGroup.findall('.//repeatableGroupItem')
-            latestDate = ''
-            latestItems = []
-            for item in repeatableGroupItems:
-                dateField = item.find(".//dataField[@name='DateDat']")
-                if dateField is not None:
-                    date = dateField.find('value').text
-                    if date > latestDate:
-                        latestDate = date
-                        latestItems = [item]
-                    elif date == latestDate:
-                        latestItems.append(item)
-            for latestItem in latestItems:
-                latestItem.set(f'{self.PREFIX}latest', 'true')
+        moduleItems = root.findall(".//moduleItem")
+        for moduleItem in moduleItems:
+            repeatableGroups = moduleItem.findall("repeatableGroup[@name='ObjDocumentationStatusGrp']")
+            for repeatableGroup in repeatableGroups:
+                repeatableGroupItems = repeatableGroup.findall('repeatableGroupItem')
+                latestDate = ''
+                latestItems = []
+                for item in repeatableGroupItems:
+                    dateField = item.find("dataField[@name='DateDat']")
+                    if dateField is not None:
+                        date = dateField.find('value').text
+                        if date > latestDate:
+                            latestDate = date
+                            latestItems = [item]
+                        elif date == latestDate:
+                            latestItems.append(item)
+                for latestItem in latestItems:
+                    latestItem.set(f'{self.PREFIX}latest', 'true')
         return root
     
 class Preprocessors:
