@@ -114,12 +114,12 @@ class ObjectPreprocessor(BasePreprocessor):
         """
         moduleItems = root.findall(".//moduleItem")
         for moduleItem in moduleItems:
-            repeatableGroups = moduleItem.findall("repeatableGroup[@name='ObjDocumentationStatusGrp']")
-            for repeatableGroup in repeatableGroups:
-                repeatableGroupItems = repeatableGroup.findall('repeatableGroupItem')
+            objDocumentationStatusGroups = moduleItem.findall("repeatableGroup[@name='ObjDocumentationStatusGrp']")
+            for objDocumentationStatus in objDocumentationStatusGroups:
+                statusItems = objDocumentationStatus.findall('repeatableGroupItem')
                 latestDate = ''
                 latestItems = []
-                for item in repeatableGroupItems:
+                for item in statusItems:
                     dateField = item.find("dataField[@name='DateDat']")
                     if dateField is not None:
                         date = dateField.find('value').text
