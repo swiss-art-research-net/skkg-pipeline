@@ -113,7 +113,6 @@ class ObjectPreprocessor(BasePreprocessor):
         This function marks the latest Object Documentation Status assignment with a flag.
         """
         repeatableGroup = root.find(".//repeatableGroup[@name='ObjDocumentationStatusGrp']")
-        print("ok")
         if repeatableGroup is not None:
             repeatableGroupItems = repeatableGroup.findall('.//repeatableGroupItem')
             latestDate = ''
