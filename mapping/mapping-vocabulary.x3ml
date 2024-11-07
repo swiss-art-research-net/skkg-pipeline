@@ -23,7 +23,12 @@
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
             <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
             <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+            <namespace prefix="object" uri="https://data.skkg.ch/object/"/>
             <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+            <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
+            <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
+            <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
+            <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -169,6 +174,53 @@
                                 <instance_generator name="Literal">
                                     <arg name="text" type="xpath">text()</arg>
                                     <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>terms/term/note</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P67i_is_referred_to_by</relationship>
+                            <entity>
+                                <type>crm:E33_Linguistic_Object</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../../../@id</arg>
+                                    <arg name="level1" type="constant">description</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300435416</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">descriptive note</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>terms/term/note</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">text()</arg>
+                                    <arg name="language" type="xpath">../isoLanguageCode/text()</arg>
                                 </instance_generator>
                             </entity>
                         </target_node>
