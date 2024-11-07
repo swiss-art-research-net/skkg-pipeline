@@ -4033,5 +4033,76 @@ else (
                     </range>
                 </link>
             </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem</source_node>
+                    <target_node>
+                        <entity variable="metadata">
+                            <type>crm:E31_Document</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                                <arg name="level1" type="constant">meta</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroup/repeatableGroupItem/vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="ObjDocumentationStatusGrp">../../../@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="ObjDocumentationStatusVgr">../@instanceName</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="true">../../@_preprocessed_latest</equals>
+                                    </if>
+                                    <if>
+                                        <or>
+                                            <if>
+                                                <equals value="255964">@id</equals>
+                                            </if>
+                                            <if>
+                                                <equals value="255965">@id</equals>
+                                            </if>
+                                            <if>
+                                                <equals value="255966">@id</equals>
+                                            </if>
+                                            <if>
+                                                <equals value="255967">@id</equals>
+                                            </if>
+                                        </or>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>crm:P2_has_type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroup/repeatableGroupItem/vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
         </mappings>
         </x3ml>
