@@ -70,6 +70,8 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
                     <or>
                         <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="20501"/>
                         <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="205074"/>
+                        <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237966"/>
+                        <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237965"/>
                     </or>
                 </expert>
             </search>
