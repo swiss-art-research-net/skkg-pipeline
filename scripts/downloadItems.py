@@ -67,11 +67,10 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         'Multimedia': '''
             <search>
                 <expert>
-                    <and>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="20502"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237965"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237966"/>
-                    </and>
+                    <or>
+                        <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="20501"/>
+                        <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="205074"/>
+                    </or>
                 </expert>
             </search>
             ''',
