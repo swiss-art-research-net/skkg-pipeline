@@ -1,4 +1,5 @@
 <x3ml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" source_type="xpath" version="1.0" xsi:noNamespaceSchemaLocation="x3ml_v1.4.xsd" editor="3MEditor v3.3"><namespaces>
+            <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
             <namespace prefix="resource" uri="https://data.skkg.ch/"/>
             <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
             <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
@@ -22,12 +23,28 @@
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
             <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
             <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+            <namespace prefix="object" uri="https://data.skkg.ch/object/"/>
+            <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+            <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
+            <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
+            <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
+            <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
         </namespaces>
         <mappings>
             <mapping>
                 <domain>
                     <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
+                        <if>
+                            <or>
+                                <if>
+                                    <equals value="20501">vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
+                                </if>
+                                <if>
+                                    <equals value="205074">vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
+                                </if>
+                            </or>
+                        </if>
                         <entity>
                             <type>crmdig:D1_Digital_Object</type>
                             <type>skkg:Multimedia</type>
@@ -314,6 +331,55 @@
                                 <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
                                 </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>crmdig:D1_Digital_Object</type>
+                            <type>skkg:Multimedia</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">virtualField[@name='MulMultimediaVrt']/value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="MulUsageVgr">../@instanceName</equals>
+                            </if>
+                            <relationship>crm:P2_has_type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
