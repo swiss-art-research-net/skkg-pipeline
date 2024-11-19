@@ -38,9 +38,6 @@ def synchroniseItems(*, host, username, password, module, inputFolder, namedGrap
         identifier = str(file.replace(filenamePrefix, '').replace('.xml', ''))
         if not client.existsItem(module=module, uuid=identifier, queryAddition=createXMLCopy(queryAddition)):
             identifiersToRemove.append(identifier)
-    print(identifiersToRemove)
-    import sys
-    sys.exit()
     for identifier in identifiersToRemove:
         filename = f"{filenamePrefix}{identifier}.xml"
         filepath = join(inputFolder, filename)
