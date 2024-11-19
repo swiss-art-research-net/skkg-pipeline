@@ -1079,23 +1079,26 @@ tasks:
       NAMEDGRAPHBASE: "{{.NAMESPACE}}graph/"
     interactive: True
     cmds:
-      - python /scripts/processUnpublishedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --namedGraphBase {{.NAMEDGRAPHBASE}} --filenamePrefix {{.FILENAMEPREFIX}} --sparqlEndpoint {{.BLAZEGRAPH_ENDPOINT}}
+      - python /scripts/processUnpublishedItems.py --url $MUSEUMPLUS_URL --username $MUSEUMPLUS_USERNAME --password $MUSEUMPLUS_PASSWORD --module {{.MODULE}} --inputFolder {{.INPUT_FOLDER}} --turtleFolder {{.TURTLE_FOLDER}} --namedGraphBase {{.NAMEDGRAPHBASE}} --filenamePrefix {{.FILENAMEPREFIX}} --sparqlEndpoint {{.BLAZEGRAPH_ENDPOINT}}
 
   _remove-unpublished-module-items:
     internal: true
     requires:
       vars: [MODULE]
     vars:
-      FOLDER:
-        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       FILENAMEPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+      TURTLEFOLDER:
+        sh: echo "/data/ttl/main/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      XMLFOLDER:
+        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
     cmds:
       - echo "Checking for unpublished items in {{.MODULE}}"
       - task: _process-items-unpublished-from-museumplus
         vars:
           MODULE: "{{.MODULE}}"
-          INPUT_FOLDER: "{{.FOLDER}}"
+          INPUT_FOLDER: "{{.XMLFOLDER}}"
+          TURTLE_FOLDER: "{{.TURTLEFOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
   _remove-module-items-from-triplestore:

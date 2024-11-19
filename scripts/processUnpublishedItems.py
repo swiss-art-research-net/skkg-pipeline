@@ -1,13 +1,13 @@
 """
-Items that have been deleted in MuseumPlus should be deleted from the local cache as well.
-This script checks if any items have been deleted in MuseumPlus and, if so, removes the local copy.
+Items that have been deleted or unpublished in MuseumPlus should be deleted from the local cache .
+This script checks if any items have been unpblished in MuseumPlus and, if so, removes the local copy.
 
 Usage:
-    python processDeletedItems.py --url <url> --module <module> --username <username> --password <password> --inputFolder <inputFolder> [--filenamePrefix <filenamePrefix>]
+    python processUnpublishedItems.py --url <url> --module <module> --username <username> --password <password> --inputFolder <inputFolder> [--filenamePrefix <filenamePrefix>]
 
 Arguments:
     --url: URL of the MuseumPlus instance
-    --module: Name of the module to check for deleted items
+    --module: Name of the module to check for unpublished items
     --username: Username to use for authentication
     --password: Password to use for authentication
     --inputFolder: Folder where the XML files are stored
@@ -18,7 +18,7 @@ import argparse
 import requests
 from lxml import etree
 from os import remove as removeFile
-from os.path import join
+from os.path import exists, join
 from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
@@ -27,7 +27,7 @@ from lib.Utils import createXMLCopy
 
 from config.moduleQueryAdditions import moduleQueryAdditions
 
-def synchroniseItems(*, host, username, password, module, inputFolder, namedGraphBase, sparqlEndpoint, filenamePrefix = 'item-'):
+def synchroniseItems(*, host, username, password, module, inputFolder, turtleFolder, namedGraphBase, sparqlEndpoint, filenamePrefix = 'item-'):
     client = MPWrapper(url=host, username=username, password=password)
     queryAddition = moduleQueryAdditions.get(module, None)
     queryAddition = etree.fromstring(queryAddition) if queryAddition else None
@@ -39,17 +39,20 @@ def synchroniseItems(*, host, username, password, module, inputFolder, namedGrap
         if not client.existsItem(module=module, uuid=identifier, queryAddition=createXMLCopy(queryAddition)):
             identifiersToRemove.append(identifier)
     for identifier in identifiersToRemove:
-        filename = f"{filenamePrefix}{identifier}.xml"
-        filepath = join(inputFolder, filename)
-        print(f"Item {identifier} in module {module} has been deleted in MuseumPlus. Deleting local copy.")
-        removeFile(filepath)
-        metadata.removeFile(filename)
+        print(f"Item {identifier} in module {module} has been deleted or unpublished in MuseumPlus. Deleting local copy.")
+        filenameXML = f"{filenamePrefix}{identifier}.xml"
+        filepathXML = join(inputFolder, filenameXML)
+        removeFile(filepathXML)
+        filenameTTL = f"{filenamePrefix}{identifier}.ttl"
+        filepathTTL = join(turtleFolder, filenameTTL)
+        if exists(filepathTTL):
+            removeFile(filepathTTL)
+        metadata.removeFile(filenameXML)
         removeFromTripleStore(identifier, namedGraphBase=namedGraphBase, filenamePrefix=filenamePrefix, endpoint=sparqlEndpoint)
-        # TODO: Remove Turtle file from disk
     if len(identifiersToRemove) > 0:
         print(f"Removed {len(identifiersToRemove)} items from the local copy and triple store.")
     else:
-        print("No items have been deleted in MuseumPlus.")
+        print("No items have been unpublished in MuseumPlus.")
 
 def removeFromTripleStore(identifier, *, namedGraphBase, filenamePrefix, endpoint):
     namedgraph = f"{namedGraphBase}{filenamePrefix}{identifier}"
@@ -61,15 +64,16 @@ def removeFromTripleStore(identifier, *, namedGraphBase, filenamePrefix, endpoin
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser = argparse.ArgumentParser(description = 'Delete all local items that have been deleted in MuseumPlus')
+    parser = argparse.ArgumentParser(description = 'Delete all local items that have been unpublished or deleted in MuseumPlus')
     parser.add_argument('--url', required= True, help='URL of the MuseumPlus instance')
     parser.add_argument('--module', required= True, help='Name of the module to synchronise')
     parser.add_argument('--username', required= True, help='Username to use for authentication')
     parser.add_argument('--password', required= True, help='Password to use for authentication')
     parser.add_argument('--inputFolder', required= True, help='Local folder where the XML files are stored')
+    parser.add_argument('--turtleFolder', required= False, help='Local folder where the Turtle files are stored.')
     parser.add_argument('--filenamePrefix', required= False, help='Prefix to use for the filenames of the XML files. Defaults to "item-"')
     parser.add_argument('--namedGraphBase', required= True, help='Base URI of the named graphs of the items in the triple store')
     parser.add_argument('--sparqlEndpoint', required= True, help='URL of the SPARQL endpoint of the triple store')
     args = parser.parse_args()
 
-    synchroniseItems(host=args.url, module=args.module, username=args.username, password=args.password, inputFolder=args.inputFolder, namedGraphBase=args.namedGraphBase, sparqlEndpoint=args.sparqlEndpoint, filenamePrefix=args.filenamePrefix or 'item-')
+    synchroniseItems(host=args.url, module=args.module, username=args.username, password=args.password, inputFolder=args.inputFolder, turtleFolder=args.turtleFolder, namedGraphBase=args.namedGraphBase, sparqlEndpoint=args.sparqlEndpoint, filenamePrefix=args.filenamePrefix or 'item-')
