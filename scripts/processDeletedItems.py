@@ -16,23 +16,28 @@ Arguments:
 
 import argparse
 import requests
+from lxml import etree
 from os import remove as removeFile
 from os.path import join
 from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
 from lib.MuseumPlusConnector import MPWrapper
+from lib.Utils import createXMLCopy
+
+from config.moduleQueryAdditions import moduleQueryAdditions
 
 def synchroniseItems(*, host, username, password, module, inputFolder, namedGraphBase, sparqlEndpoint, filenamePrefix = 'item-'):
     client = MPWrapper(url=host, username=username, password=password)
+    queryAddition = moduleQueryAdditions.get(module, None)
+    queryAddition = etree.fromstring(queryAddition) if queryAddition else None
     metadata = ItemMetadata(inputFolder)
     files = metadata.listFiles()
     identifiersToRemove = []
     for file in tqdm(files):
         identifier = str(file.replace(filenamePrefix, '').replace('.xml', ''))
-        if not client.existsItem(module=module, uuid=identifier):
+        if not client.existsItem(module=module, uuid=identifier, queryAddition=createXMLCopy(queryAddition)):
             identifiersToRemove.append(identifier)
-    
     for identifier in identifiersToRemove:
         filename = f"{filenamePrefix}{identifier}.xml"
         filepath = join(inputFolder, filename)
@@ -40,6 +45,7 @@ def synchroniseItems(*, host, username, password, module, inputFolder, namedGrap
         removeFile(filepath)
         metadata.removeFile(filename)
         removeFromTripleStore(identifier, namedGraphBase=namedGraphBase, filenamePrefix=filenamePrefix, endpoint=sparqlEndpoint)
+        # TODO: Remove Turtle file from disk
     if len(identifiersToRemove) > 0:
         print(f"Removed {len(identifiersToRemove)} items from the local copy and triple store.")
     else:
