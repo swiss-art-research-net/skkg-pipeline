@@ -31,6 +31,8 @@ from tqdm import tqdm
 from lib.Metadata import ItemMetadata
 from lib.MuseumPlusConnector import MPWrapper
 
+from config.moduleQueryAdditions import moduleQueryAdditions
+
 def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
     metadata = ItemMetadata(outputFolder)
@@ -49,51 +51,6 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     zurich_timezone = pytz.timezone('Europe/Zurich')
     downloadStarted = downloadStarted_utc.astimezone(zurich_timezone)
     
-    # Define query additions for specific modules as a MuseumPlus search query
-    moduleQueryAdditions = {
-        'Exhibition': '''
-            <search>
-                <expert>
-                    <and>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="151965"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="25578"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="177046"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="148975"/>
-                    </and>
-                </expert>
-            </search>
-            ''',
-        'Multimedia': '''
-            <search>
-                <expert>
-                    <or>
-                        <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="20501"/>
-                        <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="205074"/>
-                        <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237966"/>
-                        <equalsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237965"/>
-                    </or>
-                </expert>
-            </search>
-            ''',
-        'Object': '''
-            <search>
-                <expert>
-                    <equalsVocNodeExcludingHierarchy fieldPath="ObjInternetVoc" operand="20436"/>
-                </expert>
-            </search>
-            ''',
-        'Registrar': '''
-            <search>
-                <expert>
-                    <or>
-                        <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="140176"/>
-                        <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="199969"/>
-                    </or>
-                </expert>
-            </search>
-        '''
-    }
     queryAddition = moduleQueryAdditions.get(module, None)
     queryAddition = etree.fromstring(queryAddition) if queryAddition else None
 
