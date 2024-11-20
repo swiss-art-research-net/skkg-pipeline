@@ -748,6 +748,14 @@ tasks:
           INTERVAL: 1w
       - task: _run-task-according-to-interval
         vars:
+          TASK: remove-unpublished-items
+          INTERVAL: 1w
+      - task: _run-task-according-to-interval
+        vars:
+          TASK: remove-items-without-equivalent-ttl-from-triplestore
+          INTERVAL: 1w
+      - task: _run-task-according-to-interval
+        vars:
           TASK: create-data-dump
           INTERVAL: 1w
       - task: _run-task-according-to-interval
