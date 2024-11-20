@@ -164,13 +164,15 @@ class MPWrapper:
         """
         return f"{self.url}/vocabulary/instances/{vocabulary}/nodes/search"
 
-    def existsItem(self, *, module: str, uuid: str) -> bool:
+    def existsItem(self, *, module: str, uuid: str, queryAddition: etree.Element = None) -> bool:
         query = self._getItemQueryByUuid(module=module, uuid=uuid)
         search = query.find('.//search')
         select = etree.SubElement(search, 'select')
         field = etree.SubElement(select, 'field')
         field.set('fieldPath', '__uuid')
         url = self._getModuleSearchUrl(module)
+        if queryAddition is not None:
+            query = self._addQueryAdditionToSearch(query, queryAddition)
         response = self._post(url, query)
         if not response.content:
             return False

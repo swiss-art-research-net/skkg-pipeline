@@ -99,11 +99,11 @@ task: Available tasks for this project:
 * prepare-mapping-for-module-items:                                  Prepares the mapping for a specific module. The module name should be passed as an argument or via the MODULE variable.
 * push-latest-data-dump:                                             Upload latest data dump to S3 endpoint for data sharing
 * recreate-folder-metadata:                                          Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
-* remove-deleted-items:                                              Removes all item records that have been deleted from MuseumPlus
-* remove-deleted-module-items:                                       Removes item records that have been deleted from MuseumPlus for a specific module. The module name should be passed as an argument or via the MODULE variable.
 * remove-items-without-equivalent-ttl-from-triplestore:              Removes all item records from the triplestore that do not have an equivalent TTL file
 * remove-module-items-from-triplestore:                              Removes all item records for a specific module from the triplestore. The module name should be passed as an argument or via the MODULE variable.
 * remove-module-items-without-equivalent-ttl-from-triplestore:       Removes all item records for a specific module from the triplestore that do not have an equivalent TTL file. The module name should be passed as an argument or via the MODULE variable.
+* remove-unpublished-items:                                          Removes all item records that have been unpublished from MuseumPlus
+* remove-unpublished-module-items:                                   Removes item records that have been unpublished from MuseumPlus for a specific module. The module name should be passed as an argument or via the MODULE variable.
 * reset:                                                             Delete all artefacts produced by the pipeline.
 * reset-iiif:                                                        Delete all artefacts produced by the pipeline for the iiif data.
 * reset-last-ingested-metadata:                                      Resets the last ingested metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
