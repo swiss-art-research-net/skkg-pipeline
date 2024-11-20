@@ -533,13 +533,12 @@ tasks:
           MODULE: "{{.MODULE_UCFIRST}}"
 
   remove-unpublished-items:
-    desc: Removes all item records that have been unpublished from MuseumPlus
+    desc: Removes all item records that have been unpublished from MuseumPlus. Note that Multimedia items are skipped and should be processed separately if needed.
     cmds:
       - for:
           - Address
           - Exhibition
           - Literature
-          - Multimedia
           - Object
           - Person
           - Registrar
