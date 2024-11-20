@@ -569,14 +569,12 @@ tasks:
           MODULE: "{{.MODULE_UCFIRST}}"
 
   remove-items-without-equivalent-ttl-from-triplestore:
-    desc: Removes all item records from the triplestore that do not have an equivalent TTL file
-    prompt: This will remove all item records from the triplestore that do not have an equivalent TTL file. Do you want to continue?
+    desc: Removes all item records from the triplestore that do not have an equivalent TTL file. Note that Multimedia items are skipped and should be processed separately if needed.
     cmds:
       - for:
           - Address
           - Exhibition
           - Literature
-          - Multimedia
           - Object
           - Person
         task: _remove-module-items-without-equivalent-ttl-from-triplestore
