@@ -542,6 +542,7 @@ tasks:
           - Multimedia
           - Object
           - Person
+          - Registrar
         task: _remove-unpublished-module-items
         vars:
           MODULE: "{{.ITEM}}"
