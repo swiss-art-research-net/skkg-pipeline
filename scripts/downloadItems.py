@@ -110,7 +110,13 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
 
         # Retrieve the uuid and last modified attributes from the moduleItem element
         tree = etree.parse(join(inputFolder, file))
-        uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
+        try:
+            uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
+        except:
+            # It is possible that the total number of files available changed between the time of the query and the time of the download
+            # In this case, the file will not contain a moduleItem element
+            print(f"Could not find uuid for file {file}")
+            continue
         lastModified= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
 
         # Rename the file
