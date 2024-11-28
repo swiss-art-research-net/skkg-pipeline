@@ -1265,12 +1265,24 @@ tasks:
     interactive: True
     requires:
       vars: [INPUT_FILE, RECONCILIATION_TYPE, BASE_TYPE, RECONCILIATION_TYPE]
+    status:
+      - |
+        # Compare the date of the input file with the date of the output file. if both have been created on the same day, we assume the task is up to date
+        INPUT_FILE_DATE=$(date -r {{.INPUT_FILE}} "+%Y-%m-%d")
+        OUTPUT_FILE_DATE=$(date -r {{.OUTPUTFILE}} "+%Y-%m-%d")
+        if [ "$INPUT_FILE_DATE" == "$OUTPUT_FILE_DATE" ]; then
+          exit 0
+        else
+          exit 1
+        fi
     vars:
       LIMIT: 5
       OUTPUTFILE:
         sh: echo "/data/ttl/additional/classifications/$(basename {{.INPUT_FILE}} .ttl)-alignments.ttl"
     cmds:
         - python /scripts/suggestAlignments.py --input_file "{{.INPUT_FILE}}" --reconciliation_type "{{.RECONCILIATION_TYPE}}"  --limit "{{.LIMIT}}" --output_file "{{.OUTPUTFILE}}" --base_type "{{.BASE_TYPE}}" {{if .LOG_FILE}}--log_file "{{.LOG_FILE}}"{{end}}
+        - # Set the date of the output file to the current date and time
+        - touch -d "$(date -u "+%Y-%m-%d %H:%M:%S")" {{.OUTPUTFILE}}
 
   _update-metadata-for-module:
     internal: true
