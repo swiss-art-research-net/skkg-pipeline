@@ -3779,7 +3779,7 @@ else (
                                 </if>
                             </and>
                         </if>
-                        <entity>
+                        <entity variable="dimension_second">
                             <type>crm:E54_Dimension</type>
                             <instance_generator name="URIwithTypeIdAnd4Levels">
                                 <arg name="type" type="constant">object</arg>
@@ -3837,7 +3837,7 @@ else (
                                 </if>
                             </and>
                         </if>
-                        <entity>
+                        <entity variable="dimension_third">
                             <type>crm:E54_Dimension</type>
                             <instance_generator name="URIwithTypeIdAnd4Levels">
                                 <arg name="type" type="constant">object</arg>
