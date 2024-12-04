@@ -456,62 +456,6 @@
                 <link>
                     <path>
                         <source_relation>
-                            <relation>dataField</relation>
-                        </source_relation>
-                        <target_relation>
-                            <if>
-                                <equals value="EndDateDat">@name</equals>
-                            </if>
-                            <relationship>crm:P93i_was_taken_out_of_existence_by</relationship>
-                            <entity>
-                                <type>crm:E64_End_of_Existence</type>
-                                <instance_generator name="URIwithTypeIdAnd3Levels">
-                                    <arg name="type" type="constant">multimedia</arg>
-                                    <arg name="id" type="xpath">../../../@uuid</arg>
-                                    <arg name="level1" type="constant">rights</arg>
-                                    <arg name="level2" type="xpath">../@uuid</arg>
-                                    <arg name="level3" type="constant">end</arg>
-                                </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="constant">end of rights</arg>
-                                    <arg name="language" type="constant"/>
-                                </label_generator>
-                            </entity>
-                            <relationship>crm:P4_has_time-span</relationship>
-                            <entity>
-                                <type>crm:E52_Time-Span</type>
-                                <instance_generator name="URIwithTypeIdAnd4Levels">
-                                    <arg name="type" type="constant">multimedia</arg>
-                                    <arg name="id" type="xpath">../../../@uuid</arg>
-                                    <arg name="level1" type="constant">rights</arg>
-                                    <arg name="level2" type="xpath">../@uuid</arg>
-                                    <arg name="level3" type="constant">end</arg>
-                                    <arg name="level4" type="constant">timespan</arg>
-                                </instance_generator>
-                                <label_generator name="Constant">
-                                    <arg name="text" type="constant">timespan of end of rights</arg>
-                                    <arg name="language" type="constant"/>
-                                </label_generator>
-                            </entity>
-                            <relationship>crm:P82b_end_of_the_end</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>dataField</source_node>
-                        <target_node>
-                            <entity>
-                                <type>xsd:gYear</type>
-                                <instance_generator name="typedLiteralGen">
-                                    <arg name="text" type="xpath">substring-before(value/text(), '-')</arg>
-                                    <arg name="language" type="constant"/>
-                                </instance_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
-                <link>
-                    <path>
-                        <source_relation>
                             <relation>vocabularyReference/vocabularyReferenceItem</relation>
                         </source_relation>
                         <target_relation>
@@ -535,6 +479,120 @@
                                     <arg name="text" type="xpath">formattedValue/text()</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem/dataField</source_node>
+                    <target_node>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="MulRightsGrp">../../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="EndDateDat">@name</equals>
+                                </if>
+                                <if>
+                                    <or>
+                                        <if>
+                                            <equals value="20501">../../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                        <if>
+                                            <equals value="205074">../../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </or>
+                                </if>
+                            </and>
+                        </if>
+                        <entity>
+                            <type>crm:E13_Attribute_Assignment</type>
+                            <instance_generator name="URIwithTypeIdAnd3Levels">
+                                <arg name="type" type="constant">multimedia</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">rights</arg>
+                                <arg name="level2" type="xpath">../@uuid</arg>
+                                <arg name="level3" type="constant">dateAssignment</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat("Copyright date assignment for: ", ../../../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P140_assigned_attribute_to</relationship>
+                                <entity>
+                                    <type>crm:E30_Right</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeIdAnd2Levels">
+                                        <arg name="type" type="constant">multimedia</arg>
+                                        <arg name="id" type="xpath">../../../@uuid</arg>
+                                        <arg name="level1" type="constant">rights</arg>
+                                        <arg name="level2" type="xpath">../@uuid</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P2_has_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">type</arg>
+                                        <arg name="id" type="constant">copyrightExpirationDate</arg>
+                                    </instance_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Urheberrechtsablaufdatum</arg>
+                                        <arg name="language" type="constant">de</arg>
+                                    </label_generator>
+                                    <label_generator name="Literal">
+                                        <arg name="text" type="constant">Copyright end date</arg>
+                                        <arg name="language" type="constant">en</arg>
+                                    </label_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>value</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P141_assigned</relationship>
+                            <entity>
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">multimedia</arg>
+                                    <arg name="id" type="xpath">../../../../@uuid</arg>
+                                    <arg name="level1" type="constant">rights</arg>
+                                    <arg name="level2" type="xpath">../../@uuid</arg>
+                                    <arg name="level3" type="constant">period</arg>
+                                </instance_generator>
+                                <label_generator name="Constant">
+                                    <arg name="text" type="xpath">concat("Copyright period for: ", ../../../../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P82b_end_of_the_end</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>value</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:gYear</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">substring-before(text(), '-')</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
                             </entity>
                         </target_node>
                     </range>
