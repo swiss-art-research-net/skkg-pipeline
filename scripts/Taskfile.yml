@@ -606,7 +606,7 @@ tasks:
     interactive: True
     vars:
       OUTPUTFOLDER: /data/ttl/additional/external
-      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type
+      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type,http://www.cidoc-crm.org/cidoc-crm/P127_has_broader_term
       SOURCES: gnd,aat
       INGEST: True
       INGESTUPDATE: True
