@@ -359,8 +359,8 @@ tasks:
       - task: _ingest-data-from-file
         vars:
           NAME: crmaaa
-          FILE: /mapping/schemas/CRM_AAA_v1.5.4.rdf
-          TYPE: application/rdf+xml
+          FILE: /mapping/schemas/CRM_AAA_v1.5.4.ttl
+          TYPE: application/x-turtle
           GRAPH: https://takin.solutions/ontologies/crmaaa
       - task: _ingest-data-from-file
         vars:
