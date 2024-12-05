@@ -23,6 +23,12 @@
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
             <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
             <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+            <namespace prefix="object" uri="https://data.skkg.ch/object/"/>
+            <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+            <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
+            <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
+            <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
+            <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -649,6 +655,9 @@
                                     <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
                                 </if>
                                 <if>
+                                    <equals value="143906">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
+                                </if>
+                                <if>
                                     <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
                                 </if>
                             </and>
@@ -928,6 +937,9 @@
                                 </if>
                                 <if>
                                     <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="143911">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
                                 </if>
                                 <if>
                                     <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
