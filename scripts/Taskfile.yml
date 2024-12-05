@@ -87,6 +87,7 @@ tasks:
           - LitTypeVgr
           - LitPlaceVgr
           - LitPersonTypeVgr
+          - MulRightsTypeVgr
           - MulUsageVgr
           - MulTypeVgr
           - ObjAcquisitionModeVgr
@@ -202,7 +203,7 @@ tasks:
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           MODULE: Multimedia
-          INPUTFILES: /data/source/multimedia/multimedia-item-0a1a3d37-cb83-468a-b50f-6a4b271a69b6.xml /data/source/multimedia/multimedia-item-2063a088-3cc2-4070-b274-fe1fb3d456ee.xml /data/source/multimedia/multimedia-item-08d26839-ab9f-4456-8010-69073551b7c5.xml /data/source/multimedia/multimedia-item-11252.xml /data/source/multimedia/multimedia-item-2270.xml /data/source/multimedia/multimedia-item-8727.xml
+          INPUTFILES: /data/source/multimedia/multimedia-item-211a5e70-5474-4019-8689-4791a989cd8f.xml /data/source/multimedia/multimedia-item-0e137c8d-d712-4e08-9d6c-9776d25f651f.xml
 
   generate-example-record-person:
     desc: Generates an example Person record for developing the mapping in the X3ML editor
@@ -355,6 +356,12 @@ tasks:
           FILE: /mapping/schemas/LinkedArt.rdfs
           TYPE: application/rdf+xml
           GRAPH: https://linked.art/ns/terms
+      - task: _ingest-data-from-file
+        vars:
+          NAME: crmaaa
+          FILE: /mapping/schemas/CRM_AAA_v1.5.4.ttl
+          TYPE: application/x-turtle
+          GRAPH: https://takin.solutions/ontologies/crmaaa
       - task: _ingest-data-from-file
         vars:
           NAME: ResearchSpace Ontology
@@ -605,7 +612,7 @@ tasks:
     interactive: True
     vars:
       OUTPUTFOLDER: /data/ttl/additional/external
-      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type
+      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type,http://www.cidoc-crm.org/cidoc-crm/P127_has_broader_term
       SOURCES: gnd,aat
       INGEST: True
       INGESTUPDATE: True
