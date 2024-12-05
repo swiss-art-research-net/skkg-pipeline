@@ -700,23 +700,32 @@ tasks:
       - rm -rf /mapping/output/vocabularies
 
   reset-last-ingested-metadata:
-    desc: Resets the last ingested metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
+    desc: Resets the last ingested metadata for a specific module. Pass the module name as an argument and optionally a new date (YYYY-MM-DD).
     vars:
       MODULE:
         sh: |
           if [ -z "{{.MODULE}}" ]; then
-            echo "{{.CLI_ARGS}}"
+            echo "$(echo "{{.CLI_ARGS}}" | awk '{print $1}')"
           else
             echo "{{.MODULE}}"
           fi
+      DATE:
+        sh: |
+          ARG_DATE=$(echo "{{.CLI_ARGS}}" | awk '{print $2}')
+          if [ -z "$ARG_DATE" ]; then
+            echo "1970-01-01 00:00:00.000"
+          else
+            echo "$ARG_DATE 00:00:00.000"
+          fi
       SOURCEFOLDER:
-        sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+        sh: |
+          echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
     cmds:
       - task: _update-metadata-for-module
         vars:
           MODULE: "{{.MODULE}}"
           KEY: lastIngested
-          VALUE: "1970-01-01 00:00:00.000"
+          VALUE: "{{.DATE}}"
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
 
