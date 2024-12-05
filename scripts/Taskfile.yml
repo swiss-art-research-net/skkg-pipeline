@@ -721,11 +721,23 @@ tasks:
           FILEEXTENSION: .xml
 
   reset-last-mapped-metadata:
-    desc: Resets the last mapped metadata for a specific module. Pass the module name as an argument or via the MODULE variable.
+    desc: Resets the last mapped metadata for a specific module. Pass the module name as an argument and optionally a new date (YYYY-MM-DD).
     vars:
       MODULE:
         sh: |
-          echo "{{if .MODULE}}{{.MODULE}}{{else}}{{.CLI_ARGS}}{{end}}"
+          if [ -z "{{.MODULE}}" ]; then
+            echo "$(echo "{{.CLI_ARGS}}" | awk '{print $1}')"
+          else
+            echo "{{.MODULE}}"
+          fi
+      DATE:
+        sh: |
+          ARG_DATE=$(echo "{{.CLI_ARGS}}" | awk '{print $2}')
+          if [ -z "$ARG_DATE" ]; then
+            echo "1970-01-01 00:00:00.000"
+          else
+            echo "$ARG_DATE 00:00:00.000"
+          fi
       SOURCEFOLDER:
         sh: |
           echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
@@ -734,7 +746,7 @@ tasks:
         vars:
           MODULE: "{{.MODULE}}"
           KEY: lastMapped
-          VALUE: "1970-01-01 00:00:00.000"
+          VALUE: "{{.DATE}}"
           SOURCEFOLDER: "{{.SOURCEFOLDER}}"
           FILEEXTENSION: .xml
 
