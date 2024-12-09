@@ -280,7 +280,7 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="MulPhotographerRef">../@name</equals>
+                                <equals value="MulCreatorRef">../@name</equals>
                             </if>
                             <relationship>crm:P94i_was_created_by</relationship>
                             <entity>
@@ -324,7 +324,7 @@
                             <entity>
                                 <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
-                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
