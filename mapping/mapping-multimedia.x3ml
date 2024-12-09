@@ -310,6 +310,26 @@
                                     <arg name="text" type="xpath">concat("Creation: ", ../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300237864</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">image processing</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Bildverarbeitung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                             <relationship>crm:P4_has_time-span</relationship>
                             <entity>
