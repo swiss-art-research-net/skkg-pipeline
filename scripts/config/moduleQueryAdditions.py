@@ -35,10 +35,19 @@ moduleQueryAdditions = {
     'Registrar': '''
         <search>
             <expert>
-                <or>
-                    <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="140176"/>
-                    <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="199969"/>
-                </or>
+                <and>
+                    <or>
+                        <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="140176"/>
+                        <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="199969"/>
+                    </or>
+                    <and>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="RegExhibitionRef.ExhTypeVoc" operand="240964"/>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="RegExhibitionRef.ExhStatusVoc" operand="151965"/>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="RegExhibitionRef.ExhStatusVoc" operand="25578"/>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="RegExhibitionRef.ExhStatusVoc" operand="177046"/>
+                        <notEqualsVocNodeExcludingHierarchy fieldPath="RegExhibitionRef.ExhStatusVoc" operand="148975"/>
+                    </and>
+                </and>
             </expert>
         </search>
     '''
