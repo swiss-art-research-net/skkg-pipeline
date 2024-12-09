@@ -268,6 +268,26 @@
                                     <arg name="text" type="xpath">concat("Creation: ", virtualField[@name='MulMultimediaVrt']/value/text())</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300237864</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">image processing</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Bildverarbeitung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                             <relationship>crm:P14_carried_out_by</relationship>
                         </target_relation>
@@ -371,12 +391,42 @@
                                 <instance_generator name="URIwithTypeIdAnd1Level">
                                     <arg name="type" type="constant">multimedia</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
-                                    <arg name="level1" type="constant">photography</arg>
+                                    <arg name="level1" type="constant">creation</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">concat("Photoshoot: ", ../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
+                                    <arg name="text" type="xpath">concat("Creation: ", ../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300237864</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">image processing</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Bildverarbeitung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P9_consists_of</relationship>
+                            <entity>
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">multimedia</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">creation</arg>
+                                    <arg name="level2" type="constant">photography</arg>
+                                </instance_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
@@ -401,11 +451,12 @@
                             <relationship>crm:P4_has_time-span</relationship>
                             <entity>
                                 <type>crm:E52_Time-Span</type>
-                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
                                     <arg name="type" type="constant">multimedia</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
-                                    <arg name="level1" type="constant">photography</arg>
-                                    <arg name="level2" type="constant">date</arg>
+                                    <arg name="level1" type="constant">creation</arg>
+                                    <arg name="level2" type="constant">photography</arg>
+                                    <arg name="level3" type="constant">date</arg>
                                 </instance_generator>
                             </entity>
                             <relationship>crm:P82_at_some_time_within</relationship>
