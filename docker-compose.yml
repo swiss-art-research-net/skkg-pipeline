@@ -44,6 +44,7 @@ services:
       - IIIF_CSV_URL=${IIIF_CSV_URL}
       - S3_BUCKET_PUSH=${S3_BUCKET_PUSH}
       - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+      - JAVA_OPTS=-Xms512m -Xmx1024m
     secrets:
       - source: aws
         target: /root/.aws/
