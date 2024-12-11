@@ -6,7 +6,7 @@ vars:
   BLAZEGRAPH_ENDPOINT: http://blazegraph:8080/blazegraph/sparql
   BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
   BLAZEGRAPH_BACKUP: http://blazegraph:8080/blazegraph/backup
-  JAVA_TRANSFORM_ENDPOINT: http://localhost:8089/transform
+  X3ML_ENDPOINT: http://localhost:8089/transform
   GENERATOR_POLICY: /mapping/generator-policy.xml
   MAPPING_BATCH_SIZE: 10
   NAMESPACE: https://data.skkg.ch/
@@ -474,7 +474,7 @@ tasks:
       - rm -rf {{.OUTPUTFOLDER}}/*.ttl
       - # Copy all XML files from the source folder to the input folder
       - find {{.SOURCEFOLDER}} -maxdepth 1 -name "*.xml" -exec cp -t {{.INPUTFOLDER}} {} +
-      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}} -j {{.JAVA_TRANSFORM_ENDPOINT}}
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}} -j {{.X3ML_ENDPOINT}}
 
   perform-mapping-for-vocabularies:
     desc: Performs the mapping for the vocabularies
@@ -1064,7 +1064,7 @@ tasks:
     cmds:
       - mkdir -p {{.OUTPUTFOLDER}}
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
-      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}} -j {{.JAVA_TRANSFORM_ENDPOINT}}
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}} -j {{.X3ML_ENDPOINT}}
       - sleep 5s # Wait for the mapping to finish
       - task: _update-metadata-for-module
         vars:
