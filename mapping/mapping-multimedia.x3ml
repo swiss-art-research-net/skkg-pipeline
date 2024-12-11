@@ -36,16 +36,6 @@
                 <domain>
                     <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
-                        <if>
-                            <or>
-                                <if>
-                                    <equals value="20501">vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                </if>
-                                <if>
-                                    <equals value="205074">vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                </if>
-                            </or>
-                        </if>
                         <entity>
                             <type>crmdig:D1_Digital_Object</type>
                             <type>skkg:Multimedia</type>
@@ -568,21 +558,7 @@
                     <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
                     <target_node>
                         <if>
-                            <and>
-                                <if>
-                                    <equals value="MulRightsGrp">../@name</equals>
-                                </if>
-                                <if>
-                                    <or>
-                                        <if>
-                                            <equals value="20501">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                        <if>
-                                            <equals value="205074">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </or>
-                                </if>
-                            </and>
+                            <equals value="MulRightsGrp">../@name</equals>
                         </if>
                         <entity>
                             <type>crm:E30_Right</type>
@@ -696,16 +672,6 @@
                                 <if>
                                     <equals value="SuccessorRef">@name</equals>
                                 </if>
-                                <if>
-                                    <or>
-                                        <if>
-                                            <equals value="20501">../../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                        <if>
-                                            <equals value="205074">../../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </or>
-                                </if>
                             </and>
                         </if>
                         <entity>
@@ -759,16 +725,6 @@
                             <and>
                                 <if>
                                     <equals value="MulRightsGrp">../@name</equals>
-                                </if>
-                                <if>
-                                    <or>
-                                        <if>
-                                            <equals value="20501">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                        <if>
-                                            <equals value="205074">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </or>
                                 </if>
                             </and>
                         </if>
@@ -907,16 +863,6 @@
                                 </if>
                                 <if>
                                     <exists>moduleReference[@name='SuccessorRef']</exists>
-                                </if>
-                                <if>
-                                    <or>
-                                        <if>
-                                            <equals value="20501">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                        <if>
-                                            <equals value="205074">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </or>
                                 </if>
                             </and>
                         </if>
