@@ -6,6 +6,8 @@ RUN apt-get -qq update && \
     rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 
+RUN ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime
+
 RUN apt clean
 RUN apt update
 RUN apt install -y default-jre jq raptor2-utils
