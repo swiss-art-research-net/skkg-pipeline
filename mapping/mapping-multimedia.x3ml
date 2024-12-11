@@ -36,16 +36,6 @@
                 <domain>
                     <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
-                        <if>
-                            <or>
-                                <if>
-                                    <equals value="20501">vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                </if>
-                                <if>
-                                    <equals value="205074">vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                </if>
-                            </or>
-                        </if>
                         <entity>
                             <type>crmdig:D1_Digital_Object</type>
                             <type>skkg:Multimedia</type>
@@ -227,17 +217,43 @@
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
                             </entity>
-                            <relationship>crm:P2_has_type</relationship>
+                            <relationship>crm:P67i_is_referred_to_by</relationship>
+                            <entity>
+                                <type>crm:E33_Linguistic_Object</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">multimedia</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">rights</arg>
+                                    <arg name="level2" type="constant">statement</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300026687</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Credit Statement</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
                         </target_relation>
                     </path>
                     <range>
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>crm:E55_Type</type>
-                                <instance_generator name="URIwithTypeAnId_IdHashed">
-                                    <arg name="type" type="constant">type</arg>
-                                    <arg name="id_HASHED_CONTENTS" type="xpath">value/text()</arg>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Constant">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">value/text()</arg>
@@ -254,7 +270,7 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="MulPhotographerRef">../@name</equals>
+                                <equals value="MulCreatorRef">../@name</equals>
                             </if>
                             <relationship>crm:P94i_was_created_by</relationship>
                             <entity>
@@ -268,6 +284,26 @@
                                     <arg name="text" type="xpath">concat("Creation: ", virtualField[@name='MulMultimediaVrt']/value/text())</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300237864</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">image processing</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Bildverarbeitung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                             <relationship>crm:P14_carried_out_by</relationship>
                         </target_relation>
@@ -278,7 +314,7 @@
                             <entity>
                                 <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
-                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
@@ -310,6 +346,26 @@
                                     <arg name="text" type="xpath">concat("Creation: ", ../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300237864</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">image processing</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Bildverarbeitung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                             <relationship>crm:P4_has_time-span</relationship>
                             <entity>
@@ -319,6 +375,104 @@
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">creation</arg>
                                     <arg name="level2" type="constant">date</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P82_at_some_time_within</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:date</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="MulShootingDateDat">@name</equals>
+                            </if>
+                            <relationship>crm:P94i_was_created_by</relationship>
+                            <entity>
+                                <type>crm:E65_Creation</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">multimedia</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">creation</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat("Creation: ", ../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300237864</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">image processing</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Bildverarbeitung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P9_consists_of</relationship>
+                            <entity>
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">multimedia</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">creation</arg>
+                                    <arg name="level2" type="constant">photography</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300054225</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">photography</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Photographie</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P4_has_time-span</relationship>
+                            <entity>
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">multimedia</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">creation</arg>
+                                    <arg name="level2" type="constant">photography</arg>
+                                    <arg name="level3" type="constant">date</arg>
                                 </instance_generator>
                             </entity>
                             <relationship>crm:P82_at_some_time_within</relationship>
@@ -404,21 +558,7 @@
                     <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
                     <target_node>
                         <if>
-                            <and>
-                                <if>
-                                    <equals value="MulRightsGrp">../@name</equals>
-                                </if>
-                                <if>
-                                    <or>
-                                        <if>
-                                            <equals value="20501">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                        <if>
-                                            <equals value="205074">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </or>
-                                </if>
-                            </and>
+                            <equals value="MulRightsGrp">../@name</equals>
                         </if>
                         <entity>
                             <type>crm:E30_Right</type>
@@ -532,16 +672,6 @@
                                 <if>
                                     <equals value="SuccessorRef">@name</equals>
                                 </if>
-                                <if>
-                                    <or>
-                                        <if>
-                                            <equals value="20501">../../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                        <if>
-                                            <equals value="205074">../../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </or>
-                                </if>
                             </and>
                         </if>
                         <entity>
@@ -595,16 +725,6 @@
                             <and>
                                 <if>
                                     <equals value="MulRightsGrp">../@name</equals>
-                                </if>
-                                <if>
-                                    <or>
-                                        <if>
-                                            <equals value="20501">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                        <if>
-                                            <equals value="205074">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </or>
                                 </if>
                             </and>
                         </if>
@@ -743,16 +863,6 @@
                                 </if>
                                 <if>
                                     <exists>moduleReference[@name='SuccessorRef']</exists>
-                                </if>
-                                <if>
-                                    <or>
-                                        <if>
-                                            <equals value="20501">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                        <if>
-                                            <equals value="205074">../../vocabularyReference[@instanceName='MulUsageVgr']/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </or>
                                 </if>
                             </and>
                         </if>
