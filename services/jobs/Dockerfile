@@ -51,7 +51,7 @@ RUN pip install --no-cache-dir \
 RUN mkdir -p /libs /java/bin /x3ml /scripts /data /mapping
 RUN wget https://github.com/isl/x3ml/releases/download/2.2.0/x3ml-engine-2.2.0-exejar.jar -O /libs/x3ml-engine-exejar.jar
 
-# COPY x3ml/libs/x3ml-engine-exejar.jar /libs/x3ml-engine-exejar.jar
+# COPY x3ml service
 COPY x3ml/java/bin/ /java/bin/
 
 # Install task runner (http://taskfile.dev)
