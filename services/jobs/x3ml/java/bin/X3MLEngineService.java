@@ -27,7 +27,6 @@ public class X3MLEngineService {
     public static synchronized void initializeX3MLEngine() {
         if (engineFactory == null) {
             engineFactory = X3MLEngineFactory.create();
-            engineFactory.withVerboseLogging();
             System.out.println("X3MLEngineFactory instance created");
         }
     }
@@ -48,14 +47,8 @@ public class X3MLEngineService {
             if ("POST".equals(exchange.getRequestMethod())) {
                 Map<String, String> params = queryToMap(exchange.getRequestURI().getQuery());
 
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
-                }
-
                 try {
-                    System.out.println("--------------------------------------------------------");
                     File mappingFile = new File(params.get("mappingFile"));
-                    // InputStream mappingStream = new FileInputStream(params.get("mappingFile"));
                     File inputFile = new File(params.get("inputFile"));
                     File generatorPolicy = new File(params.get("generatorPolicy"));
                     File outputFile = new File(params.get("outputFile"));
@@ -90,12 +83,10 @@ public class X3MLEngineService {
             factory.withInputFiles(inputFile);
             factory.withMappings(mappingFile);
             
-            factory.withGeneratorPolicy(generatorPolicy); // can load only once
+            factory.withGeneratorPolicy(generatorPolicy);
             factory.withOutput(outputFile, X3MLEngineFactory.OutputFormat.TURTLE);
             
-            System.out.println("Before execute");
             factory.execute();
-            System.out.println("Finished");
         } catch (Exception e) {
             System.out.println("X3ML processing failed at stage: " + e.getClass().getName());
             throw e;

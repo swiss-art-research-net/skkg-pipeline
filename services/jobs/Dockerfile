@@ -60,9 +60,6 @@ RUN sh -c "$(curl -sSL https://taskfile.dev/install.sh)" -- -d
 # Install AWS CLI
 RUN pip --no-cache-dir install --upgrade awscli
 
-# Set Java options
-ENV JAVA_OPTS="-Xms512m -Xmx1024m"
-
 # Define volumes and working directory
 VOLUME /data
 VOLUME /mapping

@@ -1,8 +1,8 @@
 # !/bin/bash
 
-usage() { echo "Usage: $0 [-i <input folder>] [-o <output folder>] [-m <mapping file>] [-g <generator policy>] [-b <batch size>] [-j <x3ml transform service endopoint>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-i <input folder>] [-o <output folder>] [-m <mapping file>] [-g <generator policy>] [-j <x3ml transform service endopoint>]" 1>&2; exit 1; }
 
-while getopts ":i:o:m:g:b:j:" o; do
+while getopts ":i:o:m:g:j:" o; do
     case "${o}" in
         i)
             RECORDSINPUTFOLDER=${OPTARG}
@@ -15,9 +15,6 @@ while getopts ":i:o:m:g:b:j:" o; do
             ;;
         g)
             GENERATOR=${OPTARG}
-            ;;
-        b)
-            BATCHSIZE=${OPTARG}
             ;;
         j)
             SERVER_URL=${OPTARG}
@@ -46,33 +43,11 @@ export RECORDSOUTPUTFOLDER
 export RECORDMAPPING
 export GENERATOR
 
-# process a batch of files
-process_batch() {
-    batch=("$@")
-    echo "Processing batch of ${#batch[@]} files:"
-    for file in "${batch[@]}"; do
-        process_file "$file"
-    done
-}
-
-batch=()
-
 for file in "$RECORDSINPUTFOLDER"/*.xml; do
     if [ -f "$file" ]; then
-        batch+=("$file")
-
-        # Process the batch if we reach the batch size
-        if [ "${#batch[@]}" -eq "$BATCHSIZE" ]; then
-            process_batch "${batch[@]}"
-            batch=() # Reset the batch
-        fi
+        process_file "$file"
     else
         echo "No XML files found in the directory."
         break
     fi
 done
-
-# Process any remaining files in the batch
-if [ "${#batch[@]}" -gt 0 ]; then
-    process_batch "${batch[@]}"
-fi
