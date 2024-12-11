@@ -27,6 +27,7 @@ public class X3MLEngineService {
     public static synchronized void initializeX3MLEngine() {
         if (engineFactory == null) {
             engineFactory = X3MLEngineFactory.create();
+            engineFactory.withoutLogging();
             System.out.println("X3MLEngineFactory instance created");
         }
     }
@@ -79,7 +80,8 @@ public class X3MLEngineService {
             System.out.println("Starting X3ML processing");
             // new instance
             X3MLEngineFactory factory = X3MLEngineFactory.create();
-
+            
+            factory.withoutLogging();
             factory.withInputFiles(inputFile);
             factory.withMappings(mappingFile);
             
