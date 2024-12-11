@@ -33,8 +33,10 @@ process_file() {
     local file="$1"
     local output_file="$RECORDSOUTPUTFOLDER/$(basename "$file" .xml).ttl"
     echo
-    echo curl -X POST "$SERVER_URL?mappingFile=$RECORDMAPPING&generatorPolicy=$GENERATOR&inputFile=$file&outputFile=$output_file"
-    curl -X POST "$SERVER_URL?mappingFile=$RECORDMAPPING&generatorPolicy=$GENERATOR&inputFile=$file&outputFile=$output_file"
+    if ! curl --silent -X POST "$SERVER_URL?mappingFile=$RECORDMAPPING&generatorPolicy=$GENERATOR&inputFile=$file&outputFile=$output_file"; then
+        echo "Error: Failed to process file $file - Is the server running?" >&2
+        exit 1
+    fi
     echo
 }
 
