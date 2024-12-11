@@ -1,6 +1,6 @@
 # !/bin/bash
 
-usage() { echo "Usage: $0 [-i <input folder>] [-o <output folder>] [-m <mapping file>] [-g <generator policy>] [-b <batch size>] [-j <java transform service endopoint>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-i <input folder>] [-o <output folder>] [-m <mapping file>] [-g <generator policy>] [-b <batch size>] [-j <x3ml transform service endopoint>]" 1>&2; exit 1; }
 
 while getopts ":i:o:m:g:b:j:" o; do
     case "${o}" in
