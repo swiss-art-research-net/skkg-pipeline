@@ -24,6 +24,9 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8
 
+# Set the timezone
+RUN ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime
+
 # Install Python packages
 RUN pip install --no-cache-dir \
     chardet \
