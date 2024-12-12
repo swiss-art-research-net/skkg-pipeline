@@ -41,9 +41,15 @@ export RECORDSOUTPUTFOLDER
 export RECORDMAPPING
 export GENERATOR
 
-for file in "$RECORDSINPUTFOLDER"/*.xml; do
+echo "Mapping Records"
+numfiles=$(find $RECORDSINPUTFOLDER -type f -name '*.xml' | wc -l)
+count=1
+echo "Found $numfiles record XML files in $RECORDSINPUTFOLDER"
+for file in $(find $RECORDSINPUTFOLDER -type f -name '*.xml' ); do
     if [ -f "$file" ]; then
+        echo "Mapping record $count of $numfiles ($file)"
         process_file "$file"
+        count=$((count+1)) 
     else
         echo "No XML files found in the directory."
         break
