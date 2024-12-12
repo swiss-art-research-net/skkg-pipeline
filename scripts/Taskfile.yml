@@ -793,6 +793,9 @@ tasks:
       - |
         DIRECTORY="/scripts/.task/lastrun"
 
+        printf "%-30s %-20s\n" "Task" "Last Run"
+        printf "%-30s %-20s\n" "----------------" "-----------------"
+
         for FILE in "$DIRECTORY"/*; do
           # Get the base name of the file (without the directory path)
           BASENAME=$(basename "$FILE")
@@ -803,9 +806,9 @@ tasks:
           if [[ -n "$TIMESTAMP" ]]; then
             # Convert the timestamp to a human-readable date
             HUMAN_DATE=$(date -d @"$TIMESTAMP" +"%Y-%m-%d %H:%M:%S")
-            echo "$BASENAME - $HUMAN_DATE"
+            printf "%-30s %-20s\n" "$BASENAME" "$HUMAN_DATE"
           else
-            echo "$BASENAME - No valid timestamp found"
+            printf "%-30s %-20s\n" "$BASENAME" "No valid timestamp"
           fi
         done
   
