@@ -29,12 +29,10 @@ shift $((OPTIND-1))
 process_file() {
     local file="$1"
     local output_file="$RECORDSOUTPUTFOLDER/$(basename "$file" .xml).ttl"
-    echo
-    if ! curl --silent -X POST "$SERVER_URL?mappingFile=$RECORDMAPPING&generatorPolicy=$GENERATOR&inputFile=$file&outputFile=$output_file"; then
+    if ! curl --silent --output /dev/null -X POST "$SERVER_URL?mappingFile=$RECORDMAPPING&generatorPolicy=$GENERATOR&inputFile=$file&outputFile=$output_file"; then
         echo "Error: Failed to process file $file - Is the server running?" >&2
         exit 1
     fi
-    echo
 }
 
 export -f process_file
@@ -43,9 +41,15 @@ export RECORDSOUTPUTFOLDER
 export RECORDMAPPING
 export GENERATOR
 
-for file in "$RECORDSINPUTFOLDER"/*.xml; do
+echo "Mapping Records"
+numfiles=$(find $RECORDSINPUTFOLDER -type f -name '*.xml' | wc -l)
+count=1
+echo "Found $numfiles record XML files in $RECORDSINPUTFOLDER"
+for file in $(find $RECORDSINPUTFOLDER -type f -name '*.xml' ); do
     if [ -f "$file" ]; then
+        echo "Mapping record $count of $numfiles ($file)"
         process_file "$file"
+        count=$((count+1)) 
     else
         echo "No XML files found in the directory."
         break
