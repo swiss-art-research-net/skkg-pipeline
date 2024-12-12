@@ -48,6 +48,7 @@ services:
       - source: aws
         target: /root/.aws/
     volumes:
+      - blazegraph-data:/blazegraph-data
       - ./data:/data
       - ./logs:/logs
       - ./mapping:/mapping

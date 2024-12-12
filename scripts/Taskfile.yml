@@ -11,6 +11,10 @@ vars:
   NAMESPACE: https://data.skkg.ch/
   OUTPUTFOLDER_DUMP: /data/ttl/dump
 
+env:
+  BLAZEGRAPH_RUNNER: /utils/blazegraph-runner/bin/blazegraph-runner
+  BLAZEGRAPH_JOURNAL: /blazegraph-data/blazegraph.jnl
+
 output: 'prefixed'
 
 tasks:
@@ -978,9 +982,40 @@ tasks:
               echo "{{.DEBUG}}"
             fi
           fi
+      USE_RUNNER:
+        sh: |
+          # Your input string of arguments
+          args="{{.CLI_ARGS}}"
+          # Check if "--use-runner" is present in the input string
+          if [[ "$args" == *"--use-runner"* ]]; then
+            # Use parameter expansion to extract the value after "--use-runner"
+            value="${args#*--use-runner }"
+            # Split the arguments by space and get the first part as the value
+            value="${value%% *}"
+            echo "$value"
+          else
+            if [ -z "{{.USE_RUNNER}}" ]; then
+              echo "false"
+            else
+              echo "{{.USE_RUNNER}}"
+            fi
+          fi
     interactive: True
     cmds:
       - mkdir -p {{.TEMPFOLDER}}
+      - |
+        {{if eq .USE_RUNNER "true"}}
+        # If using Blazegraph Runner, ping the BLAZEGRAPH_ENDPOINT, which should fail, to make sure blazegraph is not running. If it returns something the task should exit
+        RESPONSE=$(curl -sS --fail "{{.BLAZEGRAPH_ENDPOINT}}" || true)
+
+        if [[ -n "$RESPONSE" ]]; then
+          echo "Blazegraph is running, please stop it before running this task with --use-runner set to true"
+          exit 1
+        else
+          exit 0
+        fi
+
+        {{end}}
       - |
         # If folder contains already ingested files we skip the preparation step
         if [ "$(find {{.TEMPFOLDER}} -type f -name '*.ttl.ingested' | wc -l)" -gt 0 ]; then
@@ -996,10 +1031,19 @@ tasks:
           identifier=$(basename "$f" | sed "s/{{.FILENAMEPREFIX}}//; s/\\.ttl//")
           graph="{{.NAMEDGRAPHBASE}}{{.FILENAMEPREFIX}}$identifier"
           echo "Ingesting {{.MODULE}} item $count of $numfiles into graph $graph"
+          {{if eq .USE_RUNNER "true"}}
+          # Drop graph
+          echo "DROP GRAPH <$graph>" > tmp.rq
+          $BLAZEGRAPH_RUNNER update --journal=$BLAZEGRAPH_JOURNAL tmp.rq
+          rm tmp.rq
+          # Ingest into graph
+          $BLAZEGRAPH_RUNNER load --journal=$BLAZEGRAPH_JOURNAL --graph=$graph $f
+          {{else}}
           # Drop graph
           curl --silent -X POST {{.BLAZEGRAPH_ENDPOINT}} --data-urlencode "update=DROP GRAPH <$graph>" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
           # Ingest into graph
           curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
+          {{end}}
           count=$((count+1)) 
           mv $f $f.ingested
         done
