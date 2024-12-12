@@ -29,12 +29,10 @@ shift $((OPTIND-1))
 process_file() {
     local file="$1"
     local output_file="$RECORDSOUTPUTFOLDER/$(basename "$file" .xml).ttl"
-    echo
-    if ! curl --silent -X POST "$SERVER_URL?mappingFile=$RECORDMAPPING&generatorPolicy=$GENERATOR&inputFile=$file&outputFile=$output_file"; then
+    if ! curl --silent --output /dev/null -X POST "$SERVER_URL?mappingFile=$RECORDMAPPING&generatorPolicy=$GENERATOR&inputFile=$file&outputFile=$output_file"; then
         echo "Error: Failed to process file $file - Is the server running?" >&2
         exit 1
     fi
-    echo
 }
 
 export -f process_file
