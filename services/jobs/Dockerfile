@@ -54,6 +54,13 @@ RUN pip install --no-cache-dir \
 RUN mkdir -p /libs /java/bin /x3ml /scripts /data /mapping
 RUN wget https://github.com/isl/x3ml/releases/download/2.2.0/x3ml-engine-2.2.0-exejar.jar -O /libs/x3ml-engine-exejar.jar
 
+# Install Blazegraph Runner
+RUN wget -O blazegraph-runner.tgz https://github.com/balhoff/blazegraph-runner/releases/download/v1.7/blazegraph-runner-1.7.tgz
+RUN mkdir /utils
+RUN tar -xvzf blazegraph-runner.tgz -C /utils
+RUN mv /utils/blazegraph-runner-1.7 /utils/blazegraph-runner
+RUN rm blazegraph-runner.tgz
+
 # Install task runner (http://taskfile.dev)
 RUN sh -c "$(curl -sSL https://taskfile.dev/install.sh)" -- -d
 
