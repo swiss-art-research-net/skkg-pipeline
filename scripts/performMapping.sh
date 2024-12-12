@@ -1,8 +1,8 @@
-#!/bin/bash
+# !/bin/bash
 
-usage() { echo "Usage: $0 [-i <input folder>] [-o <output folder>] [-m <mapping file>] [-g <generator policy>] [-b <batch size>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-i <input folder>] [-o <output folder>] [-m <mapping file>] [-g <generator policy>] [-j <x3ml transform service endopoint>]" 1>&2; exit 1; }
 
-while getopts ":i:o:m:g:b:" o; do
+while getopts ":i:o:m:g:j:" o; do
     case "${o}" in
         i)
             RECORDSINPUTFOLDER=${OPTARG}
@@ -16,8 +16,8 @@ while getopts ":i:o:m:g:b:" o; do
         g)
             GENERATOR=${OPTARG}
             ;;
-        b)
-            BATCHSIZE=${OPTARG}
+        j)
+            SERVER_URL=${OPTARG}
             ;;
         *)
             usage
@@ -26,27 +26,28 @@ while getopts ":i:o:m:g:b:" o; do
 done
 shift $((OPTIND-1))
 
-echo "Mapping Records"
-numfiles=$(find $RECORDSINPUTFOLDER -type f -name '*.xml' | wc -l)
-count=1
-echo "Found $numfiles record XML files in $RECORDSINPUTFOLDER"
+process_file() {
+    local file="$1"
+    local output_file="$RECORDSOUTPUTFOLDER/$(basename "$file" .xml).ttl"
+    echo
+    if ! curl --silent -X POST "$SERVER_URL?mappingFile=$RECORDMAPPING&generatorPolicy=$GENERATOR&inputFile=$file&outputFile=$output_file"; then
+        echo "Error: Failed to process file $file - Is the server running?" >&2
+        exit 1
+    fi
+    echo
+}
 
-(
-for f in $(find $RECORDSINPUTFOLDER -type f -name '*.xml' ); do
-  ((i=i%BATCHSIZE)); ((i++==0)) && wait
-  echo "Mapping record $count of $numfiles ($f)"
-  o=${f/.xml/.ttl}
-  o=${o/$RECORDSINPUTFOLDER/}
-  java --add-opens java.base/java.lang.reflect=ALL-UNNAMED \
-    --add-opens java.base/java.util=ALL-UNNAMED \
-    --add-opens java.base/java.text=ALL-UNNAMED \
-    --add-opens java.desktop/java.awt.font=ALL-UNNAMED \
-    -jar /x3ml/x3ml-engine.exejar \
-    --input $f \
-    --x3ml $RECORDMAPPING \
-    --policy $GENERATOR \
-    --output $RECORDSOUTPUTFOLDER/$o \
-    --format text/turtle &
-  count=$((count+1)) 
+export -f process_file
+export SERVER_URL
+export RECORDSOUTPUTFOLDER
+export RECORDMAPPING
+export GENERATOR
+
+for file in "$RECORDSINPUTFOLDER"/*.xml; do
+    if [ -f "$file" ]; then
+        process_file "$file"
+    else
+        echo "No XML files found in the directory."
+        break
+    fi
 done
-)

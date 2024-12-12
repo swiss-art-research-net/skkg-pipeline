@@ -6,8 +6,8 @@ vars:
   BLAZEGRAPH_ENDPOINT: http://blazegraph:8080/blazegraph/sparql
   BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
   BLAZEGRAPH_BACKUP: http://blazegraph:8080/blazegraph/backup
+  X3ML_ENDPOINT: http://localhost:8089/transform
   GENERATOR_POLICY: /mapping/generator-policy.xml
-  MAPPING_BATCH_SIZE: 10
   NAMESPACE: https://data.skkg.ch/
   OUTPUTFOLDER_DUMP: /data/ttl/dump
 
@@ -473,7 +473,7 @@ tasks:
       - rm -rf {{.OUTPUTFOLDER}}/*.ttl
       - # Copy all XML files from the source folder to the input folder
       - find {{.SOURCEFOLDER}} -maxdepth 1 -name "*.xml" -exec cp -t {{.INPUTFOLDER}} {} +
-      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -j {{.X3ML_ENDPOINT}}
 
   perform-mapping-for-vocabularies:
     desc: Performs the mapping for the vocabularies
@@ -493,7 +493,7 @@ tasks:
       - # Remove the string 'xmlns="http://www.zetcom.com/ria/ws/vocabulary"' from the XML files in the input folder as X3ML is not able to handle XML namespaces
       - find {{.INPUTFOLDER}} -maxdepth 1 -name "*.xml" -exec sed -i 's/xmlns="http:\/\/www.zetcom.com\/ria\/ws\/vocabulary"//g' {} +
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
-      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}}  -j {{.X3ML_ENDPOINT}}
 
   push-latest-data-dump:
     desc: Upload latest data dump to S3 endpoint for data sharing
@@ -1063,7 +1063,7 @@ tasks:
     cmds:
       - mkdir -p {{.OUTPUTFOLDER}}
       - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
-      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -b {{.MAPPING_BATCH_SIZE}}
+      - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -j {{.X3ML_ENDPOINT}}
       - sleep 5s # Wait for the mapping to finish
       - task: _update-metadata-for-module
         vars:
