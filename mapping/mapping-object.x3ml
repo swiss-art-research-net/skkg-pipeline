@@ -4167,5 +4167,151 @@ else (
                     </range>
                 </link>
             </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
+                    <target_node>
+                        <if>
+                            <equals value="ObjMaterialTechniqueGrp">../@name</equals>
+                        </if>
+                        <entity variable="">
+                            <type>crm:E13_Attribute_Assignment</type>
+                            <instance_generator name="URIwithTypeIdAnd2Levels">
+                                <arg name="type" type="constant">object</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">materialAssignment</arg>
+                                <arg name="level2" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat('Material assignment for object ', if (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (../../virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (../../@uuid))</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P140_assigned_attribute_to</relationship>
+                                <entity>
+                                    <type>crm:E22_Human-Made_Object</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">object</arg>
+                                        <arg name="id" type="xpath">../../@uuid</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="NotesClb">@name</equals>
+                            </if>
+                            <relationship>crm:P3_has_note</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <or>
+                                    <if>
+                                        <equals value="ObjMaterialTechniqueVgr">../@instanceName</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="ObjMaterialVgr">../@instanceName</equals>
+                                    </if>
+                                </or>
+                            </if>
+                            <relationship>crm:P141_assigned</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E57_Material</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="SortLnu">@name</equals>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="constant">materialAssignment</arg>
+                                    <arg name="level2" type="xpath">../@uuid</arg>
+                                    <arg name="level3" type="constant">sortlnu</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">sortlnu</arg>
+                                        </instance_generator>
+                                        <label_generator name="Constant">
+                                            <arg name="text" type="constant">Sortierung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
         </mappings>
         </x3ml>
