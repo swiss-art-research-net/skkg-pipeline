@@ -786,7 +786,32 @@ tasks:
         vars:
           TASK: push-latest-data-dump
           INTERVAL: 1w
+  
+  show-last-pipeline-cycle-runs:
+    desc: Displays the last pipeline cycle runs for each task
+    cmds:
+      - |
+        DIRECTORY="/scripts/.task/lastrun"
 
+        printf "%-30s %-20s\n" "Task" "Last Run"
+        printf "%-30s %-20s\n" "----------------" "-----------------"
+
+        for FILE in "$DIRECTORY"/*; do
+          # Get the base name of the file (without the directory path)
+          BASENAME=$(basename "$FILE")
+
+          # Extract the timestamp from the file (adjust this command based on file content)
+          TIMESTAMP=$(cat "$FILE" | grep -oE '[0-9]{10}' | head -n 1)
+          
+          if [[ -n "$TIMESTAMP" ]]; then
+            # Convert the timestamp to a human-readable date
+            HUMAN_DATE=$(date -d @"$TIMESTAMP" +"%Y-%m-%d %H:%M:%S")
+            printf "%-30s %-20s\n" "$BASENAME" "$HUMAN_DATE"
+          else
+            printf "%-30s %-20s\n" "$BASENAME" "No valid timestamp"
+          fi
+        done
+  
   suggest-alignments-for-vocabularies:
     desc: Suggest alignments for all vocabularies with GND data
     sources:
