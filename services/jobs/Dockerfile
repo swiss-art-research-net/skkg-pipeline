@@ -44,7 +44,7 @@ RUN pip install --no-cache-dir \
     pytz \
     pyshacl \
     pandas \
-    semantic-field-definition-generator \
+    semantic-field-definition-generator==1.4.1 \
     pyexistdb \
     pyduktape2 \
     python-decouple \
