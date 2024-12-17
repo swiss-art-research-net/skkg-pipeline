@@ -1357,7 +1357,7 @@ tasks:
       SCHEMA_SKKG: /mapping/schemas/skkg-ontology.ttl
       SCHEMA_CRM: https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs
       REPORTS_GRAPH: "{{.NAMESPACE}}graph/shaclReports"
-      LIMIT: 100
+      LIMIT: 50
       TEMP_FOLDER: /data/temp/validate
       FILE_PREFIX: validate-
       REPORT_IRI:
