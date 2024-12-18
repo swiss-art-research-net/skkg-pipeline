@@ -114,6 +114,7 @@ tasks:
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
           - ObjTechniqueVgr
+          - PerGenderVgr
           - PerTypeVgr
         task: _download-vocabulary-from-museumplus
         vars:
