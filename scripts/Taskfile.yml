@@ -114,6 +114,7 @@ tasks:
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
           - ObjTechniqueVgr
+          - PerGenderVgr
           - PerTypeVgr
         task: _download-vocabulary-from-museumplus
         vars:
@@ -214,7 +215,7 @@ tasks:
         vars:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           MODULE: Person
-          INPUTFILES: /data/source/person/person-item-1111.xml /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
+          INPUTFILES: /data/source/person/person-item-0b159fe6-f699-45b3-8e61-b7377856d8b7.xml /data/source/person/person-item-1111.xml /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
 
   generate-example-record-registrar:
     desc: Generates an example Registrar record for developing the mapping in the X3ML editor
