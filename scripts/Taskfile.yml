@@ -463,8 +463,6 @@ tasks:
     sources:
       - /mapping/mapping-iiif.x3ml
       - /data/source/iiif/*.xml
-    generates:
-      - /data/ttl/main/iiif/iiifPaths.ttl
     vars:
       SOURCEFOLDER: /data/source/iiif
       INPUTFOLDER: /mapping/input/iiif
