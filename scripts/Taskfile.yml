@@ -281,33 +281,22 @@ tasks:
     desc: Ingest IIIF data into the triplestore
     sources:
       - /data/ttl/main/iiif/*.ttl
-    vars:
-      GRAPH: https://data.skkg.ch/graph/iiifPaths
-      INPUTFOLDER: /data/ttl/main/iiif
-      TEMPFOLDER: /data/temp/ingest/iiif
     cmds:
-      - mkdir -p {{.TEMPFOLDER}}
-      - |
-        # If folder contains already ingested files we skip the preparation step
-        if [ "$(find {{.TEMPFOLDER}} -type f -name '*.ttl.ingested' | wc -l)" -gt 0 ]; then
-          echo "Skipping preparation step for IIIF path files as there are already ingested files"
-        else
-          echo "Preparing IIIF path files for ingest"
-          find {{.INPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec cp -t {{.TEMPFOLDER}} {} +
-        fi
-      - task: _drop-graph
+      - for: sources
+        task: _drop-graph
         vars:
-          GRAPH: "{{.GRAPH}}"
-      - |
-        numfiles=$(find {{.TEMPFOLDER}} -type f -name '*.ttl' | wc -l)        
-        count=1
-        graph="{{.GRAPH}}"
-        for f in $(find {{.TEMPFOLDER}} -type f -name '*.ttl' ); do
-          echo "Ingesting IIIF path file $count of $numfiles into graph $graph"
-          curl --silent -X POST --data-binary "uri=file://$f" "{{.BLAZEGRAPH_ENDPOINT}}?context-uri=$graph" {{if eq .DEBUG "true"}}{{else}} > /dev/null{{end}}
-          count=$((count+1)) 
-          mv $f $f.ingested
-        done
+          GRAPH:
+            sh: echo "{{.NAMESPACE}}graph/iiif/$(basename {{.ITEM}} .ttl)"
+      - for: sources
+        task: _ingest-data-from-file
+        vars:
+          NAME:
+            sh: echo "$(basename {{.ITEM}} .ttl)"
+          FILE: "{{.ITEM}}"
+          TYPE: application/x-turtle
+          GRAPH: 
+            sh: echo "{{.NAMESPACE}}graph/iiif/$(basename {{.ITEM}} .ttl)"
+          ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT}}"
 
   ingest-module-items:
     desc: Ingests the items for a specific module. The module name should be passed as an argument or via the MODULE variable.
@@ -487,6 +476,12 @@ tasks:
       - # Copy all XML files from the source folder to the input folder
       - find {{.SOURCEFOLDER}} -maxdepth 1 -name "*.xml" -exec cp -t {{.INPUTFOLDER}} {} +
       - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -j {{.X3ML_ENDPOINT}}
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER}}/iiifPaths.ttl.temp
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
+      - mv {{.OUTPUTFOLDER}}/iiifPaths.ttl.temp {{.OUTPUTFOLDER}}/iiifPaths.ttl
+      - task: _clean_turtle_file_from_extra_prefixes
+        vars:
+          FILE: "{{.OUTPUTFOLDER}}/iiifPaths.ttl"
 
   perform-mapping-for-vocabularies:
     desc: Performs the mapping for the vocabularies
