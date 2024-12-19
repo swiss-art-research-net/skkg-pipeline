@@ -476,6 +476,12 @@ tasks:
       - # Copy all XML files from the source folder to the input folder
       - find {{.SOURCEFOLDER}} -maxdepth 1 -name "*.xml" -exec cp -t {{.INPUTFOLDER}} {} +
       - bash /scripts/performMapping.sh -i {{.INPUTFOLDER}} -o {{.OUTPUTFOLDER}} -m {{.MAPPINGFILE}} -g {{.GENERATOR_POLICY}} -j {{.X3ML_ENDPOINT}}
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER}}/iiifPaths.ttl.temp
+      - find {{.OUTPUTFOLDER}} -maxdepth 1 -name "*.ttl" -delete
+      - mv {{.OUTPUTFOLDER}}/iiifPaths.ttl.temp {{.OUTPUTFOLDER}}/iiifPaths.ttl
+      - task: _clean_turtle_file_from_extra_prefixes
+        vars:
+          FILE: "{{.OUTPUTFOLDER}}/iiifPaths.ttl"
 
   perform-mapping-for-vocabularies:
     desc: Performs the mapping for the vocabularies
