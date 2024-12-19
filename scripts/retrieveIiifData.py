@@ -53,8 +53,11 @@ def convertCsvToXml(*, inputFile, outputFolder, filename, itemsPerFile):
         for row in reader:
             inputData.append(row)
 
-    # Split data into batches and write XML files
+    # Calculate the padding width based on the total items
     totalItems = len(inputData)
+    padding_width = len(str(totalItems))  # Ensures we have enough padding for all ranges
+
+    # Split data into batches and write XML files
     for batch_number, start_index in enumerate(range(0, totalItems, itemsPerFile), start=1):
         batch_data = inputData[start_index:start_index + itemsPerFile]
         root = etree.Element('collection')
@@ -67,9 +70,11 @@ def convertCsvToXml(*, inputFile, outputFolder, filename, itemsPerFile):
                 if value:
                     etree.SubElement(item, key).text = value
 
-        # Generate the output filename
-        end_index = start_index + len(batch_data)
-        outputFile = join(outputFolder, f'{filename}_{batch_number:05d}_{start_index + 1}-{end_index}.xml')
+        # Generate the output filename with zero-padded numbers
+        start_number = str(start_index + 1).zfill(padding_width)
+        end_number = str(start_index + len(batch_data)).zfill(padding_width)
+        outputFile = join(outputFolder, f'{filename}_{batch_number:05d}_{start_number}-{end_number}.xml')
+        
         with open(outputFile, 'wb') as xmlfile:
             xmlfile.write(etree.tostring(root, pretty_print=True))
         print(f'Created file: {outputFile}')
