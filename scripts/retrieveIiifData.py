@@ -37,7 +37,7 @@ def retrieveIiifData(*, input, outputFolder, filename='iiif', itemsPerFile=1000)
         print('Converting CSV to XML')
         # Delete all existing XML files
         for file in listdir(outputFolder):
-            if file.startswith(f"{filename}_") and file.endswith(".xml"):
+            if file.endswith(".xml"):
                 removeFile(join(outputFolder, file))
         convertCsvToXml(
             inputFile=join(outputFolder, f'{filename}.csv'), 
