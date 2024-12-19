@@ -31,7 +31,7 @@ def retrieveIiifData(*, input, outputFolder, filename='iiif', itemsPerFile=1000)
     if inputFileNeedsUpdate:
         print('Downloading report file')
         urllib.request.urlretrieve(input, join(outputFolder, f'{filename}.csv'))
-    
+
     # If the input file has changed or the output file does not exist, convert the CSV to XML
     if inputFileNeedsUpdate or not any(fname.startswith(f"{filename}_") and fname.endswith(".xml") for fname in listdir(outputFolder)):
         print('Converting CSV to XML')
@@ -60,9 +60,13 @@ def convertCsvToXml(*, inputFile, outputFolder, filename, itemsPerFile):
     totalItems = len(inputData)
     padding_width = len(str(totalItems))  # Ensures we have enough padding for all ranges
 
+    # Variables to track summary
+    filesCreated = []
+    totalBatches = (totalItems + itemsPerFile - 1) // itemsPerFile  # Total batches
+
     # Split data into batches and write XML files
-    for batch_number, start_index in enumerate(range(0, totalItems, itemsPerFile), start=1):
-        batch_data = inputData[start_index:start_index + itemsPerFile]
+    for batchNumber, startIndex in enumerate(range(0, totalItems, itemsPerFile), start=1):
+        batch_data = inputData[startIndex:startIndex + itemsPerFile]
         root = etree.Element('collection')
         for row in batch_data:
             # If the page number is empty, set it to 1
@@ -74,13 +78,22 @@ def convertCsvToXml(*, inputFile, outputFolder, filename, itemsPerFile):
                     etree.SubElement(item, key).text = value
 
         # Generate the output filename with zero-padded numbers
-        start_number = str(start_index + 1).zfill(padding_width)
-        end_number = str(start_index + len(batch_data)).zfill(padding_width)
-        outputFile = join(outputFolder, f'{filename}_{batch_number:05d}_{start_number}-{end_number}.xml')
+        startNumber = str(startIndex + 1).zfill(padding_width)
+        endNumber = str(startIndex + len(batch_data)).zfill(padding_width)
+        outputFile = join(outputFolder, f'{filename}_{batchNumber:05d}_{startNumber}-{endNumber}.xml')
         
         with open(outputFile, 'wb') as xmlfile:
             xmlfile.write(etree.tostring(root, pretty_print=True))
-        print(f'Created file: {outputFile}')
+        
+        # Record file creation
+        filesCreated.append(f"{batchNumber:05d}: {startNumber}-{endNumber}")
+
+    # Print summary
+    print("\nIIIF input files successfully completed!")
+    print(f"Total files created: {len(filesCreated)}")
+    print(f"Total items processed: {totalItems}")
+    print(f"Items per file: {itemsPerFile}")
+    print(f"Number of batches: {totalBatches}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Retrieve and prepare data related to the IIIF images')
