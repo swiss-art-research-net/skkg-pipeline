@@ -14,7 +14,7 @@ Arguments:
 import argparse
 import csv
 import urllib.request
-from os import listdir
+from os import listdir, remove as removeFile
 from os.path import exists, getsize, join
 from lxml import etree
 
@@ -31,11 +31,14 @@ def retrieveIiifData(*, input, outputFolder, filename='iiif', itemsPerFile=1000)
     if inputFileNeedsUpdate:
         print('Downloading report file')
         urllib.request.urlretrieve(input, join(outputFolder, f'{filename}.csv'))
-    # DEBUG
-    inputFileNeedsUpdate = True
+    
     # If the input file has changed or the output file does not exist, convert the CSV to XML
     if inputFileNeedsUpdate or not any(fname.startswith(f"{filename}_") and fname.endswith(".xml") for fname in listdir(outputFolder)):
         print('Converting CSV to XML')
+        # Delete all existing XML files
+        for file in listdir(outputFolder):
+            if file.startswith(f"{filename}_") and file.endswith(".xml"):
+                removeFile(join(outputFolder, file))
         convertCsvToXml(
             inputFile=join(outputFolder, f'{filename}.csv'), 
             outputFolder=outputFolder, 
