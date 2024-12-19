@@ -8,7 +8,7 @@ Arguments:
     --input: URL to a CSV file with the metadata for the IIIF images
     --outputFolder: Folder where the output data should be stored
     --filename: Name of the output files (default: iiif)
-    --itemsPerFile: Number of items per XML file (default: 1000)
+    --itemsPerFile: Number of items per XML file (default: 100)
 """
 
 import argparse
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     parser.add_argument('--input', required=True, help='CSV file with the metadata for the IIIF images')
     parser.add_argument('--outputFolder', required=True, help='Folder where the output data should be stored')
     parser.add_argument('--filename', default='iiif', help='Name of the output files')
-    parser.add_argument('--itemsPerFile', type=int, default=100, help='Number of items per XML file (default: 1000)')
+    parser.add_argument('--itemsPerFile', type=int, default=100, help='Number of items per XML file (default: 100)')
     args = parser.parse_args()
 
     retrieveIiifData(input=args.input, outputFolder=args.outputFolder, filename=args.filename, itemsPerFile=args.itemsPerFile)
