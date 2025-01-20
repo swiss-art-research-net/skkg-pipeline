@@ -347,6 +347,11 @@
                                     </if>
                                 </and>
                             </if>
+                            <relationship>crm:P108i_was_produced_by</relationship>
+                            <entity variable="object_production">
+                                <type>crm:E12_Production</type>
+                                <instance_generator name="UUID"/>
+                            </entity>
                             <relationship>crm:P32_used_general_technique</relationship>
                         </target_relation>
                     </path>
