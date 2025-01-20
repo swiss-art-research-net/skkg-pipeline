@@ -350,7 +350,11 @@
                             <relationship>crm:P108i_was_produced_by</relationship>
                             <entity variable="object_production">
                                 <type>crm:E12_Production</type>
-                                <instance_generator name="UUID"/>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="constant">production</arg>
+                                </instance_generator>
                             </entity>
                             <relationship>crm:P32_used_general_technique</relationship>
                         </target_relation>
