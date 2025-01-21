@@ -25,7 +25,7 @@
         <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
         <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
         <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
-        <namespace prefix="iiif" uri="https://iiif.skkg.3ms.io/iiif/2/"/>
+        <namespace prefix="iiif" uri="https://iiif.digital.skkg.ch/iiif/2/"/>
     </namespaces>
     <mappings>
         <mapping>

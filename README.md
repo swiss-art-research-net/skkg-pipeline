@@ -2,7 +2,7 @@
 
 ## About
 
-The repository contains the pipeline for the Sammlung Digital project by the [Stiftung für Kunst und Kultur (SKKG)](https://www.skkg.ch/).
+The repository contains the pipeline for the Sammlung Digital project by the [Stiftung für Kunst, Kultur und Geschichte (SKKG)](https://www.skkg.ch/).
 
 This code is published primarily for the sake of transparency and to share our work with the community. Please note that this pipeline was developed for SKKG and their use case, and may not be directly applicable to other projects. While we encourage reusing all or parts of this code we also want to emphasise that this project is a work in progress and may contain bugs or incomplete features. 
 
@@ -99,20 +99,21 @@ task: Available tasks for this project:
 * prepare-mapping-for-module-items:                                  Prepares the mapping for a specific module. The module name should be passed as an argument or via the MODULE variable.
 * push-latest-data-dump:                                             Upload latest data dump to S3 endpoint for data sharing
 * recreate-folder-metadata:                                          Recreate the metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
-* remove-deleted-items:                                              Removes all item records that have been deleted from MuseumPlus
-* remove-deleted-module-items:                                       Removes item records that have been deleted from MuseumPlus for a specific module. The module name should be passed as an argument or via the MODULE variable.
-* remove-items-without-equivalent-ttl-from-triplestore:              Removes all item records from the triplestore that do not have an equivalent TTL file
+* remove-items-without-equivalent-ttl-from-triplestore:              Removes all item records from the triplestore that do not have an equivalent TTL file. Note that Multimedia items are skipped and should be processed separately if needed.
 * remove-module-items-from-triplestore:                              Removes all item records for a specific module from the triplestore. The module name should be passed as an argument or via the MODULE variable.
 * remove-module-items-without-equivalent-ttl-from-triplestore:       Removes all item records for a specific module from the triplestore that do not have an equivalent TTL file. The module name should be passed as an argument or via the MODULE variable.
+* remove-unpublished-items:                                          Removes all item records that have been unpublished from MuseumPlus. Note that Multimedia items are skipped and should be processed separately if needed.
+* remove-unpublished-module-items:                                   Removes item records that have been unpublished from MuseumPlus for a specific module. The module name should be passed as an argument or via the MODULE variable.
 * reset:                                                             Delete all artefacts produced by the pipeline.
 * reset-iiif:                                                        Delete all artefacts produced by the pipeline for the iiif data.
-* reset-last-ingested-metadata:                                      Resets the last ingested metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
-* reset-last-mapped-metadata:                                        Resets the last mapped metadata for a specific module. The module name should be passed as an argument or via the MODULE variable.
+* reset-last-ingested-metadata:                                      Resets the last ingested metadata for a specific module. Pass the module name as an argument and optionally a new date (YYYY-MM-DD).
+* reset-last-mapped-metadata:                                        Resets the last mapped metadata for a specific module. Pass the module name as an argument and optionally a new date (YYYY-MM-DD).
 * reset-module:                                                      Delete all artefacts produced by the pipeline for a given module. The module name should be passed as an argument or via the MODULE variable.
 * reset-vocabularies:                                                Delete all artefacts produced by the pipeline for the vocabularies.
 * retrieve-and-ingest-additional-data:                               Retrieve and ingest additional data for external URIs in the Triple Store
 * retrieve-iiif-data:                                                Downloads and prepares data related to the IIIF images
 * run-pipeline-cycles:                                               Runs the entire pipeline as well as certain tasks according to a specific interval. When this task is executed, each step of the pipeline will be run if the interval has passed since the last execution of the task. The interval is defined in the vars section of each task.
+* show-last-pipeline-cycle-runs:                                     Displays the last pipeline cycle runs for each task
 * suggest-alignments-for-vocabularies:                               Suggest alignments for all vocabularies with GND data
 * update-iiif:                                                       Downloads, maps, and ingests the IIIF data
 * update-vocabularies:                                               Downloads, maps, and ingests the vocabularies

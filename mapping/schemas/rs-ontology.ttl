@@ -1,0 +1,9 @@
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix crmdig: <http://www.ics.forth.gr/isl/CRMdig/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rso: <http://www.researchspace.org/ontology/> .
+
+rso:EX_Digital_Image rdfs:label "Digital Image" ;
+    rdfs:subClassOf crm:E36_Visual_Item;
+    rdfs:subClassOf crmdig:D1_Digital_Object ;
+    a rdfs:Class .

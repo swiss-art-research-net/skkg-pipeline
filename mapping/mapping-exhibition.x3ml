@@ -23,6 +23,12 @@
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
             <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
             <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+            <namespace prefix="object" uri="https://data.skkg.ch/object/"/>
+            <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+            <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
+            <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
+            <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
+            <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -243,6 +249,9 @@
                                             <arg name="type" type="constant">type</arg>
                                             <arg name="id" type="constant">21102</arg>
                                         </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">ExhTypeVgr</arg>
+                                        </label_generator>
                                     </entity>
                                 </additional>
                             </entity>
@@ -271,36 +280,9 @@
                                     <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
-                <link>
-                    <path>
-                        <source_relation>
-                            <relation>moduleReference</relation>
-                        </source_relation>
-                        <target_relation>
-                            <if>
-                                <equals value="ExhObjectRef">@name</equals>
-                            </if>
-                            <relationship>crm:P16_used_specific_object</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>moduleReference</source_node>
-                        <target_node>
-                            <entity>
-                                <type>la:Set</type>
-                                <type>crm:E89_Propositional_Object</type>
-                                <instance_generator name="URIwithTypeIdAnd1Level">
-                                    <arg name="type" type="constant">exhibition</arg>
-                                    <arg name="id" type="xpath">../@uuid</arg>
-                                    <arg name="level1" type="constant">objects</arg>
-                                </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">concat("Objects exhibited at: ", ../virtualField[@name='ExhExhibitionVrt']/value/text())</arg>
-                                    <arg name="language" type="constant">en</arg>
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
                             </entity>
                         </target_node>
@@ -396,6 +378,9 @@
                                             <arg name="type" type="constant">type</arg>
                                             <arg name="id" type="constant">43086</arg>
                                         </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">ExhExternalInternalVgr</arg>
+                                        </label_generator>
                                     </entity>
                                 </additional>
                             </entity>
@@ -428,84 +413,6 @@
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">concat("Other station or venue of exhibition: ", ../../virtualField[@name='ExhExhibitionVrt']/value/text())</arg>
                                     <arg name="language" type="constant">en</arg>
-                                </label_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
-            </mapping>
-            <mapping>
-                <domain>
-                    <source_node>/application/modules/module/moduleItem/moduleReference</source_node>
-                    <target_node>
-                        <if>
-                            <and>
-                                <if>
-                                    <equals value="ExhObjectRef">@name</equals>
-                                </if>
-                                <if>
-                                    <not>
-                                        <if>
-                                            <equals value="151965">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </not>
-                                </if>
-                                <if>
-                                    <not>
-                                        <if>
-                                            <equals value="25578">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </not>
-                                </if>
-                                <if>
-                                    <not>
-                                        <if>
-                                            <equals value="vocabularyReference[@instanceName=&quot;ExhStatusVgr&quot;]/vocabularyReferenceItem/@id">177046</equals>
-                                        </if>
-                                    </not>
-                                </if>
-                                <if>
-                                    <not>
-                                        <if>
-                                            <equals value="148975">vocabularyReference[@instanceName="ExhStatusVgr"]/vocabularyReferenceItem/@id</equals>
-                                        </if>
-                                    </not>
-                                </if>
-                            </and>
-                        </if>
-                        <entity>
-                            <type>la:Set</type>
-                            <type>crm:E89_Propositional_Object</type>
-                            <instance_generator name="URIwithTypeIdAnd1Level">
-                                <arg name="type" type="constant">exhibition</arg>
-                                <arg name="id" type="xpath">../@uuid</arg>
-                                <arg name="level1" type="constant">objects</arg>
-                            </instance_generator>
-                        </entity>
-                    </target_node>
-                </domain>
-                <link>
-                    <path>
-                        <source_relation>
-                            <relation>moduleReferenceItem</relation>
-                        </source_relation>
-                        <target_relation>
-                            <relationship>la:has_member</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>moduleReferenceItem</source_node>
-                        <target_node>
-                            <entity>
-                                <type>skkg:Object</type>
-                                <type>crm:E22_Human-Made_Object</type>
-                                <instance_generator name="URIwithTypeAndId">
-                                    <arg name="type" type="constant">object</arg>
-                                    <arg name="id" type="xpath">@uuid</arg>
-                                </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="xpath">formattedValue/text()</arg>
-                                    <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
                             </entity>
                         </target_node>

@@ -43,6 +43,7 @@ services:
       - NUMBER_OF_DUMPS_TO_KEEP=${NUMBER_OF_DUMPS_TO_KEEP}
       - IIIF_CSV_URL=${IIIF_CSV_URL}
       - S3_BUCKET_PUSH=${S3_BUCKET_PUSH}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
     secrets:
       - source: aws
         target: /root/.aws/
@@ -54,7 +55,7 @@ services:
       - ./services/platform/apps:/apps
 
   platform:
-    image: swissartresearx/researchspace:develop
+    image: swissartresearx/researchspace:1c95e8ef20b2ec10043a97684b3d738bd44c2778
     container_name: ${PROJECT_NAME}_platform
     restart: unless-stopped
     depends_on:

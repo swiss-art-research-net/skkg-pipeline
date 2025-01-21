@@ -77,23 +77,9 @@
 #    Individuals
 #################################################################
 
-type:invnr rdf:type skkg:Type, skos:Concept ;
-    rdfs:label "Inv.Nr."@de, "Inventarnummer"@de ;
-    skos:prefLabel "Inventarnummer"@de .
-
-type:sortlnu rdf:type skkg:Type, skos:Concept ;
-    rdfs:label "SortLnu", "Sortierung"@de ;
-    skos:prefLabel "Sortierung"@de .
-
-type:figref rdf:type skkg:Type, skos:Concept ;
-    rdfs:label "Abb. S."@de ;
-    skos:prefLabel "Abbildung Seite"@de ;
-    crm:P127_has_broader_term aat:300445022 .
-
-type:pageref rdf:type skkg:Type, skos:Concept ;
-    rdfs:label "Erwähnung S."@de ;
-    skos:prefLabel "Erwähnung Seite"@de ;
-    crm:P127_has_broader_term aat:300445022 .
+address:privateIndividual rdf:type skkg:Address ;
+    rdfs:label "Private Individual"@en, "Privatperson"@de ;
+    skos:prefLabel "Private Individual"@en, "Privatperson"@de .
 
 type:catalogueno rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Kat. Nr."@de ;
@@ -104,6 +90,25 @@ type:conversionrate rdf:type skkg:Type, skos:Concept ;
     skos:prefLabel "Umrechnungskurs"@de, "Conversion rate"@en ;
     crm:P127_has_broader_term aat:300055662 .
 
-address:privateIndividual rdf:type skkg:Address ;
-    rdfs:label "Private Individual"@en, "Privatperson"@de ;
-    skos:prefLabel "Private Individual"@en, "Privatperson"@de .
+type:copyrightExpirationDate rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Urheberrechtsablaufdatum"@de ;
+    skos:prefLabel "Urheberrechtsablaufdatum"@de ;
+    crm:P127_has_broader_term aat:300435434 .
+
+type:figref rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Abb. S."@de ;
+    skos:prefLabel "Abbildung Seite"@de ;
+    crm:P127_has_broader_term aat:300445022 .
+
+type:invnr rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Inv.Nr."@de, "Inventarnummer"@de ;
+    skos:prefLabel "Inventarnummer"@de .
+
+type:pageref rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Erwähnung S."@de ;
+    skos:prefLabel "Erwähnung Seite"@de ;
+    crm:P127_has_broader_term aat:300445022 .
+
+type:sortlnu rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "SortLnu", "Sortierung"@de ;
+    skos:prefLabel "Sortierung"@de .

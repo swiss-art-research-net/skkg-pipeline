@@ -30,6 +30,9 @@ from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
 from lib.MuseumPlusConnector import MPWrapper
+from lib.Utils import createXMLCopy
+
+from config.moduleQueryAdditions import moduleQueryAdditions
 
 def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
@@ -49,55 +52,11 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
     zurich_timezone = pytz.timezone('Europe/Zurich')
     downloadStarted = downloadStarted_utc.astimezone(zurich_timezone)
     
-    # Define query additions for specific modules as a MuseumPlus search query
-    moduleQueryAdditions = {
-        'Exhibition': '''
-            <search>
-                <expert>
-                    <and>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhTypeVoc" operand="240964"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="151965"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="25578"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="177046"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="148975"/>
-                    </and>
-                </expert>
-            </search>
-            ''',
-        'Multimedia': '''
-            <search>
-                <expert>
-                    <and>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="20502"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237965"/>
-                        <notEqualsVocNodeExcludingHierarchy fieldPath="MulUsageVoc" operand="237966"/>
-                    </and>
-                </expert>
-            </search>
-            ''',
-        'Object': '''
-            <search>
-                <expert>
-                    <equalsVocNodeExcludingHierarchy fieldPath="ObjInternetVoc" operand="20436"/>
-                </expert>
-            </search>
-            ''',
-        'Registrar': '''
-            <search>
-                <expert>
-                    <or>
-                        <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="140176"/>
-                        <equalsVocNodeExcludingHierarchy fieldPath="RegDecisionVoc" operand="199969"/>
-                    </or>
-                </expert>
-            </search>
-        '''
-    }
     queryAddition = moduleQueryAdditions.get(module, None)
     queryAddition = etree.fromstring(queryAddition) if queryAddition else None
 
     # Get the number of items
-    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=_createXMLCopy(queryAddition))
+    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=createXMLCopy(queryAddition))
     print(f"Found {numItems} items for module {module}")
     if numItems > 0:
         if lastUpdated is not None:
@@ -121,7 +80,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         # Check if the file already exists
         if not exists(filename):
             try:
-                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated, queryAddition=_createXMLCopy(queryAddition))
+                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated, queryAddition=createXMLCopy(queryAddition))
             except:
                 log['omitted'].append(filename)
                 continue
@@ -151,7 +110,13 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
 
         # Retrieve the uuid and last modified attributes from the moduleItem element
         tree = etree.parse(join(inputFolder, file))
-        uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
+        try:
+            uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
+        except:
+            # It is possible that the total number of files available changed between the time of the query and the time of the download
+            # In this case, the file will not contain a moduleItem element
+            print(f"Could not find uuid for file {file}")
+            continue
         lastModified= tree.find('.//{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]/{http://www.zetcom.com/ria/ws/module}value').text
 
         # Rename the file
@@ -165,11 +130,6 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
             # Update last modified for file
             metadata.setLastUpdatedForFile(filename, lastModified, write=False)
     metadata.writeMetadata()
-
-def _createXMLCopy(element):
-    if element is None:
-        return None
-    return etree.fromstring(etree.tostring(element))        
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
