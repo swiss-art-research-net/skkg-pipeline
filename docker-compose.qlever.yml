@@ -4,7 +4,7 @@ services:
     container_name: ${PROJECT_NAME}_qlever
     ports:
       - 7001:7001
-    command: ["qlever index", "&", "qlever start"]
+    # First start: create index using `qlever index`
     volumes:
       - ./data:/index/skkg/data
       - ./mapping/schemas:/index/skkg/schemas
