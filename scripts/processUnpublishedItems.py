@@ -42,7 +42,10 @@ def synchroniseItems(*, host, username, password, module, inputFolder, turtleFol
         print(f"Item {identifier} in module {module} has been deleted or unpublished in MuseumPlus. Deleting local copy.")
         filenameXML = f"{filenamePrefix}{identifier}.xml"
         filepathXML = join(inputFolder, filenameXML)
-        removeFile(filepathXML)
+        if exists(filepathXML):
+            removeFile(filepathXML)
+        else:
+            print(f"File {filenameXML} does not exist in the input folder.")
         filenameTTL = f"{filenamePrefix}{identifier}.ttl"
         filepathTTL = join(turtleFolder, filenameTTL)
         if exists(filepathTTL):
