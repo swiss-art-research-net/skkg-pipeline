@@ -47,7 +47,7 @@ def synchroniseItems(*, host, username, password, module, inputFolder, turtleFol
                 print(f"Error checking item {identifier}: {e}. Retrying in 5 seconds...")
             retries -= 1
             if retries == 0:
-                raise RuntimeError(f"Failed to check item {identifier} after {retries} attempts.")
+                raise RuntimeError(f"Failed to check item {identifier} after several attempts.")
             else:
                 time.sleep(5)
     for identifier in identifiersToRemove:
