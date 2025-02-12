@@ -1948,7 +1948,7 @@ else (
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="constant">H&#246;he</arg>
+                                    <arg name="text" type="constant">Höhe</arg>
                                     <arg name="language" type="constant">de</arg>
                                 </label_generator>
                             </entity>
