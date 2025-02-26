@@ -9,3 +9,58 @@
 @prefix skkg: <https://ontology.skkg.ch/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix type: <https://data.skkg.ch/type/> .
+
+
+<https://data.skkg.ch/type/21118/177003> skos:closeMatch aat:300263566 .
+
+<https://data.skkg.ch/type/21118/151017> skos:closeMatch aat:300025175 .
+        
+<https://data.skkg.ch/type/21118/198983> skos:closeMatch aat:300025303 .
+        
+<https://data.skkg.ch/type/21118/183989> skos:closeMatch aat:300025103 .
+        
+<https://data.skkg.ch/type/21118/136720> skos:closeMatch aat:300112172 .
+
+<https://data.skkg.ch/type/21118/136726> skos:closeMatch aat:300239410 .
+
+<https://data.skkg.ch/type/21118/194014> skos:closeMatch aat:300112172 .
+
+<https://data.skkg.ch/type/21118/169990> skos:closeMatch aat:300025303 .
+
+<https://data.skkg.ch/type/21118/227969> skos:closeMatch aat:300025492 .
+
+<https://data.skkg.ch/type/21118/198982> skos:closeMatch aat:300025801 .
+
+<https://data.skkg.ch/type/21118/136725> skos:closeMatch aat:300025165 .
+
+<https://data.skkg.ch/type/21118/183988> skos:closeMatch aat:300025732 .
+
+<https://data.skkg.ch/type/21118/168981> skos:relatedMatch aat:300112172 .
+
+<https://data.skkg.ch/type/21118/136724> skos:closeMatch aat:300025230 .
+
+<https://data.skkg.ch/type/21118/193138> skos:closeMatch aat:300025574 .
+
+<https://data.skkg.ch/type/21118/193965> skos:closeMatch aat:300386333 .
+
+<https://data.skkg.ch/type/21118/188981> skos:closeMatch aat:300400903 .
+
+<https://data.skkg.ch/type/21118/185010> skos:relatedMatch aat:300025175 ;
+    skos:relatedMatch aat:300025574 .
+
+<https://data.skkg.ch/type/21118/193964> skos:closeMatch aat:300025367 .
+
+<https://data.skkg.ch/type/21118/136719> skos:closeMatch aat:300025335 .
+
+<https://data.skkg.ch/type/21118/205055> skos:closeMatch aat:300025492 .
+
+<https://data.skkg.ch/type/21118/136722> skos:closeMatch aat:300025165 .
+
+<https://data.skkg.ch/type/21118/136728> skos:relatedMatch aat:300025574 ;
+    skos:relatedMatch aat:300025732 .
+
+<https://data.skkg.ch/type/21118/262975> skos:closeMatch aat:300025337 .
+
+<https://data.skkg.ch/type/21118/136721> skos:closeMatch aat:300025373 .
+
+<https://data.skkg.ch/type/21118/136727> skos:closeMatch aat:300025574 .

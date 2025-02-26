@@ -24,6 +24,7 @@ tasks:
       - task: ingest-items
       - task: ingest-classifications
       - task: ingest-ontologies
+      - task: ingest-alignments
       - task: retrieve-and-ingest-additional-data
 
   create-blazegraph-backup:
@@ -246,6 +247,22 @@ tasks:
       - semantic-field-util -f JSON -y {{.INPUTFILE}}  write -t {{.JSONOUTPUT}}
       - semantic-field-util -f INLINE -y {{.INPUTFILE}}  write -t {{.INLINEOUTPUT}}
   
+  ingest-alignments:
+    desc: Ingests the alignments into the triplestore
+    sources:
+      - /data/ttl/additional/alignments/*.ttl
+    cmds:
+      - for: sources
+        task: _ingest-data-from-file
+        vars:
+          NAME:
+            sh: echo "$(basename {{.ITEM}} .ttl)"
+          FILE: "{{.ITEM}}"
+          TYPE: application/x-turtle
+          GRAPH: 
+            sh: echo "{{.NAMESPACE}}graph/alignments/$(basename {{.ITEM}} .ttl)"
+          ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT}}"
+
   ingest-classifications:
     desc: Ingest classifications into the triplestore
     sources:
