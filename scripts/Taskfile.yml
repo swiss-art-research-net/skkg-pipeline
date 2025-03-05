@@ -111,6 +111,7 @@ tasks:
           - ObjObjectTitleTypeVgr
           - ObjObjectTitleSourceVgr
           - ObjObjectTypeVgr
+          - ObjOtherNumberTypeVgr
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
           - ObjTechniqueVgr
