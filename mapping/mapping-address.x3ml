@@ -831,7 +831,7 @@
                             <entity variable="metadata_creation">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd3Levels">
-                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">meta</arg>
                                     <arg name="level2" type="constant">update</arg>
