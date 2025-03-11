@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qlever-backend
+  namespace: qlever
+  labels:
+    app: qlever-backend
+spec:
+  # replicas: 1
+  selector:
+    matchLabels:
+      app: qlever-backend
+  template:
+    metadata:
+      labels:
+        app: qlever-backend
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 1000
+      containers:
+      - name: qlever
+        image: adfreiburg/qlever:latest
+        workingDir: /index
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "4Gi"
+          limits:
+            cpu: "2000m"
+            memory: "8Gi"
+        command: ["/bin/sh", "-c"]
+        args:
+#            - |
+#              cat dump-2025-02-15-09-40-19.ttl | IndexBuilderMain -i skkg --stxxl-memory="1 GB" --parser-buffer-size="5 MB" -p false -s /config/skkg.settings.json -F ttl -f - | tee skkg.index-log.txt && \
+            - ServerMain -i skkg -j 8 -p 7019 -m 5G -c 2G -e 1G -k 200 -s 30s -a skkg_7643543846_0u9k7epL9m79 > skkg.server-log.txt 2>&1
+        ports:
+        - containerPort: 7019
+        volumeMounts:
+        - name: storage
+          mountPath: /index
+        - name: config-volume
+          mountPath: /config
+          readOnly: true
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: qlever-index-pvc
+      - name: config-volume
+        configMap:
+          name: skkg-settings
+          items:
+            - key: skkg.settings.json
+              path: skkg.settings.json
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qlever-service
+  namespace: qlever
+spec:
+  selector:
+    app: qlever-backend
+  ports:
+    - protocol: TCP
+      port: 7019
+      targetPort: 7019
+  # type: NodePort # local
+  type: LoadBalancer # cloud
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: skkg-settings
+  namespace: qlever
+data:
+  skkg.settings.json: |
+    {
+      "ascii-prefixes-only": false,
+      "num-triples-per-partial-vocab": 10000
+    }

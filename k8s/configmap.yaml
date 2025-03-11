@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: skkg-settings
+  namespace: qlever
+data:
+  skkg.settings.json: |
+    {
+      "ascii-prefixes-only": false,
+      "num-triples-per-partial-vocab": 10000
+    }

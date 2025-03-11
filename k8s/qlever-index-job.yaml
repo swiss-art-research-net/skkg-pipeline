@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: build-qlever-index
+  namespace: qlever
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 1000
+      containers:
+      - name: qlever
+        image: "adfreiburg/qlever:latest"
+        workingDir: /index
+        resources:
+          limits:
+            cpu: '2'
+            memory: "5Gi"
+        command: ["sh", "-c", "IndexBuilderMain -F nt -f dump-2025-02-15-09-40-19.ttl -i skkg -s /config/skkg.settings.json -m '2 GB' -b '5 MB' -k false"]
+        volumeMounts:
+        - mountPath: "/index"
+          name: storage
+        - name: config-volume
+          mountPath: "/config"
+          readOnly: true
+      restartPolicy: Never
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: qlever-index-pvc
+      - name: config-volume
+        configMap:
+          name: skkg-settings
+          items:
+          - key: "skkg.settings.json"
+            path: "skkg.settings.json"
+  backoffLimit: 0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: skkg-settings
+  namespace: qlever
+data:
+  skkg.settings.json: |
+    {
+      "ascii-prefixes-only": false,
+      "num-triples-per-partial-vocab": 50000000
+    }
