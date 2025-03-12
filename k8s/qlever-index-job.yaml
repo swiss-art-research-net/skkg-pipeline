@@ -16,15 +16,18 @@ spec:
         workingDir: /index
         resources:
           limits:
+            cpu: '4'
+            memory: "10Gi"
+          requests:
             cpu: '2'
-            memory: "5Gi"
+            memory: "8Gi"
         command:
           - "sh"
           - "-c"
           - |
             wget -O latest-dump.ttl.gz https://skkg--turtles.s3.eu-central-1.amazonaws.com/latest-dump.ttl.gz && \
             gunzip -f latest-dump.ttl.gz && \
-            IndexBuilderMain -F nt -f latest-dump.ttl -i skkg -s /config/skkg.settings.json -m '2 GB' -b '5 MB' -k false
+            IndexBuilderMain -F nt -f latest-dump.ttl -i skkg -s /config/skkg.settings.json -m '1 GB' -b '2 MB' -k false
         volumeMounts:
         - mountPath: "/index"
           name: storage
