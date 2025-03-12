@@ -18,7 +18,13 @@ spec:
           limits:
             cpu: '2'
             memory: "5Gi"
-        command: ["sh", "-c", "IndexBuilderMain -F nt -f dump-2025-02-15-09-40-19.ttl -i skkg -s /config/skkg.settings.json -m '2 GB' -b '5 MB' -k false"]
+        command:
+          - "sh"
+          - "-c"
+          - |
+            wget -O latest-dump.ttl.gz https://skkg--turtles.s3.eu-central-1.amazonaws.com/latest-dump.ttl.gz && \
+            gunzip latest-dump.ttl.gz && \
+            IndexBuilderMain -F nt -f latest-dump.ttl -i skkg -s /config/skkg.settings.json -m '2 GB' -b '5 MB' -k false
         volumeMounts:
         - mountPath: "/index"
           name: storage
