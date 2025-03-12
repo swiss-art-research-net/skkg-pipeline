@@ -5,7 +5,7 @@ metadata:
   namespace: qlever
 data:
   skkg.settings.json: |
-    {
-      "ascii-prefixes-only": false,
-      "num-triples-per-partial-vocab": 10000
+    { 
+      "num-triples-per-batch": 1000000, 
+      "parallel-parsing": false 
     }
