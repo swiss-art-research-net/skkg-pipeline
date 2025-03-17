@@ -17,7 +17,7 @@ spec:
         resources:
           limits:
             cpu: '4'
-            memory: 24G
+            memory: 4G
         command:
           - "sh"
           - "-c"
