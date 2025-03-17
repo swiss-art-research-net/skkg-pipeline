@@ -63,5 +63,5 @@ spec:
     - protocol: TCP
       port: 7019
       targetPort: 7019
-  type: NodePort # local
-  #type: LoadBalancer # cloud
+  #type: NodePort # local
+  type: LoadBalancer # cloud
