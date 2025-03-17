@@ -32,7 +32,14 @@ spec:
             memory: "8Gi"
         command: ["/bin/sh", "-c"]
         args:
-          - ServerMain -i skkg -j 8 -p 7019 -m 5G -c 2G -e 1G -k 200 -s 30s -a skkg_7643543846_0u9k7epL9m79
+          # Create access token using `kubectl create secret generic qlever-access-token -n qlever --from-literal=ACCESS_TOKEN="your-secure-token-here"`
+          - ServerMain -i skkg -j 8 -p 7019 -m 5G -c 2G -e 1G -k 200 -s 30s -a $(ACCESS_TOKEN)
+        env:
+        - name: ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: qlever-access-token
+              key: ACCESS_TOKEN
         ports:
         - containerPort: 7019
         volumeMounts:
