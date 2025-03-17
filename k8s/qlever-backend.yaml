@@ -21,7 +21,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: qlever
-        image: adfreiburg/qlever:latest
+        image: adfreiburg/qlever:commit-acb6633
         workingDir: /index
         resources:
           requests:
