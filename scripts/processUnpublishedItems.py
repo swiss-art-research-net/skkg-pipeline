@@ -16,6 +16,7 @@ Arguments:
 
 import argparse
 import requests
+import time
 from lxml import etree
 from os import remove as removeFile
 from os.path import exists, join
@@ -36,13 +37,27 @@ def synchroniseItems(*, host, username, password, module, inputFolder, turtleFol
     identifiersToRemove = []
     for file in tqdm(files):
         identifier = str(file.replace(filenamePrefix, '').replace('.xml', ''))
-        if not client.existsItem(module=module, uuid=identifier, queryAddition=createXMLCopy(queryAddition)):
-            identifiersToRemove.append(identifier)
+        retries = 3
+        while retries > 0:
+            try:
+                if not client.existsItem(module=module, uuid=identifier, queryAddition=createXMLCopy(queryAddition)):
+                    identifiersToRemove.append(identifier)
+                break
+            except Exception as e:
+                print(f"Error checking item {identifier}: {e}. Retrying in 5 seconds...")
+            retries -= 1
+            if retries == 0:
+                raise RuntimeError(f"Failed to check item {identifier} after several attempts.")
+            else:
+                time.sleep(5)
     for identifier in identifiersToRemove:
         print(f"Item {identifier} in module {module} has been deleted or unpublished in MuseumPlus. Deleting local copy.")
         filenameXML = f"{filenamePrefix}{identifier}.xml"
         filepathXML = join(inputFolder, filenameXML)
-        removeFile(filepathXML)
+        if exists(filepathXML):
+            removeFile(filepathXML)
+        else:
+            print(f"File {filenameXML} does not exist in the input folder.")
         filenameTTL = f"{filenamePrefix}{identifier}.ttl"
         filepathTTL = join(turtleFolder, filenameTTL)
         if exists(filepathTTL):

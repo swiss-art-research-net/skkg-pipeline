@@ -470,6 +470,10 @@
                                     <arg name="level1" type="constant">creation</arg>
                                     <arg name="level2" type="constant">photography</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat("Photography: ", ../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
@@ -501,6 +505,10 @@
                                     <arg name="level2" type="constant">photography</arg>
                                     <arg name="level3" type="constant">date</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat("Photography date: ", ../virtualField[@name='MulMultimediaVrt']/value/text())</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P82_at_some_time_within</relationship>
                         </target_relation>

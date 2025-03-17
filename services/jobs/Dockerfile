@@ -26,6 +26,7 @@ ENV LANG=en_US.UTF-8 \
 
 # Set the timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime
+ENV TZ=Europe/Zurich
 
 # Install Python packages
 RUN pip install --no-cache-dir \
@@ -69,4 +70,4 @@ VOLUME /mapping
 WORKDIR /scripts
 
 # Entry point
-ENTRYPOINT ["java", "-Xms512m", "-Xmx1024m", "-cp", "/libs/x3ml-engine-exejar.jar:/java/bin", "X3MLEngineService"]
+ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-Xms512m", "-Xmx1024m", "-cp", "/libs/x3ml-engine-exejar.jar:/java/bin", "X3MLEngineService"]

@@ -3,6 +3,7 @@
             <namespace prefix="resource" uri="https://data.skkg.ch/"/>
             <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
             <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <namespace prefix="crmaaa" uri="https://takin.solutions/ontologies/crmaaa/"/>
             <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
             <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
             <namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
@@ -87,6 +88,33 @@
                         </comment>
                     </comments>
                 </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>.</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P70i_is_documented_in</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>.</source_node>
+                        <target_node>
+                            <entity variable="metadata">
+                                <type>crm:E31_Document</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">exhibition</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('metadata for exhibition: ', if (virtualField[@name='ExhExhibitionVrt']/value/text()) then (virtualField[@name='ExhExhibitionVrt']/value/text()) else (@uuid))</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
                 <link>
                     <path>
                         <source_relation>
@@ -414,6 +442,75 @@
                                     <arg name="text" type="xpath">concat("Other station or venue of exhibition: ", ../../virtualField[@name='ExhExhibitionVrt']/value/text())</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem</source_node>
+                    <target_node>
+                        <entity variable="metadata">
+                            <type>crm:E31_Document</type>
+                            <instance_generator name="UUID"/>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>systemField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="__lastModified">@name</equals>
+                            </if>
+                            <relationship>crm:P94i_was_created_by</relationship>
+                            <entity>
+                                <type>crm:E65_Creation</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">exhibition</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">update</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="constant">last update of metadata</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P4_has_time-span</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>systemField</source_node>
+                        <target_node>
+                            <entity variable="metadata_creation">
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">exhibition</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">update</arg>
+                                    <arg name="level3" type="constant">date</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P82_at_some_time_within</relationship>
+                                    <entity>
+                                        <type>xsd:dateTime</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="typedLiteralGen">
+                                            <arg name="text" type="xpath">replace(value/text(),' ', 'T')</arg>
+                                        </instance_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                         </target_node>
                     </range>
