@@ -24,6 +24,7 @@ tasks:
       - task: ingest-items
       - task: ingest-classifications
       - task: ingest-ontologies
+      - task: ingest-alignments
       - task: retrieve-and-ingest-additional-data
 
   create-blazegraph-backup:
@@ -247,6 +248,22 @@ tasks:
       - semantic-field-util -f JSON -y {{.INPUTFILE}}  write -t {{.JSONOUTPUT}}
       - semantic-field-util -f INLINE -y {{.INPUTFILE}}  write -t {{.INLINEOUTPUT}}
   
+  ingest-alignments:
+    desc: Ingests the alignments into the triplestore
+    sources:
+      - /data/ttl/additional/alignments/*.ttl
+    cmds:
+      - for: sources
+        task: _ingest-data-from-file
+        vars:
+          NAME:
+            sh: echo "$(basename {{.ITEM}} .ttl)"
+          FILE: "{{.ITEM}}"
+          TYPE: application/x-turtle
+          GRAPH: 
+            sh: echo "{{.NAMESPACE}}graph/alignments/$(basename {{.ITEM}} .ttl)"
+          ENDPOINT: "{{.BLAZEGRAPH_ENDPOINT}}"
+
   ingest-classifications:
     desc: Ingest classifications into the triplestore
     sources:
@@ -624,8 +641,8 @@ tasks:
     interactive: True
     vars:
       OUTPUTFOLDER: /data/ttl/additional/external
-      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type,http://www.cidoc-crm.org/cidoc-crm/P127_has_broader_term
-      SOURCES: gnd,aat
+      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type,http://www.cidoc-crm.org/cidoc-crm/P127_has_broader_term,http://www.w3.org/2004/02/skos/core#exactMatch,http://www.w3.org/2004/02/skos/core#closeMatch,http://www.w3.org/2004/02/skos/core#relatedMatch,http://www.w3.org/2004/02/skos/core#related
+      SOURCES: gnd,aat,lt
       INGEST: True
       INGESTUPDATE: True
       INGESTNAMESPACE: https://data.skkg.ch/graph/externalData/
@@ -634,6 +651,7 @@ tasks:
       - for:
           - gnd
           - aat
+          - lt
         task: _clean_turtle_file_from_extra_prefixes
         vars:
           FILE: "/data/ttl/additional/external/{{.ITEM}}.ttl"

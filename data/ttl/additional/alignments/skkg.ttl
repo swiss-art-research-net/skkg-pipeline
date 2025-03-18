@@ -1,0 +1,213 @@
+@prefix aat: <http://vocab.getty.edu/aat/> .
+@prefix address: <https://data.skkg.ch/address/> .
+@prefix lt: <http://terminology.lido-schema.org/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skkg: <https://ontology.skkg.ch/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix type: <https://data.skkg.ch/type/> .
+
+# Mapping between SKKG and AAT
+
+<https://data.skkg.ch/type/21118/177003> skos:closeMatch aat:300263566 .
+
+<https://data.skkg.ch/type/21118/151017> skos:closeMatch aat:300025175 .
+        
+<https://data.skkg.ch/type/21118/198983> skos:closeMatch aat:300025303 .
+        
+<https://data.skkg.ch/type/21118/183989> skos:closeMatch aat:300025103 .
+        
+<https://data.skkg.ch/type/21118/136720> skos:closeMatch aat:300112172 .
+
+<https://data.skkg.ch/type/21118/136726> skos:closeMatch aat:300239410 .
+
+<https://data.skkg.ch/type/21118/194014> skos:closeMatch aat:300112172 .
+
+<https://data.skkg.ch/type/21118/169990> skos:closeMatch aat:300025303 .
+
+<https://data.skkg.ch/type/21118/227969> skos:closeMatch aat:300025492 .
+
+<https://data.skkg.ch/type/21118/198982> skos:closeMatch aat:300025801 .
+
+<https://data.skkg.ch/type/21118/136725> skos:closeMatch aat:300025165 .
+
+<https://data.skkg.ch/type/21118/183988> skos:closeMatch aat:300025732 .
+
+<https://data.skkg.ch/type/21118/168981> skos:relatedMatch aat:300112172 .
+
+<https://data.skkg.ch/type/21118/136724> skos:closeMatch aat:300025230 .
+
+<https://data.skkg.ch/type/21118/193138> skos:closeMatch aat:300025574 .
+
+<https://data.skkg.ch/type/21118/193965> skos:closeMatch aat:300386333 .
+
+<https://data.skkg.ch/type/21118/188981> skos:closeMatch aat:300400903 .
+
+<https://data.skkg.ch/type/21118/185010> skos:relatedMatch aat:300025175 ;
+    skos:relatedMatch aat:300025574 .
+
+<https://data.skkg.ch/type/21118/193964> skos:closeMatch aat:300025367 .
+
+<https://data.skkg.ch/type/21118/136719> skos:closeMatch aat:300025335 .
+
+<https://data.skkg.ch/type/21118/205055> skos:closeMatch aat:300025492 .
+
+<https://data.skkg.ch/type/21118/136722> skos:closeMatch aat:300025165 .
+
+<https://data.skkg.ch/type/21118/136728> skos:relatedMatch aat:300025574 ;
+    skos:relatedMatch aat:300025732 .
+
+<https://data.skkg.ch/type/21118/262975> skos:closeMatch aat:300025337 .
+
+<https://data.skkg.ch/type/21118/136721> skos:closeMatch aat:300025373 .
+
+<https://data.skkg.ch/type/21118/136727> skos:closeMatch aat:300025574 .
+
+# Mapping between LIDO and AAT
+
+lido:lido00226 a skos:Concept;
+    skos:related aat:300400903 .
+
+aat:300400903 skos:related lido:lido00226 .
+
+lt:lido00006 a skos:Concept;
+  skos:related aat:300121765, aat:300418027 .
+
+aat:300121765 skos:related lt:lido00006 .
+
+aat:300418027 skos:related lt:lido00006 .
+
+lt:lido00007 a skos:Concept;
+  skos:related aat:300025103, aat:300025107, aat:300025122, aat:300025123, aat:300025136,
+    aat:300025189, aat:300025580, aat:300025658, aat:300025706, aat:300025839, aat:300075154,
+    aat:300112172, aat:300121785, aat:300197742, aat:300312209, aat:300312211, aat:300386178,
+    aat:300386723 .
+
+aat:300025103 skos:related lt:lido00007 .
+
+aat:300025107 skos:related lt:lido00007 .
+
+aat:300025122 skos:related lt:lido00007 .
+
+aat:300025123 skos:related lt:lido00007 .
+
+aat:300025136 skos:related lt:lido00007 .
+
+aat:300025189 skos:related lt:lido00007 .
+
+aat:300025580 skos:related lt:lido00007 .
+
+aat:300025658 skos:related lt:lido00007 .
+
+aat:300025706 skos:related lt:lido00007 .
+
+aat:300025839 skos:related lt:lido00007 .
+
+aat:300075154 skos:related lt:lido00007 .
+
+aat:300112172 skos:related lt:lido00007 .
+
+aat:300121785 skos:related lt:lido00007 .
+
+aat:300197742 skos:related lt:lido00007 .
+
+aat:300312209 skos:related lt:lido00007 .
+
+aat:300312211 skos:related lt:lido00007 .
+
+aat:300386178 skos:related lt:lido00007 .
+
+aat:300386723 skos:related lt:lido00007 .
+
+lt:lido00012 a skos:Concept;
+  skos:related aat:300025102, aat:300025492, aat:300025601, aat:300025671 .
+
+aat:300025102 skos:related lt:lido00012 .
+
+aat:300025492 skos:related lt:lido00012 .
+
+aat:300025601 skos:related lt:lido00012 .
+
+aat:300025671 skos:related lt:lido00012 .
+
+lt:lido00224 a skos:Concept;
+  skos:related aat:300025119, aat:300025190, aat:300025845, aat:300386174 .
+
+aat:300025119 skos:related lt:lido00224 .
+
+aat:300025190 skos:related lt:lido00224 .
+
+aat:300025845 skos:related lt:lido00224 .
+
+aat:300386174 skos:related lt:lido00224 .
+
+lt:lido00225 a skos:Concept;
+  skos:related aat:300025633, aat:300417893 .
+
+aat:300025633 skos:related lt:lido00225 .
+
+aat:300417893 skos:related lt:lido00225 .
+
+lt:lido00228 a skos:Concept;
+  skos:related aat:300443925, aat:300025526, aat:300025574 .
+
+aat:300443925 skos:related lt:lido00228 .
+
+aat:300025526 skos:related lt:lido00228 .
+
+aat:300025574 skos:related lt:lido00228 .
+
+lt:lido01089 a skos:Concept;
+  skos:related aat:300025165, aat:300025174, aat:300025175, aat:300025176, aat:300025178,
+    aat:300378949 .
+
+aat:300025165 skos:related lt:lido01089 .
+
+aat:300025174 skos:related lt:lido01089 .
+
+aat:300025175 skos:related lt:lido01089 .
+
+aat:300025176 skos:related lt:lido01089 .
+
+aat:300025178 skos:related lt:lido01089 .
+
+aat:300378949 skos:related lt:lido01089 .
+
+lt:lido01096 a skos:Concept;
+  skos:related aat:300025732 .
+
+aat:300025732 skos:related lt:lido01096 .
+
+lt:lido01126 a skos:Concept;
+  skos:related aat:300025181, aat:300025388 .
+
+aat:300025181 skos:related lt:lido01126 .
+
+aat:300025388 skos:related lt:lido01126 .
+
+lt:lido01127 a skos:Concept;
+  skos:related aat:300025687, aat:300263895 .
+
+aat:300025687 skos:related lt:lido01127 .
+
+aat:300263895 skos:related lt:lido01127 .
+
+lt:lido01184 a skos:Concept;
+  skos:related aat:300025208, aat:300025234, aat:300025236, aat:300025240, aat:300203630,
+    aat:300443852 .
+
+aat:300025208 skos:related lt:lido01184 .
+
+aat:300025234 skos:related lt:lido01184 .
+
+aat:300025236 skos:related lt:lido01184 .
+
+aat:300025240 skos:related lt:lido01184 .
+
+aat:300203630 skos:related lt:lido01184 .
+
+aat:300443852 skos:related lt:lido01184 .

@@ -12,12 +12,14 @@ PREFIXES = """
     PREFIX gndo:  <https://d-nb.info/standards/elementset/gnd#>
     PREFIX wd: <http://www.wikidata.org/entity/>
     PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    PREFIX lt: <http://terminology.lido-schema.org/>
     """
 
 SOURCE_NAMESPACES  = {
     "aat": "http://vocab.getty.edu/",
     "gnd": "https://d-nb.info/gnd/",
     "loc": "http://id.loc.gov/vocabulary/relators/",
+    "lt": "http://terminology.lido-schema.org/",
     "wd": "http://www.wikidata.org/entity/"
 }
 
@@ -37,16 +39,16 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
     sourceRetrievalFunctions = {
         "aat": retrieveAatData,
         "gnd": retrieveGndData,
-        "loc": retrieveLocData
+        "loc": retrieveLocData,
+        "lt": retrieveLtData
     }
 
     for source in sources:
-        query = getSourceQuery(source, predicates)
+        query = getSourceQuery(source, predicates, ingestNamespace)
         sparql.setQuery(query)
         results = sparqlResultToDict(sparql.query().convert())
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
         identifiers = [r["identifier"] for r in results]
-
         if source in sourceRetrievalFunctions:
             logs[source] = sourceRetrievalFunctions[source](identifiers, outputFileName)
         else:
@@ -67,13 +69,26 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
             ingestSources = sources
         ingestRetrievedData(endpoint, ingestSources, outputFolder, outputFilePrefix, ingestNamespace)
 
-def getSourceQuery(source, predicates):
+def getSourceQuery(source, predicates, ingestNamespace=None):
     predicatesForQuery = '|'.join(["<%s>" % d for d in predicates])
-    template = Template("""SELECT DISTINCT ?identifier WHERE { 
-                        ?s $predicates ?identifier . 
-                        FILTER(STRSTARTS(STR(?identifier), '$namespace')) 
-    }""")
-    query = template.substitute(predicates=predicatesForQuery, namespace=SOURCE_NAMESPACES[source])
+    if ingestNamespace is not None:
+        # If an ingest namespace is provided, query for identifiers that are not in the named graph 
+        # to avoid accidental recursive retrieval of the entire external dataset.
+        namedGraph = "%s%s" % (ingestNamespace, source)
+        template = Template("""SELECT DISTINCT ?identifier WHERE {
+            GRAPH ?g {
+                ?s $predicates ?identifier .
+            }
+            FILTER(STRSTARTS(STR(?identifier), '$namespace'))
+            FILTER(?g != <$namedGraph>)
+        }""")
+        query = template.substitute(predicates=predicatesForQuery, namespace=SOURCE_NAMESPACES[source], namedGraph=namedGraph)
+    else:
+        template = Template("""SELECT DISTINCT ?identifier WHERE { 
+            ?s $predicates ?identifier . 
+            FILTER(STRSTARTS(STR(?identifier), '$namespace')) 
+        }""")
+        query = template.substitute(predicates=predicatesForQuery, namespace=SOURCE_NAMESPACES[source])
     return query
 
 def queryIdentifiersInFile(sourceFile, queryPart):
@@ -225,6 +240,36 @@ def retrieveLocData(identifiers, outputFile):
         "status": "success",
         "numRetrieved": len(identifiersToRetrieve),
         "message": "Retrieved %d additional LOC identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
+    }
+
+def retrieveLtData(identifiers, outputFile):
+    """
+    Retrieves the data for the given identifiers and writes it to an output file.
+    Only the data for the identifiers that are not already in the file is retrieved.
+    The data is retrieved from the LIDO API.
+    :param identifiers: The list of identifiers to retrieve.
+    :param outputFile: The output file to write the data to.
+    :return: A dictionary with the status and a message.
+    """
+    # Read the output file and query for existing URIs
+    existingIdentifiers = queryIdentifiersInFile(outputFile, "?identifier a skos:Concept .")
+    # Filter out existing identifiers
+    identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
+    # Retrieve ttl data from GND and append to ttl file
+    with open(outputFile, 'a') as outputFile:
+        for identifier in tqdm(identifiersToRetrieve):
+            url = "%s.ttl" % identifier
+            try:
+                with request.urlopen(url) as r:
+                    content = r.read().decode()
+                outputFile.write(content + "\n")
+                outputFile.flush()
+            except:
+                print("Could not retrieve", url)
+    return {
+        "status": "success",
+        "numRetrieved": len(identifiersToRetrieve),
+        "message": "Retrieved %d additional LIDO Terminology identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
 def printLogs(logs):
