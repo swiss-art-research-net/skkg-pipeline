@@ -44,7 +44,7 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
     }
 
     for source in sources:
-        query = getSourceQuery(source, predicates)
+        query = getSourceQuery(source, predicates, ingestNamespace)
         sparql.setQuery(query)
         results = sparqlResultToDict(sparql.query().convert())
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
@@ -69,13 +69,26 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
             ingestSources = sources
         ingestRetrievedData(endpoint, ingestSources, outputFolder, outputFilePrefix, ingestNamespace)
 
-def getSourceQuery(source, predicates):
+def getSourceQuery(source, predicates, ingestNamespace=None):
     predicatesForQuery = '|'.join(["<%s>" % d for d in predicates])
-    template = Template("""SELECT DISTINCT ?identifier WHERE { 
-                        ?s $predicates ?identifier . 
-                        FILTER(STRSTARTS(STR(?identifier), '$namespace')) 
-    }""")
-    query = template.substitute(predicates=predicatesForQuery, namespace=SOURCE_NAMESPACES[source])
+    if ingestNamespace is not None:
+        # If an ingest namespace is provided, query for identifiers that are not in the named graph 
+        # to avoid accidental recursive retrieval of the entire external dataset.
+        namedGraph = "%s%s" % (ingestNamespace, source)
+        template = Template("""SELECT DISTINCT ?identifier WHERE {
+            GRAPH ?g {
+                ?s $predicates ?identifier .
+            }
+            FILTER(STRSTARTS(STR(?identifier), '$namespace'))
+            FILTER(?g != <$namedGraph>)
+        }""")
+        query = template.substitute(predicates=predicatesForQuery, namespace=SOURCE_NAMESPACES[source], namedGraph=namedGraph)
+    else:
+        template = Template("""SELECT DISTINCT ?identifier WHERE { 
+            ?s $predicates ?identifier . 
+            FILTER(STRSTARTS(STR(?identifier), '$namespace')) 
+        }""")
+        query = template.substitute(predicates=predicatesForQuery, namespace=SOURCE_NAMESPACES[source])
     return query
 
 def queryIdentifiersInFile(sourceFile, queryPart):
