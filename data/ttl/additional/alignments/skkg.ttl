@@ -69,10 +69,10 @@
 
 # Mapping between LIDO and AAT
 
-lido:lido00226 a skos:Concept;
+lt:lido00226 a skos:Concept;
     skos:related aat:300400903 .
 
-aat:300400903 skos:related lido:lido00226 .
+aat:300400903 skos:related lt:lido00226 .
 
 lt:lido00006 a skos:Concept;
   skos:related aat:300121765, aat:300418027 .
