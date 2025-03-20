@@ -800,6 +800,10 @@ tasks:
         vars:
           TASK: update-vocabularies
           INTERVAL: 1w
+      - task:  _run-task-according-to-interval
+        vars:
+          TASK: update-iiif
+          INTERVAL: 1w
       - task: _run-task-according-to-interval
         vars:
           TASK: remove-unpublished-items
