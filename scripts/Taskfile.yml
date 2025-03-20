@@ -562,7 +562,7 @@ tasks:
       - aws s3 cp "{{.FILEPATH}}" s3://$S3_BUCKET_PUSH/{{.LATEST_FILENAME}}
 
   push-latest-data-dumps:
-    desc: Upload latest data dumps to S3 endpoint for data sharing
+    desc: Upload full and partial data dumps to S3 endpoint
     cmds:
       - task: push-latest-data-dump
       - task: push-latest-partial-data-dump
