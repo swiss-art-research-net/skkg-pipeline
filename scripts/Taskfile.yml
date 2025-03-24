@@ -274,6 +274,15 @@ tasks:
       - semantic-field-util -f JSON -y {{.INPUTFILE}}  write -t {{.JSONOUTPUT}}
       - semantic-field-util -f INLINE -y {{.INPUTFILE}}  write -t {{.INLINEOUTPUT}}
   
+  generate-multimedia-filename-csv:
+    desc: Generate a CSV file with Multimedia Item UUIDs and their corresponding filenames for use in the IIIF Image Server pipeline
+    vars:
+      MULTIMEDIAFOLDER: /data/source/multimedia
+      OBJECTFOLDER: /data/source/object
+      OUTPUTFILE: /apps/static/assets/no_auth/multimedia-filenames.csv
+    cmds:
+      - python /scripts/generateMultimediaFilenameCSV.py --multimediaFolder {{.MULTIMEDIAFOLDER}} --objectsFolder {{.OBJECTFOLDER}} --outputFile {{.OUTPUTFILE}}
+
   ingest-alignments:
     desc: Ingests the alignments into the triplestore
     sources:
