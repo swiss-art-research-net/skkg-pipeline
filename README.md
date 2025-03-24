@@ -88,6 +88,7 @@ task: Available tasks for this project:
 * generate-example-record-registrar:                                 Generates an example Registrar record for developing the mapping in the X3ML editor
 * generate-field-definitions:                                        Generates the field definitions for the platform based on the fieldDefinitions.yml file
 * generate-mapping-file-from-3m:                                     Generates a mapping file from data stored in the 3M Editor.
+* generate-multimedia-filename-csv:                                  Generate a CSV file with Multimedia Item UUIDs and their corresponding filenames for use in the IIIF Image Server pipeline
 * ingest-alignments:                                                 Ingests the alignments into the triplestore
 * ingest-classifications:                                            Ingest classifications into the triplestore
 * ingest-iiif:                                                       Ingest IIIF data into the triplestore
