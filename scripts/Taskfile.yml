@@ -279,7 +279,7 @@ tasks:
     vars:
       MULTIMEDIAFOLDER: /data/source/multimedia
       OBJECTFOLDER: /data/source/object
-      OUTPUTFILE: /data/csv/multimediaCorrespondences.csv
+      OUTPUTFILE: /apps/static/assets/no_auth/multimedia-filenames.csv
     cmds:
       - python /scripts/generateMultimediaFilenameCSV.py --multimediaFolder {{.MULTIMEDIAFOLDER}} --objectsFolder {{.OBJECTFOLDER}} --outputFile {{.OUTPUTFILE}}
 

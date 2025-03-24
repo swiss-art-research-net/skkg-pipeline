@@ -33,6 +33,10 @@ scripts/.task/**/*
 services/qlever/**/*.*
 !services/qlever/Qleverfile
 
+# Static files
+services/platform/apps/static/assets/no_auth/*.*
+!services/platform/apps/static/assets/no_auth/.gitkeep
+
 # Local
 *.zip
 docker-compose.override.yml
