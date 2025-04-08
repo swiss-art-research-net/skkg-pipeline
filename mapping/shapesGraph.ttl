@@ -31,8 +31,13 @@ skkg:EntityShape a sh:NodeShape ;
 
 skkg:TimespanShape a sh:NodeShape ;
     sh:targetClass crm:E52_Time-Span ;
+    sh:or (
+        [ sh:path crm:P82a_begin_of_the_begin ]
+        [ sh:path crm:P82_at_some_time_within ]
+    ) ;
+
     sh:property [
         sh:path crm:P82a_begin_of_the_begin ;
-        sh:maxCount 1;
+        sh:maxCount 1 ;
         sh:pattern "\\d{2,7}" 
     ] .
