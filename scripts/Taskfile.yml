@@ -91,7 +91,12 @@ tasks:
           --data-urlencode 'query={{.OBJECT_UUID_QUERY}}' \
                   -H 'Accept: text/csv' | tail -n +2 | \
         while read uuid; do
-          cat "/data/ttl/main/object/object-item-$(echo "$uuid" | tr -d '\r').ttl" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+            FILE_PATH="/data/ttl/main/object/object-item-$(echo "$uuid" | tr -d '\r').ttl"
+            if [ -f "$FILE_PATH" ]; then
+              cat "$FILE_PATH" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+            else
+              echo "File $FILE_PATH does not exist" >&2
+            fi
         done
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
