@@ -69,12 +69,29 @@ tasks:
       FILENAME: 
         sh: echo partial-dump-$(date "+%Y-%m-%d-%H-%M-%S")
       NUMFILES: 1000
+      OBJECT_UUID_QUERY: |
+        PREFIX la: <https://linked.art/ns/terms/>
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        SELECT ?uuid WHERE {
+          <https://data.skkg.ch/objectGroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          ?object a skkg:Object .
+          BIND(STRAFTER(STR(?object), "/object/") as ?uuid) 
+        }
     cmds:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
       - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
       - |
+        # Retrieve NUMFILES number of files from each directory in /data/ttl/main/
         find /data/ttl/main/ -type d | while read dir; do
           find "$dir" -maxdepth 1 -name "*.ttl" | head -n {{.NUMFILES}} | xargs cat >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+        done
+      - |
+        # Retrieve the UUIDs of the objects in the specified group 
+        curl -sG '{{.BLAZEGRAPH_ENDPOINT}}' \
+          --data-urlencode 'query={{.OBJECT_UUID_QUERY}}' \
+                  -H 'Accept: text/csv' | tail -n +2 | \
+        while read uuid; do
+          cat "/data/ttl/main/object/object-item-$(echo "$uuid" | tr -d '\r').ttl" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
         done
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
