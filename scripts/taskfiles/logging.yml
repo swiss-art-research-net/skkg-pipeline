@@ -18,3 +18,15 @@ tasks:
     cmds:
       - echo "Executing task {{.TASK_NAME}}"
       - task: "{{.TASK_NAME}}"
+
+  test:
+    desc: Test task
+    cmds:
+      - echo "This is a test task"
+      - exit 0
+    
+  test-fail:
+    desc: Test task that fails
+    cmds:
+      - echo "This is a test task that will fail"
+      - exit 1
