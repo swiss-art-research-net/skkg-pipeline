@@ -8,11 +8,13 @@ tasks:
     vars:
       TASK: "{{index .MATCH 0}}"
     cmds:
-      - echo "Executing task {{.TASK}}"
-      - |
-        if task {{.TASK}}; then
-          echo "Task {{.TASK}} succeeded!"
-        else
-          echo "Task {{.TASK}} failed!"
-          exit 1
-        fi
+      - defer: echo '{{if .EXIT_CODE}}Failed with {{.EXIT_CODE}}!{{else}}Success!{{end}}'
+      - task: _log-task-execution
+        vars:
+          TASK_NAME: "{{.TASK}}"
+
+  _log-task-execution:
+    desc: Log task execution
+    cmds:
+      - echo "Executing task {{.TASK_NAME}}"
+      - task: "{{.TASK_NAME}}"
