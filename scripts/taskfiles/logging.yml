@@ -1,0 +1,26 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  log-*:
+    desc: Run a task with logging
+    vars:
+      TASK: "{{index .MATCH 0}}"
+    cmds:
+      - defer: |
+          echo '{{if .EXIT_CODE}}Failed with {{.EXIT_CODE}}!{{else}}Success!{{end}}'
+          {{if .EXIT_CODE}}
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"Task {{.TASK}} failed with exit code {{.EXIT_CODE}}"}' "$SLACK_WEBHOOK_URL"
+          fi
+          {{end}}
+      - task: _log-task-execution
+        vars:
+          TASK_NAME: "{{.TASK}}"
+
+  _log-task-execution:
+    desc: Log task execution
+    cmds:
+      - echo "Executing task {{.TASK_NAME}}"
+      - task: "{{.TASK_NAME}}"
