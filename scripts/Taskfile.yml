@@ -21,6 +21,10 @@ includes:
   internal:
     taskfile: ./taskfiles/internal.yml
     flatten: true
+  logging:
+    taskfile: ./taskfiles/logging.yml
+    flatten: true
+    aliases: [log]
   utilities:
     taskfile: ./taskfiles/utilities.yml
     flatten: true

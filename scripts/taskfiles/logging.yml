@@ -1,0 +1,18 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  log-*:
+    desc: Run a task with logging
+    vars:
+      TASK: "{{index .MATCH 0}}"
+    cmds:
+      - echo "Executing task {{.TASK}}"
+      - |
+        if task {{.TASK}}; then
+          echo "Task {{.TASK}} succeeded!"
+        else
+          echo "Task {{.TASK}} failed!"
+          exit 1
+        fi
