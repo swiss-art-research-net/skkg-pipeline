@@ -71,4 +71,5 @@ VOLUME /mapping
 WORKDIR /scripts
 
 # Entry point
-ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-Xms512m", "-Xmx1024m", "-cp", "/libs/x3ml-engine-exejar.jar:/java/bin", "X3MLEngineService"]
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

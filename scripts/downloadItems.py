@@ -21,11 +21,14 @@ Arguments:
 
 
 import argparse
+import os
+import time
 import pytz
 from datetime import datetime
 from lxml import etree
 from os import listdir, remove as removeFile
 from os.path import join, exists, isfile
+from prometheus_client import multiprocess, CollectorRegistry, Counter, Summary
 from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
@@ -33,6 +36,12 @@ from lib.MuseumPlusConnector import MPWrapper
 from lib.Utils import createXMLCopy
 
 from config.moduleQueryAdditions import moduleQueryAdditions
+
+# Prometheus metrics
+registry = CollectorRegistry()
+runs_total = Counter("download_items_runs_total", "Total runs", registry=registry)
+errors_total = Counter("download_items_errors_total", "Total errors", registry=registry)
+duration = Summary("download_items_duration_seconds", "Duration of run", registry=registry)
 
 def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
@@ -132,24 +141,32 @@ def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
     metadata.writeMetadata()
         
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    
-    parser = argparse.ArgumentParser(description = 'Download all Object Items from MuseumPlus and save them to individual XML files')
-    parser.add_argument('--url', required= True, help='URL of the MuseumPlus instance')
-    parser.add_argument('--module', required= True, help='Name of the module to download items from')
-    parser.add_argument('--username', required= True, help='Username to use for authentication')
-    parser.add_argument('--password', required= True, help='Password to use for authentication')
-    parser.add_argument('--outputFolder', required= True, help='Folder to save the XML files to')
-    parser.add_argument('--tempFolder', required= True, help='Folder to temporarily save the XML during download')
-    parser.add_argument('--filenamePrefix', required= False, help='Prefix to use for the filenames of the XML files. Defaults to "item-"')
-    parser.add_argument('--limit', required= False, help='Limit the number of items to download')
-    parser.add_argument('--offset', required= False, help='Offset to start downloading items from')
-    args, _ = parser.parse_known_args()
+    start = time.time()
+    try:
+        parser = argparse.ArgumentParser()
+        
+        parser = argparse.ArgumentParser(description = 'Download all Object Items from MuseumPlus and save them to individual XML files')
+        parser.add_argument('--url', required= True, help='URL of the MuseumPlus instance')
+        parser.add_argument('--module', required= True, help='Name of the module to download items from')
+        parser.add_argument('--username', required= True, help='Username to use for authentication')
+        parser.add_argument('--password', required= True, help='Password to use for authentication')
+        parser.add_argument('--outputFolder', required= True, help='Folder to save the XML files to')
+        parser.add_argument('--tempFolder', required= True, help='Folder to temporarily save the XML during download')
+        parser.add_argument('--filenamePrefix', required= False, help='Prefix to use for the filenames of the XML files. Defaults to "item-"')
+        parser.add_argument('--limit', required= False, help='Limit the number of items to download')
+        parser.add_argument('--offset', required= False, help='Offset to start downloading items from')
+        args, _ = parser.parse_known_args()
 
-    if args.limit:
-        args.limit = int(args.limit)
+        if args.limit:
+            args.limit = int(args.limit)
 
-    if args.offset:
-        args.offset = int(args.offset)
+        if args.offset:
+            args.offset = int(args.offset)
 
-    downloadItems(host=args.url, module=args.module, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+        downloadItems(host=args.url, module=args.module, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+    except Exception as e:
+        print(f"Error: {e}")
+        errors_total.inc()
+        raise
+    finally:
+        duration.observe(time.time() - start)
