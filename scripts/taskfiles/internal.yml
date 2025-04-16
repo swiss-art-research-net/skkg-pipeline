@@ -123,7 +123,7 @@ tasks:
       - aws s3 cp "{{.FILEPATH}}" s3://$S3_BUCKET_PUSH/{{.FILENAME}}
       - echo "Uploading {{.FILEPATH}} as latest dump..."
       - aws s3 cp "{{.FILEPATH}}" s3://$S3_BUCKET_PUSH/{{.LATEST_FILENAME}}
-      - python /scripts/prometheusReporter.py --name skkg_s3_dump_upload_success --type gauge --action set --value 0 --labels dump_type=partial
+      - python /scripts/prometheusReporter.py --name skkg_s3_dump_upload_success --type gauge --action set --value 1--labels dump_type=partial
   
   push-multimedia-filename-csv:
     desc: Upload Multimedia filename CSV to S3 endpoint for data sharing
