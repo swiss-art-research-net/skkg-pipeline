@@ -37,13 +37,16 @@ services:
     restart: unless-stopped
     environment:
       - HOST_LOCATION=${HOST_NAME}
+      - IIIF_CSV_URL=${IIIF_CSV_URL}
       - MUSEUMPLUS_URL=${MUSEUMPLUS_URL}
       - MUSEUMPLUS_USERNAME=${MUSEUMPLUS_USERNAME}
       - MUSEUMPLUS_PASSWORD=${MUSEUMPLUS_PASSWORD}
       - NUMBER_OF_DUMPS_TO_KEEP=${NUMBER_OF_DUMPS_TO_KEEP}
-      - IIIF_CSV_URL=${IIIF_CSV_URL}
+      - PROMETHEUS_MULTIPROC_DIR=/logs/prometheus
       - S3_BUCKET_PUSH=${S3_BUCKET_PUSH}
       - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+    ports:
+      - $PORT_PROMETHEUS:8000
     secrets:
       - source: aws
         target: /root/.aws/
