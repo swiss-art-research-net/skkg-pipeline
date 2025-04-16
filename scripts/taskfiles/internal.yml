@@ -48,6 +48,16 @@ tasks:
           ?object a skkg:Object .
           BIND(STRAFTER(STR(?object), "/object/") as ?uuid) 
         }
+      PERSON_UUID_QUERY: |
+        PREFIX la: <https://linked.art/ns/terms/>
+          PREFIX skkg: <https://ontology.skkg.ch/>
+          PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+          SELECT ?uuid WHERE {
+            <https://data.skkg.ch/objectGroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+            ?object a skkg:Object ;
+              crm:P108i_was_produced_by/crm:P9_consists_of/crm:P14_carried_out_by ?person .
+            BIND(STRAFTER(STR(?person), "/person/") as ?uuid) 
+          }
     cmds:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
       - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
@@ -63,6 +73,19 @@ tasks:
                   -H 'Accept: text/csv' | tail -n +2 | \
         while read uuid; do
             FILE_PATH="/data/ttl/main/object/object-item-$(echo "$uuid" | tr -d '\r').ttl"
+            if [ -f "$FILE_PATH" ]; then
+              cat "$FILE_PATH" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+            else
+              echo "File $FILE_PATH does not exist" >&2
+            fi
+        done
+      - |
+        # Retrieve the UUIDs of the persons in the specified group 
+        curl -sG '{{.BLAZEGRAPH_ENDPOINT}}' \
+          --data-urlencode 'query={{.PERSON_UUID_QUERY}}' \
+                  -H 'Accept: text/csv' | tail -n +2 | \
+        while read uuid; do
+            FILE_PATH="/data/ttl/main/person/person-item-$(echo "$uuid" | tr -d '\r').ttl"
             if [ -f "$FILE_PATH" ]; then
               cat "$FILE_PATH" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
             else
