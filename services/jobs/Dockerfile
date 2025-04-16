@@ -46,6 +46,7 @@ RUN pip install --no-cache-dir \
     pyshacl \
     pandas \
     semantic-field-definition-generator==1.4.1 \
+    prometheus_client \
     pyexistdb \
     pyduktape2 \
     python-decouple \
