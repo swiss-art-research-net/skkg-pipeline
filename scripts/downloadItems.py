@@ -39,12 +39,10 @@ from config.moduleQueryAdditions import moduleQueryAdditions
 
 # Prometheus metrics
 registry = CollectorRegistry()
-# Multiprocess mode will register these into shared memory
 downloads_total = Counter("museumplus_downloads_total", "Total items downloaded", ["module"], registry=registry)
 skipped_total = Counter("museumplus_skipped_total", "Items skipped because they already existed", ["module"], registry=registry)
 omitted_total = Counter("museumplus_omitted_total", "Items omitted due to error", ["module"], registry=registry)
 
-run_duration = Summary("museumplus_download_duration_seconds", "Duration of download run", ["module"], registry=registry)
 run_success = Gauge("museumplus_download_success", "Whether the module download succeeded (1) or failed (0)", ["module"], registry=registry)
 
 def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
@@ -57,75 +55,68 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         'existing': [],
         'omitted': []
     }    
-    # Start Prometheus timer
-    with run_duration.labels(module=module).time():
-        try:
-            lastUpdated = metadata.getLastUpdatedDate();
+    lastUpdated = metadata.getLastUpdatedDate();
 
-            # Store the current datetime
-            downloadStarted_utc = datetime.now(pytz.utc)
-            zurich_timezone = pytz.timezone('Europe/Zurich')
-            downloadStarted = downloadStarted_utc.astimezone(zurich_timezone)
-            
-            queryAddition = moduleQueryAdditions.get(module, None)
-            queryAddition = etree.fromstring(queryAddition) if queryAddition else None
+    # Store the current datetime
+    downloadStarted_utc = datetime.now(pytz.utc)
+    zurich_timezone = pytz.timezone('Europe/Zurich')
+    downloadStarted = downloadStarted_utc.astimezone(zurich_timezone)
+    
+    queryAddition = moduleQueryAdditions.get(module, None)
+    queryAddition = etree.fromstring(queryAddition) if queryAddition else None
 
-            # Get the number of items
-            numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=createXMLCopy(queryAddition))
-            print(f"Found {numItems} items for module {module}")
-            if numItems > 0:
-                if lastUpdated is not None:
-                    print(f"Retrieving {numItems} items for module {module} (updated after {datetime.strptime(lastUpdated, '%Y-%m-%dT%H:%M:%S.%f').strftime('%d.%m.%Y %H:%M:%S')})")
-                else:
-                    print(f"Retrieving all {numItems} items for module {module}")
-            else:
-                print(f"No new items found for module {module}")
-                metadata.setLastUpdated(downloadStarted)
-                return
+    # Get the number of items
+    numItems = client.getNumberOfItems(module=module, lastUpdated=lastUpdated, queryAddition=createXMLCopy(queryAddition))
+    print(f"Found {numItems} items for module {module}")
+    if numItems > 0:
+        if lastUpdated is not None:
+            print(f"Retrieving {numItems} items for module {module} (updated after {datetime.strptime(lastUpdated, '%Y-%m-%dT%H:%M:%S.%f').strftime('%d.%m.%Y %H:%M:%S')})")
+        else:
+            print(f"Retrieving all {numItems} items for module {module}")
+    else:
+        print(f"No new items found for module {module}")
+        metadata.setLastUpdated(downloadStarted)
+        return
 
-            if not limit:
-                limit = numItems
-            else:
-                limit = min(limit, numItems)
-            if not offset:
-                offset = 0
+    if not limit:
+        limit = numItems
+    else:
+        limit = min(limit, numItems)
+    if not offset:
+        offset = 0
 
-            for i in tqdm(range(offset, offset+limit)):
-                filename = join(tempFolder, filenamePrefix + str(i).zfill(6) + ".xml")
-                # Check if the file already exists
-                if not exists(filename):
-                    try:
-                        item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated, queryAddition=createXMLCopy(queryAddition))
-                    except:
-                        log['omitted'].append(filename)
-                        continue
-                    with open(filename, 'wb') as f:
-                        f.write(etree.tostring(item, pretty_print=True))
-                        log['downloaded'].append(filename)
-                else:
-                    log['existing'].append(filename)
+    for i in tqdm(range(offset, offset+limit)):
+        filename = join(tempFolder, filenamePrefix + str(i).zfill(6) + ".xml")
+        # Check if the file already exists
+        if not exists(filename):
+            try:
+                item = client.getItemByOffset(i, module=module, lastUpdated=lastUpdated, queryAddition=createXMLCopy(queryAddition))
+            except:
+                log['omitted'].append(filename)
+                continue
+            with open(filename, 'wb') as f:
+                f.write(etree.tostring(item, pretty_print=True))
+                log['downloaded'].append(filename)
+        else:
+            log['existing'].append(filename)
 
-            storeAndRenameItems(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix, metadata=metadata)
+    storeAndRenameItems(inputFolder=tempFolder, outputFolder=outputFolder, filenamePrefix=filenamePrefix, metadata=metadata)
 
-            metadata.setLastUpdated(downloadStarted)
+    metadata.setLastUpdated(downloadStarted)
 
-            print(f"Downloaded {len(log['downloaded'])} items.")
-            print(f"Skipped {len(log['existing'])} items that already existed.")
-            if len(log['omitted']) > 0:
-                print(f"Omitted {len(log['omitted'])} items that could not be downloaded.")
-                # List omitted files
-                print("Omitted files:")
-                for file in log['omitted']:
-                    print(file)
-                
-            # Record Prometheus metrics
-            downloads_total.labels(module=module).inc(len(log['downloaded']))
-            skipped_total.labels(module=module).inc(len(log['existing']))
-            omitted_total.labels(module=module).inc(len(log['omitted']))
-            run_success.labels(module=module).set(1)
-        except Exception as e:
-            run_success.labels(module=module).set(0)
-            raise
+    print(f"Downloaded {len(log['downloaded'])} items.")
+    print(f"Skipped {len(log['existing'])} items that already existed.")
+    if len(log['omitted']) > 0:
+        print(f"Omitted {len(log['omitted'])} items that could not be downloaded.")
+        # List omitted files
+        print("Omitted files:")
+        for file in log['omitted']:
+            print(file)
+        
+    # Record Prometheus metrics
+    downloads_total.labels(module=module).inc(len(log['downloaded']))
+    skipped_total.labels(module=module).inc(len(log['existing']))
+    omitted_total.labels(module=module).inc(len(log['omitted']))
 
 def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
     # Read all XML files in the input folder
@@ -176,5 +167,11 @@ if __name__ == "__main__":
     if args.offset:
         args.offset = int(args.offset)
 
-    downloadItems(host=args.url, module=args.module, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+    run_success.labels(module=args.module).set(1)
+    try:
+        downloadItems(host=args.url, module=args.module, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+    except Exception as e:
+        run_success.labels(module=args.module).set(0)
+        raise
+    
    
