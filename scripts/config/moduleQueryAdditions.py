@@ -32,6 +32,13 @@ moduleQueryAdditions = {
             </expert>
         </search>
         ''',
+    'ObjectGroup': '''
+        <search>
+            <expert>
+                <endsWithTerm fieldPath="OgrNameTxt" operand="_public"/>
+            </expert>
+        </search>
+    ''',
     'Registrar': '''
         <search>
             <expert>
