@@ -65,7 +65,7 @@ tasks:
           <https://data.skkg.ch/objectGroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
           ?object a skkg:Object ;
             crm:P138i_has_representation ?multimedia .
-          BIND(STRAFTER(STR(?person), "/multimedia/") as ?uuid) 
+          BIND(STRAFTER(STR(?multimedia), "/multimedia/") as ?uuid) 
         }
     cmds:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
