@@ -188,6 +188,7 @@ tasks:
         - literature
         - exhibition
         - registrar
+        - objectgroup
         task: _ingest_module_items
         vars:
           MODULE: "{{.ITEM}}"
@@ -338,6 +339,7 @@ tasks:
           - Literature
           - Multimedia
           - Object
+          - ObjectGroup
           - Person
           - Registrar
         task: _prepare-mapping-for-module-items
@@ -350,6 +352,7 @@ tasks:
           - Literature
           - Multimedia
           - Object
+          - ObjectGroup
           - Person
         task: _perform-mapping-for-module-items
         vars:
@@ -460,6 +463,7 @@ tasks:
           - Exhibition
           - Literature
           - Object
+          - ObjectGroup
           - Person
           - Registrar
         task: _remove-unpublished-module-items
@@ -496,6 +500,7 @@ tasks:
           - Exhibition
           - Literature
           - Object
+          - ObjectGroup
           - Person
         task: _remove-module-items-without-equivalent-ttl-from-triplestore
         vars:
@@ -558,6 +563,7 @@ tasks:
           - Literature
           - Multimedia
           - Object
+          - ObjectGroup
           - Person
         task: reset-module
         vars:
