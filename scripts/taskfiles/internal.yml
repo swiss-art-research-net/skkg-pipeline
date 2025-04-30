@@ -59,6 +59,7 @@ tasks:
           BIND(STRAFTER(STR(?person), "/person/") as ?uuid) 
         }
       MULTIMEDIA_UUID_QUERY: |
+        PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
         PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
         SELECT ?uuid WHERE {
