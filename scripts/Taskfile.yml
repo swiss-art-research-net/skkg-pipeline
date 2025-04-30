@@ -60,6 +60,7 @@ tasks:
           - Literature
           - Multimedia
           - Object
+          - ObjectGroup
           - Person
           - Registrar
         task: _download-module-items-from-museumplus
