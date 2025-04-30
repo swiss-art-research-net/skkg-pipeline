@@ -140,7 +140,7 @@ tasks:
         sh: echo "$(basename {{.FILEPATH}})"
       LATEST_FILENAME: latest-dump.ttl.gz
     cmds:
-      - defer: python /scripts/prometheusReporter.py --name skkg_s3_dump_upload_success --type gauge --action set --value {{if .EXIT_CODE}}{{.EXIT_CODE}}{{else}}1{{end}} --labels dump_type=full
+      - defer: python /scripts/prometheusReporter.py --name skkg_s3_dump_upload_success --type gauge --action set --value {{if .EXIT_CODE}}{{.EXIT_CODE}}{{else}}0{{end}} --labels dump_type=full
       - echo "Uploading {{.FILEPATH}} to S3 bucket $S3_BUCKET_PUSH..."
       - aws s3 cp "{{.FILEPATH}}" s3://$S3_BUCKET_PUSH/{{.FILENAME}}
       - echo "Uploading {{.FILEPATH}} as latest dump..."
@@ -162,7 +162,7 @@ tasks:
         sh: echo "$(basename {{.FILEPATH}})"
       LATEST_FILENAME: latest-partial-dump.ttl.gz
     cmds:
-      - defer: python /scripts/prometheusReporter.py --name skkg_s3_dump_upload_success --type gauge --action set --value {{if .EXIT_CODE}}{{.EXIT_CODE}}{{else}}1{{end}} --labels dump_type=partial
+      - defer: python /scripts/prometheusReporter.py --name skkg_s3_dump_upload_success --type gauge --action set --value {{if .EXIT_CODE}}{{.EXIT_CODE}}{{else}}0{{end}} --labels dump_type=partial
       - echo "Uploading {{.FILEPATH}} to S3 bucket $S3_BUCKET_PUSH..."
       - aws s3 cp "{{.FILEPATH}}" s3://$S3_BUCKET_PUSH/{{.FILENAME}}
       - echo "Uploading {{.FILEPATH}} as latest dump..."
