@@ -1259,7 +1259,7 @@ else (
                                             <constant/>
                                         </instance_info>
                                         <instance_generator name="URIwithAatId">
-                                            <arg name="id" type="xpathPosition">300417255</arg>
+                                            <arg name="id" type="constant">300417255</arg>
                                         </instance_generator>
                                         <label_generator name="Literal">
                                             <arg name="text" type="constant">updating</arg>
