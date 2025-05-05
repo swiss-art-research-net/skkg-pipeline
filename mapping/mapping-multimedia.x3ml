@@ -1077,7 +1077,7 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="__lastModified">@name</equals>
+                                <equals value="__created">@name</equals>
                             </if>
                             <relationship>crm:P94i_was_created_by</relationship>
                             <entity>
@@ -1086,7 +1086,7 @@
                                     <arg name="type" type="constant">multimedia</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">meta</arg>
-                                    <arg name="level2" type="constant">update</arg>
+                                    <arg name="level2" type="constant">creation</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
                                     <arg name="text" type="constant">creation of metadata</arg>
@@ -1105,7 +1105,7 @@
                                     <arg name="type" type="constant">multimedia</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">meta</arg>
-                                    <arg name="level2" type="constant">update</arg>
+                                    <arg name="level2" type="constant">creation</arg>
                                     <arg name="level3" type="constant">date</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
