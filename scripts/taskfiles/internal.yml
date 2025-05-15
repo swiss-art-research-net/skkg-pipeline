@@ -44,7 +44,7 @@ tasks:
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
         SELECT ?uuid WHERE {
-          <https://data.skkg.ch/objectGroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
           ?object a skkg:Object .
           BIND(STRAFTER(STR(?object), "/object/") as ?uuid) 
         }
@@ -53,7 +53,7 @@ tasks:
         PREFIX skkg: <https://ontology.skkg.ch/>
         PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
         SELECT ?uuid WHERE {
-          <https://data.skkg.ch/objectGroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
           ?object a skkg:Object ;
             crm:P108i_was_produced_by/crm:P9_consists_of/crm:P14_carried_out_by ?person .
           BIND(STRAFTER(STR(?person), "/person/") as ?uuid) 
@@ -63,7 +63,7 @@ tasks:
         PREFIX skkg: <https://ontology.skkg.ch/>
         PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
         SELECT ?uuid WHERE {
-          <https://data.skkg.ch/objectGroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
           ?object a skkg:Object ;
             crm:P138i_has_representation ?multimedia .
           ?multimedia a skkg:Multimedia ;
