@@ -72,11 +72,11 @@ tasks:
     cmds:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
       - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
-      # - |
-      #   # Retrieve NUMFILES number of files from each directory in /data/ttl/main/
-      #   find /data/ttl/main/ -type d | while read dir; do
-      #     find "$dir" -maxdepth 1 -name "*.ttl" | head -n {{.NUMFILES}} | xargs cat >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
-      #   done
+      - |
+        # Retrieve NUMFILES number of files from each directory in /data/ttl/main/
+        find /data/ttl/main/ -type d | while read dir; do
+          find "$dir" -maxdepth 1 -name "*.ttl" | head -n {{.NUMFILES}} | xargs cat >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+        done
       - task: _combine_ttl_files_based_on_query
         vars:
           MODULE: object
