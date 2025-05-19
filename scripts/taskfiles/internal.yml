@@ -234,11 +234,14 @@ tasks:
         TOTAL=${#UUIDS[@]}
         COUNT=1
 
+        if [ ${#UUIDS[@]} -eq 0 ]; then
+          echo "No UUIDs retrieved from the query." >&2
+          exit 1
+        fi
+
         for uuid in "${UUIDS[@]}"; do
             CLEAN_UUID=$(echo "$uuid" | tr -d '\r')
             FILE_PATH="/data/ttl/main/{{.MODULE_LOWERCASE}}/{{.MODULE_LOWERCASE}}-item-${CLEAN_UUID}.ttl"
-            
-            echo "Processing file $COUNT/$TOTAL: $FILE_PATH"
             
             if [ -f "$FILE_PATH" ]; then
                 cat "$FILE_PATH" >> {{.OUTPUTFILE}}
@@ -248,3 +251,4 @@ tasks:
             
             ((COUNT++))
         done
+        echo "Added  $((COUNT-1)) files for module {{.MODULE}}. Output written to {{.OUTPUTFILE}}"
