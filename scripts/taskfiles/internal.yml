@@ -72,23 +72,33 @@ tasks:
     cmds:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
       - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
+      # - |
+      #   # Retrieve NUMFILES number of files from each directory in /data/ttl/main/
+      #   find /data/ttl/main/ -type d | while read dir; do
+      #     find "$dir" -maxdepth 1 -name "*.ttl" | head -n {{.NUMFILES}} | xargs cat >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      #   done
       - |
-        # Retrieve NUMFILES number of files from each directory in /data/ttl/main/
-        find /data/ttl/main/ -type d | while read dir; do
-          find "$dir" -maxdepth 1 -name "*.ttl" | head -n {{.NUMFILES}} | xargs cat >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
-        done
-      - |
-        # Retrieve the UUIDs of the objects in the specified group 
-        curl -sG '{{.BLAZEGRAPH_ENDPOINT}}' \
+        # Retrieve UUIDs and store them in an array
+        mapfile -t UUIDS < <(curl -sG '{{.BLAZEGRAPH_ENDPOINT}}' \
           --data-urlencode 'query={{.OBJECT_UUID_QUERY}}' \
-                  -H 'Accept: text/csv' | tail -n +2 | \
-        while read uuid; do
-            FILE_PATH="/data/ttl/main/object/object-item-$(echo "$uuid" | tr -d '\r').ttl"
+          -H 'Accept: text/csv' | tail -n +2)
+
+        TOTAL=${#UUIDS[@]}
+        COUNT=1
+
+        for uuid in "${UUIDS[@]}"; do
+            CLEAN_UUID=$(echo "$uuid" | tr -d '\r')
+            FILE_PATH="/data/ttl/main/object/object-item-${CLEAN_UUID}.ttl"
+            
+            echo "Processing file $COUNT/$TOTAL: $FILE_PATH"
+            
             if [ -f "$FILE_PATH" ]; then
-              cat "$FILE_PATH" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+                cat "$FILE_PATH" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
             else
-              echo "File $FILE_PATH does not exist" >&2
+                echo "File $FILE_PATH does not exist" >&2
             fi
+            
+            ((COUNT++))
         done
       - |
         # Retrieve the UUIDs of the persons in the specified group 
