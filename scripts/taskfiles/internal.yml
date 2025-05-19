@@ -77,45 +77,21 @@ tasks:
         find /data/ttl/main/ -type d | while read dir; do
           find "$dir" -maxdepth 1 -name "*.ttl" | head -n {{.NUMFILES}} | xargs cat >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
         done
-      - |
-        # Retrieve the UUIDs of the objects in the specified group 
-        curl -sG '{{.BLAZEGRAPH_ENDPOINT}}' \
-          --data-urlencode 'query={{.OBJECT_UUID_QUERY}}' \
-                  -H 'Accept: text/csv' | tail -n +2 | \
-        while read uuid; do
-            FILE_PATH="/data/ttl/main/object/object-item-$(echo "$uuid" | tr -d '\r').ttl"
-            if [ -f "$FILE_PATH" ]; then
-              cat "$FILE_PATH" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
-            else
-              echo "File $FILE_PATH does not exist" >&2
-            fi
-        done
-      - |
-        # Retrieve the UUIDs of the persons in the specified group 
-        curl -sG '{{.BLAZEGRAPH_ENDPOINT}}' \
-          --data-urlencode 'query={{.PERSON_UUID_QUERY}}' \
-                  -H 'Accept: text/csv' | tail -n +2 | \
-        while read uuid; do
-            FILE_PATH="/data/ttl/main/person/person-item-$(echo "$uuid" | tr -d '\r').ttl"
-            if [ -f "$FILE_PATH" ]; then
-              cat "$FILE_PATH" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
-            else
-              echo "File $FILE_PATH does not exist" >&2
-            fi
-        done
-      - |
-        # Retrieve the UUIDs of the multimedia items in the specified group 
-        curl -sG '{{.BLAZEGRAPH_ENDPOINT}}' \
-          --data-urlencode 'query={{.MULTIMEDIA_UUID_QUERY}}' \
-                  -H 'Accept: text/csv' | tail -n +2 | \
-        while read uuid; do
-            FILE_PATH="/data/ttl/main/multimedia/multimedia-item-$(echo "$uuid" | tr -d '\r').ttl"
-            if [ -f "$FILE_PATH" ]; then
-              cat "$FILE_PATH" >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
-            else
-              echo "File $FILE_PATH does not exist" >&2
-            fi
-        done
+      - task: _combine_ttl_files_based_on_query
+        vars:
+          MODULE: object
+          QUERY: "{{.OBJECT_UUID_QUERY}}"
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
+      - task: _combine_ttl_files_based_on_query
+        vars:
+          MODULE: person
+          QUERY: "{{.PERSON_UUID_QUERY}}"
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
+      - task: _combine_ttl_files_based_on_query
+        vars:
+          MODULE: multimedia
+          QUERY: "{{.MULTIMEDIA_UUID_QUERY}}"
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
@@ -235,3 +211,44 @@ tasks:
             printf "%-30s %-20s\n" "$BASENAME" "No valid timestamp"
           fi
         done
+        
+
+  _combine_ttl_files_based_on_query:
+    desc: Combine TTL files based on a SPARQL query
+    internal: true
+    requires:
+      vars: [MODULE, QUERY, OUTPUTFILE]
+    vars:
+      MODULE: 
+        sh: echo "{{.MODULE}}"
+      MODULE_UCFIRST:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+      MODULE_LOWERCASE:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+    cmds: 
+      - |
+        mapfile -t UUIDS < <(curl -sG '{{.BLAZEGRAPH_ENDPOINT}}' \
+        --data-urlencode 'query={{.QUERY}}' \
+        -H 'Accept: text/csv' | tail -n +2)
+
+        TOTAL=${#UUIDS[@]}
+        COUNT=1
+
+        if [ ${#UUIDS[@]} -eq 0 ]; then
+          echo "No UUIDs retrieved from the query." >&2
+          exit 1
+        fi
+
+        for uuid in "${UUIDS[@]}"; do
+            CLEAN_UUID=$(echo "$uuid" | tr -d '\r')
+            FILE_PATH="/data/ttl/main/{{.MODULE_LOWERCASE}}/{{.MODULE_LOWERCASE}}-item-${CLEAN_UUID}.ttl"
+            
+            if [ -f "$FILE_PATH" ]; then
+                cat "$FILE_PATH" >> {{.OUTPUTFILE}}
+            else
+                echo "File $FILE_PATH does not exist" >&2
+            fi
+            
+            ((COUNT++))
+        done
+        echo "Added  $((COUNT-1)) files for module {{.MODULE}}. Output written to {{.OUTPUTFILE}}"
