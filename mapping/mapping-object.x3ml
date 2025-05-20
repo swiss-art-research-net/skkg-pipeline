@@ -3274,31 +3274,6 @@ else (
                 <link>
                     <path>
                         <source_relation>
-                            <relation>formattedValue</relation>
-                        </source_relation>
-                        <target_relation>
-                            <if>
-                                <exists>text()</exists>
-                            </if>
-                            <relationship>rdfs:label</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>formattedValue</source_node>
-                        <target_node>
-                            <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
-                                    <arg name="text" type="xpath">text()</arg>
-                                    <arg name="language" type="constant"/>
-                                </instance_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
-                <link>
-                    <path>
-                        <source_relation>
                             <relation>.</relation>
                         </source_relation>
                         <target_relation>
