@@ -3289,7 +3289,7 @@ else (
                             <entity>
                                 <type>rdfs:Literal</type>
                                 <instance_generator name="Literal">
-                                    <arg name="text" type="xpath">text()</arg>
+                                    <arg name="text" type="xpath">substring-before(text(), ',')</arg>
                                     <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
