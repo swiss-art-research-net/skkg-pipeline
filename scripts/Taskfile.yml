@@ -62,6 +62,7 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Provenance
           - Registrar
         task: _download-module-items-from-museumplus
         vars:
@@ -190,6 +191,7 @@ tasks:
         - exhibition
         - registrar
         - objectgroup
+        - provenance
         task: _ingest_module_items
         vars:
           MODULE: "{{.ITEM}}"
@@ -342,6 +344,7 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Provenance
           - Registrar
         task: _prepare-mapping-for-module-items
         vars:
@@ -355,6 +358,7 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Provenance
         task: _perform-mapping-for-module-items
         vars:
           MODULE: "{{.ITEM}}"
@@ -467,6 +471,7 @@ tasks:
           - ObjectGroup
           - Person
           - Registrar
+          - Provenance
         task: _remove-unpublished-module-items
         vars:
           MODULE: "{{.ITEM}}"
@@ -503,6 +508,8 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Registrar
+          - Provenance
         task: _remove-module-items-without-equivalent-ttl-from-triplestore
         vars:
           MODULE: "{{.ITEM}}"
@@ -566,6 +573,8 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Registrar
+          - Provenance
         task: reset-module
         vars:
           MODULE: "{{.ITEM}}"
