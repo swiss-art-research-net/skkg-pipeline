@@ -132,6 +132,19 @@ class ObjectPreprocessor(BasePreprocessor):
                     latestItem.set(f'{self.PREFIX}latest', 'true')
         return root
     
+class OwnershipPreprocessor(BasePreprocessor):
+    """
+    Preprocessor for the Ownership module.
+    """
+    def preprocess(self, content: str) -> str:
+        content = super().preprocess(content)
+        root = super().parseXML(content)
+        # Process date fields
+        dateFieldSelectors = [".//repeatableGroup[@name='OwsDateGrp']/repeatableGroupItem/dataField[@name='DateFromTxt']",
+                             ".//repeatableGroup[@name='OwsDateGrp']/repeatableGroupItem/dataField[@name='DateToTxt']",]
+        root = super().processDateFields(root, dateFieldSelectors)
+        return super().dumpXML(root)
+    
 class Preprocessors:
     @staticmethod
     def getPreprocessor(module: str) -> Preprocessor:
@@ -142,5 +155,7 @@ class Preprocessors:
             return LiteraturePreprocessor()
         elif module == 'Object':
             return ObjectPreprocessor()
+        elif module == 'Ownership':
+            return OwnershipPreprocessor()
         else:
             return BasePreprocessor()
