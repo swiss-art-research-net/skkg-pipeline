@@ -64,6 +64,18 @@ tasks:
           }
           BIND(STRAFTER(STR(?person), "/person/") as ?uuid) 
         }
+      ADDRESS_UUID_QUERY: |
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        PREFIX la: <https://linked.art/ns/terms/>
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        SELECT ?uuid WHERE {
+          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          ?object a skkg:Object ;
+            crm:P24i_changed_ownership_through/crm:P23_transferred_title_from? ?address .
+          ?address a skkg:Address .
+          FILTER(?address != <https://data.skkg.ch/address/privateIndividual>)
+          BIND(STRAFTER(STR(?address), "/address/") as ?uuid) 
+        }
       MULTIMEDIA_UUID_QUERY: |
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
@@ -92,6 +104,11 @@ tasks:
         vars:
           MODULE: person
           QUERY: "{{.PERSON_UUID_QUERY}}"
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
+      - task: _combine_ttl_files_based_on_query
+        vars:
+          MODULE: address
+          QUERY: "{{.ADDRESS_UUID_QUERY}}"
           OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - task: _combine_ttl_files_based_on_query
         vars:
