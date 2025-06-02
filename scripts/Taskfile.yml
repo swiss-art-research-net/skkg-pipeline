@@ -115,6 +115,10 @@ tasks:
           - ObjPerAssociationAttributionVgr
           - ObjTechniqueVgr
           - ObjTextsTypeVgr
+          - OwsArtPersonVgr
+          - OwsOwnerTypeVgr
+          - OwsEvidenceVgr
+          - OwsPrefixTypVgr
           - PerDateTypeVgr
           - PerGenderVgr
           - PerTypeVgr
