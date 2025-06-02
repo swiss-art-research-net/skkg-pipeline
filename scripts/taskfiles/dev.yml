@@ -46,6 +46,17 @@ tasks:
           OUTPUTFILE: "{{.OUTPUTFILE}}"
           MODULE: ObjectGroup
           INPUTFILES: /data/source/objectgroup/objectgroup-item-07115c7c-a3db-4c70-828d-2a3699416254.xml
+  
+  generate-example-record-ownership:
+    desc: Generates an example Ownership record for developing the mapping in the X3ML editor
+    vars:
+      OUTPUTFILE: /mapping/example-ownership-record.xml
+    cmds:
+      - task: _generate-example-record
+        vars:
+          OUTPUTFILE: "{{.OUTPUTFILE}}"
+          MODULE: Ownership
+          INPUTFILES: /data/source/ownership/ownership-item-11722ec5-60fc-4df6-a6dc-cbe4795ea30d.xml
 
   generate-example-record-literature:
     desc: Generates an example Literature record for developing the mapping in the X3ML editor
