@@ -107,6 +107,11 @@
                             <if>
                                 <equals value="OwsOwnerTypeVoc">../@name</equals>
                             </if>
+                            <relationship>crm:P9_consists_of</relationship>
+                            <entity variable="provenance_transaction">
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="UUID"/>
+                            </entity>
                             <relationship>crm:P2_has_type</relationship>
                         </target_relation>
                     </path>
@@ -151,6 +156,96 @@
                                     <arg name="level1" type="constant">date</arg>
                                     <arg name="level2" type="xpath">@uuid</arg>
                                 </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>_preprocessed_transaction</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="acquisition">@label</equals>
+                            </if>
+                            <relationship>crm:P9_consists_of</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>_preprocessed_transaction</source_node>
+                        <target_node>
+                            <entity variable="provenance_transaction">
+                                <type>crm:E8_Acquisition</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">transaction</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">@label</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>_preprocessed_transaction</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="move">@label</equals>
+                            </if>
+                            <relationship>crm:P9_consists_of</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>_preprocessed_transaction</source_node>
+                        <target_node>
+                            <entity variable="provenance_transaction">
+                                <type>crm:E9_Move</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">transaction</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">@label</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>_preprocessed_transaction</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="transfer of custody">@label</equals>
+                            </if>
+                            <relationship>crm:P9_consists_of</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>_preprocessed_transaction</source_node>
+                        <target_node>
+                            <entity variable="provenance_transaction">
+                                <type>crm:E10_Transfer_of_Custody</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">transaction</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">@label</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
