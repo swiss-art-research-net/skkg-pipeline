@@ -136,6 +136,37 @@ class OwnershipPreprocessor(BasePreprocessor):
     """
     Preprocessor for the Ownership module.
     """
+    def addTransactionTypeData(self, root: ET.Element) -> ET.Element:
+        """
+        Depending on the transaction type, which is specified in the OwsOwnerTypeVoc vocabulary reference field,
+        we add a tag to the XML element that indicates the type of CIDOC-CRM Activity that best matches the transaction
+        in reference to the Linked.Art provenance types (https://linked.art/model/provenance).
+        """
+        # Mappings
+        mappings = {
+            '234014': {'type': 'crm:E9_Move', 'label': 'move'},
+            '233966': {'type': 'crm:E10_Transfer_of_Custody', 'label': 'transfer of custody'},
+            '233967': {'type': 'crm:E8_Acquisition', 'label': 'acquisition'},
+            '233965': {'type': 'crm:E9_Move', 'label': 'move'},
+            '231984': {'type': 'crm:E10_Transfer_of_Custody', 'label': 'transfer of custody'},
+            '233964': {'type': 'crm:E10_Transfer_of_Custody', 'label': 'transfer of custody'},
+            '231986': {'type': 'crm:E10_Transfer_of_Custody', 'label': 'transfer of custody'},
+            '231987': {'type': 'crm:E8_Acquisition', 'label': 'acquisition'},
+            '231985': {'type': 'crm:E8_Acquisition', 'label': 'acquisition'}
+        }
+        # Retrieve all vocabulary reference fields
+        moduleItems = root.findall(".//moduleItem")
+        for moduleItem in moduleItems:
+            typeField = moduleItem.find(".//vocabularyReference[@name='OwsOwnerTypeVoc']/vocabularyReferenceItem")
+            if typeField is not None and 'id' in typeField.attrib:
+                typeId = typeField.attrib['id']
+                crmType = mappings.get(typeId)
+                if crmType:
+                    transaction_elem = ET.SubElement(moduleItem, f'{self.PREFIX}transaction')
+                    transaction_elem.set('type', crmType['type'])
+                    transaction_elem.set('label', crmType['label'])
+        return root
+    
     def preprocess(self, content: str) -> str:
         content = super().preprocess(content)
         root = super().parseXML(content)
@@ -143,6 +174,8 @@ class OwnershipPreprocessor(BasePreprocessor):
         dateFieldSelectors = [".//repeatableGroup[@name='OwsDateGrp']/repeatableGroupItem/dataField[@name='DateFromTxt']",
                              ".//repeatableGroup[@name='OwsDateGrp']/repeatableGroupItem/dataField[@name='DateToTxt']",]
         root = super().processDateFields(root, dateFieldSelectors)
+        # Add transaction type data
+        root = self.addTransactionTypeData(root)
         return super().dumpXML(root)
     
 class Preprocessors:
