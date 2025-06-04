@@ -254,6 +254,56 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="OwsPlaceTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P7_took_place_at</relationship>
+                            <entity>
+                                <type>crm:E53_Place</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">transaction</arg>
+                                    <arg name="level2" type="constant">place</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('place of provenance activity ', @uuid)</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity>
+                                <type>crm:E41_E33_Linguistic_Appellation</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">transaction</arg>
+                                    <arg name="level2" type="constant">place</arg>
+                                    <arg name="level3" type="constant">name</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
             <mapping>
                 <domain template="metadata">
