@@ -115,6 +115,7 @@ tasks:
           - ObjPerAssociationAttributionVgr
           - ObjTechniqueVgr
           - ObjTextsTypeVgr
+          - OwsAcquisitionTypeVgr
           - OwsArtPersonVgr
           - OwsOwnerTypeVgr
           - OwsEvidenceVgr
