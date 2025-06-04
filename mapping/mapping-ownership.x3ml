@@ -427,6 +427,171 @@
                 </link>
             </mapping>
             <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem/dataField</source_node>
+                    <target_node>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="OwsExchangePriceGrp">../../@name</equals>
+                                </if>
+                                <if>
+                                    <equals value="ConversionRateNum">@name</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="1">value/text()</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
+                        </if>
+                        <entity>
+                            <type>crmsci:S6_Data_Evaluation</type>
+                            <instance_generator name="URIwithTypeIdAnd3Levels">
+                                <arg name="type" type="constant">provenance</arg>
+                                <arg name="id" type="xpath">../../../@uuid</arg>
+                                <arg name="level1" type="constant">payment</arg>
+                                <arg name="level2" type="xpath">../@uuid</arg>
+                                <arg name="level3" type="constant">conversion</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="constant">Conversion of sale price to CHF</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>value</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crmsci:O10_assigned_dimension</relationship>
+                            <entity variable="object_acquisition_payment_price_normalised">
+                                <type>crm:E97_Monetary_Amount</type>
+                                <instance_generator name="URIwithTypeIdAnd4Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../../../@uuid</arg>
+                                    <arg name="level1" type="constant">payment</arg>
+                                    <arg name="level2" type="xpath">../../@uuid</arg>
+                                    <arg name="level3" type="constant">price</arg>
+                                    <arg name="level4" type="constant">normalised</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P180_has_currency</relationship>
+                                    <entity>
+                                        <type>crm:E98_Currency</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIorUUID">
+                                            <arg name="text" type="constant">https://data.skkg.ch/type/20033/20152</arg>
+                                        </instance_generator>
+                                        <label_generator name="Constant">
+                                            <arg name="text" type="constant">CHF</arg>
+                                            <arg name="language" type="constant"/>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P90_has_value</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>value</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:decimal</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">text() * ../../dataField[@name="ValueNum"]/value/text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>../dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ValueNum">@name</equals>
+                            </if>
+                            <relationship>crmsci:O11_described</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>../dataField</source_node>
+                        <target_node>
+                            <entity variable="object_acquisition_payment_price">
+                                <type>crm:E97_Monetary_Amount</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="constant">payment</arg>
+                                    <arg name="level2" type="xpath">../@uuid</arg>
+                                    <arg name="level3" type="constant">price</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>value</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P15_was_influenced_by</relationship>
+                            <entity>
+                                <type>crm:E54_Dimension</type>
+                                <instance_generator name="URIwithTypeIdAnd4Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../../../@uuid</arg>
+                                    <arg name="level1" type="constant">payment</arg>
+                                    <arg name="level2" type="xpath">../../@uuid</arg>
+                                    <arg name="level3" type="constant">conversion</arg>
+                                    <arg name="level4" type="constant">rate</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">conversionrate</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Conversion rate</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P90_has_value</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>value</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:float</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
                 <domain template="metadata">
                     <source_node>/application/modules/module/moduleItem</source_node>
                     <target_node>
