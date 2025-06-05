@@ -418,7 +418,7 @@
                                     <arg name="level2" type="xpath">@uuid</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">concat(vocabularyReference[@name='CurrencyVoc']/vocabularyReferenceItem/formattedValue/text(), ' ', string(number(dataField[@name='ValueNum']/value/text()) * number(dataField[@name='ConversionRateNum']/value/text())))</arg>
+                                    <arg name="text" type="xpath">concat('payment for transaction of provenance', ../../@uuid)</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
                             </entity>
@@ -1122,7 +1122,7 @@
                                     <arg name="level3" type="constant">price</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">concat('payment for transaction of provenance', ../../../@uuid)</arg>
+                                    <arg name="text" type="xpath">concat(../vocabularyReference[@name='CurrencyVoc']/vocabularyReferenceItem/formattedValue/text(), ' ', string(number(../dataField[@name='ValueNum']/value/text()) * number(../dataField[@name='ConversionRateNum']/value/text())))</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
                             </entity>
@@ -1160,10 +1160,6 @@
                                     <arg name="level2" type="xpath">../@uuid</arg>
                                     <arg name="level3" type="constant">price</arg>
                                 </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="xpath">concat('price paid for transaction of provenance', ../../../@uuid)</arg>
-                                    <arg name="language" type="constant"/>
-                                </label_generator>
                             </entity>
                             <relationship>crm:P180_has_currency</relationship>
                         </target_relation>
