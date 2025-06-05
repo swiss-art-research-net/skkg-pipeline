@@ -1278,6 +1278,54 @@
                 </link>
             </mapping>
             <mapping>
+                <domain template="transaction (generic): object">
+                    <source_node>/application/modules/module/moduleItem/moduleReference</source_node>
+                    <target_node>
+                        <if>
+                            <and>
+                                <if>
+                                    <equals value="OwsObjRef">@name</equals>
+                                </if>
+                            </and>
+                        </if>
+                        <entity>
+                            <type>crm:E7_Activity</type>
+                            <instance_generator name="URIwithTypeIdAnd1Level">
+                                <arg name="type" type="constant">provenance</arg>
+                                <arg name="id" type="xpath">../@uuid</arg>
+                                <arg name="level1" type="constant">transaction</arg>
+                            </instance_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P16_used_specific_object</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity variable="provenance_objects">
+                                <type>crm:E22_Human-Made_Object</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
                 <domain template="transfer of custody: person">
                     <source_node>/application/modules/module/moduleItem/moduleReference</source_node>
                     <target_node>
