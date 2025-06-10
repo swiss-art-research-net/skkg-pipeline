@@ -486,7 +486,7 @@
                                     <equals value="OwsExchangePriceGrp">../../@name</equals>
                                 </if>
                                 <if>
-                                    <equals value="true">../../dataField[@name='OwsExchangePricePublicBoo']/value/text()</equals>
+                                    <equals value="true">../../../dataField[@name='OwsExchangePricePublicBoo']/value/text()</equals>
                                 </if>
                                 <if>
                                     <equals value="ConversionRateNum">@name</equals>
