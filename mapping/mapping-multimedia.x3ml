@@ -43,6 +43,10 @@
                                 <arg name="type" type="constant">multimedia</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
+                            <label_generator name="prefLabel">
+                                <arg name="text" type="xpath">virtualField[@name='MulMultimediaVrt']/value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
                             <label_generator name="Literal">
                                 <arg name="text" type="xpath">virtualField[@name='MulMultimediaVrt']/value/text()</arg>
                                 <arg name="language" type="constant"/>
