@@ -1239,23 +1239,6 @@
                         </source_relation>
                         <target_relation>
                             <relationship>crm:P11_had_participant</relationship>
-                            <entity>
-                                <type>crm:E39_Actor</type>
-                                <instance_generator name="URIwithTypeAndId">
-                                    <arg name="type" type="constant">person</arg>
-                                    <arg name="id" type="xpath">@uuid</arg>
-                                </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="xpath">formattedValue/text()</arg>
-                                    <arg name="language" type="xpath">formattedValue/@language</arg>
-                                </label_generator>
-                            </entity>
-                            <relationship>crm:P107i_is_current_or_former_member_of</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>moduleReferenceItem</source_node>
-                        <target_node>
                             <entity variable="provenance_participants">
                                 <type>crm:E74_Group</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
@@ -1267,6 +1250,23 @@
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">concat('participants in provenance activity ', ../../@uuid)</arg>
                                     <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P107_has_current_or_former_member</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E39_Actor</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">person</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
                             </entity>
                         </target_node>
@@ -1312,16 +1312,14 @@
                     <range>
                         <source_node>moduleReferenceItem</source_node>
                         <target_node>
-                            <entity>
-                                <type>crm:E39_Actor</type>
-                                <instance_generator name="URIwithTypeAndId">
-                                    <arg name="type" type="constant">person</arg>
-                                    <arg name="id" type="xpath">@uuid</arg>
+                            <entity variable="provenance_participants">
+                                <type>crm:E74_Group</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="level1" type="constant">transaction</arg>
+                                    <arg name="level2" type="constant">participants</arg>
                                 </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="xpath">formattedValue/text()</arg>
-                                    <arg name="language" type="xpath">formattedValue/@language</arg>
-                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
@@ -1366,16 +1364,14 @@
                     <range>
                         <source_node>moduleReferenceItem</source_node>
                         <target_node>
-                            <entity>
-                                <type>crm:E39_Actor</type>
-                                <instance_generator name="URIwithTypeAndId">
-                                    <arg name="type" type="constant">person</arg>
-                                    <arg name="id" type="xpath">@uuid</arg>
+                            <entity variable="provenance_participants">
+                                <type>crm:E74_Group</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="level1" type="constant">transaction</arg>
+                                    <arg name="level2" type="constant">participants</arg>
                                 </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="xpath">formattedValue/text()</arg>
-                                    <arg name="language" type="xpath">formattedValue/@language</arg>
-                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
