@@ -1410,7 +1410,7 @@
                     <range>
                         <source_node>moduleReferenceItem</source_node>
                         <target_node>
-                            <entity variable="provenance_objects">
+                            <entity>
                                 <type>crm:E22_Human-Made_Object</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">object</arg>
@@ -1420,6 +1420,66 @@
                                     <arg name="text" type="xpath">formattedValue/text()</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReferenceItem/dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="SortLnu">@name</equals>
+                            </if>
+                            <relationship>crm:P16_used_specific_object</relationship>
+                            <entity>
+                                <type>crm:E22_Human-Made_Object</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="constant">object</arg>
+                                    <arg name="level2" type="xpath">../@uuid</arg>
+                                    <arg name="level3" type="constant">order</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">sortlnu</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Sortierung</arg>
+                                            <arg name="language" type="constant"/>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReferenceItem/dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                </instance_generator>
                             </entity>
                         </target_node>
                     </range>
@@ -1461,7 +1521,7 @@
                     <range>
                         <source_node>moduleReferenceItem</source_node>
                         <target_node>
-                            <entity variable="provenance_objects">
+                            <entity>
                                 <type>crm:E22_Human-Made_Object</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">object</arg>
@@ -1512,7 +1572,7 @@
                     <range>
                         <source_node>moduleReferenceItem</source_node>
                         <target_node>
-                            <entity variable="provenance_objects">
+                            <entity>
                                 <type>crm:E22_Human-Made_Object</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">object</arg>
@@ -1563,7 +1623,7 @@
                     <range>
                         <source_node>moduleReferenceItem</source_node>
                         <target_node>
-                            <entity variable="provenance_objects">
+                            <entity>
                                 <type>crm:E22_Human-Made_Object</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">object</arg>
@@ -1573,6 +1633,94 @@
                                     <arg name="text" type="xpath">formattedValue/text()</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/moduleReference/moduleReferenceItem</source_node>
+                    <target_node>
+                        <if>
+                            <equals value="OwsObjRef">../@name</equals>
+                        </if>
+                        <entity variable="object_order_assignment">
+                            <type>crm:E13_Attribute_Assignment</type>
+                            <instance_generator name="URIwithTypeIdAnd4Levels">
+                                <arg name="type" type="constant">provenance</arg>
+                                <arg name="id" type="xpath">../../@uuid</arg>
+                                <arg name="level1" type="constant">object</arg>
+                                <arg name="level2" type="xpath">@uuid</arg>
+                                <arg name="level3" type="constant">assignment</arg>
+                                <arg name="level4" type="constant">order</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="constant">Assignment of order of object item in relation to ownership item</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                            <additional>
+                                <relationship>crm:P140_assigned_attribute_to</relationship>
+                                <entity>
+                                    <type>crm:E22_Human-Made_Object</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">object</arg>
+                                        <arg name="id" type="xpath">@uuid</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P177_assigned_property_of_type</relationship>
+                                <entity>
+                                    <type>crm:E55_Type</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithCidocCrmId">
+                                        <arg name="id" type="constant">P1_is_identified_by</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                            <additional>
+                                <relationship>crm:P16_used_specific_object</relationship>
+                                <entity>
+                                    <type>skkg:Provenance</type>
+                                    <instance_info>
+                                        <constant/>
+                                    </instance_info>
+                                    <instance_generator name="URIwithTypeAndId">
+                                        <arg name="type" type="constant">provenance</arg>
+                                        <arg name="id" type="xpath">../../@uuid</arg>
+                                    </instance_generator>
+                                </entity>
+                            </additional>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>.</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P141_assigned</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>.</source_node>
+                        <target_node>
+                            <entity variable="object_order">
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="level1" type="constant">object</arg>
+                                    <arg name="level2" type="xpath">@uuid</arg>
+                                    <arg name="level3" type="constant">order</arg>
+                                </instance_generator>
                             </entity>
                         </target_node>
                     </range>
