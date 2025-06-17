@@ -32,6 +32,7 @@
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
             <namespace prefix="objectgroup" uri="https://data.skkg.ch/objectgroup/"/>
             <namespace prefix="provenance" uri="https://data.skkg.ch/provenance/"/>
+            <namespace prefix="literature" uri="https://data.skkg.ch/literature/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -1865,6 +1866,198 @@
                     </path>
                     <range>
                         <source_node>.</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem/moduleReference/moduleReferenceItem</source_node>
+                    <target_node>
+                        <if>
+                            <equals value="OwsLiteratureRef">../@name</equals>
+                        </if>
+                        <entity variable="reference_literature">
+                            <type>frbr:F24_Publication_Expression</type>
+                            <type>crm:E33_Linguistic_Object</type>
+                            <type>skkg:Literature</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">literature</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">formattedValue/text()</arg>
+                                <arg name="language" type="xpath">formattedValue/@language</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>.</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P165_incorporates</relationship>
+                            <entity variable="reference_fragment">
+                                <type>frbr:F23_Expression_Fragment</type>
+                                <type>crm:E31_Document</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">reference</arg>
+                                    <arg name="level2" type="xpath">concat(../../@uuid,'-',@seqNo)</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P67_refers_to</relationship>
+                            <entity variable="provenance">
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P70i_is_documented_in</relationship>
+                            <entity variable="reference_fragment">
+                                <type>crm:E31_Document</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">reference</arg>
+                                    <arg name="level2" type="xpath">concat(../../@uuid,'-',@seqNo)</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P165i_is_incorporated_in</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>.</source_node>
+                        <target_node>
+                            <entity variable="reference_literature">
+                                <type>crm:E33_Linguistic_Object</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="NotesClb">@name</equals>
+                            </if>
+                            <relationship>crm:P165_incorporates</relationship>
+                            <entity variable="reference_fragment">
+                                <type>frbr:F23_Expression_Fragment</type>
+                                <instance_generator name="UUID"/>
+                            </entity>
+                            <relationship>crm:P3_has_note</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="PageRefTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P165_incorporates</relationship>
+                            <entity variable="reference_fragment">
+                                <type>frbr:F23_Expression_Fragment</type>
+                                <type>crm:E31_Document</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">reference</arg>
+                                    <arg name="level2" type="xpath">concat(../../@uuid,'-',@seqNo)</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="constant">reference</arg>
+                                    <arg name="level2" type="xpath">concat(../@uuid,'-',../@seqNo)</arg>
+                                    <arg name="level3" type="constant">page</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300445022</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">page number</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Seitennummer</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">pageref</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Erw&#228;hnung S.</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
                         <target_node>
                             <entity>
                                 <type>rdfs:Literal</type>
