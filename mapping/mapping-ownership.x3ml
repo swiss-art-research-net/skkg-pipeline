@@ -1903,7 +1903,7 @@
                             <equals value="OwsLiteratureRef">../@name</equals>
                         </if>
                         <entity variable="reference_literature">
-                            <type>frbr:F24_Publication_Expression</type>
+                            <type>frbroo:F24_Publication_Expression</type>
                             <type>crm:E33_Linguistic_Object</type>
                             <type>skkg:Literature</type>
                             <instance_generator name="URIwithTypeAndId">
@@ -1925,7 +1925,7 @@
                         <target_relation>
                             <relationship>crm:P165_incorporates</relationship>
                             <entity variable="reference_fragment">
-                                <type>frbr:F23_Expression_Fragment</type>
+                                <type>frbroo:F23_Expression_Fragment</type>
                                 <type>crm:E31_Document</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">literature</arg>
@@ -1983,7 +1983,7 @@
                             </if>
                             <relationship>crm:P165_incorporates</relationship>
                             <entity variable="reference_fragment">
-                                <type>frbr:F23_Expression_Fragment</type>
+                                <type>frbroo:F23_Expression_Fragment</type>
                                 <instance_generator name="UUID"/>
                             </entity>
                             <relationship>crm:P3_has_note</relationship>
@@ -2013,7 +2013,7 @@
                             </if>
                             <relationship>crm:P165_incorporates</relationship>
                             <entity variable="reference_fragment">
-                                <type>frbr:F23_Expression_Fragment</type>
+                                <type>frbroo:F23_Expression_Fragment</type>
                                 <type>crm:E31_Document</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">literature</arg>
@@ -2097,7 +2097,7 @@
                             </if>
                             <relationship>crm:P165_incorporates</relationship>
                             <entity variable="reference_fragment">
-                                <type>frbr:F23_Expression_Fragment</type>
+                                <type>frbroo:F23_Expression_Fragment</type>
                                 <type>crm:E31_Document</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">literature</arg>
