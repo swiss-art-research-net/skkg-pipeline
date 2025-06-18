@@ -62,6 +62,7 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Ownership
           - Registrar
         task: _download-module-items-from-museumplus
         vars:
@@ -114,6 +115,14 @@ tasks:
           - ObjPerAssociationAttributionVgr
           - ObjTechniqueVgr
           - ObjTextsTypeVgr
+          - OwsAcquisitionTypeVgr
+          - OwsArtPersonVgr
+          - OwsCharacteristicsTypeVgr
+          - OwsOwnerTypeVgr
+          - OwsEvidenceVgr
+          - OwsSourcesOtherTypeVgr
+          - OwsPrefixTypVgr
+          - OwsRelevanceSourceVgr
           - PerDateTypeVgr
           - PerGenderVgr
           - PerTypeVgr
@@ -190,6 +199,7 @@ tasks:
         - exhibition
         - registrar
         - objectgroup
+        - ownership
         task: _ingest_module_items
         vars:
           MODULE: "{{.ITEM}}"
@@ -342,6 +352,7 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Ownership
           - Registrar
         task: _prepare-mapping-for-module-items
         vars:
@@ -355,6 +366,7 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Ownership
         task: _perform-mapping-for-module-items
         vars:
           MODULE: "{{.ITEM}}"
@@ -467,6 +479,7 @@ tasks:
           - ObjectGroup
           - Person
           - Registrar
+          - Ownership
         task: _remove-unpublished-module-items
         vars:
           MODULE: "{{.ITEM}}"
@@ -503,6 +516,8 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Registrar
+          - Ownership
         task: _remove-module-items-without-equivalent-ttl-from-triplestore
         vars:
           MODULE: "{{.ITEM}}"
@@ -566,6 +581,8 @@ tasks:
           - Object
           - ObjectGroup
           - Person
+          - Registrar
+          - Ownership
         task: reset-module
         vars:
           MODULE: "{{.ITEM}}"

@@ -68,6 +68,11 @@
     rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E21_Person> , <https://ontology.skkg.ch/Actor> ;
     rdfs:label "Person"@en, "Person"@de .
 
+###  https://ontology.skkg.ch/Provenance
+<https://ontology.skkg.ch/Provenance> rdf:type owl:Class ;
+    rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E7_Activity> , <https://ontology.skkg.ch/Entity> ;
+    rdfs:label "Provenance"@en, "Provenienz"@de .
+
 ###  https://ontology.skkg.ch/Type
 <https://ontology.skkg.ch/Type> rdf:type owl:Class ;
     rdfs:subClassOf <http://www.cidoc-crm.org/cidoc-crm/E55_Type> , <https://ontology.skkg.ch/Entity> ;
