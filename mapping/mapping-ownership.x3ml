@@ -795,7 +795,7 @@
                                             <constant/>
                                         </instance_info>
                                         <instance_generator name="typedLiteralGen">
-                                            <arg name="text" type="xpath">if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) else ('0000-00-00')</arg>
+                                            <arg name="text" type="xpath">if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) else ('0001-01-01')</arg>
                                         </instance_generator>
                                     </entity>
                                 </additional>
@@ -863,7 +863,7 @@
                                         </instance_info>
                                         <instance_generator name="typedLiteralGen">
                                             <arg name="text" type="xpath">if (../../dataField[@name='DateToTxt']/@_preprocessed_dateLower) then (../../dataField[@name='DateToTxt']/@_preprocessed_dateLower) else (
-  if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) else ('0000-00-00'))</arg>
+  if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) else ('0001-01-01'))</arg>
                                         </instance_generator>
                                     </entity>
                                 </additional>
