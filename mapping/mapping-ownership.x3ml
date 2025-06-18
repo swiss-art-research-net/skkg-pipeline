@@ -795,7 +795,7 @@
                                             <constant/>
                                         </instance_info>
                                         <instance_generator name="typedLiteralGen">
-                                            <arg name="text" type="xpath">if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) else ('0001-01-01')</arg>
+                                            <arg name="text" type="xpath">if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) else ('0000-00-00')</arg>
                                         </instance_generator>
                                     </entity>
                                 </additional>
@@ -863,7 +863,7 @@
                                         </instance_info>
                                         <instance_generator name="typedLiteralGen">
                                             <arg name="text" type="xpath">if (../../dataField[@name='DateToTxt']/@_preprocessed_dateLower) then (../../dataField[@name='DateToTxt']/@_preprocessed_dateLower) else (
-  if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) else ('0001-01-01'))</arg>
+  if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) else ('0000-00-00'))</arg>
                                         </instance_generator>
                                     </entity>
                                 </additional>
@@ -2239,6 +2239,36 @@
                 <link>
                     <path>
                         <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="CharacteristicVoc">../@name</equals>
+                            </if>
+                            <relationship>crm:P2_has_type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
                             <relation>dataField</relation>
                         </source_relation>
                         <target_relation>
@@ -2256,6 +2286,58 @@
                                 <instance_generator name="Literal">
                                     <arg name="text" type="xpath">value/text()</arg>
                                     <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="SortLnu">@name</equals>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="level1" type="constant">characteristic</arg>
+                                    <arg name="level2" type="xpath">@uuid</arg>
+                                    <arg name="level3" type="constant">order</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">sortlnu</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Sortierung</arg>
+                                            <arg name="language" type="constant"/>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
                                 </instance_generator>
                             </entity>
                         </target_node>
