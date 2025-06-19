@@ -3,7 +3,7 @@
             <namespace prefix="resource" uri="https://data.skkg.ch/"/>
             <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
             <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
-            <namespace prefix="crmaaa" uri="https://takin.solutions/ontologies/crmaaa/"/>
+            <namespace prefix="aaao" uri="https://ontology.swissartresearch.net/aaao/"/>
             <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
             <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
             <namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
