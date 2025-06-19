@@ -768,7 +768,7 @@
                             </and>
                         </if>
                         <entity variable="right_status_current">
-                            <type>:ZE30_Property_Right_Status</type>
+                            <type>aaao:ZE30_Property_Right_Status</type>
                             <type>crm:E89_Propositional_Object</type>
                             <instance_generator name="URIwithTypeIdAnd3Levels">
                                 <arg name="type" type="constant">multimedia</arg>
@@ -782,7 +782,7 @@
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
                             <additional>
-                                <relationship>:ZP64_has_property_right_subject</relationship>
+                                <relationship>aaao:ZP64_has_property_right_subject</relationship>
                                 <entity>
                                     <type>crmdig:D1_Digital_Object</type>
                                     <instance_info>
@@ -870,7 +870,7 @@
                             <if>
                                 <equals value="PersonRef">../@name</equals>
                             </if>
-                            <relationship>:ZP65_ascribes_property_right_holder</relationship>
+                            <relationship>aaao:ZP65_ascribes_property_right_holder</relationship>
                         </target_relation>
                     </path>
                     <range>
@@ -906,7 +906,7 @@
                             </and>
                         </if>
                         <entity variable="right_status_original">
-                            <type>:ZE30_Property_Right_Status</type>
+                            <type>aaao:ZE30_Property_Right_Status</type>
                             <type>crm:E89_Propositional_Object</type>
                             <instance_generator name="URIwithTypeIdAnd3Levels">
                                 <arg name="type" type="constant">multimedia</arg>
@@ -920,7 +920,7 @@
                                 <arg name="language" type="constant">en</arg>
                             </label_generator>
                             <additional>
-                                <relationship>:ZP64_has_property_right_subject</relationship>
+                                <relationship>aaao:ZP64_has_property_right_subject</relationship>
                                 <entity>
                                     <type>crmdig:D1_Digital_Object</type>
                                     <instance_info>
@@ -969,7 +969,7 @@
                             <if>
                                 <equals value="SuccessorRef">../@name</equals>
                             </if>
-                            <relationship>:ZP65_ascribes_property_right_holder</relationship>
+                            <relationship>aaao:ZP65_ascribes_property_right_holder</relationship>
                         </target_relation>
                     </path>
                     <range>
@@ -1002,7 +1002,7 @@
                         <source_node>.</source_node>
                         <target_node>
                             <entity variable="right_status_current">
-                                <type>:ZE30_Property_Right_Status</type>
+                                <type>aaao:ZE30_Property_Right_Status</type>
                                 <instance_generator name="URIwithTypeIdAnd3Levels">
                                     <arg name="type" type="constant">multimedia</arg>
                                     <arg name="id" type="xpath">../../@uuid</arg>

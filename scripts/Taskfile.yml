@@ -287,10 +287,10 @@ tasks:
           GRAPH: https://linked.art/ns/terms
       - task: _ingest-data-from-file
         vars:
-          NAME: crmaaa
-          FILE: /mapping/schemas/CRM_AAA_v1.5.4.ttl
-          TYPE: application/x-turtle
-          GRAPH: https://takin.solutions/ontologies/crmaaa
+          NAME: aaao
+          FILE: /mapping/schemas/aaao.rdfs
+          TYPE: application/rdf+xml
+          GRAPH: https://ontology.swissartresearch.net/aaao/
       - task: _ingest-data-from-file
         vars:
           NAME: ResearchSpace Ontology
