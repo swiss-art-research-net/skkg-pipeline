@@ -125,6 +125,7 @@ tasks:
           - OwsRelevanceSourceVgr
           - PerDateTypeVgr
           - PerGenderVgr
+          - PerPersonTypeVgr
           - PerTypeVgr
         task: _download-vocabulary-from-museumplus
         vars:
