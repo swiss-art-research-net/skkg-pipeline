@@ -1,7 +1,7 @@
 services:
 
   blazegraph:
-    image: robcast/researchspace-blazegraph:2.2.0-20160908
+    image: robcast/researchspace-blazegraph:2.2.0-jre17
     container_name: ${PROJECT_NAME}_blazegraph
     restart: unless-stopped
     environment:
