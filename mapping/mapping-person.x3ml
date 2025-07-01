@@ -18,7 +18,7 @@
             <namespace prefix="rso" uri="http://www.researchspace.org/ontology/"/>
             <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
             <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
-            <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/en/sik:person-"/>
+            <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/en/sik:"/>
             <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
             <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
@@ -2336,6 +2336,34 @@
                             <entity>
                                 <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithSikartPersonId">
+                                    <arg name="id" type="xpath">dataField[@name='AddressTxt']/value/text()</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="sik_institution">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <relationship>crmdig:L54_is_same-as</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E39_Actor</type>
+                                <instance_generator name="URIwithSikartInstitutionId">
                                     <arg name="id" type="xpath">dataField[@name='AddressTxt']/value/text()</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
