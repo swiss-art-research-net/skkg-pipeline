@@ -91,6 +91,10 @@
 		<pattern>{id}</pattern>
 	</generator>
 
+	<generator name="URIwithSikartInstitutionId" prefix="sikart">
+		<pattern>institution-{id}</pattern>
+	</generator>
+
 	<generator name="URIwithSikartPersonId" prefix="sikart">
 		<pattern>person-{id}</pattern>
 	</generator>
