@@ -3,7 +3,7 @@
             <namespace prefix="resource" uri="https://data.skkg.ch/"/>
             <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
             <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
-            <namespace prefix="aaao" uri="https://ontology.swissartresearch.net/aaao/"/>
+            <namespace prefix="crmaaa" uri="https://takin.solutions/ontologies/crmaaa/"/>
             <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
             <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
             <namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
@@ -30,6 +30,7 @@
             <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
+            <namespace prefix="aaao" uri="https://ontology.swissartresearch.net/aaao/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -139,6 +140,36 @@
                         <target_relation>
                             <if>
                                 <equals value="MulTypeVgr">../@instanceName</equals>
+                            </if>
+                            <relationship>crm:P2_has_type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="MulCategoryVgr">../@instanceName</equals>
                             </if>
                             <relationship>crm:P2_has_type</relationship>
                         </target_relation>
