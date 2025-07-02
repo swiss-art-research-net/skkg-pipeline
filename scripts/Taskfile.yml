@@ -86,6 +86,7 @@ tasks:
           - LitTypeVgr
           - LitPlaceVgr
           - LitPersonTypeVgr
+          - MulCategoryVgr
           - MulRightsTypeVgr
           - MulUsageVgr
           - MulTypeVgr
