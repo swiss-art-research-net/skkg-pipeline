@@ -193,27 +193,32 @@
                 <link>
                     <path>
                         <source_relation>
-                            <relation>terms/term/content</relation>
+                            <relation>terms/term</relation>
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="ur">../isoLanguageCode/text()</equals>
+                                <and>
+                                    <if>
+                                        <equals value="ur">isoLanguageCode/text()</equals>
+                                    </if>
+                                    <if>
+                                        <exists>termClass/@logicalName</exists>
+                                    </if>
+                                </and>
                             </if>
                             <relationship>crmdig:L54_is_same-as</relationship>
                         </target_relation>
                     </path>
                     <range>
-                        <source_node>terms/term/content</source_node>
+                        <source_node>terms/term</source_node>
                         <target_node>
                             <entity>
                                 <type>crm:E55_Type</type>
                                 <instance_generator name="URIorUUID">
-                                    <arg name="text" type="xpath">if (starts-with(text(), 'ma:')) 
-then concat('http://materialarchiv.ch/', text()) 
-else ()</arg>
+                                    <arg name="text" type="xpath">concat(termClass/@logicalName, content/text())</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">../../term[isoLanguageCode/text() != 'ur']/content/text()</arg>
+                                    <arg name="text" type="xpath">../term[isoLanguageCode/text() != 'ur']/content/text()</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
                             </entity>
