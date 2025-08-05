@@ -352,6 +352,12 @@
                                     <arg name="id" type="xpath">../../@uuid</arg>
                                     <arg name="level1" type="constant">transaction</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">if (exists(../../_preprocessed_transaction/@label)) 
+then ../../_preprocessed_transaction/@label 
+else 'transaction'</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P11_had_participant</relationship>
                             <entity variable="provenance_actors">
@@ -787,6 +793,14 @@
                                     <arg name="level2" type="xpath">../../@uuid</arg>
                                     <arg name="level3" type="constant">begin</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat(
+if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateLower) else ('0001-01-01'),
+' - ',
+if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) else ( if (../../dataField[@name='DateToTxt']/@_preprocessed_dateUpper) then (../../dataField[@name='DateToTxt']/@_preprocessed_dateUpper) else ('9999-12-31') )
+)</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P82a_begin_of_the_begin</relationship>
                                     <entity>
@@ -854,6 +868,15 @@
                                     <arg name="level2" type="xpath">../../@uuid</arg>
                                     <arg name="level3" type="constant">end</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat(
+if (../../dataField[@name='DateToTxt']/@_preprocessed_dateLower) then (../../dataField[@name='DateToTxt']/@_preprocessed_dateLower) else (
+  if (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) then (../../dataField[@name='DateFromTxt']/@_preprocessed_dateUpper) else ('0001-01-01')),
+' - ',
+if (../../dataField[@name='DateToTxt']/@_preprocessed_dateUpper) then (../../dataField[@name='DateToTxt']/@_preprocessed_dateUpper) else ('9999-12-31')
+)</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P82a_begin_of_the_begin</relationship>
                                     <entity>
