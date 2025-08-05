@@ -27,18 +27,6 @@ skkg:EntityShape a sh:NodeShape ;
             sh:path crm:P90_has_value ;
             sh:minCount 1;
         ]
-        [
-            sh:path crm:P82a_begin_of_the_begin ;
-            sh:minCount 1;
-        ]
-        [
-            sh:path crm:P82_at_some_time_within ;
-            sh:minCount 1;
-        ]
-        [
-            sh:path crm:P82b_end_of_the_end ;
-            sh:minCount 1;
-        ]
     ) .
 
 skkg:TimespanShape a sh:NodeShape ;
