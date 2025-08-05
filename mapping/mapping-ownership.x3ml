@@ -352,6 +352,12 @@
                                     <arg name="id" type="xpath">../../@uuid</arg>
                                     <arg name="level1" type="constant">transaction</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">if (exists(../../_preprocessed_transaction/@label)) 
+then ../../_preprocessed_transaction/@label 
+else 'transaction'</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P11_had_participant</relationship>
                             <entity variable="provenance_actors">
