@@ -7,20 +7,24 @@ PROMETHEUS_MULTIPROC_DIR = os.environ.get("PROMETHEUS_MULTIPROC_DIR", "/logs/pro
 
 class MetricsHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path != "/metrics":
-            self.send_response(404)
+        try:
+            if self.path != "/metrics":
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(b"Not Found")
+                return
+
+            registry = CollectorRegistry()
+            multiprocess.MultiProcessCollector(registry)
+            data = generate_latest(registry)
+            self.send_response(200)
+            self.send_header("Content-Type", CONTENT_TYPE_LATEST)
             self.end_headers()
-            self.wfile.write(b"Not Found")
-            return
-
-        registry = CollectorRegistry()
-        multiprocess.MultiProcessCollector(registry)
-
-        data = generate_latest(registry)
-        self.send_response(200)
-        self.send_header("Content-Type", CONTENT_TYPE_LATEST)
-        self.end_headers()
-        self.wfile.write(data)
+            self.wfile.write(data)
+        except Exception as e:
+            self.send_response(500)
+            self.end_headers()
+            self.wfile.write(f"Internal server error: {e}".encode())
 
 if __name__ == "__main__":
     port = 8000
