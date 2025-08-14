@@ -54,11 +54,15 @@ tasks:
     requires:
       vars: [OUTPUTFILE, INPUTFILES, MODULE]
     vars:
-      OUTPUTFILE:
-        sh: echo '/mapping/example-record-{{.MODULE}}.xml'
-      INPUTFILES:
-        sh: echo {{.IDS}} | tr ',' '\n' | sed "s|^|/data/source/{{.MODULE}}/{{.MODULE}}-item-|" | sed 's|$|.xml|' | paste -sd' '
       MODULE: "{{.MODULE}}"
+      MODULE_LOWERCASE:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
+      MODULE_UCFIRST:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+      OUTPUTFILE:
+        sh: echo '/mapping/example-record-{{.MODULE_LOWERCASE}}.xml'
+      INPUTFILES:
+        sh: echo {{.IDS}} | tr ',' '\n' | sed "s|^|/data/source/{{.MODULE_LOWERCASE}}/{{.MODULE_LOWERCASE}}-item-|" | sed 's|$|.xml|' | paste -sd' '
     cmds:
       - cat {{.INPUTFILES}} > {{.OUTPUTFILE}}
       - sed -i 's/<application xmlns="http:\/\/www.zetcom.com\/ria\/ws\/module">//g' {{.OUTPUTFILE}}
@@ -66,4 +70,4 @@ tasks:
       - sed -i 's/<\/modules>//g' {{.OUTPUTFILE}}
       - sed -i 's/<\/application>//g' {{.OUTPUTFILE}}
       - echo '<application><modules>' | cat - {{.OUTPUTFILE}} > temp && mv temp {{.OUTPUTFILE}}; echo '</modules></application>' >> {{.OUTPUTFILE}}
-      - python /scripts/applyPreprocessingForExampleRecord.py --file {{.OUTPUTFILE}} --module {{.MODULE}}
+      - python /scripts/applyPreprocessingForExampleRecord.py --file {{.OUTPUTFILE}} --module {{.MODULE_UCFIRST}}
