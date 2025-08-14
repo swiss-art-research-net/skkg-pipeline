@@ -3,105 +3,34 @@
 version: '3'
 
 tasks:
-  generate-example-record-address:
-    desc: Generates an example Address record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-address-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: Address
-          INPUTFILES: /data/source/address/address-item-260a0a70-4d26-4f15-8b27-d87243c47c24.xml /data/source/address/address-item-0df1724d-e9e8-4b0c-96db-bc1ee4696000.xml /data/source/address/address-item-0b5918d4-c549-4477-8c82-159314e3b525.xml /data/source/address/address-item-3a7892e0-9d41-4561-9595-42070e0b9e66.xml /data/source/address/address-item-287ee736-19da-4806-a722-c3e389ab8c4a.xml /data/source/address/address-item-0a4ea0e2-f98f-4966-a0df-ab159620d3bf.xml
 
-  generate-example-record-exhibition:
-    desc: Generates an example Exhibition record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-exhibition-record.xml
+  generate-example-records:
+    desc: Generates example records for e.g. mapping in the X3ML editor
     cmds:
-      - task: _generate-example-record
+      - for:
+            - module: address
+              ids: 260a0a70-4d26-4f15-8b27-d87243c47c24,0df1724d-e9e8-4b0c-96db-bc1ee4696000,0b5918d4-c549-4477-8c82-159314e3b525,3a7892e0-9d41-4561-9595-42070e0b9e66,287ee736-19da-4806-a722-c3e389ab8c4a,0a4ea0e2-f98f-4966-a0df-ab159620d3bf
+            - module: exhibition
+              ids: 4
+            - module: object
+              ids: 11384,10013,91aa0c4a-3325-45f6-9f29-e90eb13ec4c2,9414327b-74ab-4425-b123-ecbb28db5168,305,10094,857,493,4f66e941-1bcb-4e14-baab-ffdaef1c3436,0a5b480f-04d5-4053-840a-5185a2abda39,c6b149c2-f809-4d8c-8dc9-70acb24e0070,3412c1a2-3c87-462a-8943-34aede5dcf5a,2a0c8fab-5771-496c-9350-5482f50c93e2,0a5b9c6a-2d1d-43c5-b833-6975ddfa7ded,3c7215d0-3aba-4bb8-98e6-5da239ab0a64,0b17827d-117b-42b7-9925-0731f6db779b,0a0c96ab-71f1-466a-a5ff-ab556d437f15,ffa356cf-f988-4d96-9580-92dcb0e4dddf
+            - module: objectgroup
+              ids: 07115c7c-a3db-4c70-828d-2a3699416254
+            - module: ownership
+              ids: 3c70bd74-d7bf-4162-ae6e-88ae250135bd,23d7cb8b-b2e4-4667-96ab-4cffecb2268b,3b332144-cfb7-4471-bcf0-43f9c1c08946,151fe738-54c7-4276-a70d-05d9a16724f3,f75d5747-8fc8-4e19-9d97-e5f959b1b7f3,3c813f63-0e5d-4f24-9123-d7646fa65c78,11722ec5-60fc-4df6-a6dc-cbe4795ea30d,744e646b-1608-4e54-850e-e5f3ef85305a
+            - module: literature
+              ids: b16e2d5f-af15-4a6d-99be-e06af532923e,a50e1a84-367c-4a9f-8357-ebc4fe29badc,710a0732-993d-4d4e-8611-5fe1714c2385,0b6b164a-d7d2-4c58-8f94-9dcf2eb6a9dc,a6fda927-827b-4824-8cfc-2f91dcea74f8,118,0a1ab550-dabb-4afd-be17-f0f43725be33,0b7ee850-6fd8-45ba-af19-267548c9c4cf
+            - module: multimedia
+              ids: d2069a25-3b97-4bf3-95ca-85f1330cf9f3,0eac7e95-8ff3-460d-a75b-37f66b717fc7,211a5e70-5474-4019-8689-4791a989cd8f,0e137c8d-d712-4e08-9d6c-9776d25f651f
+            - module: person
+              ids: d99176a8-89e3-44b0-ada7-e1f85fc27ffd,02ff6635-e98d-43b5-bd24-990be1908010,8bf5f0fb-aeb4-4f83-8308-6df89863a1ec,0b159fe6-f699-45b3-8e61-b7377856d8b7,1111,88c3cca8-a587-44b8-8c6d-194dd285b1dd,0d2611a7-961e-420a-8b04-dc628c3f70fb,f447a4d2-7be1-4d7c-8dcb-64381b20a9bc
+            - module: registrar
+              ids: dabea9ee-8e3a-435d-a4f6-ca38a8b0bc51
+        task:  _generate-example-record
         vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: Exhibition
-          INPUTFILES: /data/source/exhibition/exhibition-item-53b63629-5c82-4614-aecc-7bf3075778a7.xml /data/source/exhibition/exhibition-item-4.xml
-
-  generate-example-record-object:
-    desc: Generates an example Object record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-object-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: Object
-          INPUTFILES: /data/source/object/object-item-11384.xml /data/source/object/object-item-10013.xml /data/source/object/object-item-91aa0c4a-3325-45f6-9f29-e90eb13ec4c2.xml /data/source/object/object-item-9414327b-74ab-4425-b123-ecbb28db5168.xml /data/source/object/object-item-305.xml /data/source/object/object-item-10094.xml /data/source/object/object-item-857.xml /data/source/object/object-item-493.xml /data/source/object/object-item-4f66e941-1bcb-4e14-baab-ffdaef1c3436.xml /data/source/object/object-item-0a5b480f-04d5-4053-840a-5185a2abda39.xml /data/source/object/object-item-c6b149c2-f809-4d8c-8dc9-70acb24e0070.xml /data/source/object/object-item-3412c1a2-3c87-462a-8943-34aede5dcf5a.xml /data/source/object/object-item-2a0c8fab-5771-496c-9350-5482f50c93e2.xml /data/source/object/object-item-0a5b9c6a-2d1d-43c5-b833-6975ddfa7ded.xml /data/source/object/object-item-3c7215d0-3aba-4bb8-98e6-5da239ab0a64.xml /data/source/object/object-item-0b17827d-117b-42b7-9925-0731f6db779b.xml /data/source/object/object-item-0a0c96ab-71f1-466a-a5ff-ab556d437f15.xml /data/source/object/object-item-ffa356cf-f988-4d96-9580-92dcb0e4dddf.xml
-
-  generate-example-record-objectgroup:
-    desc: Generates an example ObjectGroup record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-objectgroup-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: ObjectGroup
-          INPUTFILES: /data/source/objectgroup/objectgroup-item-07115c7c-a3db-4c70-828d-2a3699416254.xml
+          MODULE: '{{.ITEM.module}}'
+          IDS: '{{.ITEM.ids}}'
   
-  generate-example-record-ownership:
-    desc: Generates an example Ownership record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-ownership-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: Ownership
-          INPUTFILES: /data/source/ownership/ownership-item-3c70bd74-d7bf-4162-ae6e-88ae250135bd.xml /data/source/ownership/ownership-item-23d7cb8b-b2e4-4667-96ab-4cffecb2268b.xml /data/source/ownership/ownership-item-3b332144-cfb7-4471-bcf0-43f9c1c08946.xml /data/source/ownership/ownership-item-151fe738-54c7-4276-a70d-05d9a16724f3.xml /data/source/ownership/ownership-item-f75d5747-8fc8-4e19-9d97-e5f959b1b7f3.xml /data/source/ownership/ownership-item-3c813f63-0e5d-4f24-9123-d7646fa65c78.xml /data/source/ownership/ownership-item-11722ec5-60fc-4df6-a6dc-cbe4795ea30d.xml /data/source/ownership/ownership-item-744e646b-1608-4e54-850e-e5f3ef85305a.xml
-
-  generate-example-record-literature:
-    desc: Generates an example Literature record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-literature-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: Literature
-          INPUTFILES: /data/source/literature/literature-item-b16e2d5f-af15-4a6d-99be-e06af532923e.xml /data/source/literature/literature-item-a50e1a84-367c-4a9f-8357-ebc4fe29badc.xml /data/source/literature/literature-item-710a0732-993d-4d4e-8611-5fe1714c2385.xml /data/source/literature/literature-item-0b6b164a-d7d2-4c58-8f94-9dcf2eb6a9dc.xml /data/source/literature/literature-item-a6fda927-827b-4824-8cfc-2f91dcea74f8.xml /data/source/literature/literature-item-118.xml /data/source/literature/literature-item-0a1ab550-dabb-4afd-be17-f0f43725be33.xml /data/source/literature/literature-item-0b7ee850-6fd8-45ba-af19-267548c9c4cf.xml
-
-  generate-example-record-multimedia:
-    desc: Generates an example Multimedia record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-multimedia-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: Multimedia
-          INPUTFILES: /data/source/multimedia/multimedia-item-d2069a25-3b97-4bf3-95ca-85f1330cf9f3.xml /data/source/multimedia/multimedia-item-0eac7e95-8ff3-460d-a75b-37f66b717fc7.xml /data/source/multimedia/multimedia-item-211a5e70-5474-4019-8689-4791a989cd8f.xml /data/source/multimedia/multimedia-item-0e137c8d-d712-4e08-9d6c-9776d25f651f.xml
-
-  generate-example-record-person:
-    desc: Generates an example Person record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-person-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: Person
-          INPUTFILES: /data/source/person/person-item-d99176a8-89e3-44b0-ada7-e1f85fc27ffd.xml /data/source/person/person-item-02ff6635-e98d-43b5-bd24-990be1908010.xml /data/source/person/person-item-8bf5f0fb-aeb4-4f83-8308-6df89863a1ec.xml /data/source/person/person-item-0b159fe6-f699-45b3-8e61-b7377856d8b7.xml /data/source/person/person-item-1111.xml /data/source/person/person-item-88c3cca8-a587-44b8-8c6d-194dd285b1dd.xml /data/source/person/person-item-0d2611a7-961e-420a-8b04-dc628c3f70fb.xml /data/source/person/person-item-f447a4d2-7be1-4d7c-8dcb-64381b20a9bc.xml
-
-  generate-example-record-registrar:
-    desc: Generates an example Registrar record for developing the mapping in the X3ML editor
-    vars:
-      OUTPUTFILE: /mapping/example-registrar-record.xml
-    cmds:
-      - task: _generate-example-record
-        vars:
-          OUTPUTFILE: "{{.OUTPUTFILE}}"
-          MODULE: Registrar
-          INPUTFILES: /data/source/registrar/registrar-item-dabea9ee-8e3a-435d-a4f6-ca38a8b0bc51.xml
-
   generate-mapping-file-from-3m:
     desc: Generates a mapping file from data stored in the 3M Editor.
     cmds:
@@ -121,11 +50,14 @@ tasks:
 
   _generate-example-record:
     internal: true
+    silent: true
     requires:
       vars: [OUTPUTFILE, INPUTFILES, MODULE]
     vars:
-      OUTPUTFILE: "{{.OUTPUTFILE}}"
-      INPUTFILES: "{{.INPUTFILES}}"
+      OUTPUTFILE:
+        sh: echo '/mapping/example-record-{{.MODULE}}.xml'
+      INPUTFILES:
+        sh: echo {{.IDS}} | tr ',' '\n' | sed "s|^|/data/source/{{.MODULE}}/{{.MODULE}}-item-|" | sed 's|$|.xml|' | paste -sd' '
       MODULE: "{{.MODULE}}"
     cmds:
       - cat {{.INPUTFILES}} > {{.OUTPUTFILE}}
