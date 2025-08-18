@@ -232,7 +232,7 @@ tasks:
             echo "{{.MODULE}}"
           fi
       MODULE_UCFIRST:
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) substr($0,2)}')"
     cmds:
       - task: _ingest_module_items
         vars:
@@ -329,7 +329,7 @@ tasks:
             echo "{{.MODULE}}"
           fi
       MODULE_UCFIRST:
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) substr($0,2)}')"
     cmds:
       - task: _perform-mapping-for-module-items
         vars:
@@ -378,7 +378,7 @@ tasks:
             echo "{{.MODULE}}"
           fi
       MODULE_UCFIRST:
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) substr($0,2)}')"
     cmds:
       - task: _prepare-mapping-for-module-items
         vars:
@@ -456,7 +456,7 @@ tasks:
             echo "{{.MODULE}}"
           fi
       MODULE_UCFIRST: 
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) substr($0,2)}')"
     cmds:
       - echo "Removing unpublished {{.MODULE}} items..."
       - task: _remove-unpublished-module-items
@@ -492,7 +492,7 @@ tasks:
             echo "{{.MODULE}}"
           fi
       MODULE_UCFIRST:
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) substr($0,2)}')"
     cmds:
       - task: _remove-module-items-from-triplestore
         vars:
@@ -529,7 +529,7 @@ tasks:
             echo "{{.MODULE}}"
           fi
       MODULE_UCFIRST:
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) substr($0,2)}')"
     cmds:
       - task: _remove-module-items-without-equivalent-ttl-from-triplestore
         vars:
@@ -605,7 +605,7 @@ tasks:
       MODULE_LOWERCASE:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       MODULE_UCFIRST:
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) substr($0,2)}')"
     cmds:
       - |
         if [ -z "{{.MODULE}}" ]; then
@@ -784,7 +784,7 @@ tasks:
       FILENAMEPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
       MODULE_UCFIRST:
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) substr($0,2)}')"
     cmds:
       - echo "Downloading {{.MODULE_UCFIRST}} items from MuseumPlus"
       - mkdir -p {{.FOLDER}}
