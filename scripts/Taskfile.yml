@@ -3,15 +3,15 @@
 version: '3'
 
 vars:
-  BLAZEGRAPH_ENDPOINT: http://blazegraph:8080/blazegraph/sparql
+  # Customisable variables
   MODULES: Address,Exhibition,Literature,Multimedia,Object,ObjectGroup,Person,Ownership,Registrar
-  BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
-  BLAZEGRAPH_BACKUP: http://blazegraph:8080/blazegraph/backup
-  X3ML_ENDPOINT: http://localhost:8089/transform
-  GENERATOR_POLICY: /mapping/generator-policy.xml
   NAMESPACE: https://data.skkg.ch/
-  OUTPUTFOLDER_DUMP: /data/ttl/dump
-  OUTPUTFOLDER_CSV: /data/csv
+  # Presets
+  BLAZEGRAPH_BACKUP: http://blazegraph:8080/blazegraph/backup
+  BLAZEGRAPH_ENDPOINT: http://blazegraph:8080/blazegraph/sparql
+  BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
+  GENERATOR_POLICY: /mapping/generator-policy.xml
+  X3ML_ENDPOINT: http://localhost:8089/transform
 
 output: 'prefixed'
 
