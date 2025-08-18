@@ -4,6 +4,7 @@ version: '3'
 
 vars:
   BLAZEGRAPH_ENDPOINT: http://blazegraph:8080/blazegraph/sparql
+  MODULES: Address,Exhibition,Literature,Multimedia,Object,ObjectGroup,Person,Ownership,Registrar
   BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
   BLAZEGRAPH_BACKUP: http://blazegraph:8080/blazegraph/backup
   X3ML_ENDPOINT: http://localhost:8089/transform
@@ -55,18 +56,12 @@ tasks:
     desc: Downloads all item records from MuseumPlus
     cmds:
       - for:
-          - Address
-          - Exhibition
-          - Literature
-          - Multimedia
-          - Object
-          - ObjectGroup
-          - Person
-          - Ownership
-          - Registrar
+          var: MODULES
+          split: ','
+          as: MODULE
         task: _download-module-items-from-museumplus
         vars:
-          MODULE: "{{.ITEM}}"
+          MODULE: "{{.MODULE}}"
 
   download-source-vocabularies:
     desc: Downloads all vocabularies from MuseumPlus
