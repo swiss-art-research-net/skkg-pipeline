@@ -542,18 +542,12 @@ tasks:
     cmds:
       - rm -f /scripts/.task/checksum/*
       - for:
-          - Address
-          - Exhibition
-          - Literature
-          - Multimedia
-          - Object
-          - ObjectGroup
-          - Person
-          - Registrar
-          - Ownership
+          var: MODULES
+          split: ','
+          as: MODULE
         task: reset-module
         vars:
-          MODULE: "{{.ITEM}}"
+          MODULE: "{{.MODULE}}"
       - task: _reset-iiif-and-vocabularies
       - echo "Done!"
 
