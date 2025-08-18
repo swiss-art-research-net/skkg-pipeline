@@ -334,31 +334,20 @@ tasks:
     cmds:
       - echo "Preparing mapping..."
       - for:
-          - Address
-          - Exhibition
-          - Literature
-          - Multimedia
-          - Object
-          - ObjectGroup
-          - Person
-          - Ownership
-          - Registrar
+          var: MODULES
+          split: ','
+          as: MODULE
         task: _prepare-mapping-for-module-items
         vars:
-          MODULE: "{{.ITEM}}"
+          MODULE: "{{.MODULE}}"
       - echo "Mapping..."
       - for:
-          - Address
-          - Exhibition
-          - Literature
-          - Multimedia
-          - Object
-          - ObjectGroup
-          - Person
-          - Ownership
+          var: MODULES
+          split: ','
+          as: MODULE
         task: _perform-mapping-for-module-items
         vars:
-          MODULE: "{{.ITEM}}"
+          MODULE: "{{.MODULE}}"
 
   prepare-mapping-for-module-items:
     desc: Prepares the mapping for a specific module. The module name should be passed as an argument or via the MODULE variable.
