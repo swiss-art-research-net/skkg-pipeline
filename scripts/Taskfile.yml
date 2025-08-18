@@ -483,17 +483,12 @@ tasks:
     desc: Removes all item records from the triplestore that do not have an equivalent TTL file. Note that Multimedia items are skipped and should be processed separately if needed.
     cmds:
       - for:
-          - Address
-          - Exhibition
-          - Literature
-          - Object
-          - ObjectGroup
-          - Person
-          - Registrar
-          - Ownership
+          var: MODULES
+          split: ','
+          as: MODULE
         task: _remove-module-items-without-equivalent-ttl-from-triplestore
         vars:
-          MODULE: "{{.ITEM}}"
+          MODULE: "{{.MODULE}}"
 
   remove-module-items-without-equivalent-ttl-from-triplestore:
     desc: Removes all item records for a specific module from the triplestore that do not have an equivalent TTL file. The module name should be passed as an argument or via the MODULE variable.
