@@ -138,12 +138,10 @@ tasks:
           else
             echo "{{.MODULE}}"
           fi
-      MODULE_UCFIRST:
-        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
     cmds:
       - task: _download-module-items-from-museumplus
         vars:
-          MODULE: "{{.MODULE_UCFIRST}}"
+          MODULE: "{{.MODULE}}"
 
   first-run:
     desc: Task to run when the pipeline is run for the first time
@@ -785,12 +783,14 @@ tasks:
         sh: echo "/data/source/$(echo "{{.MODULE}}" | awk '{print tolower($0)}')"
       FILENAMEPREFIX:
         sh: echo "$(echo "{{.MODULE}}" | awk '{print tolower($0)}')-item-"
+      MODULE_UCFIRST:
+        sh: echo "$(echo "{{.MODULE}}" | awk '{print toupper(substr($0,0,1)) tolower(substr($0,2))}')"
     cmds:
-      - echo "Downloading {{.MODULE}} items from MuseumPlus"
+      - echo "Downloading {{.MODULE_UCFIRST}} items from MuseumPlus"
       - mkdir -p {{.FOLDER}}
       - task: _download-items-from-museumplus
         vars:
-          MODULE: "{{.MODULE}}"
+          MODULE: "{{.MODULE_UCFIRST}}"
           OUTPUT_FOLDER: "{{.FOLDER}}"
           FILENAMEPREFIX: "{{.FILENAMEPREFIX}}"
 
