@@ -186,18 +186,12 @@ tasks:
     desc: Ingest items for all modules. Add --debug true To see the response from the triplestore
     cmds:
       - for:
-        - object
-        - address
-        - person
-        - multimedia
-        - literature
-        - exhibition
-        - registrar
-        - objectgroup
-        - ownership
+          var: MODULES
+          split: ','
+          as: MODULE
         task: _ingest_module_items
         vars:
-          MODULE: "{{.ITEM}}"
+          MODULE: "{{.MODULE}}"
 
   ingest-iiif:
     desc: Ingest IIIF data into the triplestore
