@@ -3,10 +3,11 @@
 version: '3'
 
 vars:
-  # Customisable variables
+  #### Customisable Variables ###
   MODULES: Address,Exhibition,Literature,Multimedia,Object,ObjectGroup,Person,Ownership,Registrar
   NAMESPACE: https://data.skkg.ch/
-  # Presets
+
+  #### Presets ###
   BLAZEGRAPH_BACKUP: http://blazegraph:8080/blazegraph/backup
   BLAZEGRAPH_ENDPOINT: http://blazegraph:8080/blazegraph/sparql
   BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
