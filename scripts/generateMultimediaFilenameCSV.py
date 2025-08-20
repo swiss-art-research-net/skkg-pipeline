@@ -44,6 +44,10 @@ def generateMultimediaFilenameCSV(*, multimediaFolder: str, objectsFolder: str, 
         multimediaItems[uuid]['moduleId'] = tree.find('.//ns:moduleItem', namespaces=NAMESPACES).get('id')
         # Retrieve usage
         multimediaItems[uuid]['usage'] = tree.find('.//ns:moduleItem/ns:vocabularyReference[@instanceName="MulUsageVgr"]/ns:vocabularyReferenceItem/ns:formattedValue', namespaces=NAMESPACES).text
+        # Retrieve category
+        categoryElement = tree.find('.//ns:moduleItem/ns:vocabularyReference[@instanceName="MulCategoryVgr"]/ns:vocabularyReferenceItem/ns:formattedValue', namespaces=NAMESPACES)
+        if categoryElement is not None:
+            multimediaItems[uuid]['category'] = categoryElement.text
     
     for file in tqdm(objectFiles):
         tree = etree.parse(join(objectsFolder, file))
@@ -97,7 +101,7 @@ def generateMultimediaFilenameCSV(*, multimediaFolder: str, objectsFolder: str, 
     
     # Write output to CSV
     with open(outputFile, 'w') as f:
-        writer = DictWriter(f, fieldnames=('uuid' ,'filename','multimediaId','objectUuids','objectIds','objectInvNrs', 'usage'))
+        writer = DictWriter(f, fieldnames=('uuid' ,'filename','multimediaId','objectUuids','objectIds','objectInvNrs', 'category', 'usage'))
         writer.writeheader()
         for uuid in uuids:
             item = multimediaItems[uuid]
@@ -109,6 +113,7 @@ def generateMultimediaFilenameCSV(*, multimediaFolder: str, objectsFolder: str, 
                     'objectUuids': ';'.join(item['objectUuids']) if 'objectUuids' in item else '',
                     'objectIds': ';'.join(item['objectIds']) if 'objectIds' in item else '',
                     'objectInvNrs': ';'.join(item['objectInvNrs']) if 'objectInvNrs' in item else '',
+                    'category': item['category'] if 'category' in item else '',
                     'usage': item['usage'],
                 }
                 writer.writerow(row)
