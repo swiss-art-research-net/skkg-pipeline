@@ -102,6 +102,58 @@
                 <link>
                     <path>
                         <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="OwsObjectNumberTxt">@name</equals>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">identifier</arg>
+                                    <arg name="level2" type="constant">invnrprov</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">invnrprov</arg>
+                                        </instance_generator>
+                                        <label_generator name="Constant">
+                                            <arg name="text" type="constant">Inv.-Nr. Provenienz</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
                             <relation>vocabularyReference/vocabularyReferenceItem</relation>
                         </source_relation>
                         <target_relation>
