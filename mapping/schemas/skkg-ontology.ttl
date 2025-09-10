@@ -109,6 +109,10 @@ type:invnr rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Inv.Nr."@de, "Inventarnummer"@de ;
     skos:prefLabel "Inventarnummer"@de .
 
+type:invnrprov rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Inv.-Nr. Provenienz"@de, "Inventarnummer Provenienz"@de ;
+    skos:prefLabel "Inventarnummer Provenienz"@de .
+
 type:pageref rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Erwähnung S."@de ;
     skos:prefLabel "Erwähnung Seite"@de ;
