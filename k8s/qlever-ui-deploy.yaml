@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qlever-ui
+  namespace: qlever
+  labels:
+    app: qlever-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qlever-ui
+  template:
+    metadata:
+      labels:
+        app: qlever-ui
+    spec:
+      containers:
+      - name: qlever-ui
+        image: adfreiburg/qlever-ui:latest
+        ports:
+        - containerPort: 7000
+        env:
+        - name: QLEVER_BACKEND_URL
+          value: "104.248.100.4:7019"
+        volumeMounts:
+          - mountPath: /app/db
+            name: qlever-ui-db-storage
+      volumes:
+        - name: qlever-ui-db-storage
+          persistentVolumeClaim:
+            claimName: qlever-ui-db-pvc
+        
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qlever-ui-service
+  namespace: qlever
+spec:
+  selector:
+    app: qlever-ui
+  ports:
+    - protocol: TCP
+      port: 7000
+      targetPort: 7000
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qlever-ui-db-pvc
+  namespace: qlever
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

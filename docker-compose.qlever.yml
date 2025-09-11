@@ -1,0 +1,23 @@
+services:  
+  qlever:
+    build: ./services/qlever
+    container_name: ${PROJECT_NAME}_qlever
+    ports:
+      - 7001:7001
+    # First start: create index using `qlever index`
+    volumes:
+      - ./data:/index/skkg/data
+      - ./mapping/schemas:/index/skkg/schemas
+      - ./services/qlever/skkg:/index/skkg
+    
+  qlever-ui:
+    # First start: create database using `python manage.py migrate` and superuser using `python manage.py createsuperuser`
+    image: docker.io/adfreiburg/qlever-ui
+    container_name: ${PROJECT_NAME}_qlever_ui
+    ports:
+      - 7000:7000
+    volumes:
+      - qlever-ui-db:/app/db
+
+volumes:
+  qlever-ui-db:

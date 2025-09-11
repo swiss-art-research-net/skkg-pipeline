@@ -1,0 +1,28 @@
+# Qleverfile for VVZ, use with https://github.com/ad-freiburg/qlever-control
+#
+# qlever get-data  # this requires a separate internal tool
+# qlever index     # builds the index (takes a few seconds)
+# qlever start     # starts the server (takes a few seconds)
+#
+# Also builds a text index for fast kewyword search in literals.
+
+[data]
+NAME             = skkg
+DESCRIPTION      = SKKG Data
+TEXT_DESCRIPTION = All literals, search with FILTER KEYWORDS(?text, "...")
+
+[index]
+INPUT_FILES     = data/ttl/main data/ttl/additional/external schemas
+CAT_INPUT_FILES = find ${INPUT_FILES} -type f -regex ".*\.\(ttl\|rdf\|rdfs\)" -exec sh -c 'ext=`echo "{}" | sed "s|.*\.||"`; if [ "ext" = "ttl" ]; then cat "{}"; else rapper -gq -o turtle "{}"; fi' \;
+SETTINGS_JSON   = { "num-triples-per-batch": 1000000, "parallel-parsing": false }
+TEXT_INDEX      = from_literals
+
+[server]
+PORT               = 7001
+ACCESS_TOKEN       = ${data:NAME}_8736426534
+MEMORY_FOR_QUERIES = 10G
+
+[runtime]
+SYSTEM = native
+
+UI_CONFIG = skkg

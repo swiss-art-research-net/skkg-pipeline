@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qlever-backend
+  namespace: qlever
+  labels:
+    app: qlever-backend
+spec:
+  # replicas: 1
+  selector:
+    matchLabels:
+      app: qlever-backend
+  template:
+    metadata:
+      labels:
+        app: qlever-backend
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 1000
+      containers:
+      - name: qlever
+        image: adfreiburg/qlever:commit-acb6633
+        workingDir: /index
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "4Gi"
+          limits:
+            cpu: "2000m"
+            memory: "8Gi"
+        command: ["/bin/sh", "-c"]
+        args:
+          # Create access token using `kubectl create secret generic qlever-access-token -n qlever --from-literal=ACCESS_TOKEN="your-secure-token-here"`
+          - ServerMain -i skkg -j 8 -p 7019 -m 5G -c 2G -e 1G -k 200 -s 30s -a $(ACCESS_TOKEN)
+        env:
+        - name: ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: qlever-access-token
+              key: ACCESS_TOKEN
+        ports:
+        - containerPort: 7019
+        volumeMounts:
+        - name: storage
+          mountPath: /index
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: qlever-index-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qlever-service
+  namespace: qlever
+spec:
+  selector:
+    app: qlever-backend
+  ports:
+    - protocol: TCP
+      port: 7019
+      targetPort: 7019
+  #type: NodePort # local
+  type: LoadBalancer # cloud
