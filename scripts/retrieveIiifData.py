@@ -8,7 +8,7 @@ Arguments:
     --input: URL to a CSV file with the metadata for the IIIF images
     --outputFolder: Folder where the output data should be stored
     --filename: Name of the output files (default: iiif)
-    --itemsPerFile: Number of items per XML file (default: 100)
+    --itemsPerFile: Number of items per XML file (default: 1000)
 """
 
 import argparse

@@ -3,7 +3,7 @@
             <namespace prefix="resource" uri="https://data.skkg.ch/"/>
             <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
             <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
-            <namespace prefix="crmaaa" uri="https://takin.solutions/ontologies/crmaaa/"/>
+            <namespace prefix="aaao" uri="https://ontology.swissartresearch.net/aaao/"/>
             <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
             <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
             <namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
@@ -1138,19 +1138,19 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="__lastModified">@name</equals>
+                                <equals value="__created">@name</equals>
                             </if>
                             <relationship>crm:P94i_was_created_by</relationship>
-                            <entity>
+                            <entity variable="metadata_creation">
                                 <type>crm:E65_Creation</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">literature</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">meta</arg>
-                                    <arg name="level2" type="constant">update</arg>
+                                    <arg name="level2" type="constant">creation</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="constant">last update of metadata</arg>
+                                    <arg name="text" type="constant">creation of metadata</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
                             </entity>
@@ -1160,13 +1160,101 @@
                     <range>
                         <source_node>systemField</source_node>
                         <target_node>
-                            <entity variable="metadata_creation">
+                            <entity variable="metadata_creation_date">
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd3Levels">
                                     <arg name="type" type="constant">literature</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">meta</arg>
-                                    <arg name="level2" type="constant">update</arg>
+                                    <arg name="level2" type="constant">creation</arg>
+                                    <arg name="level3" type="constant">date</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P82_at_some_time_within</relationship>
+                                    <entity>
+                                        <type>xsd:dateTime</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="typedLiteralGen">
+                                            <arg name="text" type="xpath">replace(value/text(),' ', 'T')</arg>
+                                        </instance_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>systemField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="__lastModified">@name</equals>
+                            </if>
+                            <relationship>crm:P94i_was_created_by</relationship>
+                            <entity variable="metadata_creation">
+                                <type>crm:E65_Creation</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">creation</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="constant">creation of metadata</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P9_consists_of</relationship>
+                            <entity variable="metadata_update">
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">lastUpdate</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="constant">last update of metadata</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300417255</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">updating</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P4_has_time-span</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>systemField</source_node>
+                        <target_node>
+                            <entity variable="metadata_update_date">
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">lastUpdate</arg>
                                     <arg name="level3" type="constant">date</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">

@@ -1,0 +1,328 @@
+<x3ml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" source_type="xpath" version="1.0" xsi:noNamespaceSchemaLocation="x3ml_v1.4.xsd" editor="3MEditor v3.3"><namespaces>
+            <namespace prefix="crmsci" uri="http://www.cidoc-crm.org/extensions/crmsci/"/>
+            <namespace prefix="resource" uri="https://data.skkg.ch/"/>
+            <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
+            <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <namespace prefix="aaao" uri="https://ontology.swissartresearch.net/aaao/"/>
+            <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
+            <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
+            <namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
+            <namespace prefix="frbroo" uri="http://iflastandards.info/ns/fr/frbr/frbroo/"/>
+            <namespace prefix="gnd" uri="https://d-nb.info/gnd/"/>
+            <namespace prefix="la" uri="https://linked.art/ns/terms/"/>
+            <namespace prefix="loc" uri="http://id.loc.gov/vocabulary/relators/"/>
+            <namespace prefix="mets" uri="http://www.loc.gov/METS/"/>
+            <namespace prefix="mods" uri="http://www.loc.gov/mods/v3"/>
+            <namespace prefix="oai" uri="http://www.openarchives.org/OAI/2.0/"/>
+            <namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
+            <namespace prefix="rso" uri="http://www.researchspace.org/ontology/"/>
+            <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
+            <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
+            <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/en/sik:person-"/>
+            <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
+            <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
+            <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
+            <namespace prefix="wikidata" uri="https://www.wikidata.org/wiki/"/>
+            <namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+            <namespace prefix="object" uri="https://data.skkg.ch/object/"/>
+            <namespace prefix="type" uri="https://data.skkg.ch/type/"/>
+            <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
+            <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
+            <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
+            <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
+            <namespace prefix="objectgroup" uri="https://data.skkg.ch/objectgroup/"/>
+        </namespaces>
+        <mappings>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem</source_node>
+                    <target_node>
+                        <entity>
+                            <type>la:Set</type>
+                            <type>crm:E89_Propositional_Object</type>
+                            <type>skkg:ObjectGroup</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">objectgroup</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">dataField[@name="OgrNameTxt"]/value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                            <label_generator name="prefLabel">
+                                <arg name="text" type="xpath">dataField[@name="OgrNameTxt"]/value/text()</arg>
+                                <arg name="language" type="constant"/>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>.</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P70i_is_documented_in</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>.</source_node>
+                        <target_node>
+                            <entity variable="metadata">
+                                <type>crm:E31_Document</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">objectgroup</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('metadata for objectgroup: ', if (dataField[@name="OgrNameTxt"]/value/text()) then (dataField[@name="OgrNameTxt"]/value/text()) else (@uuid))</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference/moduleReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="OgrObjectRef">../@name</equals>
+                            </if>
+                            <relationship>la:has_member</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReference/moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E22_Human-Made_Object</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="OgrNotesClb">@name</equals>
+                            </if>
+                            <relationship>crm:P67i_is_referred_to_by</relationship>
+                            <entity>
+                                <type>crm:E33_Linguistic_Object</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">objectgroup</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">description</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300435416</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Description</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Beschreibung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem</source_node>
+                    <target_node>
+                        <entity variable="metadata">
+                            <type>crm:E31_Document</type>
+                            <instance_generator name="UUID"/>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>systemField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="__created">@name</equals>
+                            </if>
+                            <relationship>crm:P94i_was_created_by</relationship>
+                            <entity variable="metadata_creation">
+                                <type>crm:E65_Creation</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">objectgroup</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">creation</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="constant">creation of metadata</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P4_has_time-span</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>systemField</source_node>
+                        <target_node>
+                            <entity variable="metadata_creation_date">
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">objectgroup</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">creation</arg>
+                                    <arg name="level3" type="constant">date</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P82_at_some_time_within</relationship>
+                                    <entity>
+                                        <type>xsd:dateTime</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="typedLiteralGen">
+                                            <arg name="text" type="xpath">replace(value/text(),' ', 'T')</arg>
+                                        </instance_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>systemField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="__lastModified">@name</equals>
+                            </if>
+                            <relationship>crm:P94i_was_created_by</relationship>
+                            <entity variable="metadata_creation">
+                                <type>crm:E65_Creation</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">objectgroup</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">creation</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="constant">creation of metadata</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>crm:P9_consists_of</relationship>
+                            <entity variable="metadata_update">
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">objectgroup</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">lastUpdate</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="constant">last update of metadata</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300417255</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">updating</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P4_has_time-span</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>systemField</source_node>
+                        <target_node>
+                            <entity variable="metadata_update_date">
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">objectgroup</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">meta</arg>
+                                    <arg name="level2" type="constant">lastUpdate</arg>
+                                    <arg name="level3" type="constant">date</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P82_at_some_time_within</relationship>
+                                    <entity>
+                                        <type>xsd:dateTime</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="typedLiteralGen">
+                                            <arg name="text" type="xpath">replace(value/text(),' ', 'T')</arg>
+                                        </instance_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+        </mappings>
+        </x3ml>

@@ -21,11 +21,14 @@ Arguments:
 
 
 import argparse
+import os
+import time
 import pytz
 from datetime import datetime
 from lxml import etree
 from os import listdir, remove as removeFile
 from os.path import join, exists, isfile
+from prometheus_client import multiprocess, CollectorRegistry, Counter, Summary, Gauge
 from tqdm import tqdm
 
 from lib.Metadata import ItemMetadata
@@ -33,6 +36,14 @@ from lib.MuseumPlusConnector import MPWrapper
 from lib.Utils import createXMLCopy
 
 from config.moduleQueryAdditions import moduleQueryAdditions
+
+# Prometheus metrics
+registry = CollectorRegistry()
+downloads_total = Counter("museumplus_downloads_total", "Total items downloaded", ["module"], registry=registry)
+skipped_total = Counter("museumplus_skipped_total", "Items skipped because they already existed", ["module"], registry=registry)
+omitted_total = Counter("museumplus_omitted_total", "Items omitted due to error", ["module"], registry=registry)
+
+run_success = Gauge("museumplus_download_success", "Whether the module download succeeded (1) or failed (0)", ["module"], registry=registry)
 
 def downloadItems(*, host, username, password, module, outputFolder, tempFolder, filenamePrefix = 'item-', limit = None, offset = None):          
     client = MPWrapper(url=host, username=username, password=password)
@@ -43,8 +54,7 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         'downloaded': [],
         'existing': [],
         'omitted': []
-    }
-
+    }    
     lastUpdated = metadata.getLastUpdatedDate();
 
     # Store the current datetime
@@ -102,6 +112,11 @@ def downloadItems(*, host, username, password, module, outputFolder, tempFolder,
         print("Omitted files:")
         for file in log['omitted']:
             print(file)
+        
+    # Record Prometheus metrics
+    downloads_total.labels(module=module).inc(len(log['downloaded']))
+    skipped_total.labels(module=module).inc(len(log['existing']))
+    omitted_total.labels(module=module).inc(len(log['omitted']))
 
 def storeAndRenameItems(*, inputFolder, outputFolder, filenamePrefix, metadata):
     # Read all XML files in the input folder
@@ -152,4 +167,11 @@ if __name__ == "__main__":
     if args.offset:
         args.offset = int(args.offset)
 
-    downloadItems(host=args.url, module=args.module, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+    run_success.labels(module=args.module).set(1)
+    try:
+        downloadItems(host=args.url, module=args.module, username=args.username, password=args.password, outputFolder=args.outputFolder, tempFolder=args.tempFolder, filenamePrefix=args.filenamePrefix or 'item-', limit=args.limit, offset=args.offset)
+    except Exception as e:
+        run_success.labels(module=args.module).set(0)
+        raise
+    
+   

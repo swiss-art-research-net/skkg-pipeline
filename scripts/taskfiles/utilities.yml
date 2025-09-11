@@ -1,0 +1,71 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+
+  execute-query-from-file:
+    desc: Execute a query against the main Blazegraph instance. Pass the path to the file as command line argument
+    cmds:
+      - |
+        curl -X POST -H "Accept: text/csv" --data-urlencode "query=$(cat "{{.CLI_ARGS}}")" {{.BLAZEGRAPH_ENDPOINT}}
+
+  _clean_turtle_file_from_extra_prefixes:
+    desc: Removes additional prefix statements in a Turtle file
+    internal: true
+    requires:
+      vars: [FILE]
+    vars:
+      TEMP_FILE:
+        sh: echo "/data/temp/$(basename {{.FILE}}).cleaned"
+    cmds:
+      - cp {{.FILE}} {{.TEMP_FILE}}
+      - awk '/^@prefix/ && !seen[$0]++ { print }' {{.TEMP_FILE}} > {{.FILE}}
+      - grep -v "^@prefix" {{.TEMP_FILE}} >> {{.FILE}}
+      - rm -f {{.TEMP_FILE}}
+
+  _run-task-according-to-interval:
+    internal: true
+    desc: Run a task according to a specified interval
+    requires:
+      vars: [TASK, INTERVAL]
+    deps:
+      - task: _output_message
+        vars:
+          MESSAGE: "Checking if task '{{.TASK}}' has been run in the last {{.INTERVAL}}..."
+    vars:
+      LAST_RUN:
+        sh: cat /scripts/.task/lastrun/{{.TASK}} 2>/dev/null || echo 0
+      INTERVAL_IN_SECONDS:
+        sh: |
+          FREQUENCY="{{.INTERVAL}}"
+          case "${FREQUENCY: -1}" in
+            "s") INTERVAL=${FREQUENCY%?} ;;   # Seconds
+            "m") INTERVAL=$((${FREQUENCY%?} * 60)) ;;   # Minutes
+            "h") INTERVAL=$((${FREQUENCY%?} * 3600)) ;; # Hours
+            "d") INTERVAL=$((${FREQUENCY%?} * 86400)) ;; # Days
+            "w") INTERVAL=$((${FREQUENCY%?} * 604800)) ;; # Weeks
+            "M") INTERVAL=$((${FREQUENCY%?} * 2592000)) ;; # Months (approx 30 days)
+            "y") INTERVAL=$((${FREQUENCY%?} * 31536000)) ;; # Years (365 days)
+            *)
+              echo "Invalid frequency format."
+              exit 1
+              ;;
+          esac
+          echo $INTERVAL
+      CURRENT_TIME: 
+        sh: date +%s
+    status:
+      - |
+          CURRENT_TIME={{.CURRENT_TIME}}
+          LAST_RUN={{.LAST_RUN}}
+          INTERVAL_IN_SECONDS={{.INTERVAL_IN_SECONDS}}
+          if [ $(($CURRENT_TIME - $LAST_RUN)) -ge $INTERVAL_IN_SECONDS ]; then
+            exit 1
+          else
+            exit 0
+          fi
+    cmds:
+      - task: "{{.TASK}}"
+      - mkdir -p /scripts/.task/lastrun
+      - echo "{{.CURRENT_TIME}}" > /scripts/.task/lastrun/{{.TASK}}

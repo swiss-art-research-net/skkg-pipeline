@@ -6,6 +6,11 @@ services:
       timeout: 10s
       retries: 2
       start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - "autoheal=true"
     networks:
@@ -19,6 +24,11 @@ services:
       timeout: 10s
       retries: 2
       start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - "autoheal=true"
     networks:
@@ -31,6 +41,11 @@ services:
       timeout: 30s
       retries: 2
       start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
     - internal
 
@@ -47,6 +62,11 @@ services:
       timeout: 30s
       retries: 2
       start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - "autoheal=true"
     networks:

@@ -11,8 +11,10 @@ data/**/*.*
 !data/ttl/main/.gitkeep
 !data/ttl/additional/classifications/.gitkeep
 !data/ttl/additional/external/.gitkeep
+!data/ttl/additional/alignments/skkg.ttl
 !data/platform/*.*
 logs/*.*
+logs/*/*.*
 !logs/.gitkeep
 mapping/input/*/*.*
 mapping/output/*/*.*
@@ -31,6 +33,10 @@ scripts/.task/**/*
 # Qlever specific
 services/qlever/**/*.*
 !services/qlever/Qleverfile
+
+# Static files
+services/platform/apps/static/assets/no_auth/*.*
+!services/platform/apps/static/assets/no_auth/.gitkeep
 
 # Local
 *.zip
