@@ -224,12 +224,12 @@ class PersonPreprocessor(BasePreprocessor):
         knownDateTypes = {
             '258982': {'type': 'nameChange', 'label': 'name change'},
             '258981': {'type': 'nameChange', 'label': 'name change'},
-            '255974': {'type': 'locationChange', 'label': 'location change', 'aat': '300393179'},
-            '258983': {'type': 'locationChange', 'label': 'location change', 'aat': '300393179'},
-            '194028': {'type': 'active', 'label': 'active', 'aat': '300393177'},
-            '184965': {'type': 'active', 'label': 'active', 'aat': '300393177'},
-            '190028': {'type': 'active', 'label': 'active', 'aat': '300393177'},
-            '184964': {'type': 'active', 'label': 'active', 'aat': '300393177'},
+            '255974': {'type': 'locationChange', 'label': 'location change', 'aat': '300393179', 'aatLabel': 'change of residence'},
+            '258983': {'type': 'locationChange', 'label': 'location change', 'aat': '300393179', 'aatLabel': 'change of residence'},
+            '194028': {'type': 'active', 'label': 'active', 'aat': '300393177', 'aatLabel': 'professional activity'},
+            '184965': {'type': 'active', 'label': 'active', 'aat': '300393177', 'aatLabel': 'professional activity'},
+            '190028': {'type': 'active', 'label': 'active', 'aat': '300393177', 'aatLabel': 'professional activity'},
+            '184964': {'type': 'active', 'label': 'active', 'aat': '300393177', 'aatLabel': 'professional activity'},
         }
         moduleItems = root.findall(".//moduleItem")
         for moduleItem in moduleItems:
