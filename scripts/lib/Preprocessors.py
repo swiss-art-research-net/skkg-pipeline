@@ -201,33 +201,35 @@ class PersonPreprocessor(BasePreprocessor):
         We use a map of known vocabulary reference IDs to determine the type of date. Unknown
         IDs are treated as 'other'.
 
-        The known IDs are mapped to the following types, date predicates, and AAT terms:
+        The known IDs are mapped to the following types and AAT terms:
 
-        ID, Label, Type, Date Predicate, AAT Term
+        ID, Label, Type, AAT Term
 
-        258982, ab Namensänderung, name change, crm:P82a_begin_of_the_begin
-        258981, bis Namensänderung, name change, crm:P82b_end_of_the_end
-        255974, ab Ortswechsel, location change, crm:P82a_begin_of_the_begin, 300393179
-        258983, bis Ortswechsel, location change, crm:P82b_end_of_the_end, 300393179
-        194028, aktiv ab, active, crm:P82a_begin_of_the_begin, 300393177
-        184965, aktiv bis, active, crm:P82b_end_of_the_end, 300393177
-        190028, aktiv um, active, crm:P82_at_some_time_within, 300393177
-        184964, aktiv von, active, crm:P82a_begin_of_the_begin, 300393177
+        258982, ab Namensänderung, name change
+        258981, bis Namensänderung, name change
+        255974, ab Ortswechsel, location change, 300393179
+        258983, bis Ortswechsel, location change 300393179
+        194028, aktiv ab, active, 300393177
+        184965, aktiv bis, active, 300393177
+        190028, aktiv um, active, 300393177
+        184964, aktiv von, active, 300393177
 
         The preprocessed dates will get an additional node in the repeatableGroupItem
         with the prefixed name 'dateType' and the following attributes:
         - type: 'nameChange', 'locationChange', 'active', 'other'
-        - predicate: the corresponding CIDOC-CRM date predicate
+        - label: human readable label
+        - aat: AAT term ID (if available)
+        
         """
         knownDateTypes = {
-            '258982': {'type': 'nameChange', 'label': 'name change', 'predicate': 'crm:P82a_begin_of_the_begin'},
-            '258981': {'type': 'nameChange', 'label': 'name change', 'predicate': 'crm:P82b_end_of_the_end'},
-            '255974': {'type': 'locationChange', 'label': 'location change', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393179'},
-            '258983': {'type': 'locationChange', 'label': 'location change', 'predicate': 'crm:P82b_end_of_the_end', 'aat': '300393179'},
-            '194028': {'type': 'active', 'label': 'active', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393177'},
-            '184965': {'type': 'active', 'label': 'active', 'predicate': 'crm:P82b_end_of_the_end', 'aat': '300393177'},
-            '190028': {'type': 'active', 'label': 'active', 'predicate': 'crm:P82_at_some_time_within', 'aat': '300393177'},
-            '184964': {'type': 'active', 'label': 'active', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393177'},
+            '258982': {'type': 'nameChange', 'label': 'name change'},
+            '258981': {'type': 'nameChange', 'label': 'name change'},
+            '255974': {'type': 'locationChange', 'label': 'location change', 'aat': '300393179'},
+            '258983': {'type': 'locationChange', 'label': 'location change', 'aat': '300393179'},
+            '194028': {'type': 'active', 'label': 'active', 'aat': '300393177'},
+            '184965': {'type': 'active', 'label': 'active', 'aat': '300393177'},
+            '190028': {'type': 'active', 'label': 'active', 'aat': '300393177'},
+            '184964': {'type': 'active', 'label': 'active', 'aat': '300393177'},
         }
         moduleItems = root.findall(".//moduleItem")
         for moduleItem in moduleItems:
