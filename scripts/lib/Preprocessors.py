@@ -244,7 +244,8 @@ class PersonPreprocessor(BasePreprocessor):
                             dateType = knownDateTypes.get(typeId, {'type': 'other', 'predicate': 'crm:P82_at_some_time_within'})
                             dateTypeField = ET.SubElement(item, f'{self.PREFIX}dateType')
                             for key, value in dateType.items():
-                                dateTypeField.set(key, value)
+                                subElem = ET.SubElement(dateTypeField, key)
+                                subElem.text = value
 
         return root
 class Preprocessors:
