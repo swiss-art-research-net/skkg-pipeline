@@ -220,14 +220,14 @@ class PersonPreprocessor(BasePreprocessor):
         - predicate: the corresponding CIDOC-CRM date predicate
         """
         knownDateTypes = {
-            '258982': {'type': 'nameChange', 'predicate': 'crm:P82a_begin_of_the_begin',},
-            '258981': {'type': 'nameChange', 'predicate': 'crm:P82b_end_of_the_end'},
-            '255974': {'type': 'locationChange', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393179'},
-            '258983': {'type': 'locationChange', 'predicate': 'crm:P82b_end_of_the_end', 'aat': '300393179'},
-            '194028': {'type': 'active', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393177'},
-            '184965': {'type': 'active', 'predicate': 'crm:P82b_end_of_the_end', 'aat': '300393177'},
-            '190028': {'type': 'active', 'predicate': 'crm:P82_at_some_time_within', 'aat': '300393177'},
-            '184964': {'type': 'active', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393177'},
+            '258982': {'type': 'nameChange', 'label': 'name change', 'predicate': 'crm:P82a_begin_of_the_begin'},
+            '258981': {'type': 'nameChange', 'label': 'name change', 'predicate': 'crm:P82b_end_of_the_end'},
+            '255974': {'type': 'locationChange', 'label': 'location change', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393179'},
+            '258983': {'type': 'locationChange', 'label': 'location change', 'predicate': 'crm:P82b_end_of_the_end', 'aat': '300393179'},
+            '194028': {'type': 'active', 'label': 'active', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393177'},
+            '184965': {'type': 'active', 'label': 'active', 'predicate': 'crm:P82b_end_of_the_end', 'aat': '300393177'},
+            '190028': {'type': 'active', 'label': 'active', 'predicate': 'crm:P82_at_some_time_within', 'aat': '300393177'},
+            '184964': {'type': 'active', 'label': 'active', 'predicate': 'crm:P82a_begin_of_the_begin', 'aat': '300393177'},
         }
         moduleItems = root.findall(".//moduleItem")
         for moduleItem in moduleItems:
@@ -236,7 +236,6 @@ class PersonPreprocessor(BasePreprocessor):
                 dateItems = perDateGroup.findall('repeatableGroupItem')
                 for item in dateItems:
                     typeField = item.find(".//vocabularyReference[@instanceName='PerDateTypeVgr']/vocabularyReferenceItem")
-                    print(typeField)
                     if typeField is not None and 'id' in typeField.attrib:
                         typeId = typeField.attrib['id']
                         if typeId not in ['143906', '143911', '141086', '141087']:
