@@ -165,7 +165,7 @@
                                         <equals value="PerDateGrp">../@name</equals>
                                     </if>
                                     <if>
-                                        <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                        <equals value="143906">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
                                     </if>
                                     <if>
                                         <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
@@ -219,7 +219,7 @@
                                         <equals value="PerDateGrp">../@name</equals>
                                     </if>
                                     <if>
-                                        <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                        <equals value="143911">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
                                     </if>
                                     <if>
                                         <equals value="person">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
@@ -273,7 +273,7 @@
                                         <equals value="PerDateGrp">../@name</equals>
                                     </if>
                                     <if>
-                                        <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                        <equals value="141086">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
                                     </if>
                                     <if>
                                         <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
@@ -327,7 +327,7 @@
                                         <equals value="PerDateGrp">../@name</equals>
                                     </if>
                                     <if>
-                                        <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                        <equals value="141087">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
                                     </if>
                                     <if>
                                         <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
@@ -363,6 +363,61 @@
                                 </instance_generator>
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">concat("Dissolution of ", ../../virtualField[@name='PerPersonVrt']/value/text())</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroup/repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="PerDateGrp">../@name</equals>
+                                    </if>
+                                    <if>
+                                        <exists>_preprocessed_dateType/@type</exists>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>crm:P14i_performed</relationship>
+                        </target_relation>
+                        <comments>
+                            <comment type="">
+                                <rationale/>
+                                <alternatives/>
+                                <typical_mistakes/>
+                                <local_habits/>
+                                <link_to_cook_book/>
+                                <example>
+                                    <example_source/>
+                                    <example_target/>
+                                </example>
+                                <comments_last_update date="" person=""/>
+                            </comment>
+                        </comments>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroup/repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">person</arg>
+                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="level1" type="xpath">_preprocessed_dateType/@type</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat(
+  string(_preprocessed_dateType/@label),
+  ": ",
+  string(../../virtualField[@name='PerPersonVrt']/value)
+)</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
                             </entity>
@@ -1045,9 +1100,6 @@
                                     <equals value="PerDateGrp">../@name</equals>
                                 </if>
                                 <if>
-                                    <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
-                                </if>
-                                <if>
                                     <equals value="143906">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
                                 </if>
                                 <if>
@@ -1327,9 +1379,6 @@
                             <and>
                                 <if>
                                     <equals value="PerDateGrp">../@name</equals>
-                                </if>
-                                <if>
-                                    <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
                                 </if>
                                 <if>
                                     <equals value="143911">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
@@ -1613,7 +1662,7 @@
                                     <equals value="PerDateGrp">../@name</equals>
                                 </if>
                                 <if>
-                                    <equals value="BirthDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                    <equals value="141086">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
                                 </if>
                                 <if>
                                     <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
@@ -1894,7 +1943,7 @@
                                     <equals value="PerDateGrp">../@name</equals>
                                 </if>
                                 <if>
-                                    <equals value="DeathDate">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@name</equals>
+                                    <equals value="141087">vocabularyReference[@instanceName="PerDateTypeVgr"]/vocabularyReferenceItem/@id</equals>
                                 </if>
                                 <if>
                                     <equals value="group">../../vocabularyReference[@instanceName="PerTypeVgr"]/vocabularyReferenceItem/@name</equals>
@@ -2392,7 +2441,7 @@
                             <entity>
                                 <type>crm:E39_Actor</type>
                                 <instance_generator name="URIorUUID">
-                                    <arg type="xpath" name="text">dataField[@name='AddressTxt']/value/text()</arg>
+                                    <arg name="text" type="xpath">dataField[@name='AddressTxt']/value/text()</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
