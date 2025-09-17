@@ -178,6 +178,76 @@ class OwnershipPreprocessor(BasePreprocessor):
         root = self.addTransactionTypeData(root)
         return super().dumpXML(root)
     
+class PersonPreprocessor(BasePreprocessor):
+    """
+    Preprocessor for the Person module.
+    """
+    def preprocess(self, content: str) -> str:
+        content = super().preprocess(content)
+        root = super().parseXML(content)
+        root = self.processPersonDates(root)
+        return super().dumpXML(root)
+    
+    def processPersonDates(self, root: ET.Element) -> ET.Element:
+        """
+        This function processes the additional dates in the Person item, i.e.
+        those that are not Birth/Death or Formation/Dissolution.
+
+        There is a repeatable group called PerDateGrp that contains the additional dates.
+        Birth/Death and Formation/Dissolution are given the vocabularyReference
+        of instance PerDateTypeVgr with the IDs 143906, 143911, 141086 and 141087. All other
+        dates are considered additional dates and are processed here.
+
+        We use a map of known vocabulary reference IDs to determine the type of date. Unknown
+        IDs are treated as 'other'.
+
+        The known IDs are mapped to the following types and AAT terms:
+
+        ID, Label, Type, AAT Term
+
+        258982, ab Namensänderung, name change
+        258981, bis Namensänderung, name change
+        255974, ab Ortswechsel, location change, 300393179
+        258983, bis Ortswechsel, location change 300393179
+        194028, aktiv ab, active, 300393177
+        184965, aktiv bis, active, 300393177
+        190028, aktiv um, active, 300393177
+        184964, aktiv von, active, 300393177
+
+        The preprocessed dates will get an additional node in the repeatableGroupItem
+        with the prefixed name 'dateType' and the following attributes:
+        - type: 'nameChange', 'locationChange', 'active', 'other'
+        - label: human readable label
+        - aat: AAT term ID (if available)
+        
+        """
+        knownDateTypes = {
+            '258982': {'type': 'nameChange', 'label': 'name change'},
+            '258981': {'type': 'nameChange', 'label': 'name change'},
+            '255974': {'type': 'locationChange', 'label': 'location change', 'aat': '300393179', 'aatLabel': 'change of residence'},
+            '258983': {'type': 'locationChange', 'label': 'location change', 'aat': '300393179', 'aatLabel': 'change of residence'},
+            '194028': {'type': 'active', 'label': 'active', 'aat': '300393177', 'aatLabel': 'professional activity'},
+            '184965': {'type': 'active', 'label': 'active', 'aat': '300393177', 'aatLabel': 'professional activity'},
+            '190028': {'type': 'active', 'label': 'active', 'aat': '300393177', 'aatLabel': 'professional activity'},
+            '184964': {'type': 'active', 'label': 'active', 'aat': '300393177', 'aatLabel': 'professional activity'},
+        }
+        moduleItems = root.findall(".//moduleItem")
+        for moduleItem in moduleItems:
+            perDateGroups = moduleItem.findall("repeatableGroup[@name='PerDateGrp']")
+            for perDateGroup in perDateGroups:
+                dateItems = perDateGroup.findall('repeatableGroupItem')
+                for item in dateItems:
+                    typeField = item.find(".//vocabularyReference[@instanceName='PerDateTypeVgr']/vocabularyReferenceItem")
+                    if typeField is not None and 'id' in typeField.attrib:
+                        typeId = typeField.attrib['id']
+                        if typeId not in ['143906', '143911', '141086', '141087']:
+                            dateType = knownDateTypes.get(typeId, {'type': 'other', 'predicate': 'crm:P82_at_some_time_within'})
+                            dateTypeField = ET.SubElement(item, f'{self.PREFIX}dateType')
+                            for key, value in dateType.items():
+                                subElem = ET.SubElement(dateTypeField, key)
+                                subElem.text = value
+
+        return root
 class Preprocessors:
     @staticmethod
     def getPreprocessor(module: str) -> Preprocessor:
@@ -190,5 +260,7 @@ class Preprocessors:
             return ObjectPreprocessor()
         elif module == 'Ownership':
             return OwnershipPreprocessor()
+        elif module == 'Person':
+            return PersonPreprocessor()
         else:
             return BasePreprocessor()
