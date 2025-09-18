@@ -1979,10 +1979,9 @@ else (
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:float</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2020,10 +2019,9 @@ else (
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:float</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2061,10 +2059,9 @@ else (
                         <source_node>dataField</source_node>
                         <target_node>
                             <entity>
-                                <type>rdfs:Literal</type>
-                                <instance_generator name="Literal">
+                                <type>xsd:float</type>
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
