@@ -1055,7 +1055,8 @@ tasks:
           exit 0
         fi
         if [ $TOTAL_NUM_TTL_FILES -gt $TOTAL_NUM_GRAPHS ]; then
-          echo "!! There are more TTL files than graphs. Module {{.MODULE}} should be reingested completely."
+         printf '\n\033[1;41m %-70s \033[0m\n\n' \
+            "+++ There are more TTL files than graphs. Module {{.MODULE}} should be reingested completely! +++"
           exit 0
         fi
         RETRY_COUNT=1
