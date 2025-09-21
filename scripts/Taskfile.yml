@@ -1042,36 +1042,47 @@ tasks:
       - echo "Checking for {{.MODULE}} items in the triplestore that do not have an equivalent TTL file..."
       - |
         MAX_RETRIES=5
+
+        echo "Fetching graphs from triplestore..."
         RESPONSE=$(curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}?format=json" --data-urlencode "query={{.QUERY}}")
+
         GRAPHS=$(echo $RESPONSE | jq -r '.results.bindings[].g.value')
         TOTAL_NUM_GRAPHS=$(echo $GRAPHS | wc -w)
         echo "Total number of graphs: $TOTAL_NUM_GRAPHS"
+
+        echo "Collecting TTL files..."
         TTL_FILES=$(find {{.TTLFOLDER}} -type f -name "*.ttl" | xargs -n 1 basename | sed 's/.ttl//')
         TOTAL_NUM_TTL_FILES=$(echo $TTL_FILES | wc -w)
         echo "Total number of TTL files: $TOTAL_NUM_TTL_FILES"
-        # For each GRAPH in the triplestore check if there is a corresponding TTL file. If not remove the GRAPH
+
+        echo "Checking graphs..."
         RETRY_COUNT=1
         for GRAPH in $GRAPHS; do
-          # Extract the GRAPH name from the full URI by removing the NAMEDGRAPHBASE
           GRAPH_NAME="${GRAPH#{{.NAMEDGRAPHBASE}}}"
+
           if [[ $TTL_FILES == *$GRAPH_NAME* ]]; then
+            echo "Keeping graph $GRAPH_NAME"
             continue
-          else
-            DROP_QUERY="DROP GRAPH <$GRAPH>"
-            echo "Dropping graph $GRAPH"
-            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-              curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null || true
-              if [ $? -eq 0 ]; then
-                RETRY_COUNT=1
-                break
-              else
-                echo "Retrying..."
-                RETRY_COUNT=$((RETRY_COUNT+1))
-                sleep 2
-              fi
-            done
           fi
+
+          echo "Graph $GRAPH_NAME not found in TTL files. Dropping..."
+          DROP_QUERY="DROP GRAPH <$GRAPH>"
+
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            curl --silent -X POST "{{.BLAZEGRAPH_ENDPOINT}}" --data-urlencode "update=$DROP_QUERY" > /dev/null || true
+            if [ $? -eq 0 ]; then
+              echo "Dropped graph $GRAPH_NAME successfully"
+              RETRY_COUNT=1
+              break
+            else
+              echo "Retrying drop for $GRAPH_NAME ($RETRY_COUNT/$MAX_RETRIES)..."
+              RETRY_COUNT=$((RETRY_COUNT+1))
+              sleep 2
+            fi
+          done
         done
+
+        echo "Done."
 
   _reset-iiif-and-vocabularies:
     internal: true
