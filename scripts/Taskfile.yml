@@ -1054,6 +1054,10 @@ tasks:
           echo "All graphs have a corresponding TTL file. Nothing to do."
           exit 0
         fi
+        if [ $TOTAL_NUM_TTL_FILES -gt $TOTAL_NUM_GRAPHS ]; then
+          echo "!! There are more TTL files than graphs. Module {{.MODULE}} should be reingested completely."
+          exit 0
+        fi
         RETRY_COUNT=1
         for GRAPH in $GRAPHS; do
           # Extract the GRAPH name from the full URI by removing the NAMEDGRAPHBASE
