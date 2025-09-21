@@ -1051,7 +1051,7 @@ tasks:
         echo "Total number of TTL files: $TOTAL_NUM_TTL_FILES"
         # For each GRAPH in the triplestore check if there is a corresponding TTL file. If not remove the GRAPH
         if [ $TOTAL_NUM_TTL_FILES -eq $TOTAL_NUM_GRAPHS ]; then
-          echo "All graphs have a corresponding TTL file. Nothing to do."
+          echo "The number of TTL files matches the number of graphs. No action taken."
           exit 0
         fi
         if [ $TOTAL_NUM_TTL_FILES -gt $TOTAL_NUM_GRAPHS ]; then
