@@ -1093,9 +1093,10 @@
                                         <instance_info>
                                             <constant/>
                                         </instance_info>
-                                        <instance_generator name="URIwithTypeAndId">
+                                        <instance_generator name="URIwithTypeIdAnd1Level">
                                             <arg name="type" type="constant">type</arg>
-                                            <arg name="id" type="xpath">@id</arg>
+                                            <arg name="id" type="xpath">../@id</arg>
+                                            <arg name="level1" type="xpath">@id</arg>
                                         </instance_generator>
                                         <label_generator name="Literal">
                                             <arg name="text" type="xpath">formattedValue/text()</arg>
@@ -1187,9 +1188,10 @@
                                         <instance_info>
                                             <constant/>
                                         </instance_info>
-                                        <instance_generator name="URIwithTypeAndId">
+                                        <instance_generator name="URIwithTypeIdAnd1Level">
                                             <arg name="type" type="constant">type</arg>
-                                            <arg name="id" type="xpath">@id</arg>
+                                            <arg name="id" type="xpath">../@id</arg>
+                                            <arg name="level1" type="xpath">@id</arg>
                                         </instance_generator>
                                         <label_generator name="Literal">
                                             <arg name="text" type="xpath">formattedValue/text()</arg>
