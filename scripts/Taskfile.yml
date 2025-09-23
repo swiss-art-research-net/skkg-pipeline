@@ -78,6 +78,7 @@ tasks:
           - GenLanguageVgr
           - GenMoveStatusVgr
           - LitAuthorTypeVgr
+          - LitExhibitionTypeVgr
           - LitLanguageVgr
           - LitTypeVgr
           - LitPlaceVgr
