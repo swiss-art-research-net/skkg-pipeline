@@ -16,6 +16,7 @@ tasks:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
       - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
       - find /data/ttl/main/ -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - find /data/ttl/additional/external/ -name "*.ttl" -exec cat {} + >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
