@@ -369,6 +369,110 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference/moduleReferenceItem/vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <and>
+                                            <if>
+                                                <equals value="ExhOrganiserRef">../../../@name</equals>
+                                            </if>
+                                            <if>
+                                                <equals value="ExhOrganiserTypeVgr">../@instanceName</equals>
+                                            </if>
+                                        </and>
+                                    </if>
+                                    <if>
+                                        <or>
+                                            <if>
+                                                <equals value="60204">@id</equals>
+                                            </if>
+                                            <if>
+                                                <equals value="98263">@id</equals>
+                                            </if>
+                                        </or>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>crm:P01i_is_domain_of</relationship>
+                            <entity>
+                                <type>crm:PC14_carried_out_by</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">exhibition</arg>
+                                    <arg name="id" type="xpath">../../../../@uuid</arg>
+                                    <arg name="level1" type="constant">organiser</arg>
+                                    <arg name="level2" type="xpath">../../@uuid</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P02_has_range</relationship>
+                                    <entity>
+                                        <type>crm:E39_Actor</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">address</arg>
+                                            <arg name="id" type="xpath">../../@uuid</arg>
+                                        </instance_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P14.1_in_the_role_of</relationship>
+                        </target_relation>
+                        <comments>
+                            <comment type="">
+                                <rationale>Only map if ExhOrganiserTypeVgr is Kurator:in or Institution</rationale>
+                                <alternatives/>
+                                <typical_mistakes/>
+                                <local_habits/>
+                                <link_to_cook_book/>
+                                <example>
+                                    <example_source/>
+                                    <example_target/>
+                                </example>
+                                <comments_last_update date="" person=""/>
+                            </comment>
+                        </comments>
+                    </path>
+                    <range>
+                        <source_node>moduleReference/moduleReferenceItem/vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="xpath">../@id</arg>
+                                    <arg name="level1" type="xpath">@id</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="xpath">formattedValue/@language</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">32086</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">ExhOrganiserTypeVgr</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
                 <link template="vocab_type">
                     <path>
                         <source_relation>
