@@ -74,6 +74,7 @@ tasks:
           - ExhOrganiserTypeVgr
           - ExhTypeVgr
           - ExhStatusVgr
+          - ExhStationsStatusVgr
           - GenCurrencyVgr
           - GenLanguageVgr
           - GenMoveStatusVgr
