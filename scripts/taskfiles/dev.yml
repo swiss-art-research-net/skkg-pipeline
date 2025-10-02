@@ -11,7 +11,7 @@ tasks:
             - module: Address
               ids: 260a0a70-4d26-4f15-8b27-d87243c47c24,0df1724d-e9e8-4b0c-96db-bc1ee4696000,0b5918d4-c549-4477-8c82-159314e3b525,3a7892e0-9d41-4561-9595-42070e0b9e66,287ee736-19da-4806-a722-c3e389ab8c4a
             - module: Exhibition
-              ids: 4,152,164,cf5ce8dc-e90b-4c8e-b5a0-422024be35de
+              ids: 4,152,164,cf5ce8dc-e90b-4c8e-b5a0-422024be35de,ed92b106-0629-400b-b0d4-ca8f940eab1c
             - module: Object
               ids: 8de02a49-3661-434b-92ff-e65c015fbca2,11384,10013,91aa0c4a-3325-45f6-9f29-e90eb13ec4c2,9414327b-74ab-4425-b123-ecbb28db5168,305,10094,857,493,4f66e941-1bcb-4e14-baab-ffdaef1c3436,0a5b480f-04d5-4053-840a-5185a2abda39,c6b149c2-f809-4d8c-8dc9-70acb24e0070,3412c1a2-3c87-462a-8943-34aede5dcf5a,2a0c8fab-5771-496c-9350-5482f50c93e2,0a5b9c6a-2d1d-43c5-b833-6975ddfa7ded,3c7215d0-3aba-4bb8-98e6-5da239ab0a64,0b17827d-117b-42b7-9925-0731f6db779b,0a0c96ab-71f1-466a-a5ff-ab556d437f15,ffa356cf-f988-4d96-9580-92dcb0e4dddf
             - module: ObjectGroup
