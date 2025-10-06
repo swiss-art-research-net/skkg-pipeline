@@ -82,9 +82,14 @@ tasks:
         PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
         SELECT ?uuid WHERE {
           <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
-          ?object a skkg:Object ;
-            crm:P138i_has_representation ?multimedia .
-          ?multimedia a skkg:Multimedia ;
+          ?object a skkg:Object .
+          {
+            ?object crm:P138i_has_representation ?multimedia .
+          } UNION {
+            ?exhibition crm:P16_used_specific_object/la:has_member ?object ;
+              crm:P67i_is_referred_to_by ?multimedia .
+          }
+          ?multimedia a skkg:Multimedia .
           BIND(STRAFTER(STR(?multimedia), "/multimedia/") as ?uuid) 
         }
     cmds:
