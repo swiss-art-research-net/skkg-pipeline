@@ -2629,7 +2629,9 @@
                             <entity>
                                 <type>crm:E39_Actor</type>
                                 <instance_generator name="URIorUUID">
-                                    <arg name="text" type="xpath">dataField[@name='AddressTxt']/value/text()</arg>
+                                    <arg name="text" type="xpath">if (starts-with(dataField[@name='AddressTxt']/value/text(), 'http')) 
+then dataField[@name='AddressTxt']/value/text() 
+else concat('http://ark.bnf.fr/ark:/', dataField[@name='AddressTxt']/value/text())</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
