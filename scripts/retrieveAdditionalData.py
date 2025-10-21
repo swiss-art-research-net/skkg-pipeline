@@ -331,7 +331,7 @@ def retrieveWdData(identifiers, outputFile):
             sparql.setQuery(query)
             try:
                 results = sparql.query().convert()
-            except urllib.error.HTTPError as exception:
+            except request.HTTPError as exception:
                 print(exception)
             sleep(3)
             outputFile.write(results.serialize(format='turtle'))
