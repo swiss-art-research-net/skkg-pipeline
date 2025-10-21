@@ -2265,7 +2265,7 @@
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
-                                    <arg name="level1" type="constant">birth</arg>
+                                    <arg name="level1" type="xpath">../_preprocessed_dateType/type/text()</arg>
                                     <arg name="level2" type="constant">date</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
@@ -2291,7 +2291,7 @@
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
-                                    <arg name="level1" type="constant">birth</arg>
+                                    <arg name="level1" type="xpath">../_preprocessed_dateType/type/text()</arg>
                                     <arg name="level2" type="constant">date</arg>
                                 </instance_generator>
                             </entity>
@@ -2326,7 +2326,7 @@
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">../../../@uuid</arg>
-                                    <arg name="level1" type="constant">birth</arg>
+                                    <arg name="level1" type="xpath">../_preprocessed_dateType/type/text()</arg>
                                     <arg name="level2" type="constant">date</arg>
                                 </instance_generator>
                             </entity>
