@@ -12,6 +12,7 @@ PREFIXES = """
     PREFIX gvp:  <http://vocab.getty.edu/ontology#>
     PREFIX gndo:  <https://d-nb.info/standards/elementset/gnd#>
     PREFIX lt: <http://terminology.lido-schema.org/>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX wd: <http://www.wikidata.org/entity/>
     PREFIX wdt: <http://www.wikidata.org/prop/direct/>
     """
@@ -157,6 +158,7 @@ def retrieveAatData(identifiers, outputFile):
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
     # Retrieve ttl data from GND and append to ttl file
     with open(outputFile, 'a') as outputFile:
+        print("Retrieving %d AAT identifiers" % len(identifiersToRetrieve))
         for identifier in tqdm(identifiersToRetrieve):
             url = "%s.ttl" % identifier
             try:
@@ -196,6 +198,7 @@ def retrieveGndData(identifiers, outputFile, *, predicates=None, depth=0, maxDep
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
     # Retrieve ttl data from GND and append to ttl file
     with open(outputFile, 'a') as outputFileHandle:
+        print("Retrieving %d GND identifiers" % len(identifiersToRetrieve))
         for identifier in tqdm(identifiersToRetrieve):
             url = "%s.ttl" % identifier.replace("https://d-nb.info/gnd/","https://lobid.org/gnd/")
             try:
@@ -246,6 +249,7 @@ def retrieveLocData(identifiers, outputFile):
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
     # Retrieve ttl data from GND and append to ttl file
     with open(outputFile, 'a') as f:
+        print("Retrieving %d LOC identifiers" % len(identifiersToRetrieve))
         for identifier in tqdm(identifiersToRetrieve):
             url = "%s.nt" % identifier
             try:
@@ -282,6 +286,7 @@ def retrieveLtData(identifiers, outputFile):
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
     # Retrieve ttl data from GND and append to ttl file
     with open(outputFile, 'a') as outputFile:
+        print("Retrieving %d LIDO Terminology identifiers" % len(identifiersToRetrieve))
         for identifier in tqdm(identifiersToRetrieve):
             url = "%s.ttl" % identifier
             try:
@@ -325,25 +330,51 @@ def retrieveWdData(identifiers, outputFile):
 
     # Retrieve relevant data from Wikidata and append to ttl file
     wdEndpoint = "https://query.wikidata.org/sparql"
-    batchSizeForRetrieval = 100
+    batchSizeForRetrieval = 20
     agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
     sparql = SPARQLWrapper(wdEndpoint, agent=agent)    
     # with open(targetFile, 'a') as outputFile:
     with open(outputFile, 'a') as outputFile:
+        print("Retrieving %d Wikidata identifiers in %d chunks" % (len(identifiersToRetrieve), (len(identifiersToRetrieve) + batchSizeForRetrieval - 1) // batchSizeForRetrieval))
         for batch in tqdm(chunker(identifiersToRetrieve, batchSizeForRetrieval)):
             query = """
                 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                 CONSTRUCT {
                     ?entity wdt:P31 ?type ;
+                        rdfs:label ?label ;
                         wdt:P625 ?coordinates ;
-                        wdt:P18 ?image .
+                        wdt:P18 ?image ;
+                        wdt:P19 ?placeOfBirth ;
+                        wdt:P20 ?placeOfDeath .
+                    ?placeOfBirth wdt:P31 ?placeOfBirthType ;
+                        rdfs:label ?placeOfBirthLabel ;
+                        wdt:P625 ?placeOfBirthCoordinates .
+                    ?placeOfDeath wdt:P31 ?placeOfDeathType ;
+                        rdfs:label ?placeOfDeathLabel ;
+                        wdt:P625 ?placeOfDeathCoordinates .
                 } WHERE {
                     {
                         ?entity wdt:P31 ?type .
                     } UNION {
+                        ?entity rdfs:label ?label .
+                        FILTER(LANG(?label) = "de")
+                    } UNION {
                         ?entity wdt:P625 ?coordinates .
                     } UNION {
                         ?entity wdt:P18 ?image .
+                    } UNION {
+                        ?entity wdt:P19 ?placeOfBirth .
+                        ?placeOfBirth wdt:P31 ?placeOfBirthType ;
+                            rdfs:label ?placeOfBirthLabel ;
+                            wdt:P625 ?placeOfBirthCoordinates .
+                        FILTER(LANG(?placeOfBirthLabel) = "de")
+                    } UNION {
+                        ?entity wdt:P20 ?placeOfDeath .
+                        ?placeOfDeath wdt:P31 ?placeOfDeathType ;
+                            rdfs:label ?placeOfDeathLabel ;
+                            wdt:P625 ?placeOfDeathCoordinates .
+                        FILTER(LANG(?placeOfDeathLabel) = "de")
                     }
                     VALUES (?entity) {
                         %s
