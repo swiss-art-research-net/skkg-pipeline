@@ -335,7 +335,7 @@ def retrieveWdData(identifiers, outputFile):
     sparql = SPARQLWrapper(wdEndpoint, agent=agent)    
     # with open(targetFile, 'a') as outputFile:
     with open(outputFile, 'a') as outputFile:
-        print("Retrieving %d Wikidata identifiers in %d chunks" % (len(identifiersToRetrieve), len(identifiersToRetrieve) // batchSizeForRetrieval + 1))
+        print("Retrieving %d Wikidata identifiers in %d chunks" % (len(identifiersToRetrieve), (len(identifiersToRetrieve) + batchSizeForRetrieval - 1) // batchSizeForRetrieval))
         for batch in tqdm(chunker(identifiersToRetrieve, batchSizeForRetrieval)):
             query = """
                 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
