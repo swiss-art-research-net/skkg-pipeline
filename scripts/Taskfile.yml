@@ -529,7 +529,7 @@ tasks:
           - gnd
           - lt
           - wd
-        task: _clean_turtle_file_from_extra_prefixes
+        task: _clean_turtle_with_rapper
         vars:
           FILE: "/data/ttl/additional/external/{{.ITEM}}.ttl"
 
