@@ -24,6 +24,19 @@ tasks:
       - grep -v "^@prefix" {{.TEMP_FILE}} >> {{.FILE}}
       - rm -f {{.TEMP_FILE}}
 
+  _clean_turtle_with_rapper:
+    desc: Parses and outputs a Turtle file using RaptorRDF to ensure proper formatting
+    internal: true
+    requires:
+      vars: [FILE]
+    vars:
+      TEMP_FILE:
+        sh: echo "/data/temp/$(basename {{.FILE}}).rapped"
+    cmds:
+      - cp {{.FILE}} {{.TEMP_FILE}}
+      - rapper -q -i turtle -o turtle {{.TEMP_FILE}} > {{.FILE}}
+      - rm -f {{.TEMP_FILE}}
+
   _run-task-according-to-interval:
     internal: true
     desc: Run a task according to a specified interval

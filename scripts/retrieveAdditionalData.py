@@ -178,13 +178,16 @@ def retrieveAatData(identifiers, outputFile):
         "message": "Retrieved %d additional AAT identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
-def retrieveGndData(identifiers, outputFile):
+def retrieveGndData(identifiers, outputFile, *, predicates=None, depth=0, maxDepth=2):
     """
     Retrieves the data for the given identifiers and writes it to an output file.
     Only the data for the identifiers that are not already in the file is retrieved.
     The data is retrieved from the LOBID API.
     :param identifiers: The list of identifiers to retrieve.
     :param outputFile: The output file to write the data to.
+    :param predicates: The predicates to use for retrieving additional identifiers recursively.
+    :param depth: The current recursion depth.
+    :param maxDepth: The maximum recursion depth.
     :return: A dictionary with the status and a message.
     """
     # Read the output file and query for existing URIs
@@ -192,22 +195,42 @@ def retrieveGndData(identifiers, outputFile):
     # Filter out existing identifiers
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
     # Retrieve ttl data from GND and append to ttl file
-    with open(outputFile, 'a') as outputFile:
+    with open(outputFile, 'a') as outputFileHandle:
         for identifier in tqdm(identifiersToRetrieve):
             url = "%s.ttl" % identifier.replace("https://d-nb.info/gnd/","https://lobid.org/gnd/")
             try:
                 with request.urlopen(url) as r:
                     content = r.read().decode()
-                outputFile.write(content + "\n")
-                outputFile.flush()
+                outputFileHandle.write(content + "\n")
+                outputFileHandle.flush()
             except:
                 print("Could not retrieve", url)
-    return {
+    status = {
         "status": "success",
         "numRetrieved": len(identifiersToRetrieve),
         "message": "Retrieved %d additional GND identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
-
+    depth += 1
+    if depth < maxDepth:
+        # Recursively retrieve data for any new identifiers found in the retrieved data
+        if predicates is None:
+            predicates = [
+                "gndo:placeOfActivity",
+                "gndo:placeOfBirth",
+                "gndo:placeOfDeath"
+            ]
+        newIdentifiers = queryIdentifiersInFile(outputFile, "?entity ?predicate ?identifier . VALUES (?predicate) { %s }" % ' '.join(f"({p})" for p in predicates))
+        identifiersToRetrieve = [d for d in newIdentifiers if d not in existingIdentifiers]
+        if len(identifiersToRetrieve) > 0:
+            print("Recursively retrieving data for %d new GND identifiers at depth %d" % (len(identifiersToRetrieve), depth))
+            newStatus = retrieveGndData(identifiersToRetrieve, outputFile, predicates=predicates, depth=depth, maxDepth=maxDepth)
+            if newStatus["status"] == "success":
+                status["numRetrieved"] += newStatus["numRetrieved"]
+                status["message"] = "Retrieved %d additional GND identifiers (%d present in total)" % (status["numRetrieved"], len(identifiers))
+            else:
+                status = newStatus
+    return status
+    
 def retrieveLocData(identifiers, outputFile):
     """
     Retrieves the data for the given identifiers and writes it to a file named loc.ttl in the target folder.
