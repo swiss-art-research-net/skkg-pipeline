@@ -223,7 +223,7 @@ def retrieveGndData(identifiers, outputFile, *, predicates=None, depth=0, maxDep
         identifiersToRetrieve = [d for d in newIdentifiers if d not in existingIdentifiers]
         if len(identifiersToRetrieve) > 0:
             print("Recursively retrieving data for %d new GND identifiers at depth %d" % (len(identifiersToRetrieve), depth))
-            newStatus = retrieveGndData(identifiersToRetrieve, outputFile, depth=depth, maxDepth=maxDepth)
+            newStatus = retrieveGndData(identifiersToRetrieve, outputFile, predicates=predicates, depth=depth, maxDepth=maxDepth)
             if newStatus["status"] == "success":
                 status["numRetrieved"] += newStatus["numRetrieved"]
                 status["message"] = "Retrieved %d additional GND identifiers (%d present in total)" % (status["numRetrieved"], len(identifiers))
