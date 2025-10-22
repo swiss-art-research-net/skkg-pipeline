@@ -229,7 +229,7 @@ def retrieveGndData(identifiers, outputFile, *, predicates=None, depth=0, maxDep
                 status["message"] = "Retrieved %d additional GND identifiers (%d present in total)" % (status["numRetrieved"], len(identifiers))
             else:
                 status = newStatus
-    return status            
+    return status
     
 def retrieveLocData(identifiers, outputFile):
     """
