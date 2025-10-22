@@ -34,7 +34,7 @@ tasks:
         sh: echo "/data/temp/$(basename {{.FILE}}).rapped"
     cmds:
       - cp {{.FILE}} {{.TEMP_FILE}}
-      - rapper -i turtle -o turtle {{.TEMP_FILE}} > {{.FILE}}
+      - rapper -q -i turtle -o turtle {{.TEMP_FILE}} > {{.FILE}}
       - rm -f {{.TEMP_FILE}}
 
   _run-task-according-to-interval:
