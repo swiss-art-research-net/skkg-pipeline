@@ -299,11 +299,11 @@ def retrieveLtData(identifiers, outputFile):
 
 def retrieveWdData(identifiers, outputFile):
     """
-    Retrieves the data for the given identifiers and writes it to a file named wd.ttl in the target folder.
+    Retrieves the data for the given identifiers and writes it to a file named wd.ttl in the specified output file.
     Only the data for the identifiers that are not already in the file is retrieved.
     The data is retrieved from the Wikidata SPARQL Endpoint.
     :param identifiers: The list of identifiers to retrieve.
-    :param targetFolder: The folder where the data is stored.
+    :param outputFile: The file path where the data is written.
     :return: A dictionary with the status and a message.
     """
 
@@ -354,7 +354,7 @@ def retrieveWdData(identifiers, outputFile):
             sparql.setQuery(query)
             try:
                 results = sparql.query().convert()
-            except urllib.error.HTTPError as exception:
+            except request.HTTPError as exception:
                 print(exception)
             sleep(3)
             outputFile.write(results.serialize(format='turtle'))
