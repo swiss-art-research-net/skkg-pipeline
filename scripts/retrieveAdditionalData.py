@@ -422,7 +422,7 @@ if __name__ == "__main__":
     parser.add_argument('--ingestNamespace', type=str, help='Namespace for named graphs where sources will be ingested to. The source name will be appended to the namespace.')
     parser.add_argument('--ingestUpdate', type=bool, default=False, help='Ingest the data only if new data has been retrieved')
     parser.add_argument('--wdConstructQuery', type=str, help='Optional custom CONSTRUCT query to use for Wikidata data retrieval. VALUES bound for ?entity will be added automatically.')
-    parser.add_argument('--gndPredicates', type=str, help='Optional predicates to use for recursively retrieving additional GND identifiers. Provide as comma separated list of full URIs.')
+    parser.add_argument('--gndPredicates', type=str, help='Optional predicates to use for recursively retrieving additional GND identifiers. Provide as comma separated list of full URIs or gndo: predicates.')
     args = parser.parse_args()
 
     if args.predicates is not None:
@@ -437,7 +437,15 @@ if __name__ == "__main__":
             'constructQuery': args.wdConstructQuery
         }
     if args.gndPredicates is not None:
-        gndPredicates = ["<%s>" % s.strip() for s in args.gndPredicates.split(",")]
+        gndPredicates = []
+        for s in args.gndPredicates.split(","):
+            s = s.strip()
+            if s.startswith("http://") or s.startswith("https://"):
+                gndPredicates.append(f"<{s}>")
+            elif s.startswith("gndo:") and " " not in s:
+                gndPredicates.append(s)
+            else:
+                raise ValueError(f"Invalid predicate format: {s}. Must be a full URI or start with 'gndo:'.")
         options['gnd'] = {
             'predicates': gndPredicates
         }
