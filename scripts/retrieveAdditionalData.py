@@ -449,10 +449,10 @@ if __name__ == "__main__":
             s = s.strip()
             if s.startswith("http://") or s.startswith("https://"):
                 gndPredicates.append(f"<{s}>")
-            elif s.startswith("gndo:") and " " not in s:
+            elif re.match(r"^gndo:[a-zA-Z0-9_]+$", s):
                 gndPredicates.append(s)
             else:
-                raise ValueError(f"Invalid predicate format: {s}. Must be a full URI or start with 'gndo:'.")
+                raise ValueError(f"Invalid predicate format: {s}. Must be a full URI or match 'gndo:[a-zA-Z0-9_]+' pattern.")
         options['gnd'] = {
             'predicates': gndPredicates
         }
