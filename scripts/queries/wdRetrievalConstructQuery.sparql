@@ -1,0 +1,39 @@
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+CONSTRUCT {
+    ?entity wdt:P31 ?type ;
+        rdfs:label ?label ;
+        wdt:P625 ?coordinates ;
+        wdt:P18 ?image ;
+        wdt:P19 ?placeOfBirth ;
+        wdt:P20 ?placeOfDeath .
+    ?placeOfBirth wdt:P31 ?placeOfBirthType ;
+        rdfs:label ?placeOfBirthLabel ;
+        wdt:P625 ?placeOfBirthCoordinates .
+    ?placeOfDeath wdt:P31 ?placeOfDeathType ;
+        rdfs:label ?placeOfDeathLabel ;
+        wdt:P625 ?placeOfDeathCoordinates .
+} WHERE {
+    {
+        ?entity wdt:P31 ?type .
+    } UNION {
+        ?entity rdfs:label ?label .
+        FILTER(LANG(?label) = "de")
+    } UNION {
+        ?entity wdt:P625 ?coordinates .
+    } UNION {
+        ?entity wdt:P18 ?image .
+    } UNION {
+        ?entity wdt:P19 ?placeOfBirth .
+        ?placeOfBirth wdt:P31 ?placeOfBirthType ;
+            rdfs:label ?placeOfBirthLabel ;
+            wdt:P625 ?placeOfBirthCoordinates .
+        FILTER(LANG(?placeOfBirthLabel) = "de")
+    } UNION {
+        ?entity wdt:P20 ?placeOfDeath .
+        ?placeOfDeath wdt:P31 ?placeOfDeathType ;
+            rdfs:label ?placeOfDeathLabel ;
+            wdt:P625 ?placeOfDeathCoordinates .
+        FILTER(LANG(?placeOfDeathLabel) = "de")
+    }
+}

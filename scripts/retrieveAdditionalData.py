@@ -1,4 +1,5 @@
 import argparse
+import re
 import requests
 from os import path
 from rdflib import Graph
@@ -25,7 +26,7 @@ SOURCE_NAMESPACES  = {
     "wd": "http://www.wikidata.org/entity/"
 }
 
-def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None, ingestUpdate=False):
+def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None, ingestUpdate=False, options=None):
     """Retrieve additional data for URIs in the Triple Store from respective sources
 
     Args:
@@ -53,7 +54,7 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
         identifiers = [r["identifier"] for r in results]
         if source in sourceRetrievalFunctions:
-            logs[source] = sourceRetrievalFunctions[source](identifiers, outputFileName)
+            logs[source] = sourceRetrievalFunctions[source](identifiers, outputFileName, **(options.get(source, {}) if options else {}))
         else:
             logs[source] = {
                 "status": "error",
@@ -192,6 +193,13 @@ def retrieveGndData(identifiers, outputFile, *, predicates=None, depth=0, maxDep
     :param maxDepth: The maximum recursion depth.
     :return: A dictionary with the status and a message.
     """
+
+    DEFAULT_GND_PREDICATES = [
+        "gndo:placeOfActivity",
+        "gndo:placeOfBirth",
+        "gndo:placeOfDeath"
+    ]
+
     # Read the output file and query for existing URIs
     existingIdentifiers = queryIdentifiersInFile(outputFile, "?identifier a gndo:AuthorityResource .")
     # Filter out existing identifiers
@@ -217,11 +225,7 @@ def retrieveGndData(identifiers, outputFile, *, predicates=None, depth=0, maxDep
     if depth < maxDepth:
         # Recursively retrieve data for any new identifiers found in the retrieved data
         if predicates is None:
-            predicates = [
-                "gndo:placeOfActivity",
-                "gndo:placeOfBirth",
-                "gndo:placeOfDeath"
-            ]
+            predicates = DEFAULT_GND_PREDICATES
         newIdentifiers = queryIdentifiersInFile(outputFile, "?entity ?predicate ?identifier . VALUES (?predicate) { %s }" % ' '.join(f"({p})" for p in predicates))
         identifiersToRetrieve = [d for d in newIdentifiers if d not in existingIdentifiers]
         if len(identifiersToRetrieve) > 0:
@@ -302,14 +306,30 @@ def retrieveLtData(identifiers, outputFile):
         "message": "Retrieved %d additional LIDO Terminology identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
-def retrieveWdData(identifiers, outputFile):
+def retrieveWdData(identifiers, outputFile, *, constructQuery=None):
     """
     Retrieves the data for the given identifiers and writes it to a file named wd.ttl in the specified output file.
     Only the data for the identifiers that are not already in the file is retrieved.
     The data is retrieved from the Wikidata SPARQL Endpoint.
     :param identifiers: The list of identifiers to retrieve.
     :param outputFile: The file path where the data is written.
+    :param constructQuery: Optional custom CONSTRUCT query to use for data retrieval. VALUES clause for ?entity will be added automatically.
     :return: A dictionary with the status and a message.
+    """
+
+    DEFAULT_WD_CONSTRUCT_QUERY = """
+        PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        CONSTRUCT {
+        ?entity rdfs:label ?label ;
+                wdt:P625 ?coordinates ;
+                wdt:P18 ?image .
+        }
+        WHERE {
+            { ?entity rdfs:label ?label . FILTER(LANG(?label) = "de") }
+            UNION { ?entity wdt:P625 ?coordinates . }
+            UNION { ?entity wdt:P18 ?image . }
+        }
     """
 
     def chunker(seq, size):
@@ -335,53 +355,15 @@ def retrieveWdData(identifiers, outputFile):
     sparql = SPARQLWrapper(wdEndpoint, agent=agent)    
     # with open(targetFile, 'a') as outputFile:
     with open(outputFile, 'a') as outputFile:
+        if constructQuery is None:
+            constructQuery = DEFAULT_WD_CONSTRUCT_QUERY
         print("Retrieving %d Wikidata identifiers in %d chunks" % (len(identifiersToRetrieve), (len(identifiersToRetrieve) + batchSizeForRetrieval - 1) // batchSizeForRetrieval))
         for batch in tqdm(chunker(identifiersToRetrieve, batchSizeForRetrieval)):
-            query = """
-                PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                CONSTRUCT {
-                    ?entity wdt:P31 ?type ;
-                        rdfs:label ?label ;
-                        wdt:P625 ?coordinates ;
-                        wdt:P18 ?image ;
-                        wdt:P19 ?placeOfBirth ;
-                        wdt:P20 ?placeOfDeath .
-                    ?placeOfBirth wdt:P31 ?placeOfBirthType ;
-                        rdfs:label ?placeOfBirthLabel ;
-                        wdt:P625 ?placeOfBirthCoordinates .
-                    ?placeOfDeath wdt:P31 ?placeOfDeathType ;
-                        rdfs:label ?placeOfDeathLabel ;
-                        wdt:P625 ?placeOfDeathCoordinates .
-                } WHERE {
-                    {
-                        ?entity wdt:P31 ?type .
-                    } UNION {
-                        ?entity rdfs:label ?label .
-                        FILTER(LANG(?label) = "de")
-                    } UNION {
-                        ?entity wdt:P625 ?coordinates .
-                    } UNION {
-                        ?entity wdt:P18 ?image .
-                    } UNION {
-                        ?entity wdt:P19 ?placeOfBirth .
-                        ?placeOfBirth wdt:P31 ?placeOfBirthType ;
-                            rdfs:label ?placeOfBirthLabel ;
-                            wdt:P625 ?placeOfBirthCoordinates .
-                        FILTER(LANG(?placeOfBirthLabel) = "de")
-                    } UNION {
-                        ?entity wdt:P20 ?placeOfDeath .
-                        ?placeOfDeath wdt:P31 ?placeOfDeathType ;
-                            rdfs:label ?placeOfDeathLabel ;
-                            wdt:P625 ?placeOfDeathCoordinates .
-                        FILTER(LANG(?placeOfDeathLabel) = "de")
-                    }
-                    VALUES (?entity) {
-                        %s
-                    }
-                }
-
-            """ % ( "(<" + ">)\n(<".join(batch) + ">)" )
+            valuesClause = """
+            VALUES (?entity) {
+                %s
+            }""" % ( "(<" + ">)\n(<".join(batch) + ">)" )
+            query = re.sub(r'\}\s*$', valuesClause + "\n}", constructQuery, flags=re.DOTALL)
             sparql.setQuery(query)
             try:
                 results = sparql.query().convert()
@@ -439,6 +421,8 @@ if __name__ == "__main__":
     parser.add_argument('--ingest', type=bool, default=False, help='Ingest the retrieved data into the Triple Store')
     parser.add_argument('--ingestNamespace', type=str, help='Namespace for named graphs where sources will be ingested to. The source name will be appended to the namespace.')
     parser.add_argument('--ingestUpdate', type=bool, default=False, help='Ingest the data only if new data has been retrieved')
+    parser.add_argument('--wdConstructQuery', type=str, help='Optional custom CONSTRUCT query to use for Wikidata data retrieval. VALUES bound for ?entity will be added automatically.')
+    parser.add_argument('--gndPredicates', type=str, help='Optional predicates to use for recursively retrieving additional GND identifiers. Provide as comma separated list of full URIs or gndo: predicates.')
     args = parser.parse_args()
 
     if args.predicates is not None:
@@ -447,4 +431,23 @@ if __name__ == "__main__":
     if args.sources is not None:
         args.sources = [s.strip() for s in args.sources.split(",")]
 
-    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix, ingest=args.ingest, ingestNamespace=args.ingestNamespace, ingestUpdate=args.ingestUpdate)
+    options = {}
+    if args.wdConstructQuery is not None:
+        options['wd'] = {
+            'constructQuery': args.wdConstructQuery
+        }
+    if args.gndPredicates is not None:
+        gndPredicates = []
+        for s in args.gndPredicates.split(","):
+            s = s.strip()
+            if s.startswith("http://") or s.startswith("https://"):
+                gndPredicates.append(f"<{s}>")
+            elif re.match(r"^gndo:[a-zA-Z0-9_]+$", s):
+                gndPredicates.append(s)
+            else:
+                raise ValueError(f"Invalid predicate format: {s}. Must be a full URI or match 'gndo:[a-zA-Z0-9_]+' pattern.")
+        options['gnd'] = {
+            'predicates': gndPredicates
+        }
+
+    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix, ingest=args.ingest, ingestNamespace=args.ingestNamespace, ingestUpdate=args.ingestUpdate, options=options)
