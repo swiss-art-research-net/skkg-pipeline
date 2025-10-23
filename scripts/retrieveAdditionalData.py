@@ -422,6 +422,7 @@ if __name__ == "__main__":
     parser.add_argument('--ingestNamespace', type=str, help='Namespace for named graphs where sources will be ingested to. The source name will be appended to the namespace.')
     parser.add_argument('--ingestUpdate', type=bool, default=False, help='Ingest the data only if new data has been retrieved')
     parser.add_argument('--wdConstructQuery', type=str, help='Optional custom CONSTRUCT query to use for Wikidata data retrieval')
+    parser.add_argument('--gndPredicates', type=str, help='Optional predicates to use for recursively retrieving additional GND identifiers. Provide as comma separated list of full URIs.')
     args = parser.parse_args()
 
     if args.predicates is not None:
@@ -434,6 +435,11 @@ if __name__ == "__main__":
     if args.wdConstructQuery is not None:
         options['wd'] = {
             'constructQuery': args.wdConstructQuery
+        }
+    if args.gndPredicates is not None:
+        gndPredicates = ["<%s>" % s.strip() for s in args.gndPredicates.split(",")]
+        options['gnd'] = {
+            'predicates': gndPredicates
         }
 
     runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix, ingest=args.ingest, ingestNamespace=args.ingestNamespace, ingestUpdate=args.ingestUpdate, options=options)
