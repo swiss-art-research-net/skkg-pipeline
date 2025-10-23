@@ -1,4 +1,5 @@
 import argparse
+import re
 import requests
 from os import path
 from rdflib import Graph
@@ -192,6 +193,13 @@ def retrieveGndData(identifiers, outputFile, *, predicates=None, depth=0, maxDep
     :param maxDepth: The maximum recursion depth.
     :return: A dictionary with the status and a message.
     """
+
+    DEFAULT_GND_PREDICATES = [
+        "gndo:placeOfActivity",
+        "gndo:placeOfBirth",
+        "gndo:placeOfDeath"
+    ]
+
     # Read the output file and query for existing URIs
     existingIdentifiers = queryIdentifiersInFile(outputFile, "?identifier a gndo:AuthorityResource .")
     # Filter out existing identifiers
@@ -217,11 +225,7 @@ def retrieveGndData(identifiers, outputFile, *, predicates=None, depth=0, maxDep
     if depth < maxDepth:
         # Recursively retrieve data for any new identifiers found in the retrieved data
         if predicates is None:
-            predicates = [
-                "gndo:placeOfActivity",
-                "gndo:placeOfBirth",
-                "gndo:placeOfDeath"
-            ]
+            predicates = DEFAULT_GND_PREDICATES
         newIdentifiers = queryIdentifiersInFile(outputFile, "?entity ?predicate ?identifier . VALUES (?predicate) { %s }" % ' '.join(f"({p})" for p in predicates))
         identifiersToRetrieve = [d for d in newIdentifiers if d not in existingIdentifiers]
         if len(identifiersToRetrieve) > 0:
@@ -302,7 +306,7 @@ def retrieveLtData(identifiers, outputFile):
         "message": "Retrieved %d additional LIDO Terminology identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
-def retrieveWdData(identifiers, outputFile):
+def retrieveWdData(identifiers, outputFile, *, constructQuery=None):
     """
     Retrieves the data for the given identifiers and writes it to a file named wd.ttl in the specified output file.
     Only the data for the identifiers that are not already in the file is retrieved.
@@ -310,6 +314,21 @@ def retrieveWdData(identifiers, outputFile):
     :param identifiers: The list of identifiers to retrieve.
     :param outputFile: The file path where the data is written.
     :return: A dictionary with the status and a message.
+    """
+
+    DEFAULT_WD_CONSTRUCT_QUERY = """
+        PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        CONSTRUCT {
+        ?entity rdfs:label ?label ;
+                wdt:P625 ?coordinates ;
+                wdt:P18 ?image .
+        }
+        WHERE {
+            { ?entity rdfs:label ?label . FILTER(LANG(?label) = "de") }
+            UNION { ?entity wdt:P625 ?coordinates . }
+            UNION { ?entity wdt:P18 ?image . }
+        }
     """
 
     def chunker(seq, size):
@@ -335,53 +354,15 @@ def retrieveWdData(identifiers, outputFile):
     sparql = SPARQLWrapper(wdEndpoint, agent=agent)    
     # with open(targetFile, 'a') as outputFile:
     with open(outputFile, 'a') as outputFile:
+        if constructQuery is None:
+            constructQuery = DEFAULT_WD_CONSTRUCT_QUERY
         print("Retrieving %d Wikidata identifiers in %d chunks" % (len(identifiersToRetrieve), (len(identifiersToRetrieve) + batchSizeForRetrieval - 1) // batchSizeForRetrieval))
         for batch in tqdm(chunker(identifiersToRetrieve, batchSizeForRetrieval)):
-            query = """
-                PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                CONSTRUCT {
-                    ?entity wdt:P31 ?type ;
-                        rdfs:label ?label ;
-                        wdt:P625 ?coordinates ;
-                        wdt:P18 ?image ;
-                        wdt:P19 ?placeOfBirth ;
-                        wdt:P20 ?placeOfDeath .
-                    ?placeOfBirth wdt:P31 ?placeOfBirthType ;
-                        rdfs:label ?placeOfBirthLabel ;
-                        wdt:P625 ?placeOfBirthCoordinates .
-                    ?placeOfDeath wdt:P31 ?placeOfDeathType ;
-                        rdfs:label ?placeOfDeathLabel ;
-                        wdt:P625 ?placeOfDeathCoordinates .
-                } WHERE {
-                    {
-                        ?entity wdt:P31 ?type .
-                    } UNION {
-                        ?entity rdfs:label ?label .
-                        FILTER(LANG(?label) = "de")
-                    } UNION {
-                        ?entity wdt:P625 ?coordinates .
-                    } UNION {
-                        ?entity wdt:P18 ?image .
-                    } UNION {
-                        ?entity wdt:P19 ?placeOfBirth .
-                        ?placeOfBirth wdt:P31 ?placeOfBirthType ;
-                            rdfs:label ?placeOfBirthLabel ;
-                            wdt:P625 ?placeOfBirthCoordinates .
-                        FILTER(LANG(?placeOfBirthLabel) = "de")
-                    } UNION {
-                        ?entity wdt:P20 ?placeOfDeath .
-                        ?placeOfDeath wdt:P31 ?placeOfDeathType ;
-                            rdfs:label ?placeOfDeathLabel ;
-                            wdt:P625 ?placeOfDeathCoordinates .
-                        FILTER(LANG(?placeOfDeathLabel) = "de")
-                    }
-                    VALUES (?entity) {
-                        %s
-                    }
-                }
-
-            """ % ( "(<" + ">)\n(<".join(batch) + ">)" )
+            valuesClause = """
+            VALUES (?entity) {
+                %s
+            }""" % ( "(<" + ">)\n(<".join(batch) + ">)" )
+            query = re.sub(r'\}\s*$', valuesClause + "\n}", constructQuery, flags=re.DOTALL)
             sparql.setQuery(query)
             try:
                 results = sparql.query().convert()
