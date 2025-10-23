@@ -53,7 +53,14 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
         results = sparqlResultToDict(sparql.query().convert())
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
         identifiers = [r["identifier"] for r in results]
-        if source in sourceRetrievalFunctions:
+        # If no identifiers are found, skip the source
+        if len(identifiers) == 0:
+            logs[source] = {
+                "status": "info",
+                "numRetrieved": 0,
+                "message": "No identifiers found for source %s" % source
+            }
+        elif source in sourceRetrievalFunctions:
             logs[source] = sourceRetrievalFunctions[source](identifiers, outputFileName, **(options.get(source, {}) if options else {}))
         else:
             logs[source] = {

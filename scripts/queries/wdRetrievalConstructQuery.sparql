@@ -18,7 +18,8 @@ CONSTRUCT {
         ?entity wdt:P31 ?type .
     } UNION {
         ?entity rdfs:label ?label .
-        FILTER(LANG(?label) = "de")
+        BIND(LANG(?label) AS ?labelLang)
+        FILTER(?labelLang = "de" || ?labelLang = "en")
     } UNION {
         ?entity wdt:P625 ?coordinates .
     } UNION {
@@ -28,12 +29,14 @@ CONSTRUCT {
         ?placeOfBirth wdt:P31 ?placeOfBirthType ;
             rdfs:label ?placeOfBirthLabel ;
             wdt:P625 ?placeOfBirthCoordinates .
-        FILTER(LANG(?placeOfBirthLabel) = "de")
+        BIND(LANG(?placeOfBirthLabel) AS ?labelLang)
+        FILTER(?labelLang = "de" || ?labelLang = "en")
     } UNION {
         ?entity wdt:P20 ?placeOfDeath .
         ?placeOfDeath wdt:P31 ?placeOfDeathType ;
             rdfs:label ?placeOfDeathLabel ;
             wdt:P625 ?placeOfDeathCoordinates .
-        FILTER(LANG(?placeOfDeathLabel) = "de")
+        BIND(LANG(?placeOfDeathLabel) AS ?labelLang)
+        FILTER(?labelLang = "de" || ?labelLang = "en")
     }
 }
