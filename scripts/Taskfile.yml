@@ -522,8 +522,10 @@ tasks:
       INGEST: True
       INGESTUPDATE: True
       INGESTNAMESPACE: https://data.skkg.ch/graph/externalData/
+      WDCONSTRUCTQUERY:
+        sh: cat /scripts/queries/wdRetrievalConstructQuery.sparql
     cmds:
-      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}} --sources "{{.SOURCES}}"
+      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}} --sources "{{.SOURCES}}" --wdConstructQuery '{{.WDCONSTRUCTQUERY}}'
       - for:
           - aat
           - gnd

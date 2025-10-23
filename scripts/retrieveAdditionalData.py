@@ -26,7 +26,7 @@ SOURCE_NAMESPACES  = {
     "wd": "http://www.wikidata.org/entity/"
 }
 
-def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None, ingestUpdate=False):
+def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None, ingestUpdate=False, options=None):
     """Retrieve additional data for URIs in the Triple Store from respective sources
 
     Args:
@@ -54,7 +54,7 @@ def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFileP
         outputFileName = path.join(outputFolder, "%s%s.ttl" % (outputFilePrefix, source))
         identifiers = [r["identifier"] for r in results]
         if source in sourceRetrievalFunctions:
-            logs[source] = sourceRetrievalFunctions[source](identifiers, outputFileName)
+            logs[source] = sourceRetrievalFunctions[source](identifiers, outputFileName, **(options.get(source, {}) if options else {}))
         else:
             logs[source] = {
                 "status": "error",
@@ -313,6 +313,7 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None):
     The data is retrieved from the Wikidata SPARQL Endpoint.
     :param identifiers: The list of identifiers to retrieve.
     :param outputFile: The file path where the data is written.
+    :param constructQuery: Optional custom CONSTRUCT query to use for data retrieval. VALUES clause for ?entity will be added automatically.
     :return: A dictionary with the status and a message.
     """
 
@@ -420,6 +421,7 @@ if __name__ == "__main__":
     parser.add_argument('--ingest', type=bool, default=False, help='Ingest the retrieved data into the Triple Store')
     parser.add_argument('--ingestNamespace', type=str, help='Namespace for named graphs where sources will be ingested to. The source name will be appended to the namespace.')
     parser.add_argument('--ingestUpdate', type=bool, default=False, help='Ingest the data only if new data has been retrieved')
+    parser.add_argument('--wdConstructQuery', type=str, help='Optional custom CONSTRUCT query to use for Wikidata data retrieval')
     args = parser.parse_args()
 
     if args.predicates is not None:
@@ -428,4 +430,10 @@ if __name__ == "__main__":
     if args.sources is not None:
         args.sources = [s.strip() for s in args.sources.split(",")]
 
-    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix, ingest=args.ingest, ingestNamespace=args.ingestNamespace, ingestUpdate=args.ingestUpdate)
+    options = {}
+    if args.wdConstructQuery is not None:
+        options['wd'] = {
+            'constructQuery': args.wdConstructQuery
+        }
+
+    runDataRetrieval(endpoint=args.endpoint, sources=args.sources, predicates=args.predicates, outputFolder=args.outputFolder, outputFilePrefix=args.outputFilePrefix, ingest=args.ingest, ingestNamespace=args.ingestNamespace, ingestUpdate=args.ingestUpdate, options=options)
