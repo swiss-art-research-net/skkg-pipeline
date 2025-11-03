@@ -44,7 +44,7 @@ services:
       - NUMBER_OF_DUMPS_TO_KEEP=${NUMBER_OF_DUMPS_TO_KEEP}
       - PROMETHEUS_MULTIPROC_DIR=/logs/prometheus
       - S3_BUCKET_PUSH=${S3_BUCKET_PUSH}
-      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
     ports:
       - $PORT_PROMETHEUS:8000
     secrets:
