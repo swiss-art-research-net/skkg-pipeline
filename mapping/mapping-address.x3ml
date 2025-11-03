@@ -30,6 +30,7 @@
             <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
+            <namespace prefix="geo" uri="http://www.opengis.net/ont/geosparql#"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -784,6 +785,37 @@
                                         </label_generator>
                                     </entity>
                                 </additional>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="_UserAdr4712Num">@name</equals>
+                                    </if>
+                                    <if>
+                                        <exists>../dataField[@name='_UserAdr6992Num']/value/text()</exists>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>crm:P168_place_is_defined_by</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>geo:wktLiteral</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">concat("Point(", value/text(), " ", ../dataField[@name="_UserAdr6992Num"]/value/text(), ")")</arg>
+                                </instance_generator>
                             </entity>
                         </target_node>
                     </range>
