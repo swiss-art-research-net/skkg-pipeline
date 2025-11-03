@@ -9,7 +9,7 @@ tasks:
     cmds:
       - for:
             - module: Address
-              ids: 260a0a70-4d26-4f15-8b27-d87243c47c24,0df1724d-e9e8-4b0c-96db-bc1ee4696000,0b5918d4-c549-4477-8c82-159314e3b525,3a7892e0-9d41-4561-9595-42070e0b9e66,287ee736-19da-4806-a722-c3e389ab8c4a
+              ids: 8,335be109-2b6b-4353-8ea6-b68237fed732,260a0a70-4d26-4f15-8b27-d87243c47c24,0df1724d-e9e8-4b0c-96db-bc1ee4696000,0b5918d4-c549-4477-8c82-159314e3b525,3a7892e0-9d41-4561-9595-42070e0b9e66,287ee736-19da-4806-a722-c3e389ab8c4a
             - module: Exhibition
               ids: 4,152,164,cf5ce8dc-e90b-4c8e-b5a0-422024be35de,ed92b106-0629-400b-b0d4-ca8f940eab1c
             - module: Object
