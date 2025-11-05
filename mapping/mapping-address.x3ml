@@ -467,6 +467,17 @@
                                     <arg name="level1" type="constant">altname</arg>
                                     <arg name="level2" type="xpath">@uuid</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat(
+  if (dataField[@name="ForeNameTxt"]/value/text())
+  then concat(dataField[@name="ForeNameTxt"]/value/text(), ' ')
+  else '',
+  if (dataField[@name="SurNameTxt"]/value/text())
+  then dataField[@name="SurNameTxt"]/value/text()
+  else ''
+)</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                                 <additional>
                                     <relationship>crm:P2_has_type</relationship>
                                     <entity>
