@@ -58,7 +58,7 @@ services:
       - ./services/platform/apps:/apps
 
   platform:
-    image: swissartresearx/researchspace:d3772173099ab67bd0cccd02ea8127b979e59add
+    image: swissartresearx/researchspace:3559d782b7e4070d846215952948646cc21c2bae
     container_name: ${PROJECT_NAME}_platform
     restart: unless-stopped
     depends_on:
