@@ -696,7 +696,7 @@ tasks:
   validate-turtle-file:
     desc: Validate a Turtle file using SHACL. Pass the file to validate through command line argument
     cmds:
-      - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs -m -i rdfs -a -j -f turtle {{.CLI_ARGS}}
+      - pyshacl -s /mapping/shapesGraph.ttl -e /mapping/schemas/skkg-ontology.ttl -e /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs -ef xml -m -i none -a -j -f turtle {{.CLI_ARGS}}
 
   _combine_and_ingest_shacl_reports:
     internal: true
@@ -1141,7 +1141,7 @@ tasks:
     vars:
       SHAPES_GRAPH: /mapping/shapesGraph.ttl
       SCHEMA_SKKG: /mapping/schemas/skkg-ontology.ttl
-      SCHEMA_CRM: https://cidoc-crm.org/rdfs/7.1.1/CIDOC_CRM_v7.1.1.rdfs
+      SCHEMA_CRM: /mapping/schemas/CIDOC_CRM_7.1.1_RDFS_Impl_v1.1.rdfs
       REPORTS_GRAPH: "{{.NAMESPACE}}graph/shaclReports"
       LIMIT: 50
       TEMP_FOLDER: /data/temp/validate
@@ -1160,7 +1160,7 @@ tasks:
         count=1
         for f in $(find {{.FOLDER}} -type f -name '*.ttl' | head -n {{.LIMIT}}); do
           echo "Validating file $count of $numfiles: $f"
-          pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -m -i rdfs -a -j -f turtle $f -o {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f) || true
+          pyshacl -s {{.SHAPES_GRAPH}} -e {{.SCHEMA_SKKG}} -e {{.SCHEMA_CRM}} -ef xml -m -i none -a -j -f turtle $f -o {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f) || true
           # Delete the report output file if it does conform
           if grep -q 'sh:conforms true' {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f); then
             rm {{.TEMP_FOLDER}}/{{.FILE_PREFIX}}$(basename $f)
