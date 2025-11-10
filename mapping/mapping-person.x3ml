@@ -1274,6 +1274,15 @@
                                     <arg name="level1" type="constant">birth</arg>
                                     <arg name="level2" type="constant">place</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">if
+ (../../dataField[@name='PlaceTxt']/value/text())
+then
+ (../../dataField[@name='PlaceTxt']/value/text())
+else
+("place of birth (not further specified)")</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P89_falls_within</relationship>
                         </target_relation>
@@ -1555,6 +1564,15 @@
                                     <arg name="level1" type="constant">death</arg>
                                     <arg name="level2" type="constant">place</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">if
+ (../../dataField[@name='PlaceTxt']/value/text())
+then
+ (../../dataField[@name='PlaceTxt']/value/text())
+else
+("place of death (not further specified)")</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P89_falls_within</relationship>
                         </target_relation>
@@ -1836,6 +1854,15 @@
                                     <arg name="level1" type="constant">formation</arg>
                                     <arg name="level2" type="constant">place</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">if
+ (../../dataField[@name='PlaceTxt']/value/text())
+then
+ (../../dataField[@name='PlaceTxt']/value/text())
+else
+("place of formation (not further specified)")</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P89_falls_within</relationship>
                         </target_relation>
@@ -2117,6 +2144,15 @@
                                     <arg name="level1" type="constant">dissolution</arg>
                                     <arg name="level2" type="constant">place</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">if
+ (../../dataField[@name='PlaceTxt']/value/text())
+then
+ (../../dataField[@name='PlaceTxt']/value/text())
+else
+("place of dissolution (not further specified)")</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                             <relationship>crm:P89_falls_within</relationship>
                         </target_relation>
