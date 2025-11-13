@@ -17,7 +17,7 @@ Arguments:
 
 import argparse
 from lib.Preprocessor import getPreprocessor
-import lib.SkkgPreprocessors # To ensure SkkgPreprocessors are registered
+import lib.SkkgPreprocessors # To ensure SKKG Preprocessors are registered
 from datetime import datetime
 from os import listdir
 from os.path import join, isfile
