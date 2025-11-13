@@ -2,10 +2,11 @@
 This script applies the data preprocessing steps for the example file that is generated for use with the X3ML mapping tool.
 """
 
-from lib.Preprocessors import Preprocessors
+from lib.Preprocessor import getPreprocessor
+import lib.SkkgPreprocessors # To ensure SKKG Preprocessors are registered
 
 def applyPreprocessing(*, file, module):
-    preprocessor = Preprocessors.getPreprocessor(module)
+    preprocessor = getPreprocessor(module)
     print("Preprocessing file:", file, "with module:", module)
     with open(file, 'r') as f:
         contents = f.read()
@@ -15,8 +16,6 @@ def applyPreprocessing(*, file, module):
 
 if __name__ == "__main__":
     import argparse
-    from os.path import join
-    from lib.Preprocessors import Preprocessors
 
     parser = argparse.ArgumentParser()
 

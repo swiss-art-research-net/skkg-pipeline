@@ -16,7 +16,8 @@ Arguments:
 """
 
 import argparse
-from lib.Preprocessors import Preprocessors
+from lib.Preprocessor import getPreprocessor
+import lib.SkkgPreprocessors # To ensure SKKG Preprocessors are registered
 from datetime import datetime
 from os import listdir
 from os.path import join, isfile
@@ -41,7 +42,7 @@ def prepareDataForMapping(*, module, inputFolder, outputFolder, filenamePrefix='
     else:
         offset = int(offset)
 
-    preprocessor = Preprocessors.getPreprocessor(module)
+    preprocessor = getPreprocessor(module)
 
     for file in files[offset:offset+limit]:
         if ids is not None or shouldBeMapped(file=file, metadata=metadata):
