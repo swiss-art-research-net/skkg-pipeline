@@ -53,7 +53,7 @@ class ObjectPreprocessor(BasePreprocessor):
                     latestItem.set(f'{self.PREFIX}latest', 'true')
         return root
 
-@registerPreprocessor('Ownership') 
+@registerPreprocessor('Ownership')
 class OwnershipPreprocessor(BasePreprocessor):
     """
     Preprocessor for the Ownership module.
