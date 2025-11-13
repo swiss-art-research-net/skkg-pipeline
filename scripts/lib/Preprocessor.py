@@ -1,18 +1,27 @@
 """
-This file contains the Preprocessor classes for the different modules. It contains a function
-that returns the appropriate preprocessor based on the module name.
+This file contains the base preprocessor class and the preprocessor registry. Preprocessors
+are used to apply generic and module-specific preprocessing steps to the XML data before it is mapped.
 
-The preprocess function in each preprocessor class takes the content of an input file as a string
-and returns the preprocessed content as a string.
+To create a new preprocessor for a module, create a new class that inherits from BasePreprocessor
+and implement the preprocess function. Register the preprocessor using the @registerPreprocessor
+decorator with the module name as the argument.
 
-The preprocess function in the BasePreprocessor class contains the common preprocessing steps
-that are shared across all modules. If no specific preprocessor is found for a module, the
-BasePreprocessor is returned.
+    from .Preprocessor import BasePreprocessor, registerPreprocessor
 
-Usage:
-    preprocessor = Preprocessors.getPreprocessor('Literature')
+    @registerPreprocessor('Literature')
+    class LiteraturePreprocessor(BasePreprocessor):
+        def preprocess(self, content: str) -> str:
+            content = super().preprocess(content)
+            root = super().parseXML(content)
+            dateFieldSelectors = [".//dataField[@name='LitYearTxt']"]
+            root = super().processDateFields(root, dateFieldSelectors)
+            return super().dumpXML(root)
+
+To use a preprocessor, call the getPreprocessor function with the module name
+and call the preprocess function on the returned preprocessor instance.
+
+    preprocessor = getPreprocessor('Literature')
     preprocessedContent = preprocessor.preprocess(content)
-
 """
 
 from abc import ABC, abstractmethod
