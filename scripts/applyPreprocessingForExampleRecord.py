@@ -3,7 +3,7 @@ This script applies the data preprocessing steps for the example file that is ge
 """
 
 from lib.Preprocessor import getPreprocessor
-import lib.SkkgPreprocessors # To ensure SkkgPreprocessors are registered
+import lib.SkkgPreprocessors # To ensure SKKG Preprocessors are registered
 
 def applyPreprocessing(*, file, module):
     preprocessor = getPreprocessor(module)
