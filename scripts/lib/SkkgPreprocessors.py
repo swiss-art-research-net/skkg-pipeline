@@ -100,7 +100,7 @@ class OwnershipPreprocessor(BasePreprocessor):
         root = self.addTransactionTypeData(root)
         return super().dumpXML(root)
 
-@registerPreprocessor('Person')   
+@registerPreprocessor('Person')
 class PersonPreprocessor(BasePreprocessor):
     """
     Preprocessor for the Person module.
