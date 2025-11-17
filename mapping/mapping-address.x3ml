@@ -31,6 +31,7 @@
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
             <namespace prefix="geo" uri="http://www.opengis.net/ont/geosparql#"/>
+            <namespace prefix="schema" uri="http://schema.org/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -826,6 +827,54 @@
                                 <type>geo:wktLiteral</type>
                                 <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">concat("Point(", value/text(), " ", ../dataField[@name="_UserAdr6992Num"]/value/text(), ")")</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="_UserAdr4712Num">@name</equals>
+                            </if>
+                            <relationship>schema:longitude</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:float</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="_UserAdr6992Num">@name</equals>
+                            </if>
+                            <relationship>schema:latitude</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:float</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
                                 </instance_generator>
                             </entity>
                         </target_node>
