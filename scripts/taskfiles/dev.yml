@@ -71,3 +71,13 @@ tasks:
       - sed -i 's/<\/application>//g' {{.OUTPUTFILE}}
       - echo '<application><modules>' | cat - {{.OUTPUTFILE}} > temp && mv temp {{.OUTPUTFILE}}; echo '</modules></application>' >> {{.OUTPUTFILE}}
       - python /scripts/applyPreprocessingForExampleRecord.py --file {{.OUTPUTFILE}} --module {{.MODULE_UCFIRST}}
+    
+  synchronise-internationalisation:
+    desc: Synchronises the internationalisation files with the messages.properties file. Pass the DEEPL API key as a CLI argument or through the environment variable DEEPLKEY.
+    vars:
+      DIRECTORY: /apps/skkg/data/i18n
+      DEEPLKEY: 
+        sh: if [ -z "$DEEPLKEY" ]; then echo "{{.CLI_ARGS}}"; else echo "$DEEPLKEY"; fi
+    cmds:
+      - python /apps/skkg/src/synchroniseI18nFiles.py --inputDir {{.DIRECTORY}} --deeplKey {{.DEEPLKEY}}
+  

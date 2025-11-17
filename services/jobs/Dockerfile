@@ -35,6 +35,7 @@ RUN pip install --no-cache-dir \
     lxml \
     urllib3 \
     requests \
+    deepl \
     edtf \
     tqdm \
     rdflib \
