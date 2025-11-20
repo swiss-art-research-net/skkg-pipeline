@@ -31,6 +31,7 @@
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
             <namespace prefix="owl" uri="http://www.w3.org/2002/07/owl#"/>
+            <namespace prefix="gndo" uri="http://d-nb.info/standards/elementset/gnd#"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -441,6 +442,7 @@
                         <target_node>
                             <entity>
                                 <type>crm:E39_Actor</type>
+                                <type>gndo:AuthorityResource</type>
                                 <instance_generator name="URIorUUID">
                                     <arg name="text" type="xpath">@name</arg>
                                 </instance_generator>
@@ -469,6 +471,7 @@
                         <target_node>
                             <entity>
                                 <type>crm:E39_Actor</type>
+                                <type>wd:Q35120</type>
                                 <instance_generator name="URIwithWikidataId">
                                     <arg name="id" type="xpath">dataField[@name="AddressTxt"]/value/text()</arg>
                                 </instance_generator>
