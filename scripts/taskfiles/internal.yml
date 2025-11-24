@@ -15,7 +15,17 @@ tasks:
     cmds:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
       - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
+      - # Add main data
       - find /data/ttl/main/ -name "*.ttl" -exec cat {} + > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - # Add external data
+      - find /data/ttl/additional/external/ -name "*.ttl" -exec cat {} + >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - # Add alignments
+      - find /data/ttl/additional/alignments/ -name "*.ttl" -exec cat {} + >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - # Add .ttl ontologies
+      - find /mapping/schemas -name "*.ttl" -exec cat {} + >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - # Add .rdf and .rdfs ontologies converted to .ttl
+      - find /mapping/schemas -name '*.rdf' -exec sh -c 'rapper -q -i rdfxml -o turtle "$1" >> "$2"' _ {} {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl \;
+      - find /mapping/schemas -name '*.rdfs' -exec sh -c 'rapper -q -i rdfxml -o turtle "$1" >> "$2"' _ {} {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl \;
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
@@ -125,6 +135,10 @@ tasks:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - gzip -c {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz
       - rm -f {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+      - # Remove old dumps if NUMBER_OF_DUMPS_TO_KEEP is set
+      - if [ -n "$NUMBER_OF_DUMPS_TO_KEEP" ]; then
+          ls -t {{.OUTPUTFOLDER_DUMP}}/partial-dump-*.ttl.gz | tail -n +$(($NUMBER_OF_DUMPS_TO_KEEP+1)) | xargs rm -f;
+        fi
       - echo "Partial data dump created at {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz" 
 
   generate-multimedia-filename-csv:
