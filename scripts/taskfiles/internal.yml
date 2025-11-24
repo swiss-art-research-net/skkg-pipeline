@@ -26,6 +26,8 @@ tasks:
       - # Add .rdf and .rdfs ontologies converted to .ttl -> OMIT for now due to wrong namespace in Linked Art ontology files
       - #find /mapping/schemas -name '*.rdf' -exec sh -c 'rapper -q -i rdfxml -o turtle "$1" >> "$2"' _ {} {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl \;
       - #find /mapping/schemas -name '*.rdfs' -exec sh -c 'rapper -q -i rdfxml -o turtle "$1" >> "$2"' _ {} {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl \;
+      - # Remove wrong prefix defind in LT external data
+      - sed -i '' '/^@prefix owl: *<http:\/\/www.w3.org\/TR\/owl-semantics\/> *\./d' {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
