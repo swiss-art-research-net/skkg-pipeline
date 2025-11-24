@@ -23,9 +23,9 @@ tasks:
       - find /data/ttl/additional/alignments/ -name "*.ttl" -exec cat {} + >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
       - # Add .ttl ontologies
       - find /mapping/schemas -name "*.ttl" -exec cat {} + >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
-      - # Add .rdf and .rdfs ontologies converted to .ttl
-      - find /mapping/schemas -name '*.rdf' -exec sh -c 'rapper -q -i rdfxml -o turtle "$1" >> "$2"' _ {} {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl \;
-      - find /mapping/schemas -name '*.rdfs' -exec sh -c 'rapper -q -i rdfxml -o turtle "$1" >> "$2"' _ {} {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl \;
+      - # Add .rdf and .rdfs ontologies converted to .ttl -> OMIT for now due to wrong namespace in Linked Art ontology files
+      - #find /mapping/schemas -name '*.rdf' -exec sh -c 'rapper -q -i rdfxml -o turtle "$1" >> "$2"' _ {} {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl \;
+      - #find /mapping/schemas -name '*.rdfs' -exec sh -c 'rapper -q -i rdfxml -o turtle "$1" >> "$2"' _ {} {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl \;
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
