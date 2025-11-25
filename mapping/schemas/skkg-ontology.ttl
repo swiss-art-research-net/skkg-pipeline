@@ -121,13 +121,4 @@ type:pageref rdf:type skkg:Type, skos:Concept ;
 type:sortlnu rdf:type skkg:Type, skos:Concept ;
     rdfs:label "SortLnu", "Sortierung"@de ;
     skos:prefLabel "Sortierung"@de .
-
-#################################################################
-#    Alignments
-#################################################################
-
-# Dok_Dokumentation related to AAT term "PDF"
-<https://data.skkg.ch/type/43088/271965> skos:related aat:300266022 .
-
-# Prov_Datenblatt related to AAT term "PDF"
-<https://data.skkg.ch/type/43088/260971> skos:related aat:300266022 .
+    
