@@ -46,11 +46,11 @@
                                 <arg name="id" type="xpath">@uuid</arg>
                             </instance_generator>
                             <label_generator name="Literal">
-                                <arg name="text" type="xpath">dataField[@name="OgrNameTxt"]/value/text()</arg>
+                                <arg name="text" type="xpath">replace(dataField[@name="OgrNameTxt"]/value/text(), "_public", "")</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
                             <label_generator name="prefLabel">
-                                <arg name="text" type="xpath">dataField[@name="OgrNameTxt"]/value/text()</arg>
+                                <arg name="text" type="xpath">replace(dataField[@name="OgrNameTxt"]/value/text(), "_public", "")</arg>
                                 <arg name="language" type="constant"/>
                             </label_generator>
                         </entity>
@@ -76,7 +76,7 @@
                                     <arg name="level1" type="constant">meta</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">concat('metadata for objectgroup: ', if (dataField[@name="OgrNameTxt"]/value/text()) then (dataField[@name="OgrNameTxt"]/value/text()) else (@uuid))</arg>
+                                    <arg name="text" type="xpath">concat('metadata for objectgroup: ', if (dataField[@name="OgrNameTxt"]/value/text()) then (replace(dataField[@name="OgrNameTxt"]/value/text(), "_public", "")) else (@uuid))</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
                             </entity>
