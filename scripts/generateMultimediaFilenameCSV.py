@@ -44,6 +44,14 @@ def generateMultimediaFilenameCSV(*, multimediaFolder: str, objectsFolder: str, 
         multimediaItems[uuid]['moduleId'] = tree.find('.//ns:moduleItem', namespaces=NAMESPACES).get('id')
         # Retrieve usage
         multimediaItems[uuid]['usage'] = tree.find('.//ns:moduleItem/ns:vocabularyReference[@instanceName="MulUsageVgr"]/ns:vocabularyReferenceItem/ns:formattedValue', namespaces=NAMESPACES).text
+
+        # Get category to determine if it should be included via IIIF
+        multimediaItems[uuid]['serveViaIIIF'] = True
+        categoryElement = tree.find('.//ns:moduleItem/ns:vocabularyReference[@instanceName="MulCategoryVgr"]/ns:vocabularyReferenceItem', namespaces=NAMESPACES)
+        if categoryElement is not None:
+            categoryID = categoryElement.get('id')
+            if categoryID in ['271965', '260971']:  # PDF or other non-IIIF categories
+                multimediaItems[uuid]['serveViaIIIF'] = False
     
     for file in tqdm(objectFiles):
         tree = etree.parse(join(objectsFolder, file))
@@ -97,7 +105,7 @@ def generateMultimediaFilenameCSV(*, multimediaFolder: str, objectsFolder: str, 
     
     # Write output to CSV
     with open(outputFile, 'w') as f:
-        writer = DictWriter(f, fieldnames=('uuid' ,'filename','multimediaId','objectUuids','objectIds','objectInvNrs', 'usage'))
+        writer = DictWriter(f, fieldnames=('uuid' ,'filename','multimediaId','objectUuids','objectIds','objectInvNrs', 'usage', 'serveViaIIIF'))
         writer.writeheader()
         for uuid in uuids:
             item = multimediaItems[uuid]
@@ -110,6 +118,7 @@ def generateMultimediaFilenameCSV(*, multimediaFolder: str, objectsFolder: str, 
                     'objectIds': ';'.join(item['objectIds']) if 'objectIds' in item else '',
                     'objectInvNrs': ';'.join(item['objectInvNrs']) if 'objectInvNrs' in item else '',
                     'usage': item['usage'],
+                    'serveViaIIIF': item['serveViaIIIF']
                 }
                 writer.writerow(row)
 

@@ -561,6 +561,7 @@ tasks:
   reset-iiif:
     desc: Delete all artefacts produced by the pipeline for the iiif data.
     cmds: 
+      - echo "Deleting IIIF data..."
       - rm -rf /data/ttl/main/iiif
       - rm -rf /mapping/input/iiif
       - rm -rf /mapping/output/iiif
@@ -600,6 +601,7 @@ tasks:
   reset-vocabularies:
     desc: Delete all artefacts produced by the pipeline for the vocabularies.
     cmds: 
+      - echo "Deleting vocabularies data..."
       - rm -rf /data/ttl/main/vocabularies
       - rm -rf /mapping/input/vocabularies
       - rm -rf /mapping/output/vocabularies
