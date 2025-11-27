@@ -18,7 +18,6 @@
         <namespace prefix="rso" uri="http://www.researchspace.org/ontology/" />
         <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
         <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
-        <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/"/>
         <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
         <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
         <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>

@@ -44,7 +44,6 @@ PREFIX aat:   <http://vocab.getty.edu/aat/>
 PREFIX oai:   <http://www.openarchives.org/OAI/2.0/>
 PREFIX xml:   <http://www.w3.org/XML/1998/namespace>
 PREFIX dcterms: <http://purl.org/dc/terms/>
-PREFIX sikart: <https://recherche.sik-isea.ch/>
 PREFIX gnd:   <https://d-nb.info/gnd/>
 PREFIX crm:   <http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX mets:  <http://www.loc.gov/METS/>
