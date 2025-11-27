@@ -67,6 +67,12 @@
 
 <https://data.skkg.ch/type/21118/136727> skos:closeMatch aat:300025574 .
 
+# Dok_Dokumentation related to AAT term "PDF"
+<https://data.skkg.ch/type/43088/271965> skos:related aat:300266022 .
+
+# Prov_Datenblatt related to AAT term "PDF"
+<https://data.skkg.ch/type/43088/260971> skos:related aat:300266022 .
+
 # Mapping between LIDO and AAT
 
 lt:lido00226 a skos:Concept;

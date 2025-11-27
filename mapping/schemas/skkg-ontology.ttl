@@ -121,3 +121,4 @@ type:pageref rdf:type skkg:Type, skos:Concept ;
 type:sortlnu rdf:type skkg:Type, skos:Concept ;
     rdfs:label "SortLnu", "Sortierung"@de ;
     skos:prefLabel "Sortierung"@de .
+    
