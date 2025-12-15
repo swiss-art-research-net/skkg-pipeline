@@ -145,10 +145,9 @@ class OwnershipPreprocessor(BasePreprocessor):
                 crmType = typeMappings.get(acquisitionId)
                 if not crmType:
                     crmType = typeMappings.get('default')
-                if crmType:
-                    transaction_elem = ET.SubElement(moduleItem, f'{self.PREFIX}transaction')
-                    transaction_elem.set('type', crmType['type'])
-                    transaction_elem.set('label', crmType['label'])
+                transaction_elem = ET.SubElement(moduleItem, f'{self.PREFIX}transaction')
+                transaction_elem.set('type', crmType['type'])
+                transaction_elem.set('label', crmType['label'])
         return root
     
     def preprocess(self, content: str) -> str:
