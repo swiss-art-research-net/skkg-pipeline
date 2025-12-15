@@ -96,7 +96,6 @@ class OwnershipPreprocessor(BasePreprocessor):
             None: {
                 None: {'type': 'E7_Activity', 'label': 'activity'},
                 'default': {'type': 'E7_Activity', 'label': 'activity'},
-                '231996': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'},
                 '231997': {'type': 'E7_Activity', 'label': 'activity'},
                 '231993': {'type': 'E8_Acquisition', 'label': 'acquisition'},
                 '231994': {'type': 'E8_Acquisition', 'label': 'acquisition'}
