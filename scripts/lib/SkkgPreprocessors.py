@@ -104,7 +104,7 @@ class OwnershipPreprocessor(BasePreprocessor):
             '234014': {
                 'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'},
             },
-            '233966x': {
+            '233966': {
                 'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'}
             },
             '233967': {
