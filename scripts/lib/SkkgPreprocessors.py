@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+import logging
 
 from .Preprocessor import BasePreprocessor, registerPreprocessor
 
@@ -89,6 +90,7 @@ class OwnershipPreprocessor(BasePreprocessor):
         |Private Sammlung    |231987      |Erwerbsart unbekannt |231997           |E8 Acquisition         |
 
         """
+        logger = logging.getLogger(__name__)
         # Mappings
         mappings = {
             None: {
@@ -102,7 +104,7 @@ class OwnershipPreprocessor(BasePreprocessor):
             '234014': {
                 'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'},
             },
-            '233966': {
+            '233966x': {
                 'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'}
             },
             '233967': {
@@ -145,9 +147,15 @@ class OwnershipPreprocessor(BasePreprocessor):
                 crmType = typeMappings.get(acquisitionId)
                 if not crmType:
                     crmType = typeMappings.get('default')
-                transaction_elem = ET.SubElement(moduleItem, f'{self.PREFIX}transaction')
-                transaction_elem.set('type', crmType['type'])
-                transaction_elem.set('label', crmType['label'])
+                if crmType is not None:
+                    transaction_elem = ET.SubElement(moduleItem, f'{self.PREFIX}transaction')
+                    transaction_elem.set('type', crmType['type'])
+                    transaction_elem.set('label', crmType['label'])
+                else:
+                    logger.error(f'No mapping found for typeId {typeId} and acquisitionId {acquisitionId}')
+            else:
+                logger.error(f'No mapping found for typeId {typeId}.')
+
         return root
     
     def preprocess(self, content: str) -> str:
