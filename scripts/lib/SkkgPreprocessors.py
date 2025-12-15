@@ -60,29 +60,93 @@ class OwnershipPreprocessor(BasePreprocessor):
     """
     def addTransactionTypeData(self, root: ET.Element) -> ET.Element:
         """
-        Depending on the transaction type, which is specified in the OwsOwnerTypeVoc vocabulary reference field,
+        Depending on the transaction type, which is specified in the OwsOwnerTypeVoc vocabulary reference field, 
+        and the type of acquisition, which is specified in the OwsAcquisitionTypeVoc vocabulary reference field,
         we add a tag to the XML element that indicates the type of CIDOC-CRM Activity that best matches the transaction
         in reference to the Linked.Art provenance types (https://linked.art/model/provenance).
+
+        The mappings are as follows:
+        |Art Besitz          |OwsOwnerType|Erwerbsart           |OwsAcquisitionType|Mapping                |
+        |--------------------|------------|---------------------|-----------------|-----------------------|
+        |<leer>              |            |<leer>               |                 |E7 Activity            |
+        |<kein Beispiel>     |            |erhalten als Leihgabe|231996           |E10 Transfer of Custody|
+        |<leer>              |            |Erwerbsart unbekannt |231997           |E7 Activity            |
+        |<leer>              |            |erworben auf Auktion |231993           |E8 Acquisition         |
+        |<leer>              |            |geerbt               |231994           |E8 Acquisition         |
+        |Auslagerung         |234014      |                     |                 |E10 Transfer of Custody|
+        |Besitz              |233966      |<leer>               |                 |E10 Transfer of Custody|
+        |Besitz              |233966      |erworben auf Auktion |231993           |E8 Acquisition         |
+        |Eigentum            |233967      |<leer>               |                 |E8 Acquisition         |
+        |Eigentum            |233967      |erhalten im Tausch   |265972           |E8 Acquisition         |
+        |Eigentum            |233967      |Erwerbsart unbekannt |231997           |E8 Acquisition         |
+        |Eigentum            |233967      |erworben als Kauf    |231995           |E8 Acquisition         |
+        |Eigentum            |233967      |erworben auf Auktion |231993           |E8 Acquisition         |
+        |Eigentum            |233967      |geerbt               |231994           |E8 Acquisition         |
+        |Einlagerung         |233965      |                     |                 |E10 Transfer of Custody|
+        |Kommissionsware     |231984      |<leer>               |                 |E10 Transfer of Custody|
+        |Leihgabe            |233964      |                     |                 |E10 Transfer of Custody|
+        |Öffentliche Sammlung|231985      |                     |                 |E10 Transfer of Custody
+        |Privatbesitz        |231986      |<leer>               |                 |E8 Acquisition         |
+        |Private Sammlung    |231987      |Erwerbsart unbekannt |231997           |E8 Acquisition         |
+
         """
         # Mappings
         mappings = {
-            '234014': {'type': 'crm:E9_Move', 'label': 'move'},
-            '233966': {'type': 'crm:E10_Transfer_of_Custody', 'label': 'transfer of custody'},
-            '233967': {'type': 'crm:E8_Acquisition', 'label': 'acquisition'},
-            '233965': {'type': 'crm:E9_Move', 'label': 'move'},
-            '231984': {'type': 'crm:E10_Transfer_of_Custody', 'label': 'transfer of custody'},
-            '233964': {'type': 'crm:E10_Transfer_of_Custody', 'label': 'transfer of custody'},
-            '231986': {'type': 'crm:E10_Transfer_of_Custody', 'label': 'transfer of custody'},
-            '231987': {'type': 'crm:E8_Acquisition', 'label': 'acquisition'},
-            '231985': {'type': 'crm:E8_Acquisition', 'label': 'acquisition'}
+            None: {
+                None: {'type': 'E7_Activity', 'label': 'activity'},
+                'default': {'type': 'E7_Activity', 'label': 'activity'},
+                '231996': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'},
+                '231997': {'type': 'E7_Activity', 'label': 'activity'},
+                '231993': {'type': 'E8_Acquisition', 'label': 'acquisition'},
+                '231994': {'type': 'E8_Acquisition', 'label': 'acquisition'}
+            },
+            '234014': {
+                'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'},
+            },
+            '233966': {
+                None: {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'},
+                'default': {'type': 'E8_Acquisition', 'label': 'acquisition'}
+            },
+            '233967': {
+                'default': {'type': 'E8_Acquisition', 'label': 'acquisition'}
+            },
+            '233965': {
+                'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'}
+            },
+            '231984': {
+                'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'}
+            },
+            '233964': {
+                'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'}
+            },
+            '231985': {
+                'default': {'type': 'E10_Transfer_of_Custody', 'label': 'transfer of custody'}
+            },
+            '231986': {
+                'default': {'type': 'E8_Acquisition', 'label': 'acquisition'}
+            },
+            '231987': {
+                'default': {'type': 'E8_Acquisition', 'label': 'acquisition'}
+            }
         }
         # Retrieve all vocabulary reference fields
         moduleItems = root.findall(".//moduleItem")
         for moduleItem in moduleItems:
             typeField = moduleItem.find(".//vocabularyReference[@name='OwsOwnerTypeVoc']/vocabularyReferenceItem")
-            if typeField is not None and 'id' in typeField.attrib:
-                typeId = typeField.attrib['id']
-                crmType = mappings.get(typeId)
+            acquisitionField = moduleItem.find(".//vocabularyReference[@name='OwsAcquisitionTypeVoc']/vocabularyReferenceItem")
+            if typeField is None:
+                typeId = None
+            else:
+                typeId = typeField.attrib.get('id')
+            if acquisitionField is None:
+                acquisitionId = None
+            else:
+                acquisitionId = acquisitionField.attrib.get('id')
+            typeMappings = mappings.get(typeId)
+            if typeMappings:
+                crmType = typeMappings.get(acquisitionId)
+                if not crmType:
+                    crmType = typeMappings.get('default')
                 if crmType:
                     transaction_elem = ET.SubElement(moduleItem, f'{self.PREFIX}transaction')
                     transaction_elem.set('type', crmType['type'])
