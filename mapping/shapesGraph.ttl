@@ -47,6 +47,6 @@ skkg:ProvenanceShape a sh:NodeShape ;
     sh:targetClass skkg:Provenance ;
     sh:property [
         sh:path crm:P9_consists_of ;
-        sh:minCount 1 ;
-        sh:class crm:E7_Activity ;
+        sh:qualifiedValueShape [ sh:class crm:E7_Activity ] ;
+        sh:qualifiedMinCount 1 ;
     ] .
