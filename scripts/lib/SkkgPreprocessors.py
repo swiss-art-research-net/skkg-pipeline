@@ -70,12 +70,12 @@ class OwnershipPreprocessor(BasePreprocessor):
         |Art Besitz          |OwsOwnerType|Erwerbsart           |OwsAcquisitionType|Mapping                |
         |--------------------|------------|---------------------|-----------------|-----------------------|
         |<leer>              |            |<leer>               |                 |E7 Activity            |
-        |<kein Beispiel>     |            |erhalten als Leihgabe|231996           |E10 Transfer of Custody|
         |<leer>              |            |Erwerbsart unbekannt |231997           |E7 Activity            |
         |<leer>              |            |erworben auf Auktion |231993           |E8 Acquisition         |
         |<leer>              |            |geerbt               |231994           |E8 Acquisition         |
         |Auslagerung         |234014      |                     |                 |E10 Transfer of Custody|
         |Besitz              |233966      |<leer>               |                 |E10 Transfer of Custody|
+        |Besitz              |233966      |erhalten als Leihgabe|231996           |E10 Transfer of Custody|
         |Eigentum            |233967      |<leer>               |                 |E8 Acquisition         |
         |Eigentum            |233967      |erhalten im Tausch   |265972           |E8 Acquisition         |
         |Eigentum            |233967      |Erwerbsart unbekannt |231997           |E8 Acquisition         |
