@@ -16,6 +16,8 @@ Arguments:
 
 import argparse
 import requests
+import sys
+import select
 import time
 from lxml import etree
 from os import remove as removeFile
@@ -35,6 +37,26 @@ def synchroniseItems(*, host, username, password, module, inputFolder, turtleFol
     metadata = ItemMetadata(inputFolder)
     files = metadata.listFiles()
     identifiersToRemove = []
+    # Check if total number of files locally match the number of items in the module
+    totalItemsInModule = client.getNumberOfItems(module=module, queryAddition=createXMLCopy(queryAddition))
+    
+    if totalItemsInModule == len(files):
+        print("Total number of items matches the number of local files. Would you like to check each item individually for unpublished status? (y/N): ", end='', flush=True)
+        choice = 'n'
+        rlist, _, _ = select.select([sys.stdin], [], [], 5)
+        if rlist:
+            choice = sys.stdin.readline().strip().lower() or 'n'
+        if choice != 'y':
+            print("Exiting without checking individual items.")
+            return
+    elif totalItemsInModule > len(files):
+        print(f"Warning: The number of items in the module is greater than the number of local files. Recommended to re-download all items for module {module}.")
+        print(f"Total items in module: {totalItemsInModule}, Local files: {len(files)}")
+    else:
+        print(f"Total items in module: {totalItemsInModule}, Local files: {len(files)}")
+    print("Checking for unpublished or deleted items individually...")   
+    
+    return False
     for file in tqdm(files):
         identifier = str(file.replace(filenamePrefix, '').replace('.xml', ''))
         retries = 3
@@ -50,6 +72,7 @@ def synchroniseItems(*, host, username, password, module, inputFolder, turtleFol
                 raise RuntimeError(f"Failed to check item {identifier} after several attempts.")
             else:
                 time.sleep(5)
+
     for identifier in identifiersToRemove:
         print(f"Item {identifier} in module {module} has been deleted or unpublished in MuseumPlus. Deleting local copy.")
         filenameXML = f"{filenamePrefix}{identifier}.xml"
