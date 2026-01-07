@@ -56,7 +56,6 @@ def synchroniseItems(*, host, username, password, module, inputFolder, turtleFol
         print(f"Total items in module: {totalItemsInModule}, Local files: {len(files)}")
     print("Checking for unpublished or deleted items individually...")   
     
-    return False
     for file in tqdm(files):
         identifier = str(file.replace(filenamePrefix, '').replace('.xml', ''))
         retries = 3
