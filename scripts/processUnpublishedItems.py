@@ -41,7 +41,8 @@ def synchroniseItems(*, host, username, password, module, inputFolder, turtleFol
     totalItemsInModule = client.getNumberOfItems(module=module, queryAddition=createXMLCopy(queryAddition))
     
     if totalItemsInModule == len(files):
-        print(f"Total number of items ({totalItemsInModule}) matches the number of local files. Would you like to check each item individually for unpublished status? (y/N): ", end='', flush=True)
+        print(f"Total number of items ({totalItemsInModule}) matches the number of local files.")
+        print("Would you like to check each item individually for unpublished status? (y/N): ", end='', flush=True)
         choice = 'n'
         rlist, _, _ = select.select([sys.stdin], [], [], 5)
         if rlist:
