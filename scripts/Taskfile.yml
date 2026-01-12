@@ -118,6 +118,7 @@ tasks:
           - OwsAcquisitionTypeVgr
           - OwsArtPersonVgr
           - OwsCharacteristicsTypeVgr
+          - OwsCurrencyVgr
           - OwsOwnerTypeVgr
           - OwsEvidenceVgr
           - OwsSourcesOtherTypeVgr
