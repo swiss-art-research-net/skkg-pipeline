@@ -600,6 +600,65 @@ else 'transaction'</arg>
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference/moduleReferenceItem/dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="SortLnu">@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="OwsObjRef">../../@name</equals>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>crm:P1_is_identified_by</relationship>
+                            <entity>
+                                <type>crm:E42_Identifier</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">provenance</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="constant">object</arg>
+                                    <arg name="level2" type="xpath">../@uuid</arg>
+                                    <arg name="level3" type="constant">order</arg>
+                                </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">sortlnu</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Sortierung</arg>
+                                            <arg name="language" type="constant"/>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReference/moduleReferenceItem/dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:integer</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
             <mapping>
                 <domain template="metadata">
@@ -1684,66 +1743,6 @@ else 'transaction'</arg>
                         </target_node>
                     </range>
                 </link>
-                <link>
-                    <path>
-                        <source_relation>
-                            <relation>moduleReferenceItem/dataField</relation>
-                        </source_relation>
-                        <target_relation>
-                            <if>
-                                <equals value="SortLnu">@name</equals>
-                            </if>
-                            <relationship>crm:P16_used_specific_object</relationship>
-                            <entity>
-                                <type>crm:E22_Human-Made_Object</type>
-                                <instance_generator name="URIwithTypeAndId">
-                                    <arg name="type" type="constant">object</arg>
-                                    <arg name="id" type="xpath">../@uuid</arg>
-                                </instance_generator>
-                            </entity>
-                            <relationship>crm:P1_is_identified_by</relationship>
-                            <entity>
-                                <type>crm:E42_Identifier</type>
-                                <instance_generator name="URIwithTypeIdAnd3Levels">
-                                    <arg name="type" type="constant">provenance</arg>
-                                    <arg name="id" type="xpath">../../../@uuid</arg>
-                                    <arg name="level1" type="constant">object</arg>
-                                    <arg name="level2" type="xpath">../@uuid</arg>
-                                    <arg name="level3" type="constant">order</arg>
-                                </instance_generator>
-                                <additional>
-                                    <relationship>crm:P2_has_type</relationship>
-                                    <entity>
-                                        <type>crm:E55_Type</type>
-                                        <instance_info>
-                                            <constant/>
-                                        </instance_info>
-                                        <instance_generator name="URIwithTypeAndId">
-                                            <arg name="type" type="constant">type</arg>
-                                            <arg name="id" type="constant">sortlnu</arg>
-                                        </instance_generator>
-                                        <label_generator name="Literal">
-                                            <arg name="text" type="constant">Sortierung</arg>
-                                            <arg name="language" type="constant"/>
-                                        </label_generator>
-                                    </entity>
-                                </additional>
-                            </entity>
-                            <relationship>crm:P190_has_symbolic_content</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>moduleReferenceItem/dataField</source_node>
-                        <target_node>
-                            <entity>
-                                <type>xsd:integer</type>
-                                <instance_generator name="typedLiteralGen">
-                                    <arg name="text" type="xpath">value/text()</arg>
-                                </instance_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
             </mapping>
             <mapping>
                 <domain template="acquisition: object">
@@ -1929,13 +1928,13 @@ else 'transaction'</arg>
                             <additional>
                                 <relationship>crm:P140_assigned_attribute_to</relationship>
                                 <entity>
-                                    <type>crm:E22_Human-Made_Object</type>
+                                    <type>skkg:Provenance</type>
                                     <instance_info>
                                         <constant/>
                                     </instance_info>
                                     <instance_generator name="URIwithTypeAndId">
-                                        <arg name="type" type="constant">object</arg>
-                                        <arg name="id" type="xpath">@uuid</arg>
+                                        <arg name="type" type="constant">provenance</arg>
+                                        <arg name="id" type="xpath">../../@uuid</arg>
                                     </instance_generator>
                                 </entity>
                             </additional>
@@ -1959,8 +1958,8 @@ else 'transaction'</arg>
                                         <constant/>
                                     </instance_info>
                                     <instance_generator name="URIwithTypeAndId">
-                                        <arg name="type" type="constant">provenance</arg>
-                                        <arg name="id" type="xpath">../../@uuid</arg>
+                                        <arg name="type" type="constant">object</arg>
+                                        <arg name="id" type="xpath">@uuid</arg>
                                     </instance_generator>
                                 </entity>
                             </additional>
