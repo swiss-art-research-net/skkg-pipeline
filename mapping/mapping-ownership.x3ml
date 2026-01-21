@@ -1953,7 +1953,7 @@ else 'transaction'</arg>
                             <additional>
                                 <relationship>crm:P16_used_specific_object</relationship>
                                 <entity>
-                                    <type>skkg:Provenance</type>
+                                    <type>skkg:Object</type>
                                     <instance_info>
                                         <constant/>
                                     </instance_info>
