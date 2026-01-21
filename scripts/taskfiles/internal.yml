@@ -73,7 +73,12 @@ tasks:
             ?object crm:P138i_has_representation/crm:P104_is_subject_to/crm:P75i_is_possessed_by ?person .
           } UNION {
             ?object crm:P138i_has_representation/crm:P94i_was_created_by/crm:P14_carried_out_by ?person .
-          }
+          } UNION {
+            ?provenance a skkg:Provenance ;
+              crm:P9_consists_of ?activity .
+          ?activity crm:P16_used_specific_object ?object ;
+            crm:P11_had_participant/crm:P107_has_current_or_former_member ?person .
+          }	
           BIND(STRAFTER(STR(?person), "/person/") as ?uuid) 
         }
       ADDRESS_UUID_QUERY: |
