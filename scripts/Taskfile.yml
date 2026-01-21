@@ -113,6 +113,7 @@ tasks:
           - ObjOtherNumberTypeVgr
           - ObjPerAssociationRoleVgr
           - ObjPerAssociationAttributionVgr
+          - ObjProvenanceStatusVgr
           - ObjTechniqueVgr
           - ObjTextsTypeVgr
           - OwsAcquisitionTypeVgr
