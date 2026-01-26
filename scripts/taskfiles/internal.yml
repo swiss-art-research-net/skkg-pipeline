@@ -162,7 +162,7 @@ tasks:
         vars:
           MODULE: literature
           QUERY: "{{.LITERATURE_UUID_QUERY}}"
-          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
