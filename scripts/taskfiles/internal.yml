@@ -55,8 +55,13 @@ tasks:
       OBJECT_UUID_QUERY: |
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
-        SELECT ?uuid WHERE {
-          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+        SELECT DISTINCT ?uuid WHERE {
+          {
+            <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          } UNION {
+              VALUES ?exhibition { exhibition:136 exhibition:152 exhibition:158 exhibition:1d42c3a2-a3b5-439e-b43f-0bc76f203a70 exhibition:2cf13c63-4233-4563-b8f3-839dd2df2c15 exhibition:492ee8a1-1dd0-4821-8189-e7329724f0b3 exhibition:8194e0bb-e9d8-4f12-a8fc-50fe5e453971 exhibition:9886763b-a3bb-4fab-98f3-a4164f40588a }
+              ?exhibition crm:P16_used_specific_object/la:has_member ?object
+          }
           ?object a skkg:Object .
           BIND(STRAFTER(STR(?object), "/object/") as ?uuid) 
         }
@@ -108,6 +113,17 @@ tasks:
           }
           ?multimedia a skkg:Multimedia .
           BIND(STRAFTER(STR(?multimedia), "/multimedia/") as ?uuid) 
+        }
+      LITERATURE_UUID_QUERY: |
+        PREFIX la: <https://linked.art/ns/terms/>
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX exhibition: <https://data.skkg.ch/exhibition/>
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        SELECT DISTINCT ?uuid WHERE {
+          VALUES ?exhibition { exhibition:136 exhibition:152 exhibition:158 exhibition:1d42c3a2-a3b5-439e-b43f-0bc76f203a70 exhibition:2cf13c63-4233-4563-b8f3-839dd2df2c15 exhibition:492ee8a1-1dd0-4821-8189-e7329724f0b3 exhibition:8194e0bb-e9d8-4f12-a8fc-50fe5e453971 exhibition:9886763b-a3bb-4fab-98f3-a4164f40588a }
+          ?literature a skkg:Literature ;
+            crm:P67_refers_to ?exhibition .
+          BIND(STRAFTER(STR(?literature), "/literature/") as ?uuid) 
         }
     cmds:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
