@@ -59,8 +59,13 @@ tasks:
           {
             <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
           } UNION {
-              VALUES ?exhibition { exhibition:136 exhibition:152 exhibition:158 exhibition:1d42c3a2-a3b5-439e-b43f-0bc76f203a70 exhibition:2cf13c63-4233-4563-b8f3-839dd2df2c15 exhibition:492ee8a1-1dd0-4821-8189-e7329724f0b3 exhibition:8194e0bb-e9d8-4f12-a8fc-50fe5e453971 exhibition:9886763b-a3bb-4fab-98f3-a4164f40588a }
-              ?exhibition crm:P16_used_specific_object/la:has_member ?object
+            VALUES ?exhibition { exhibition:136 exhibition:152 exhibition:158 exhibition:1d42c3a2-a3b5-439e-b43f-0bc76f203a70 exhibition:2cf13c63-4233-4563-b8f3-839dd2df2c15 exhibition:492ee8a1-1dd0-4821-8189-e7329724f0b3 exhibition:8194e0bb-e9d8-4f12-a8fc-50fe5e453971 exhibition:9886763b-a3bb-4fab-98f3-a4164f40588a }
+            ?exhibition crm:P16_used_specific_object/la:has_member ?object
+          } UNION {
+            VALUES ?exhibition { exhibition:136 exhibition:152 exhibition:158 exhibition:1d42c3a2-a3b5-439e-b43f-0bc76f203a70 exhibition:2cf13c63-4233-4563-b8f3-839dd2df2c15 exhibition:492ee8a1-1dd0-4821-8189-e7329724f0b3 exhibition:8194e0bb-e9d8-4f12-a8fc-50fe5e453971 exhibition:9886763b-a3bb-4fab-98f3-a4164f40588a }
+            ?literature a skkg:Literature ;
+              crm:P67_refers_to ?exhibition ;
+              crm:P165_incorporates/crm:P67_refers_to ?object .
           }
           ?object a skkg:Object .
           BIND(STRAFTER(STR(?object), "/object/") as ?uuid) 
@@ -153,6 +158,11 @@ tasks:
           MODULE: multimedia
           QUERY: "{{.MULTIMEDIA_UUID_QUERY}}"
           OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
+      - task: _combine_ttl_files_based_on_query
+        vars:
+          MODULE: literature
+          QUERY: "{{.LITERATURE_UUID_QUERY}}"
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
       - task: _clean_turtle_file_from_extra_prefixes
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
