@@ -53,8 +53,10 @@ tasks:
         sh: echo partial-dump-$(date "+%Y-%m-%d-%H-%M-%S")
       NUMFILES: 1000
       OBJECT_UUID_QUERY: |
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX exhibition: <https://data.skkg.ch/exhibition/>
         SELECT DISTINCT ?uuid WHERE {
           {
             # Objects contained in group Sammlung Digital Test
