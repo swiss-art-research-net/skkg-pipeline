@@ -1,4 +1,4 @@
-FROM docker.io/adfreiburg/qlever:commit-acb6633
+FROM docker.io/adfreiburg/qlever:commit-9410312
 USER root
 RUN apt update
 RUN apt install -y python3 python3-pip librdf-dev raptor2-utils
