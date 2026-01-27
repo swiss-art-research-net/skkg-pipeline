@@ -773,7 +773,7 @@
                         <source_node>moduleReferenceItem</source_node>
                         <target_node>
                             <entity>
-                                <type>crm:E21_Person</type>
+                                <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
@@ -908,7 +908,7 @@
                         <source_node>moduleReference/moduleReferenceItem</source_node>
                         <target_node>
                             <entity>
-                                <type>crm:E21_Person</type>
+                                <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
@@ -1007,7 +1007,7 @@
                         <source_node>moduleReference/moduleReferenceItem</source_node>
                         <target_node>
                             <entity>
-                                <type>crm:E21_Person</type>
+                                <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>

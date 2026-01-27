@@ -2799,7 +2799,7 @@ else (
                         <source_node>.</source_node>
                         <target_node>
                             <entity variable="subproduction_person">
-                                <type>crm:E21_Person</type>
+                                <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
@@ -2929,7 +2929,7 @@ else (
                         <source_node>.</source_node>
                         <target_node>
                             <entity variable="subproduction_person">
-                                <type>crm:E21_Person</type>
+                                <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
