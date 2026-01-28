@@ -2492,7 +2492,14 @@ else
                                         <arg name="id" type="xpath">@uuid</arg>
                                     </instance_generator>
                                     <label_generator name="Literal">
-                                        <arg name="text" type="xpath">formattedValue/text()</arg>
+                                        <arg name="text" type="xpath">substring-after(
+  formattedValue/text(),
+  concat(
+    vocabularyReference[@name='TypeAVoc' and @instanceName='PerPersonTypeVgr']
+      /vocabularyReferenceItem/formattedValue[@language='de'],
+    ': '
+  )
+)</arg>
                                         <arg name="language" type="constant"/>
                                     </label_generator>
                                 </entity>
