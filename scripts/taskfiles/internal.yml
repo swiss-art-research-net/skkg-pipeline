@@ -76,9 +76,10 @@ tasks:
           BIND(STRAFTER(STR(?object), "/object/") as ?uuid) 
         }
       PERSON_UUID_QUERY: |
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        PREFIX exhibition: <https://data.skkg.ch/exhibition/>
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
-        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
         SELECT DISTINCT ?uuid WHERE {
           {
             <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
