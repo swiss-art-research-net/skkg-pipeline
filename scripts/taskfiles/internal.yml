@@ -76,11 +76,20 @@ tasks:
           BIND(STRAFTER(STR(?object), "/object/") as ?uuid) 
         }
       PERSON_UUID_QUERY: |
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        PREFIX exhibition: <https://data.skkg.ch/exhibition/>
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
-        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-        SELECT ?uuid WHERE {
-          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+        SELECT DISTINCT ?uuid WHERE {
+          {
+            <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          } UNION {
+            # Objects referenced in literature about specific exhibitions
+            VALUES ?exhibition { exhibition:136 exhibition:152 exhibition:158 exhibition:1d42c3a2-a3b5-439e-b43f-0bc76f203a70 exhibition:2cf13c63-4233-4563-b8f3-839dd2df2c15 exhibition:492ee8a1-1dd0-4821-8189-e7329724f0b3 exhibition:8194e0bb-e9d8-4f12-a8fc-50fe5e453971 exhibition:9886763b-a3bb-4fab-98f3-a4164f40588a }
+            ?literature a skkg:Literature ;
+              crm:P67_refers_to ?exhibition ;
+              crm:P165_incorporates/crm:P67_refers_to ?object .
+          }
           ?object a skkg:Object .
           {
             ?object crm:P108i_was_produced_by/crm:P9_consists_of/crm:P14_carried_out_by|crm:P15_was_influenced_by ?person .
@@ -100,7 +109,7 @@ tasks:
         PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
-        SELECT ?uuid WHERE {
+        SELECT DISTINCT ?uuid WHERE {
           <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
           ?object a skkg:Object ;
             crm:P24i_changed_ownership_through/crm:P23_transferred_title_from? ?address .
@@ -112,7 +121,7 @@ tasks:
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
         PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-        SELECT ?uuid WHERE {
+        SELECT DISTINCT ?uuid WHERE {
           <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
           ?object a skkg:Object .
           {
