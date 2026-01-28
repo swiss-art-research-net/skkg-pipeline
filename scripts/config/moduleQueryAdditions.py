@@ -38,7 +38,14 @@ moduleQueryAdditions = {
                 <endsWithTerm fieldPath="OgrNameTxt" operand="_public"/>
             </expert>
         </search>
-    ''',
+        ''',
+    'Ownership': '''
+        <search>
+            <expert>
+                <equalsVocNodeExcludingHierarchy fieldPath="OwsStatusGrp.StatusVoc" operand="233013"/>
+            </expert>
+        </search>
+        ''',
     'Registrar': '''
         <search>
             <expert>
