@@ -98,10 +98,72 @@
                     <range>
                         <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
                         <target_node>
-                            <entity>
+                            <entity variable="skkg_type">
                                 <type>rdfs:Class</type>
                                 <instance_generator name="URIwitSkkgId">
                                     <arg name="id" type="xpath">concat(upper-case(substring(@name,1,1)), substring(@name, 2))</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="PerTypeVgr">../@instanceName</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="person">@name</equals>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>rdf:type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity variable="crm_type">
+                                <type>rdfs:Class</type>
+                                <instance_generator name="URIwithCidocCrmId">
+                                    <arg name="id" type="constant">E21_Person</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>vocabularyReference/vocabularyReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="PerTypeVgr">../@instanceName</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="group">@name</equals>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>rdf:type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>vocabularyReference/vocabularyReferenceItem</source_node>
+                        <target_node>
+                            <entity variable="crm_type">
+                                <type>rdfs:Class</type>
+                                <instance_generator name="URIwithCidocCrmId">
+                                    <arg name="id" type="constant">E74_Group</arg>
                                 </instance_generator>
                             </entity>
                         </target_node>

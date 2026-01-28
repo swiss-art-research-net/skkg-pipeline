@@ -303,7 +303,6 @@
                         <target_node>
                             <entity>
                                 <type>crm:E53_Place</type>
-                                <type>skkg:Address</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
@@ -805,7 +804,6 @@
                         <target_node>
                             <entity>
                                 <type>crm:E53_Place</type>
-                                <type>skkg:Address</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
