@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import logging
+import re
 
 from .Preprocessor import BasePreprocessor, registerPreprocessor
 
@@ -22,7 +23,6 @@ class LiteraturePreprocessor(BasePreprocessor):
         Convert strings like "28a" -> 28, "  1600 " -> 1600.
         Returns None if no leading digits exist.
         """
-        import re
         if not value:
             return None
         m = re.match(r"\s*(\d+)", value)
