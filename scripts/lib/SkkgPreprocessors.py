@@ -15,6 +15,7 @@ class LiteraturePreprocessor(BasePreprocessor):
         dateFieldSelectors = [".//dataField[@name='LitYearTxt']"]
         root = super().processDateFields(root, dateFieldSelectors)
         root = self.addSortingForReferencedObjects(root)
+        root = self.removeTypeFromReferencedObjectLabels(root)
         return super().dumpXML(root)
     
 
@@ -90,6 +91,32 @@ class LiteraturePreprocessor(BasePreprocessor):
                     formattedValueElem = ET.SubElement(sortField, 'formattedValue')
                     formattedValueElem.set('language', 'de')
                     formattedValueElem.text = str(index + 1)
+        return root
+    
+    def removeTypeFromReferencedObjectLabels(self, root: ET.Element) -> ET.Element:
+        """
+        This function removes the type prefix (from the vocabulary field) from the labels of referenced objects in the Literature module.
+        """
+        # Find the type prefix from the vocabularyReference
+        typePrefix = None
+        vocabRef = root.find(".//vocabularyReference[@instanceName='LitObjectTypeVgr']/vocabularyReferenceItem/formattedValue[@language='de']")
+        if vocabRef is not None and vocabRef.text:
+            typePrefix = vocabRef.text.strip()
+        if typePrefix:
+            typePrefixFull = f"{typePrefix}: "
+        else:
+            typePrefixFull = None
+
+        moduleItems = root.findall(".//moduleItem")
+        for moduleItem in moduleItems:
+            referencedObjects = moduleItem.findall("./moduleReference[@name='LitObjectRef']/moduleReferenceItem")
+            for obj in referencedObjects:
+                label = obj.find("./formattedValue")
+                if label is not None and label.text and typePrefixFull:
+                    labelText = label.text
+                    if labelText.startswith(typePrefixFull):
+                        newLabelText = labelText.replace(typePrefixFull, "", 1)
+                        label.text = newLabelText
         return root
         
     
