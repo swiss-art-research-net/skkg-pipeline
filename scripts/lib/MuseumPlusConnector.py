@@ -225,6 +225,31 @@ class MPWrapper:
         item = etree.fromstring(response.content)
         return item
     
+    def getItemByUuid(self, *, module: str, uuid: str, queryAddition: etree.Element = None) -> etree.Element:
+        """
+        Returns exactly one item matching the given UUID (or raises if not found).
+        """
+        url = self._getModuleSearchUrl(module)
+        query = self._getItemQueryByUuid(module=module, uuid=uuid)
+
+        if queryAddition is not None:
+            query = self._addQueryAdditionToSearch(query, queryAddition)
+
+        response = self._post(url, query)
+        if not response.content:
+            raise ValueError(f"No response content for uuid={uuid} in module={module}")
+
+        item = etree.fromstring(response.content)
+
+        # Verify totalSize if present
+        mod = item.find('.//{http://www.zetcom.com/ria/ws/module}module')
+        if mod is not None:
+            total = int(mod.get("totalSize", "0"))
+            if total < 1:
+                raise ValueError(f"Item not found: uuid={uuid} in module={module}")
+
+        return item
+
     def getVocabularyNodes(self, vocabulary: str) -> etree.Element:
         url = self._getVocabularySearchUrl(vocabulary)
         params = { 
