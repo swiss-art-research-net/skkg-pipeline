@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 import logging
+import re
 
 from .Preprocessor import BasePreprocessor, registerPreprocessor
 
@@ -13,7 +14,84 @@ class LiteraturePreprocessor(BasePreprocessor):
         root = super().parseXML(content)
         dateFieldSelectors = [".//dataField[@name='LitYearTxt']"]
         root = super().processDateFields(root, dateFieldSelectors)
+        root = self.addSortingForReferencedObjects(root)
         return super().dumpXML(root)
+    
+
+    def _extract_number(self, value):
+        """
+        Convert strings like "28a" -> 28, "  1600 " -> 1600.
+        Returns None if no leading digits exist.
+        """
+        if not value:
+            return None
+        m = re.match(r"\s*(\d+)", value)
+        return int(m.group(1)) if m else None
+
+    def addSortingForReferencedObjects(self, root: ET.Element) -> ET.Element:
+        """
+        This function adds sorting information for referenced objects in the Literature module.
+        """
+        moduleItems = root.findall(".//moduleItem")
+        for moduleItem in moduleItems:
+            referencedObjects = moduleItem.findall("./moduleReference[@name='LitObjectRef']/moduleReferenceItem")
+            sortKeys = {}
+
+            for obj in referencedObjects:
+                objId = obj.attrib.get("uuid")
+
+                # Invnr from formattedValue, e.g. "Objekt in Literatur: 1600, ..."
+                invNr = None
+                label = obj.find("./formattedValue")
+                if label is not None and label.text:
+                    labelText = label.text
+                    if labelText.startswith("Objekt in Literatur: "):
+                        invNr_raw = labelText.replace("Objekt in Literatur: ", "").split(",")[0].strip()
+                        invNr = self._extract_number(invNr_raw) 
+
+                # Catalogue number
+                catNumberField = obj.find("./dataField[@name='CatalogueNoTxt']/value")
+                catNumber_raw = catNumberField.text.strip() if (catNumberField is not None and catNumberField.text) else None
+                catNumber = self._extract_number(catNumber_raw)
+
+                # Page number (if it’s numeric-like, treat it numeric; otherwise None)
+                pageField = obj.find("./dataField[@name='PageRefTxt']/value")
+                page_raw = pageField.text.strip() if (pageField is not None and pageField.text) else None
+                pageNumber = self._extract_number(page_raw)
+
+                # Figure page number (you had FigRefTxt twice; keep FigRefTxt here)
+                figPageField = obj.find("./dataField[@name='FigRefTxt']/value")
+                fig_raw = figPageField.text.strip() if (figPageField is not None and figPageField.text) else None
+                figPageNumber = self._extract_number(fig_raw)
+
+                sortKeys[objId] = {
+                    "invNr": invNr,
+                    "catNumber": catNumber,
+                    "pageNumber": pageNumber,
+                    "figPageNumber": figPageNumber,
+                }
+            # Sort by catNumber, then figPageNumber, then pageNumber, then invNr
+            sortKeysList = [
+                (objId, keys["catNumber"] if keys["catNumber"] is not None else float('inf'),
+                 keys["figPageNumber"] if keys["figPageNumber"] is not None else float('inf'),
+                 keys["pageNumber"] if keys["pageNumber"] is not None else float('inf'),
+                 keys["invNr"] if keys["invNr"] is not None else float('inf'))
+                for objId, keys in sortKeys.items()
+            ]
+            sortedKeys = sorted(sortKeysList, key=lambda x: (x[1], x[2], x[3], x[4]), reverse=False)
+            for index, (objId, _, _, _, _) in enumerate(sortedKeys):
+                obj = next((o for o in referencedObjects if o.attrib.get("uuid") == objId), None)
+                if obj is not None:
+                    sortField = ET.SubElement(obj, 'dataField')
+                    sortField.set('dataType', 'Long')
+                    sortField.set('name', 'SortLnu')
+                    valueElem = ET.SubElement(sortField, 'value')
+                    valueElem.text = str(index + 1)
+                    formattedValueElem = ET.SubElement(sortField, 'formattedValue')
+                    formattedValueElem.set('language', 'de')
+                    formattedValueElem.text = str(index + 1)
+        return root
+        
     
 @registerPreprocessor('Object')
 class ObjectPreprocessor(BasePreprocessor):
