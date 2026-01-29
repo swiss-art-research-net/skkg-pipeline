@@ -15,6 +15,7 @@ class LiteraturePreprocessor(BasePreprocessor):
         dateFieldSelectors = [".//dataField[@name='LitYearTxt']"]
         root = super().processDateFields(root, dateFieldSelectors)
         root = self.addSortingForReferencedObjects(root)
+        root = self.removeObjectInLiteratureLabels(root)
         return super().dumpXML(root)
     
 
@@ -90,6 +91,22 @@ class LiteraturePreprocessor(BasePreprocessor):
                     formattedValueElem = ET.SubElement(sortField, 'formattedValue')
                     formattedValueElem.set('language', 'de')
                     formattedValueElem.text = str(index + 1)
+        return root
+    
+    def removeObjectInLiteratureLabels(self, root: ET.Element) -> ET.Element:
+        """
+        This function removes the "Objekt in Literatur: " prefix from the labels of referenced objects in the Literature module.
+        """
+        moduleItems = root.findall(".//moduleItem")
+        for moduleItem in moduleItems:
+            referencedObjects = moduleItem.findall("./moduleReference[@name='LitObjectRef']/moduleReferenceItem")
+            for obj in referencedObjects:
+                label = obj.find("./formattedValue")
+                if label is not None and label.text:
+                    labelText = label.text
+                    if labelText.startswith("Objekt in Literatur: "):
+                        newLabelText = labelText.replace("Objekt in Literatur: ", "")
+                        label.text = newLabelText
         return root
         
     
