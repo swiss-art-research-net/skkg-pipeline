@@ -90,16 +90,6 @@ class LiteraturePreprocessor(BasePreprocessor):
                     formattedValueElem = ET.SubElement(sortField, 'formattedValue')
                     formattedValueElem.set('language', 'de')
                     formattedValueElem.text = str(index + 1)
-            # Add SortLnu Element based on the sorted order:
-            # for index, obj in enumerate(sortedObjects):
-            #     sortField = ET.SubElement(obj, 'dataField')
-            #     sortField.set('dataType', 'Long')
-            #     sortField.set('name', 'SortLnu')
-            #     valueElem = ET.SubElement(sortField, 'value')
-            #     valueElem.text = str(index + 1)
-            #     formattedValueElem = ET.SubElement(sortField, 'formattedValue')
-            #     formattedValueElem.set('language', 'de')
-            #     formattedValueElem.text = str(index + 1)
         return root
         
     
