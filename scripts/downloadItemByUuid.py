@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+from datetime import datetime
 from os.path import join, exists
 from os import remove as removeFile
 from lxml import etree
@@ -23,13 +24,9 @@ from lib.Utils import createXMLCopy
 from config.moduleQueryAdditions import moduleQueryAdditions
 
 
-def _extract_uuid_and_last_modified(tree: etree._ElementTree):
+def _extract_uuid(tree: etree._ElementTree):
     uuid = tree.find('.//{http://www.zetcom.com/ria/ws/module}moduleItem').get('uuid')
-    lastModified = tree.find(
-        './/{http://www.zetcom.com/ria/ws/module}systemField[@name="__lastModified"]'
-        '/{http://www.zetcom.com/ria/ws/module}value'
-    ).text
-    return uuid, lastModified
+    return uuid
 
 
 def downloadItemByUuid(*, host, username, password, module, uuid, outputFolder, tempFolder, filenamePrefix="item-", force=False):
@@ -59,9 +56,9 @@ def downloadItemByUuid(*, host, username, password, module, uuid, outputFolder, 
 
     # Validate / extract fields and store final
     try:
-        extracted_uuid, lastModified = _extract_uuid_and_last_modified(tree)
+        extracted_uuid = _extract_uuid(tree)
     except Exception as e:
-        print(f"Downloaded XML did not contain expected moduleItem/lastModified fields for uuid={uuid}")
+        print(f"Downloaded XML did not contain expected moduleItem fields for uuid={uuid}")
         raise
 
     if extracted_uuid != uuid:
@@ -76,7 +73,7 @@ def downloadItemByUuid(*, host, username, password, module, uuid, outputFolder, 
     if exists(tempPath):
         removeFile(tempPath)
 
-    # Update metadata for this file
+    lastModified = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
     metadata.setLastUpdatedForFile(outFilename, lastModified, write=False)
     metadata.writeMetadata()
 
