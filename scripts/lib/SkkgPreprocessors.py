@@ -13,7 +13,62 @@ class LiteraturePreprocessor(BasePreprocessor):
         root = super().parseXML(content)
         dateFieldSelectors = [".//dataField[@name='LitYearTxt']"]
         root = super().processDateFields(root, dateFieldSelectors)
+        root = self.addSortingForReferencedObjects(root)
         return super().dumpXML(root)
+    
+    def addSortingForReferencedObjects(self, root: ET.Element) -> ET.Element:
+        """
+        This function adds sorting information for referenced objects in the Literature module.
+        """
+        moduleItems = root.findall(".//moduleItem")
+        for moduleItem in moduleItems:
+            referencedObjects = moduleItem.findall("./moduleReference[@name='LitObjectRef']/moduleReferenceItem")
+            sortKeys = {}
+            for obj in  referencedObjects:
+                objId = obj.attrib.get('uuid')
+                # Invnr is from tjhe value formattedValue which starts with "Objekt in Literatur: " followed by the invnr, e.g. "Objekt in Literatur: 1600, Adolf Dietrich (1877–1957), Raupen..."
+                label = obj.find("./formattedValue")
+                if label is not None and label.text:
+                    labelText = label.text
+                    if labelText.startswith("Objekt in Literatur: "):
+                        invNr = labelText.replace("Objekt in Literatur: ", "").split(",")[0].strip()
+                else:
+                    invNr = None
+                # Catalogue number
+                catNumberField = obj.find("./dataField[@name='CatalogueNoTxt']/value")
+                catNumber = catNumberField.text if catNumberField is not None else None
+                # Page number
+                pageField = obj.find("./dataField[@name='FigRefTxt']/value")
+                pageNumber = pageField.text if pageField is not None else None
+                # Figure page number
+                figPageField = obj.find("./dataField[@name='FigRefTxt']/value")
+                figPageNumber = figPageField.text if figPageField is not None else None
+                # Store sort key information
+                sortKeys[objId] = {
+                    'invNr': int(invNr),
+                    'catNumber': int(catNumber),
+                    'pageNumber': pageNumber,
+                    'figPageNumber': figPageNumber
+                }     
+            # Sort by catNumber, then figPageNumber, then pageNumber, then invNr
+            sortedObjects = sorted(referencedObjects, key=lambda x: (
+                sortKeys[x.attrib.get('uuid')]['catNumber'] if sortKeys[x.attrib.get('uuid')]['catNumber'] is not None else '',
+                sortKeys[x.attrib.get('uuid')]['figPageNumber'] if sortKeys[x.attrib.get('uuid')]['figPageNumber'] is not None else '',
+                sortKeys[x.attrib.get('uuid')]['pageNumber'] if sortKeys[x.attrib.get('uuid')]['pageNumber'] is not None else '',
+                sortKeys[x.attrib.get('uuid')]['invNr'] if sortKeys[x.attrib.get('uuid')]['invNr'] is not None else ''
+            ))
+            # Add SortLnu Element based on the sorted order:
+            for index, obj in enumerate(sortedObjects):
+                sortField = ET.SubElement(obj, 'dataField')
+                sortField.set('dataType', 'Long')
+                sortField.set('name', 'SortLnu')
+                valueElem = ET.SubElement(sortField, 'value')
+                valueElem.text = str(index + 1)
+                formattedValueElem = ET.SubElement(sortField, 'formattedValue')
+                formattedValueElem.set('language', 'de')
+                formattedValueElem.text = str(index + 1)
+        return root
+        
     
 @registerPreprocessor('Object')
 class ObjectPreprocessor(BasePreprocessor):
