@@ -1885,6 +1885,83 @@
                         </target_node>
                     </range>
                 </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>formattedValue</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P67i_is_referred_to_by</relationship>
+                            <entity>
+                                <type>crm:E33_Linguistic_Object</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">literature</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">reference</arg>
+                                    <arg name="level2" type="xpath">concat(../@uuid,'-',../@seqNo)</arg>
+                                    <arg name="level3" type="constant">citation</arg>
+                                </instance_generator>
+                                <label_generator name="Constant">
+                                    <arg name="text" type="xpath">concat('citation for: ', text())</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithAatId">
+                                            <arg name="id" type="constant">300026497</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Citation</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">Zitierweise</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                            </entity>
+                            <relationship>crm:P190_has_symbolic_content</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>formattedValue</source_node>
+                        <target_node>
+                            <entity>
+                                <type>rdfs:Literal</type>
+                                <instance_generator name="Literal">
+                                    <arg name="text" type="xpath">concat(
+  string-join(
+    (
+      normalize-space(replace(../../../dataField[@name='LitCitationClb']/value/text(), '\.\s*$', '')),
+      if (normalize-space(../dataField[@name='PageRefTxt']/value/text()) != '')
+      then concat('S. ', normalize-space(../dataField[@name='PageRefTxt']/value/text()))
+      else (),
+      if (normalize-space(../dataField[@name='FigRefTxt']/value/text()) != '')
+      then
+        if (matches(normalize-space(../dataField[@name='FigRefTxt']/value/text()), '^\d'))
+        then concat('Abb. S. ', normalize-space(../dataField[@name='FigRefTxt']/value/text()))
+        else concat('Abb. ', normalize-space(../dataField[@name='FigRefTxt']/value/text()))
+      else (),
+      if (normalize-space(../dataField[@name='CatalogueNoTxt']/value/text()) != '')
+      then concat('Nr. ', normalize-space(../dataField[@name='CatalogueNoTxt']/value/text()))
+      else ()
+    ),
+    ', '
+  ),
+  '.'
+)</arg>
+                                    <arg name="language" type="constant"/>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
             </mapping>
             <mapping>
                 <domain>
