@@ -1953,7 +1953,7 @@ else 'transaction'</arg>
                             <additional>
                                 <relationship>crm:P16_used_specific_object</relationship>
                                 <entity>
-                                    <type>skkg:Object</type>
+                                    <type>crm:E22_Human-Made_Object</type>
                                     <instance_info>
                                         <constant/>
                                     </instance_info>
@@ -2048,7 +2048,7 @@ else 'transaction'</arg>
                             <additional>
                                 <relationship>crm:P16_used_specific_object</relationship>
                                 <entity>
-                                    <type>skkg:Provenance</type>
+                                    <type>crm:E7_Activity</type>
                                     <instance_info>
                                         <constant/>
                                     </instance_info>
@@ -2094,7 +2094,6 @@ else 'transaction'</arg>
                         <entity variable="reference_literature">
                             <type>frbroo:F24_Publication_Expression</type>
                             <type>crm:E33_Linguistic_Object</type>
-                            <type>skkg:Literature</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">literature</arg>
                                 <arg name="id" type="xpath">@uuid</arg>

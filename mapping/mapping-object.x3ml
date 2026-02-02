@@ -866,7 +866,6 @@
                         <target_node>
                             <entity>
                                 <type>crm:E39_Actor</type>
-                                <type>skkg:Address</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">if (../../dataField[@name='_UserObj4487Boo']/value/text() = 'true') then ('privateIndividual') else (@uuid)</arg>
@@ -2800,7 +2799,7 @@ else (
                         <source_node>.</source_node>
                         <target_node>
                             <entity variable="subproduction_person">
-                                <type>crm:E21_Person</type>
+                                <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
@@ -2930,7 +2929,7 @@ else (
                         <source_node>.</source_node>
                         <target_node>
                             <entity variable="subproduction_person">
-                                <type>crm:E21_Person</type>
+                                <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
@@ -4216,7 +4215,6 @@ else (
                         <entity>
                             <type>la:Set</type>
                             <type>crm:E89_Propositional_Object</type>
-                            <type>skkg:ObjectGroup</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">objectgroup</arg>
                                 <arg name="id" type="xpath">@uuid</arg>

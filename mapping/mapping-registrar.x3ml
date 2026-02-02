@@ -39,7 +39,6 @@
                         </if>
                         <entity variable="exhibition">
                             <type>crm:E7_Activity</type>
-                            <type>skkg:Exhibition</type>
                             <instance_generator name="URIwithTypeAndId">
                                 <arg name="type" type="constant">exhibition</arg>
                                 <arg name="id" type="xpath">@uuid</arg>
@@ -121,7 +120,6 @@
                         <source_node>moduleReferenceItem</source_node>
                         <target_node>
                             <entity>
-                                <type>skkg:Object</type>
                                 <type>crm:E22_Human-Made_Object</type>
                                 <instance_generator name="URIwithTypeAndId">
                                     <arg name="type" type="constant">object</arg>
