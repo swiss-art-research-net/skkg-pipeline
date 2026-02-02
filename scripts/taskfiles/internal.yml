@@ -259,7 +259,7 @@ tasks:
       - task:  _run-task-according-to-interval
         vars:
           TASK: update-iiif
-          INTERVAL: 1w
+          INTERVAL: 2d
       - task: _run-task-according-to-interval
         vars:
           TASK: remove-unpublished-items
