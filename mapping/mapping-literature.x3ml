@@ -1945,8 +1945,8 @@
       if (normalize-space(../dataField[@name='FigRefTxt']/value/text()) != '')
       then
         if (matches(normalize-space(../dataField[@name='FigRefTxt']/value/text()), '^\d'))
-        then concat('S. ', normalize-space(../dataField[@name='FigRefTxt']/value/text()))
-        else normalize-space(../dataField[@name='FigRefTxt']/value/text())
+        then concat('Abb. S. ', normalize-space(../dataField[@name='FigRefTxt']/value/text()))
+        else concat('Abb. ', normalize-space(../dataField[@name='FigRefTxt']/value/text()))
       else (),
       if (normalize-space(../dataField[@name='CatalogueNoTxt']/value/text()) != '')
       then concat('Nr. ', normalize-space(../dataField[@name='CatalogueNoTxt']/value/text()))
