@@ -1186,7 +1186,18 @@ else (
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="ObjProvenanceStatusGrp">../@name</equals>
+                                <and>
+                                    <if>
+                                        <equals value="ObjProvenanceStatusGrp">../@name</equals>
+                                    </if>
+                                    <if>
+                                        <not>
+                                            <if>
+                                                <equals value="244964">vocabularyReference[@instanceName='ObjProvenanceStatusVgr']/vocabularyReferenceItem/@id</equals>
+                                            </if>
+                                        </not>
+                                    </if>
+                                </and>
                             </if>
                             <relationship>crm:P140i_was_attributed_by</relationship>
                         </target_relation>
@@ -4881,7 +4892,18 @@ else (
                     <source_node>/application/modules/module/moduleItem/repeatableGroup/repeatableGroupItem</source_node>
                     <target_node>
                         <if>
-                            <equals value="ObjProvenanceStatusGrp">../@name</equals>
+                            <and>
+                                <if>
+                                    <equals value="ObjProvenanceStatusGrp">../@name</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="244964">vocabularyReference[@instanceName='ObjProvenanceStatusVgr']/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
                         </if>
                         <entity>
                             <type>crm:E13_Attribute_Assignment</type>
