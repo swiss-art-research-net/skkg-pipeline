@@ -42,7 +42,11 @@ moduleQueryAdditions = {
     'Ownership': '''
         <search>
             <expert>
-                <equalsVocNodeExcludingHierarchy fieldPath="OwsStatusGrp.StatusVoc" operand="233013"/>
+                <and>
+                    <equalsVocNodeExcludingHierarchy fieldPath="OwsStatusGrp.StatusVoc" operand="233013"/>
+                    <notEqualsVocNodeExcludingHierarchy fieldPath="OwsStatusGrp.StatusVoc" operand="232012"/>
+                    <notEqualsVocNodeExcludingHierarchy fieldPath="OwsStatusGrp.StatusVoc" operand="232013"/>
+                </and>
             </expert>
         </search>
         ''',
