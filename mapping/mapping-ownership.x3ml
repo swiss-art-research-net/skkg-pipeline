@@ -2381,7 +2381,7 @@ else 'transaction'</arg>
                                     <arg name="type" type="constant">literature</arg>
                                     <arg name="id" type="xpath">../@uuid</arg>
                                     <arg name="level1" type="constant">reference</arg>
-                                    <arg name="level2" type="xpath">concat(../../../@uuid,'-',@seqNo)</arg>
+                                    <arg name="level2" type="xpath">concat(../../../@uuid,'-',../@seqNo)</arg>
                                     <arg name="level3" type="constant">citation</arg>
                                 </instance_generator>
                                 <label_generator name="Constant">
