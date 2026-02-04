@@ -2418,7 +2418,7 @@ else 'transaction'</arg>
                             <entity>
                                 <type>rdfs:Literal</type>
                                 <instance_generator name="Literal">
-                                    <arg name="text" type="xpath">concat( if (contains(text(), ':')) then normalize-space(substring-after(text(), ':')) else text(), if (../dataField[@name="PageRefTxt"]/value/text()) then concat( ', ', if (matches(../dataField[@name="PageRefTxt"]/value/text(), '^\d')) then concat('S. ', ../dataField[@name="PageRefTxt"]/value/text()) else ../dataField[@name="PageRefTxt"]/value/text() ) else '' )</arg>
+                                    <arg name="text" type="xpath">concat( if (contains(text(), ':')) then normalize-space(substring-after(text(), ':')) else text(), if (../dataField[@name="PageRefTxt"]/value/text()) then concat( ', ', if (matches(../dataField[@name="PageRefTxt"]/value/text(), '^\d')) then concat('S. ', ../dataField[@name="PageRefTxt"]/value/text()) else ../dataField[@name="PageRefTxt"]/value/text() ) else '', '.' )</arg>
                                     <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
