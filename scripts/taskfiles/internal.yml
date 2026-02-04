@@ -178,7 +178,7 @@ tasks:
           MODULE: literature
           QUERY: "{{.LITERATURE_UUID_QUERY}}"
           OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
-      - task: _clean_turtle_file_from_extra_prefixes
+      - task: _clean_turtle_with_rapper
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - gzip -c {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl > {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl.gz
