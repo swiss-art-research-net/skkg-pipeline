@@ -2560,9 +2560,9 @@ else 'transaction'</arg>
                                 <type>crm:E42_Identifier</type>
                                 <instance_generator name="URIwithTypeIdAnd3Levels">
                                     <arg name="type" type="constant">provenance</arg>
-                                    <arg name="id" type="xpath">../../@uuid</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
                                     <arg name="level1" type="constant">characteristic</arg>
-                                    <arg name="level2" type="xpath">@uuid</arg>
+                                    <arg name="level2" type="xpath">../@uuid</arg>
                                     <arg name="level3" type="constant">order</arg>
                                 </instance_generator>
                                 <additional>
