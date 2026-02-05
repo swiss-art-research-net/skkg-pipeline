@@ -52,6 +52,46 @@ tasks:
       FILENAME: 
         sh: echo partial-dump-$(date "+%Y-%m-%d-%H-%M-%S")
       NUMFILES: 1000
+      ADDRESS_UUID_QUERY: |
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        PREFIX la: <https://linked.art/ns/terms/>
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        SELECT DISTINCT ?uuid WHERE {
+          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          ?object a skkg:Object ;
+            crm:P24i_changed_ownership_through/crm:P23_transferred_title_from? ?address .
+          ?address a skkg:Address .
+          FILTER(?address != <https://data.skkg.ch/address/privateIndividual>)
+          BIND(STRAFTER(STR(?address), "/address/") as ?uuid) 
+        }
+      LITERATURE_UUID_QUERY: |
+        PREFIX la: <https://linked.art/ns/terms/>
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX exhibition: <https://data.skkg.ch/exhibition/>
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        SELECT DISTINCT ?uuid WHERE {
+          # Literature about specific exhibitions
+          VALUES ?exhibition { exhibition:136 exhibition:152 exhibition:158 exhibition:1d42c3a2-a3b5-439e-b43f-0bc76f203a70 exhibition:2cf13c63-4233-4563-b8f3-839dd2df2c15 exhibition:492ee8a1-1dd0-4821-8189-e7329724f0b3 exhibition:8194e0bb-e9d8-4f12-a8fc-50fe5e453971 exhibition:9886763b-a3bb-4fab-98f3-a4164f40588a }
+          ?literature a skkg:Literature ;
+            crm:P67_refers_to ?exhibition .
+          BIND(STRAFTER(STR(?literature), "/literature/") as ?uuid) 
+        }
+      MULTIMEDIA_UUID_QUERY: |
+        PREFIX la: <https://linked.art/ns/terms/>
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        SELECT DISTINCT ?uuid WHERE {
+          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          ?object a skkg:Object .
+          {
+            ?object crm:P138i_has_representation ?multimedia .
+          } UNION {
+            ?exhibition crm:P16_used_specific_object/la:has_member ?object ;
+              crm:P67i_is_referred_to_by ?multimedia .
+          }
+          ?multimedia a skkg:Multimedia .
+          BIND(STRAFTER(STR(?multimedia), "/multimedia/") as ?uuid) 
+        }
       OBJECT_UUID_QUERY: |
         PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
         PREFIX la: <https://linked.art/ns/terms/>
@@ -74,6 +114,18 @@ tasks:
           }
           ?object a skkg:Object .
           BIND(STRAFTER(STR(?object), "/object/") as ?uuid) 
+        }
+      OWNERSHIP_UUID_QUERY: |
+        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+        PREFIX la: <https://linked.art/ns/terms/>
+        PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX exhibition: <https://data.skkg.ch/exhibition/>
+        SELECT DISTINCT ?uuid WHERE {
+          # Objects contained in group Sammlung Digital Test
+          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
+          ?ownership a skkg:Provenance ;
+            crm:P9_consists_of/crm:P16_used_specific_object ?object .
+          BIND(STRAFTER(STR(?ownership), "/provenance/") as ?uuid) 
         }
       PERSON_UUID_QUERY: |
         PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
@@ -105,46 +157,6 @@ tasks:
           }	
           BIND(STRAFTER(STR(?person), "/person/") as ?uuid) 
         }
-      ADDRESS_UUID_QUERY: |
-        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-        PREFIX la: <https://linked.art/ns/terms/>
-        PREFIX skkg: <https://ontology.skkg.ch/>
-        SELECT DISTINCT ?uuid WHERE {
-          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
-          ?object a skkg:Object ;
-            crm:P24i_changed_ownership_through/crm:P23_transferred_title_from? ?address .
-          ?address a skkg:Address .
-          FILTER(?address != <https://data.skkg.ch/address/privateIndividual>)
-          BIND(STRAFTER(STR(?address), "/address/") as ?uuid) 
-        }
-      MULTIMEDIA_UUID_QUERY: |
-        PREFIX la: <https://linked.art/ns/terms/>
-        PREFIX skkg: <https://ontology.skkg.ch/>
-        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-        SELECT DISTINCT ?uuid WHERE {
-          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
-          ?object a skkg:Object .
-          {
-            ?object crm:P138i_has_representation ?multimedia .
-          } UNION {
-            ?exhibition crm:P16_used_specific_object/la:has_member ?object ;
-              crm:P67i_is_referred_to_by ?multimedia .
-          }
-          ?multimedia a skkg:Multimedia .
-          BIND(STRAFTER(STR(?multimedia), "/multimedia/") as ?uuid) 
-        }
-      LITERATURE_UUID_QUERY: |
-        PREFIX la: <https://linked.art/ns/terms/>
-        PREFIX skkg: <https://ontology.skkg.ch/>
-        PREFIX exhibition: <https://data.skkg.ch/exhibition/>
-        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-        SELECT DISTINCT ?uuid WHERE {
-          # Literature about specific exhibitions
-          VALUES ?exhibition { exhibition:136 exhibition:152 exhibition:158 exhibition:1d42c3a2-a3b5-439e-b43f-0bc76f203a70 exhibition:2cf13c63-4233-4563-b8f3-839dd2df2c15 exhibition:492ee8a1-1dd0-4821-8189-e7329724f0b3 exhibition:8194e0bb-e9d8-4f12-a8fc-50fe5e453971 exhibition:9886763b-a3bb-4fab-98f3-a4164f40588a }
-          ?literature a skkg:Literature ;
-            crm:P67_refers_to ?exhibition .
-          BIND(STRAFTER(STR(?literature), "/literature/") as ?uuid) 
-        }
     cmds:
       - mkdir -p {{.OUTPUTFOLDER_DUMP}}
       - rm -f {{.OUTPUTFOLDER_DUMP}}/*.ttl
@@ -155,18 +167,13 @@ tasks:
         done
       - task: _combine_ttl_files_based_on_query
         vars:
-          MODULE: object
-          QUERY: "{{.OBJECT_UUID_QUERY}}"
-          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
-      - task: _combine_ttl_files_based_on_query
-        vars:
-          MODULE: person
-          QUERY: "{{.PERSON_UUID_QUERY}}"
-          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
-      - task: _combine_ttl_files_based_on_query
-        vars:
           MODULE: address
           QUERY: "{{.ADDRESS_UUID_QUERY}}"
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
+      - task: _combine_ttl_files_based_on_query
+        vars:
+          MODULE: literature
+          QUERY: "{{.LITERATURE_UUID_QUERY}}"
           OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - task: _combine_ttl_files_based_on_query
         vars:
@@ -175,8 +182,18 @@ tasks:
           OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - task: _combine_ttl_files_based_on_query
         vars:
-          MODULE: literature
-          QUERY: "{{.LITERATURE_UUID_QUERY}}"
+          MODULE: object
+          QUERY: "{{.OBJECT_UUID_QUERY}}"
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
+      - task: _combine_ttl_files_based_on_query
+        vars:
+          MODULE: ownership
+          QUERY: "{{.OWNERSHIP_UUID_QUERY}}"
+          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
+      - task: _combine_ttl_files_based_on_query
+        vars:
+          MODULE: person
+          QUERY: "{{.PERSON_UUID_QUERY}}"
           OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - task: _clean_turtle_with_rapper
         vars:
