@@ -31,7 +31,7 @@
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
             <namespace prefix="owl" uri="http://www.w3.org/2002/07/owl#"/>
-            <namespace prefix="gndo" uri="http://d-nb.info/standards/elementset/gnd#"/>
+            <namespace prefix="gndo" uri="https://d-nb.info/standards/elementset/gnd#"/>
         </namespaces>
         <mappings>
             <mapping>
