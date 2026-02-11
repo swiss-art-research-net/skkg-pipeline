@@ -2830,7 +2830,14 @@ then dataField[@name='AddressTxt']/value/text()
 else concat('https://vocab.getty.edu/page/ulan/', dataField[@name='AddressTxt']/value/text())</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
+                                    <arg name="text" type="xpath">if (vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/@name = 'Website_eigene') then
+    concat("Eigene Website von: ", ../../virtualField[@name='PerPersonVrt']/value/text())
+else if (vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/@name = 'Website_externe_Referenz') then
+    concat("Externe Referenz zu: ", ../../virtualField[@name='PerPersonVrt']/value/text())
+else if (vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/@name = 'werkverzeichnis') then
+    concat("Werkverzeichnis von: ", ../../virtualField[@name='PerPersonVrt']/value/text())
+else
+    concat("Weitere Referenz zu: ", ../../virtualField[@name='PerPersonVrt']/value/text())</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
                                 <additional>
@@ -2847,7 +2854,7 @@ else concat('https://vocab.getty.edu/page/ulan/', dataField[@name='AddressTxt']/
                                         </instance_generator>
                                         <label_generator name="Literal">
                                             <arg name="text" type="xpath">vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/formattedValue/text()</arg>
-                                            <arg name="language" type="constant">vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/formattedValue/@language</arg>
+                                            <arg name="language" type="xpath">vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/formattedValue/@language</arg>
                                         </label_generator>
                                     </entity>
                                 </additional>
