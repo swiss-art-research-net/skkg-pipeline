@@ -519,55 +519,6 @@
                 <link>
                     <path>
                         <source_relation>
-                            <relation>repeatableGroup/repeatableGroupItem</relation>
-                        </source_relation>
-                        <target_relation>
-                            <if>
-                                <equals value="wikidata_identifier">vocabularyReference[@instanceName="PerUrlTypeVgr"]/vocabularyReferenceItem/@name</equals>
-                            </if>
-                            <relationship>crmdig:L54_is_same-as</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>repeatableGroup/repeatableGroupItem</source_node>
-                        <target_node>
-                            <entity>
-                                <type>crm:E39_Actor</type>
-                                <type>wd:Q35120</type>
-                                <instance_generator name="URIwithWikidataId">
-                                    <arg name="id" type="xpath">dataField[@name="AddressTxt"]/value/text()</arg>
-                                </instance_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
-                <link>
-                    <path>
-                        <source_relation>
-                            <relation>repeatableGroup/repeatableGroupItem</relation>
-                        </source_relation>
-                        <target_relation>
-                            <if>
-                                <equals value="sik-isea">vocabularyReference[@instanceName="PerUrlTypeVgr"]/vocabularyReferenceItem/@name</equals>
-                            </if>
-                            <relationship>crmdig:L54_is_same-as</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>repeatableGroup/repeatableGroupItem</source_node>
-                        <target_node>
-                            <entity>
-                                <type>crm:E39_Actor</type>
-                                <instance_generator name="URIwithSikartId">
-                                    <arg name="id" type="xpath">substring-after(substring-before(dataField[@name="AddressTxt"]/value/text(), '&amp;'), 'id=')</arg>
-                                </instance_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
-                <link>
-                    <path>
-                        <source_relation>
                             <relation>vocabularyReference/vocabularyReferenceItem</relation>
                         </source_relation>
                         <target_relation>
@@ -2670,62 +2621,6 @@ else
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="sik_person">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
-                            </if>
-                            <relationship>crmdig:L54_is_same-as</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>repeatableGroupItem</source_node>
-                        <target_node>
-                            <entity>
-                                <type>crm:E39_Actor</type>
-                                <instance_generator name="URIwithSikartPersonId">
-                                    <arg name="id" type="xpath">dataField[@name='AddressTxt']/value/text()</arg>
-                                </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
-                                    <arg name="language" type="constant"/>
-                                </label_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
-                <link>
-                    <path>
-                        <source_relation>
-                            <relation>repeatableGroupItem</relation>
-                        </source_relation>
-                        <target_relation>
-                            <if>
-                                <equals value="sik_institution">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
-                            </if>
-                            <relationship>crmdig:L54_is_same-as</relationship>
-                        </target_relation>
-                    </path>
-                    <range>
-                        <source_node>repeatableGroupItem</source_node>
-                        <target_node>
-                            <entity>
-                                <type>crm:E39_Actor</type>
-                                <instance_generator name="URIwithSikartInstitutionId">
-                                    <arg name="id" type="xpath">dataField[@name='AddressTxt']/value/text()</arg>
-                                </instance_generator>
-                                <label_generator name="Literal">
-                                    <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
-                                    <arg name="language" type="constant"/>
-                                </label_generator>
-                            </entity>
-                        </target_node>
-                    </range>
-                </link>
-                <link>
-                    <path>
-                        <source_relation>
-                            <relation>repeatableGroupItem</relation>
-                        </source_relation>
-                        <target_relation>
-                            <if>
                                 <equals value="BnF_id">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
                             </if>
                             <relationship>crmdig:L54_is_same-as</relationship>
@@ -2775,6 +2670,194 @@ else concat('https://rkd.nl/artists/', dataField[@name='AddressTxt']/value/text(
                                     <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
                                     <arg name="language" type="constant"/>
                                 </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="proveana">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <relationship>crmdig:L54_is_same-as</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E39_Actor</type>
+                                <instance_generator name="URIorUUID">
+                                    <arg name="text" type="xpath">if (starts-with(dataField[@name='AddressTxt']/value/text(), 'http')) 
+then dataField[@name='AddressTxt']/value/text() 
+else concat('https://www.proveana.de/de/link/act', dataField[@name='AddressTxt']/value/text())</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="sik_person">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <relationship>crmdig:L54_is_same-as</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E39_Actor</type>
+                                <instance_generator name="URIorUUID">
+                                    <arg name="text" type="xpath">if (starts-with(dataField[@name='AddressTxt']/value/text(), 'http')) 
+then dataField[@name='AddressTxt']/value/text() 
+else concat('https://recherche.sik-isea.ch/de/sik:person-', dataField[@name='AddressTxt']/value/text())</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="sik_institution">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <relationship>crmdig:L54_is_same-as</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E39_Actor</type>
+                                <instance_generator name="URIorUUID">
+                                    <arg name="text" type="xpath">if (starts-with(dataField[@name='AddressTxt']/value/text(), 'http')) 
+then dataField[@name='AddressTxt']/value/text() 
+else concat('https://recherche.sik-isea.ch/de/sik:institution-', dataField[@name='AddressTxt']/value/text())</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="ULAN-id">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                            </if>
+                            <relationship>crmdig:L54_is_same-as</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E39_Actor</type>
+                                <instance_generator name="URIorUUID">
+                                    <arg name="text" type="xpath">if (starts-with(dataField[@name='AddressTxt']/value/text(), 'http')) 
+then dataField[@name='AddressTxt']/value/text() 
+else concat('https://vocab.getty.edu/page/ulan/', dataField[@name='AddressTxt']/value/text())</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>repeatableGroupItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <or>
+                                    <if>
+                                        <equals value="Website_eigene">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="Website_externe_Referenz">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="werkverzeichnis">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="Other_reference">vocabularyReference[@name='TypeVoc']/vocabularyReferenceItem/@name</equals>
+                                    </if>
+                                </or>
+                            </if>
+                            <relationship>crm:P67i_is_referred_to_by</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>repeatableGroupItem</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E73_Information_Object</type>
+                                <instance_generator name="URIorUUID">
+                                    <arg name="text" type="xpath">if (starts-with(dataField[@name='AddressTxt']/value/text(), 'http')) 
+then dataField[@name='AddressTxt']/value/text() 
+else concat('https://vocab.getty.edu/page/ulan/', dataField[@name='AddressTxt']/value/text())</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">if (vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/@name = 'Website_eigene') then
+    concat("Eigene Website von: ", ../../virtualField[@name='PerPersonVrt']/value/text())
+else if (vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/@name = 'Website_externe_Referenz') then
+    concat("Externe Referenz zu: ", ../../virtualField[@name='PerPersonVrt']/value/text())
+else if (vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/@name = 'werkverzeichnis') then
+    concat("Werkverzeichnis von: ", ../../virtualField[@name='PerPersonVrt']/value/text())
+else
+    concat("Weitere Referenz zu: ", ../../virtualField[@name='PerPersonVrt']/value/text())</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeIdAnd1Level">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="xpath">vocabularyReference[@instanceName='PerUrlTypeVgr']/@id</arg>
+                                            <arg name="level1" type="xpath">vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/@id</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="xpath">vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/formattedValue/text()</arg>
+                                            <arg name="language" type="xpath">vocabularyReference[@instanceName='PerUrlTypeVgr']/vocabularyReferenceItem/formattedValue/@language</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                         </target_node>
                     </range>

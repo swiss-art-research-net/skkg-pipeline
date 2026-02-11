@@ -129,6 +129,7 @@ tasks:
           - PerDateTypeVgr
           - PerGenderVgr
           - PerPersonTypeVgr
+          - PerUrlTypeVgr
           - PerTypeVgr
         task: _download-vocabulary-from-museumplus
         vars:
