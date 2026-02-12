@@ -128,6 +128,7 @@ tasks:
           - OwsRelevanceSourceVgr
           - PerDateTypeVgr
           - PerGenderVgr
+          - PerNameTypeVgr
           - PerPersonTypeVgr
           - PerUrlTypeVgr
           - PerTypeVgr
