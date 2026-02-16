@@ -183,7 +183,9 @@
                             <entity>
                                 <type>http://www.w3.org/2000/01/rdf-schema#Literal</type>
                                 <instance_generator name="Literal">
-                                    <arg name="text" type="xpath">text()</arg>
+                                    <arg name="text" type="xpath">if (contains(text(), ' ---'))
+then substring-before(text(), ' ---')
+else text()</arg>
                                     <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
                                 </instance_generator>
                             </entity>
