@@ -132,6 +132,7 @@ tasks:
         PREFIX exhibition: <https://data.skkg.ch/exhibition/>
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
+        PREFIX person: <https://data.skkg.ch/person/>
         SELECT DISTINCT ?uuid WHERE {
           {
             <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
@@ -154,7 +155,20 @@ tasks:
               crm:P9_consists_of ?activity .
           ?activity crm:P16_used_specific_object ?object ;
             crm:P11_had_participant/crm:P107_has_current_or_former_member ?person .
-          }	
+          }	UNION {
+            VALUES (?person) 
+            {
+              ( person:05585de9-7241-4c35-a040-a7dce126c616 )
+              ( person:3990d6e4-fa9b-44a4-9d82-ef6628ab389a )
+              ( person:3ffb75d1-8734-4083-962d-a2a1a23db29b )
+              ( person:86085f5e-f1a9-4156-950b-89d40d05e964 )
+              ( person:8a57b23f-7ac8-4fda-891d-1f1eeb603dc3 )
+              ( person:f23b8f3e-c9f8-49da-8ffb-31cb4e89b4a3 )
+              ( person:f7126d6d-406e-4ca2-a823-31553b73fe1b )
+              ( person:2f30908d-e268-452a-bcbb-2d937a481320	)
+              ( person:ded563fa-c17e-4c45-b377-8d9dc6ad4c91	)
+            }
+          }
           BIND(STRAFTER(STR(?person), "/person/") as ?uuid) 
         }
     cmds:
