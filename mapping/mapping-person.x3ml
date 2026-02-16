@@ -2754,7 +2754,7 @@ else concat('https://recherche.sik-isea.ch/sik:person-', dataField[@name='Addres
                                 <instance_generator name="URIorUUID">
                                     <arg name="text" type="xpath">if (starts-with(dataField[@name='AddressTxt']/value/text(), 'http')) 
 then dataField[@name='AddressTxt']/value/text() 
-else concat('https://recherche.sik-isea.ch/de/sik:institution-', dataField[@name='AddressTxt']/value/text())</arg>
+else concat('https://recherche.sik-isea.ch/sik:institution-', dataField[@name='AddressTxt']/value/text())</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
