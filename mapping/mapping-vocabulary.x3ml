@@ -69,7 +69,9 @@
                             <entity variable="metadata">
                                 <type>rdf:Literal</type>
                                 <instance_generator name="Literal">
-                                    <arg name="text" type="xpath">substring-before(../content/text(), ' ---')</arg>
+                                    <arg name="text" type="xpath">if (contains(../content/text(), ' ---'))
+then substring-before(../content/text(), ' ---')
+else ../content/text()</arg>
                                     <arg name="language" type="xpath">if (contains(../isoLanguageCode/text(),'--')) then ('und') else (../isoLanguageCode/text())</arg>
                                 </instance_generator>
                             </entity>
