@@ -18,7 +18,7 @@
             <namespace prefix="rso" uri="http://www.researchspace.org/ontology/"/>
             <namespace prefix="skkg" uri="https://ontology.skkg.ch/"/>
             <namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
-            <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/en/sik:"/>
+            <namespace prefix="sikart" uri="https://recherche.sik-isea.ch/sik:"/>
             <namespace prefix="ulan" uri="http://vocab.getty.edu/page/ulan/"/>
             <namespace prefix="wd" uri="http://www.wikidata.org/entity/"/>
             <namespace prefix="viaf" uri="https://viaf.org/viaf/"/>
@@ -2724,7 +2724,7 @@ else concat('https://www.proveana.de/de/link/act', dataField[@name='AddressTxt']
                                 <instance_generator name="URIorUUID">
                                     <arg name="text" type="xpath">if (starts-with(dataField[@name='AddressTxt']/value/text(), 'http')) 
 then dataField[@name='AddressTxt']/value/text() 
-else concat('https://recherche.sik-isea.ch/de/sik:person-', dataField[@name='AddressTxt']/value/text())</arg>
+else concat('https://recherche.sik-isea.ch/sik:person-', dataField[@name='AddressTxt']/value/text())</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
                                     <arg name="text" type="xpath">../../virtualField[@name='PerPersonVrt']/value/text()</arg>
