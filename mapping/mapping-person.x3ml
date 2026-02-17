@@ -1251,9 +1251,8 @@
                         <target_node>
                             <entity variable="birth_date_begin">
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1541,9 +1540,8 @@ else
                         <target_node>
                             <entity variable="death_date_begin">
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1576,9 +1574,8 @@ else
                         <target_node>
                             <entity variable="death_date_end">
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1831,9 +1828,8 @@ else
                         <target_node>
                             <entity variable="formation_date_begin">
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -1866,9 +1862,8 @@ else
                         <target_node>
                             <entity variable="formation_date_end">
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2121,9 +2116,8 @@ else
                         <target_node>
                             <entity variable="dissolution_date_begin">
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2156,9 +2150,8 @@ else
                         <target_node>
                             <entity variable="dissolution_date_end">
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2365,7 +2358,7 @@ else
                     <range>
                         <source_node>virtualField</source_node>
                         <target_node>
-                            <entity variable="birth_date">
+                            <entity>
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">person</arg>
@@ -2391,7 +2384,7 @@ else
                                 <equals value="DateFromBeginDat">@name</equals>
                             </if>
                             <relationship>crm:P4_has_time-span</relationship>
-                            <entity variable="birth_date">
+                            <entity>
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">person</arg>
@@ -2406,11 +2399,10 @@ else
                     <range>
                         <source_node>dataField</source_node>
                         <target_node>
-                            <entity variable="birth_date_begin">
+                            <entity>
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
@@ -2426,7 +2418,75 @@ else
                                 <equals value="DateFromEndDat">@name</equals>
                             </if>
                             <relationship>crm:P4_has_time-span</relationship>
-                            <entity variable="birth_date">
+                            <entity>
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">person</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="xpath">../_preprocessed_dateType/type/text()</arg>
+                                    <arg name="level2" type="constant">date</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P81a_end_of_the_begin</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:date</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="DateToBeginDat">@name</equals>
+                            </if>
+                            <relationship>crm:P4_has_time-span</relationship>
+                            <entity>
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">person</arg>
+                                    <arg name="id" type="xpath">../../../@uuid</arg>
+                                    <arg name="level1" type="xpath">../_preprocessed_dateType/type/text()</arg>
+                                    <arg name="level2" type="constant">date</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P81b_begin_of_the_end</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>xsd:date</type>
+                                <instance_generator name="typedLiteralGen">
+                                    <arg name="text" type="xpath">value/text()</arg>
+                                </instance_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="DateToEndDat">@name</equals>
+                            </if>
+                            <relationship>crm:P4_has_time-span</relationship>
+                            <entity>
                                 <type>crm:E52_Time-Span</type>
                                 <instance_generator name="URIwithTypeIdAnd2Levels">
                                     <arg name="type" type="constant">person</arg>
@@ -2441,11 +2501,10 @@ else
                     <range>
                         <source_node>dataField</source_node>
                         <target_node>
-                            <entity variable="birth_date_end">
+                            <entity>
                                 <type>xsd:date</type>
-                                <instance_generator name="Literal">
+                                <instance_generator name="typedLiteralGen">
                                     <arg name="text" type="xpath">value/text()</arg>
-                                    <arg name="language" type="constant"/>
                                 </instance_generator>
                             </entity>
                         </target_node>
