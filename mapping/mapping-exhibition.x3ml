@@ -1098,7 +1098,7 @@
                             <additional>
                                 <relationship>crm:P140_assigned_attribute_to</relationship>
                                 <entity>
-                                    <type>crm:E36_Visual_Item</type>
+                                    <type>crm:E39_Actor</type>
                                     <instance_info>
                                         <constant/>
                                     </instance_info>
