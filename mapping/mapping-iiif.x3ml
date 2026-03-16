@@ -47,6 +47,13 @@
                                 <if>
                                     <equals value="1">page_number/text()</equals>
                                 </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="">width/text()</equals>
+                                        </if>
+                                    </not>
+                                </if>
                             </and>
                         </if>
                         <entity variable="multimedia_item">
@@ -148,6 +155,13 @@
                                         </if>
                                     </not>
                                 </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="">width/text()</equals>
+                                        </if>
+                                    </not>
+                                </if>
                             </and>
                         </if>
                         <entity variable="multimedia_item">
@@ -235,7 +249,18 @@
                     <source_node>/collection/item</source_node>
                     <target_node>
                         <if>
-                            <equals value="true">done/text()</equals>
+                            <and>
+                                <if>
+                                    <equals value="true">done/text()</equals>
+                                </if>
+                                <if>
+                                    <not>
+                                        <if>
+                                            <equals value="">width/text()</equals>
+                                        </if>
+                                    </not>
+                                </if>
+                            </and>
                         </if>
                         <entity variable="digitalObject">
                             <type>crmdig:D1_Digital_Object</type>
