@@ -30,6 +30,7 @@
             <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
+            <namespace prefix="address" uri="https://data.skkg.ch/address/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -364,6 +365,10 @@
                                     <arg name="type" type="constant">address</arg>
                                     <arg name="id" type="xpath">@uuid</arg>
                                 </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">formattedValue/text()</arg>
+                                    <arg name="language" type="constant"/>
+                                </label_generator>
                             </entity>
                         </target_node>
                     </range>
@@ -1078,6 +1083,16 @@
                                 </if>
                                 <if>
                                     <exists>dataField[@name='SortLnu']</exists>
+                                </if>
+                                <if>
+                                    <or>
+                                        <if>
+                                            <equals value="60204">vocabularyReference[@instanceName="ExhOrganiserTypeVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                        <if>
+                                            <equals value="98263">vocabularyReference[@instanceName="ExhOrganiserTypeVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </or>
                                 </if>
                             </and>
                         </if>
