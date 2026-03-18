@@ -1084,6 +1084,16 @@
                                 <if>
                                     <exists>dataField[@name='SortLnu']</exists>
                                 </if>
+                                <if>
+                                    <or>
+                                        <if>
+                                            <equals value="60204">vocabularyReference[@instanceName="ExhOrganiserTypeVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                        <if>
+                                            <equals value="98263">vocabularyReference[@instanceName="ExhOrganiserTypeVgr"]/vocabularyReferenceItem/@id</equals>
+                                        </if>
+                                    </or>
+                                </if>
                             </and>
                         </if>
                         <entity variable="exhibition_organiser_order_assignment">
