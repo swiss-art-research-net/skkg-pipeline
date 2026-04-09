@@ -1867,6 +1867,10 @@
                                             <arg name="type" type="constant">type</arg>
                                             <arg name="id" type="constant">sortlnu</arg>
                                         </instance_generator>
+                                        <label_generator name="Constant">
+                                            <arg name="text" type="constant">Sortierung</arg>
+                                            <arg name="language" type="constant">de</arg>
+                                        </label_generator>
                                     </entity>
                                 </additional>
                             </entity>
