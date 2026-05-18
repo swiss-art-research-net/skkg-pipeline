@@ -1,4 +1,6 @@
 import argparse
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 import re
 import requests
 from os import path
@@ -25,6 +27,8 @@ SOURCE_NAMESPACES  = {
     "lt": "http://terminology.lido-schema.org/",
     "wd": "http://www.wikidata.org/entity/"
 }
+
+DEFAULT_WD_ENDPOINT = "https://query.wikidata.org/sparql"
 
 def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None, ingestUpdate=False, options=None):
     """Retrieve additional data for URIs in the Triple Store from respective sources
@@ -313,7 +317,7 @@ def retrieveLtData(identifiers, outputFile):
         "message": "Retrieved %d additional LIDO Terminology identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
-def retrieveWdData(identifiers, outputFile, *, constructQuery=None):
+def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEFAULT_WD_ENDPOINT, maxRetries=5, maxRetryAfterSeconds=300):
     """
     Retrieves the data for the given identifiers and writes it to a file named wd.ttl in the specified output file.
     Only the data for the identifiers that are not already in the file is retrieved.
@@ -348,6 +352,31 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None):
         """
         return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
+    def getRetryAfterSeconds(headers, fallback=90):
+        """
+        Parse an HTTP Retry-After header value into seconds.
+        Returns the fallback value when the header is absent or invalid.
+        """
+        if headers is None:
+            return fallback
+
+        retryAfter = headers.get("Retry-After")
+        if retryAfter is None:
+            return fallback
+
+        try:
+            return max(int(retryAfter), 1)
+        except (TypeError, ValueError):
+            pass
+
+        try:
+            retryAt = parsedate_to_datetime(retryAfter)
+            if retryAt.tzinfo is None:
+                retryAt = retryAt.replace(tzinfo=timezone.utc)
+            return max(int((retryAt - datetime.now(timezone.utc)).total_seconds()), 1)
+        except (TypeError, ValueError, OverflowError):
+            return fallback
+
     # Read the output file and query for existing URIs
     # targetFile = path.join(targetFolder, 'wd.ttl')
     existingIdentifiers = queryIdentifiersInFile(outputFile, "?identifier wdt:P31 ?type .")
@@ -356,32 +385,75 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None):
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
 
     # Retrieve relevant data from Wikidata and append to ttl file
-    wdEndpoint = "https://query.wikidata.org/sparql"
     batchSizeForRetrieval = 20
     agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-    sparql = SPARQLWrapper(wdEndpoint, agent=agent)    
+    numIdentifiersWithData = 0
     # with open(targetFile, 'a') as outputFile:
     with open(outputFile, 'a') as outputFile:
         if constructQuery is None:
             constructQuery = DEFAULT_WD_CONSTRUCT_QUERY
         print("Retrieving %d Wikidata identifiers in %d chunks" % (len(identifiersToRetrieve), (len(identifiersToRetrieve) + batchSizeForRetrieval - 1) // batchSizeForRetrieval))
         for batch in tqdm(chunker(identifiersToRetrieve, batchSizeForRetrieval)):
+            retryCount = 0
             valuesClause = """
             VALUES (?entity) {
                 %s
             }""" % ( "(<" + ">)\n(<".join(batch) + ">)" )
             query = re.sub(r'\}\s*$', valuesClause + "\n}", constructQuery, flags=re.DOTALL)
-            sparql.setQuery(query)
-            try:
-                results = sparql.query().convert()
-            except request.HTTPError as exception:
-                print(exception)
+            while True:
+                try:
+                    response = requests.post(
+                        endpoint,
+                        data=query.encode("utf-8"),
+                        headers={
+                            "Accept": "text/turtle",
+                            "Content-Type": "application/sparql-query; charset=utf-8",
+                            "User-Agent": agent,
+                            "Api-User-Agent": agent
+                        }
+                    )
+                    response.raise_for_status()
+                    results = Graph()
+                    results.parse(data=response.text, format='turtle')
+                    break
+                except requests.HTTPError as exception:
+                    response = exception.response
+                    responseHeaders = dict(response.headers.items()) if response is not None else {}
+                    responseBody = response.text if response is not None else ""
+                    if response is not None and response.status_code == 429:
+                        retryCount += 1
+                        retryAfterSeconds = getRetryAfterSeconds(response.headers)
+                        if retryCount > maxRetries:
+                            return {
+                                "status": "error",
+                                "numRetrieved": numIdentifiersWithData,
+                                "message": "Aborting Wikidata batch after %d HTTP 429 retries (last Retry-After: %d seconds, max allowed retries: %d)" % (retryCount - 1, retryAfterSeconds, maxRetries)
+                            }
+                        if retryAfterSeconds > maxRetryAfterSeconds:
+                            return {
+                                "status": "error",
+                                "numRetrieved": numIdentifiersWithData,
+                                "message": "Aborting Wikidata batch because Retry-After (%d seconds) exceeds the configured maximum of %d seconds" % (retryAfterSeconds, maxRetryAfterSeconds)
+                            }
+                        print("HTTP 429 from Wikidata endpoint. Waiting %d seconds before retrying this batch." % retryAfterSeconds)
+                        sleep(retryAfterSeconds)
+                        continue
+                    else:
+                        statusCode = response.status_code if response is not None else -1
+                        print("HTTP error %d from Wikidata endpoint with response headers %s." % (statusCode, responseHeaders))
+                        if responseBody:
+                            print("HTTP error body from Wikidata endpoint: %s" % responseBody[:1000])
+                        raise exception
+            triplesInBatch = len(results)
+            identifiersInBatch = len({str(subject) for subject in results.subjects()})
+            numIdentifiersWithData += identifiersInBatch
             sleep(3)
-            outputFile.write(results.serialize(format='turtle'))
+            if triplesInBatch > 0:
+                outputFile.write(results.serialize(format='turtle'))
     return {
         "status": "success",
-        "numRetrieved": len(identifiersToRetrieve),
-        "message": "Retrieved %d additional Wikidata identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
+        "numRetrieved": numIdentifiersWithData,
+        "message": "Retrieved data for %d Wikidata identifiers (%d requested, %d present in total)" % (numIdentifiersWithData, len(identifiersToRetrieve), len(identifiers))
     }
 
 def printLogs(logs):
@@ -428,6 +500,7 @@ if __name__ == "__main__":
     parser.add_argument('--ingest', type=bool, default=False, help='Ingest the retrieved data into the Triple Store')
     parser.add_argument('--ingestNamespace', type=str, help='Namespace for named graphs where sources will be ingested to. The source name will be appended to the namespace.')
     parser.add_argument('--ingestUpdate', type=bool, default=False, help='Ingest the data only if new data has been retrieved')
+    parser.add_argument('--wdEndpoint', type=str, default=DEFAULT_WD_ENDPOINT, help='Wikidata SPARQL endpoint to use for Wikidata data retrieval')
     parser.add_argument('--wdConstructQuery', type=str, help='Optional custom CONSTRUCT query to use for Wikidata data retrieval. VALUES bound for ?entity will be added automatically.')
     parser.add_argument('--gndPredicates', type=str, help='Optional predicates to use for recursively retrieving additional GND identifiers. Provide as comma separated list of full URIs or gndo: predicates.')
     args = parser.parse_args()
@@ -439,10 +512,13 @@ if __name__ == "__main__":
         args.sources = [s.strip() for s in args.sources.split(",")]
 
     options = {}
-    if args.wdConstructQuery is not None:
+    if args.wdEndpoint != DEFAULT_WD_ENDPOINT:
         options['wd'] = {
-            'constructQuery': args.wdConstructQuery
+            'endpoint': args.wdEndpoint
         }
+    if args.wdConstructQuery is not None:
+        options.setdefault('wd', {})
+        options['wd']['constructQuery'] = args.wdConstructQuery
     if args.gndPredicates is not None:
         gndPredicates = []
         for s in args.gndPredicates.split(","):
