@@ -387,7 +387,6 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEF
     # Retrieve relevant data from Wikidata and append to ttl file
     batchSizeForRetrieval = 20
     agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-    sparql = SPARQLWrapper(endpoint, agent=agent)
     numIdentifiersWithData = 0
     # with open(targetFile, 'a') as outputFile:
     with open(outputFile, 'a') as outputFile:
@@ -400,22 +399,37 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEF
                 %s
             }""" % ( "(<" + ">)\n(<".join(batch) + ">)" )
             query = re.sub(r'\}\s*$', valuesClause + "\n}", constructQuery, flags=re.DOTALL)
-            sparql.setQuery(query)
             while True:
                 try:
-                    results = sparql.query().convert()
+                    response = requests.post(
+                        endpoint,
+                        data=query.encode("utf-8"),
+                        headers={
+                            "Accept": "text/turtle",
+                            "Content-Type": "application/sparql-query; charset=utf-8",
+                            "User-Agent": agent,
+                            "Api-User-Agent": agent
+                        }
+                    )
+                    response.raise_for_status()
+                    results = Graph()
+                    results.parse(data=response.text, format='turtle')
                     break
-                except request.HTTPError as exception:
-                    if exception.code == 429:
-                        retryAfterSeconds = getRetryAfterSeconds(exception.headers)
+                except requests.HTTPError as exception:
+                    response = exception.response
+                    responseHeaders = dict(response.headers.items()) if response is not None else {}
+                    responseBody = response.text if response is not None else ""
+                    if response is not None and response.status_code == 429:
+                        retryAfterSeconds = getRetryAfterSeconds(response.headers)
                         print("HTTP 429 from Wikidata endpoint. Waiting %d seconds before retrying this batch." % retryAfterSeconds)
                         sleep(retryAfterSeconds)
                         continue
-                    return {
-                        "status": "error",
-                        "numRetrieved": numIdentifiersWithData,
-                        "message": "Could not retrieve Wikidata data after receiving %d identifiers: %s" % (numIdentifiersWithData, exception)
-                    }
+                    else:
+                        statusCode = response.status_code if response is not None else -1
+                        print("HTTP error %d from Wikidata endpoint with response headers %s." % (statusCode, responseHeaders))
+                        if responseBody:
+                            print("HTTP error body from Wikidata endpoint: %s" % responseBody[:1000])
+                        raise exception
             triplesInBatch = len(results)
             identifiersInBatch = len({str(subject) for subject in results.subjects()})
             numIdentifiersWithData += identifiersInBatch

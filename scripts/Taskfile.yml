@@ -47,7 +47,7 @@ tasks:
       WDCONSTRUCTQUERY:
         sh: cat /scripts/queries/wdRetrievalConstructQuery.sparql
     cmds:
-      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}} --sources "{{.SOURCES}}" --wdConstructQuery '{{.WDCONSTRUCTQUERY}}'
+      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}} --sources "{{.SOURCES}}" --wdConstructQuery '{{.WDCONSTRUCTQUERY}}'  
       - for:
           - aat
           - gnd
