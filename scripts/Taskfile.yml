@@ -33,30 +33,6 @@ includes:
 
 tasks:
 
-
-  debug:
-    desc: Debug
-    interactive: True
-    vars:
-      OUTPUTFOLDER: /data/ttl/additional/external
-      PREDICATES: http://www.ics.forth.gr/isl/CRMdig/L54_is_same-as,http://www.cidoc-crm.org/cidoc-crm/P2_has_type,http://www.cidoc-crm.org/cidoc-crm/P127_has_broader_term,http://www.w3.org/2004/02/skos/core#exactMatch,http://www.w3.org/2004/02/skos/core#closeMatch,http://www.w3.org/2004/02/skos/core#relatedMatch,http://www.w3.org/2004/02/skos/core#related
-      SOURCES: wd
-      INGEST: False
-      INGESTUPDATE: False
-      INGESTNAMESPACE: https://data.skkg.ch/graph/externalData/
-      WDCONSTRUCTQUERY:
-        sh: cat /scripts/queries/wdRetrievalConstructQuery.sparql
-    cmds:
-      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}} --sources "{{.SOURCES}}" --wdConstructQuery '{{.WDCONSTRUCTQUERY}}'  
-      - for:
-          - aat
-          - gnd
-          - lt
-          - wd
-        task: _clean_turtle_with_rapper
-        vars:
-          FILE: "/data/ttl/additional/external/{{.ITEM}}.ttl"
-
   default:
     desc: Runs the entire pipeline
     cmds:
