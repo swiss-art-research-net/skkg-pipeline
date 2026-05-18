@@ -26,6 +26,8 @@ SOURCE_NAMESPACES  = {
     "wd": "http://www.wikidata.org/entity/"
 }
 
+DEFAULT_WD_ENDPOINT = "https://query.wikidata.org/sparql"
+
 def runDataRetrieval(*, endpoint, sources, predicates, outputFolder, outputFilePrefix='', ingest=False, ingestNamespace=None, ingestUpdate=False, options=None):
     """Retrieve additional data for URIs in the Triple Store from respective sources
 
@@ -313,7 +315,7 @@ def retrieveLtData(identifiers, outputFile):
         "message": "Retrieved %d additional LIDO Terminology identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
-def retrieveWdData(identifiers, outputFile, *, constructQuery=None):
+def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEFAULT_WD_ENDPOINT):
     """
     Retrieves the data for the given identifiers and writes it to a file named wd.ttl in the specified output file.
     Only the data for the identifiers that are not already in the file is retrieved.
@@ -356,10 +358,9 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None):
     identifiersToRetrieve = [d for d in identifiers if d not in existingIdentifiers]
 
     # Retrieve relevant data from Wikidata and append to ttl file
-    wdEndpoint = "https://query.wikidata.org/sparql"
     batchSizeForRetrieval = 20
     agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-    sparql = SPARQLWrapper(wdEndpoint, agent=agent)    
+    sparql = SPARQLWrapper(endpoint, agent=agent)
     # with open(targetFile, 'a') as outputFile:
     with open(outputFile, 'a') as outputFile:
         if constructQuery is None:
@@ -428,6 +429,7 @@ if __name__ == "__main__":
     parser.add_argument('--ingest', type=bool, default=False, help='Ingest the retrieved data into the Triple Store')
     parser.add_argument('--ingestNamespace', type=str, help='Namespace for named graphs where sources will be ingested to. The source name will be appended to the namespace.')
     parser.add_argument('--ingestUpdate', type=bool, default=False, help='Ingest the data only if new data has been retrieved')
+    parser.add_argument('--wdEndpoint', type=str, default=DEFAULT_WD_ENDPOINT, help='Wikidata SPARQL endpoint to use for Wikidata data retrieval')
     parser.add_argument('--wdConstructQuery', type=str, help='Optional custom CONSTRUCT query to use for Wikidata data retrieval. VALUES bound for ?entity will be added automatically.')
     parser.add_argument('--gndPredicates', type=str, help='Optional predicates to use for recursively retrieving additional GND identifiers. Provide as comma separated list of full URIs or gndo: predicates.')
     args = parser.parse_args()
@@ -439,10 +441,13 @@ if __name__ == "__main__":
         args.sources = [s.strip() for s in args.sources.split(",")]
 
     options = {}
-    if args.wdConstructQuery is not None:
+    if args.wdEndpoint != DEFAULT_WD_ENDPOINT:
         options['wd'] = {
-            'constructQuery': args.wdConstructQuery
+            'endpoint': args.wdEndpoint
         }
+    if args.wdConstructQuery is not None:
+        options.setdefault('wd', {})
+        options['wd']['constructQuery'] = args.wdConstructQuery
     if args.gndPredicates is not None:
         gndPredicates = []
         for s in args.gndPredicates.split(","):
