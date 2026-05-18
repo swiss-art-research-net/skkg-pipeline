@@ -1,4 +1,6 @@
 import argparse
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 import re
 import requests
 from os import path
@@ -350,6 +352,31 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEF
         """
         return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
+    def getRetryAfterSeconds(headers, fallback=90):
+        """
+        Parse an HTTP Retry-After header value into seconds.
+        Returns the fallback value when the header is absent or invalid.
+        """
+        if headers is None:
+            return fallback
+
+        retryAfter = headers.get("Retry-After")
+        if retryAfter is None:
+            return fallback
+
+        try:
+            return max(int(retryAfter), 1)
+        except (TypeError, ValueError):
+            pass
+
+        try:
+            retryAt = parsedate_to_datetime(retryAfter)
+            if retryAt.tzinfo is None:
+                retryAt = retryAt.replace(tzinfo=timezone.utc)
+            return max(int((retryAt - datetime.now(timezone.utc)).total_seconds()), 1)
+        except (TypeError, ValueError, OverflowError):
+            return fallback
+
     # Read the output file and query for existing URIs
     # targetFile = path.join(targetFolder, 'wd.ttl')
     existingIdentifiers = queryIdentifiersInFile(outputFile, "?identifier wdt:P31 ?type .")
@@ -361,6 +388,7 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEF
     batchSizeForRetrieval = 20
     agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
     sparql = SPARQLWrapper(endpoint, agent=agent)
+    numIdentifiersWithData = 0
     # with open(targetFile, 'a') as outputFile:
     with open(outputFile, 'a') as outputFile:
         if constructQuery is None:
@@ -373,16 +401,31 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEF
             }""" % ( "(<" + ">)\n(<".join(batch) + ">)" )
             query = re.sub(r'\}\s*$', valuesClause + "\n}", constructQuery, flags=re.DOTALL)
             sparql.setQuery(query)
-            try:
-                results = sparql.query().convert()
-            except request.HTTPError as exception:
-                print(exception)
-            sleep(70) # Sleep for 70 seconds to avoid hitting the Wikidata query rate limit of 1 request per minute for large result sets
-            outputFile.write(results.serialize(format='turtle'))
+            while True:
+                try:
+                    results = sparql.query().convert()
+                    break
+                except request.HTTPError as exception:
+                    if exception.code == 429:
+                        retryAfterSeconds = getRetryAfterSeconds(exception.headers)
+                        print("HTTP 429 from Wikidata endpoint. Waiting %d seconds before retrying this batch." % retryAfterSeconds)
+                        sleep(retryAfterSeconds)
+                        continue
+                    return {
+                        "status": "error",
+                        "numRetrieved": numIdentifiersWithData,
+                        "message": "Could not retrieve Wikidata data after receiving %d identifiers: %s" % (numIdentifiersWithData, exception)
+                    }
+            triplesInBatch = len(results)
+            identifiersInBatch = len({str(subject) for subject in results.subjects()})
+            numIdentifiersWithData += identifiersInBatch
+            sleep(3)
+            if triplesInBatch > 0:
+                outputFile.write(results.serialize(format='turtle'))
     return {
         "status": "success",
-        "numRetrieved": len(identifiersToRetrieve),
-        "message": "Retrieved %d additional Wikidata identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
+        "numRetrieved": numIdentifiersWithData,
+        "message": "Retrieved data for %d Wikidata identifiers (%d requested, %d present in total)" % (numIdentifiersWithData, len(identifiersToRetrieve), len(identifiers))
     }
 
 def printLogs(logs):
