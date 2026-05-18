@@ -11,7 +11,6 @@ vars:
   BLAZEGRAPH_BACKUP: http://blazegraph:8080/blazegraph/backup
   BLAZEGRAPH_ENDPOINT: http://blazegraph:8080/blazegraph/sparql
   BLAZEGRAPH_ENDPOINT_SECONDARY: http://blazegraph-secondary:8080/blazegraph/sparql
-  WIKIDATA_ENDPOINT: https://qlever.dev/api/wikidata
   GENERATOR_POLICY: /mapping/generator-policy.xml
   X3ML_ENDPOINT: http://localhost:8089/transform
 
@@ -48,7 +47,7 @@ tasks:
       WDCONSTRUCTQUERY:
         sh: cat /scripts/queries/wdRetrievalConstructQuery.sparql
     cmds:
-      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}} --sources "{{.SOURCES}}" --wdConstructQuery '{{.WDCONSTRUCTQUERY}}' --wdEndpoint {{.WIKIDATA_ENDPOINT}}
+      - python /scripts/retrieveAdditionalData.py --endpoint {{.BLAZEGRAPH_ENDPOINT}} --outputFolder {{.OUTPUTFOLDER}} --predicates "{{.PREDICATES}}" --ingest {{.INGEST}} --ingestNamespace {{.INGESTNAMESPACE}} --ingestUpdate {{.INGESTUPDATE}} --sources "{{.SOURCES}}" --wdConstructQuery '{{.WDCONSTRUCTQUERY}}'
       - for:
           - aat
           - gnd

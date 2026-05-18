@@ -377,7 +377,7 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEF
                 results = sparql.query().convert()
             except request.HTTPError as exception:
                 print(exception)
-            sleep(3)
+            sleep(70) # Sleep for 70 seconds to avoid hitting the Wikidata query rate limit of 1 request per minute for large result sets
             outputFile.write(results.serialize(format='turtle'))
     return {
         "status": "success",
