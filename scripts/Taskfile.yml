@@ -116,6 +116,7 @@ tasks:
           - ObjProvenanceStatusVgr
           - ObjTechniqueVgr
           - ObjTextsTypeVgr
+          - ObjUrlTypeVgr
           - OwsAcquisitionTypeVgr
           - OwsArtPersonVgr
           - OwsCharacteristicsTypeVgr
