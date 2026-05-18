@@ -317,7 +317,7 @@ def retrieveLtData(identifiers, outputFile):
         "message": "Retrieved %d additional LIDO Terminology identifiers (%d present in total)" % (len(identifiersToRetrieve), len(identifiers))
     }
 
-def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEFAULT_WD_ENDPOINT):
+def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEFAULT_WD_ENDPOINT, maxRetries=5, maxRetryAfterSeconds=300):
     """
     Retrieves the data for the given identifiers and writes it to a file named wd.ttl in the specified output file.
     Only the data for the identifiers that are not already in the file is retrieved.
@@ -394,6 +394,7 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEF
             constructQuery = DEFAULT_WD_CONSTRUCT_QUERY
         print("Retrieving %d Wikidata identifiers in %d chunks" % (len(identifiersToRetrieve), (len(identifiersToRetrieve) + batchSizeForRetrieval - 1) // batchSizeForRetrieval))
         for batch in tqdm(chunker(identifiersToRetrieve, batchSizeForRetrieval)):
+            retryCount = 0
             valuesClause = """
             VALUES (?entity) {
                 %s
@@ -420,7 +421,20 @@ def retrieveWdData(identifiers, outputFile, *, constructQuery=None, endpoint=DEF
                     responseHeaders = dict(response.headers.items()) if response is not None else {}
                     responseBody = response.text if response is not None else ""
                     if response is not None and response.status_code == 429:
+                        retryCount += 1
                         retryAfterSeconds = getRetryAfterSeconds(response.headers)
+                        if retryCount > maxRetries:
+                            return {
+                                "status": "error",
+                                "numRetrieved": numIdentifiersWithData,
+                                "message": "Aborting Wikidata batch after %d HTTP 429 retries (last Retry-After: %d seconds, max allowed retries: %d)" % (retryCount - 1, retryAfterSeconds, maxRetries)
+                            }
+                        if retryAfterSeconds > maxRetryAfterSeconds:
+                            return {
+                                "status": "error",
+                                "numRetrieved": numIdentifiersWithData,
+                                "message": "Aborting Wikidata batch because Retry-After (%d seconds) exceeds the configured maximum of %d seconds" % (retryAfterSeconds, maxRetryAfterSeconds)
+                            }
                         print("HTTP 429 from Wikidata endpoint. Waiting %d seconds before retrying this batch." % retryAfterSeconds)
                         sleep(retryAfterSeconds)
                         continue
