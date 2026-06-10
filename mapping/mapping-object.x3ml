@@ -28,6 +28,7 @@
             <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
             <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
+            <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -102,6 +103,93 @@
                                     <arg name="text" type="xpath">concat('production of object ', if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@uuid))</arg>
                                     <arg name="language" type="constant">en</arg>
                                 </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>.</relation>
+                        </source_relation>
+                        <target_relation>
+                            <relationship>crm:P129i_is_subject_of</relationship>
+                            <entity variable="object_iiif_manifest">
+                                <type>crm:E33_Linguistic_Object</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">manifest</arg>
+                                    <arg name="level2" type="constant">iiif</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('IIIF Manifest of object ', if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@uuid))</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                            <relationship>la:digitally_carried_by</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>.</source_node>
+                        <target_node>
+                            <entity variable="object_iiif_manifest_document">
+                                <type>crmdig:D1_Digital_Object</type>
+                                <instance_generator name="URIwithTypeIdAnd3Levels">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                    <arg name="level1" type="constant">manifest</arg>
+                                    <arg name="level2" type="constant">iiif</arg>
+                                    <arg name="level3" type="constant">digitalobject</arg>
+                                </instance_generator>
+                                <label_generator name="Literal">
+                                    <arg name="text" type="xpath">concat('IIIF Manifest of object ', if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@uuid))</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                                <additional>
+                                    <relationship>la:access_point</relationship>
+                                    <entity>
+                                        <type>crmdig:D1_Digital_Object</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIorUUID">
+                                            <arg name="text" type="xpath">concat('https://manifest.digital.skkg.ch/iiif/object/',@uuid)</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="xpath">concat('IIIF Manifest of object ', if (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) then (virtualField[@name='ObjObjectTitleFirstVrt']/value/text()) else (@uuid))</arg>
+                                            <arg name="language" type="constant"/>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                                <additional>
+                                    <relationship>dcterms:conformsTo</relationship>
+                                    <entity>
+                                        <type>crmdig:D1_Digital_Object</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIorUUID">
+                                            <arg name="text" type="constant">http://iiif.io/api/presentation/</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">IIIF Presentation API</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
+                                <additional>
+                                    <relationship>dc:format</relationship>
+                                    <entity>
+                                        <type>rdf:Literal</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="Literal">
+                                            <arg name="text" type="constant">application/ld+json;profile='http://iiif.io/api/presentation/3/context.json'</arg>
+                                        </instance_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                         </target_node>
                     </range>
