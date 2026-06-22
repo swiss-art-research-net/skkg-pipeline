@@ -931,7 +931,7 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="ObjAcquisitionAddressRef">../@name</equals>
+                                <equals value="ObjAcquisitionPersonRef">../@name</equals>
                             </if>
                             <relationship>crm:P24i_changed_ownership_through</relationship>
                             <entity variable="object_acquisition">
@@ -955,7 +955,7 @@
                             <entity>
                                 <type>crm:E39_Actor</type>
                                 <instance_generator name="URIwithTypeAndId">
-                                    <arg name="type" type="constant">address</arg>
+                                    <arg name="type" type="constant">person</arg>
                                     <arg name="id" type="xpath">if (../../dataField[@name='_UserObj4487Boo']/value/text() = 'true') then ('privateIndividual') else (@uuid)</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
