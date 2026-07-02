@@ -52,18 +52,6 @@ tasks:
       FILENAME: 
         sh: echo partial-dump-$(date "+%Y-%m-%d-%H-%M-%S")
       NUMFILES: 1000
-      ADDRESS_UUID_QUERY: |
-        PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-        PREFIX la: <https://linked.art/ns/terms/>
-        PREFIX skkg: <https://ontology.skkg.ch/>
-        SELECT DISTINCT ?uuid WHERE {
-          <https://data.skkg.ch/objectgroup/07115c7c-a3db-4c70-828d-2a3699416254> la:has_member ?object .
-          ?object a skkg:Object ;
-            crm:P24i_changed_ownership_through/crm:P23_transferred_title_from? ?address .
-          ?address a skkg:Address .
-          FILTER(?address != <https://data.skkg.ch/address/privateIndividual>)
-          BIND(STRAFTER(STR(?address), "/address/") as ?uuid) 
-        }
       LITERATURE_UUID_QUERY: |
         PREFIX la: <https://linked.art/ns/terms/>
         PREFIX skkg: <https://ontology.skkg.ch/>
@@ -155,7 +143,11 @@ tasks:
               crm:P9_consists_of ?activity .
           ?activity crm:P16_used_specific_object ?object ;
             crm:P11_had_participant/crm:P107_has_current_or_former_member ?person .
-          }	UNION {
+          } UNION {
+            ?object crm:P24i_changed_ownership_through/crm:P23_transferred_title_from? ?person .
+            ?person a skkg:Person .
+            FILTER(?person != <https://data.skkg.ch/person/privateIndividual>)
+          }	 UNION {
             VALUES (?person) 
             {
               ( person:05585de9-7241-4c35-a040-a7dce126c616 )
@@ -179,11 +171,6 @@ tasks:
         find /data/ttl/main/ -type d | while read dir; do
           find "$dir" -maxdepth 1 -name "*.ttl" | head -n {{.NUMFILES}} | xargs cat >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
         done
-      - task: _combine_ttl_files_based_on_query
-        vars:
-          MODULE: address
-          QUERY: "{{.ADDRESS_UUID_QUERY}}"
-          OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
       - task: _combine_ttl_files_based_on_query
         vars:
           MODULE: literature
