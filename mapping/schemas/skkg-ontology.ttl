@@ -122,3 +122,8 @@ type:sortlnu rdf:type skkg:Type, skos:Concept ;
     rdfs:label "SortLnu", "Sortierung"@de ;
     skos:prefLabel "Sortierung"@de .
     
+<https://data.skkg.ch/type/21101/gnd> rdf:type skkg:Type, skos:Concept, crm:E55_Type ;
+    rdfs:label "GND-ID", "GND-ID"@de ;
+    skos:prefLabel "GND-ID"@de ;
+    skos:inScheme type:21101 ;
+    crm:P127_has_broader_term type:21101 .
