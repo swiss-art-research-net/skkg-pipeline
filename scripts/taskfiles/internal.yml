@@ -196,6 +196,8 @@ tasks:
           MODULE: person
           QUERY: "{{.PERSON_UUID_QUERY}}"
           OUTPUTFILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
+      - # Add the SKKG ontology
+      - cat /mapping/schemas/skkg-ontology.ttl >> {{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl
       - task: _clean_turtle_with_rapper
         vars:
           FILE: "{{.OUTPUTFOLDER_DUMP}}/{{.FILENAME}}.ttl"
