@@ -494,7 +494,14 @@
                         </source_relation>
                         <target_relation>
                             <if>
-                                <equals value="PerReferenceGNDVgr">../@instanceName</equals>
+                                <or>
+                                    <if>
+                                        <equals value="PerReferenceGNDVgr">../@instanceName</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="PerReferenceGNDGroupVgr">../@instanceName</equals>
+                                    </if>
+                                </or>
                             </if>
                             <relationship>crmdig:L54_is_same-as</relationship>
                         </target_relation>
