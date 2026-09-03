@@ -797,6 +797,68 @@
                 <link>
                     <path>
                         <source_relation>
+                            <relation>dataField</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <and>
+                                    <if>
+                                        <equals value="_UserObj7068Boo">@name</equals>
+                                    </if>
+                                    <if>
+                                        <equals value="true">value/text()</equals>
+                                    </if>
+                                </and>
+                            </if>
+                            <relationship>crm:P24i_changed_ownership_through</relationship>
+                            <entity variable="object_acquisition">
+                                <type>crm:E8_Acquisition</type>
+                                <instance_generator name="URIwithTypeIdAnd1Level">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">acquisition</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P4_has_time-span</relationship>
+                            <entity>
+                                <type>crm:E52_Time-Span</type>
+                                <instance_generator name="URIwithTypeIdAnd2Levels">
+                                    <arg name="type" type="constant">object</arg>
+                                    <arg name="id" type="xpath">../@uuid</arg>
+                                    <arg name="level1" type="constant">acquisition</arg>
+                                    <arg name="level2" type="constant">date</arg>
+                                </instance_generator>
+                            </entity>
+                            <relationship>crm:P2_has_type</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>dataField</source_node>
+                        <target_node>
+                            <entity>
+                                <type>crm:E55_Type</type>
+                                <instance_info>
+                                    <constant/>
+                                </instance_info>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">type</arg>
+                                    <arg name="id" type="constant">datungenau</arg>
+                                </instance_generator>
+                                <label_generator name="Constant">
+                                    <arg name="text" type="constant">Datierung ungenau</arg>
+                                    <arg name="language" type="constant">de</arg>
+                                </label_generator>
+                                <label_generator name="Constant">
+                                    <arg name="text" type="constant">Inexact dating</arg>
+                                    <arg name="language" type="constant">en</arg>
+                                </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+                <link>
+                    <path>
+                        <source_relation>
                             <relation>repeatableGroup/repeatableGroupItem</relation>
                         </source_relation>
                         <target_relation>
