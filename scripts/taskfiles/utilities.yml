@@ -25,16 +25,16 @@ tasks:
       - rm -f {{.TEMP_FILE}}
 
   _clean_turtle_with_rapper:
-    desc: Parses and outputs a Turtle file using RaptorRDF to ensure proper formatting
+    desc: Parses and outputs a Turtle file using Riot to ensure proper formatting
     internal: true
     requires:
       vars: [FILE]
     vars:
       TEMP_FILE:
-        sh: echo "/data/temp/$(basename {{.FILE}}).rapped"
+        sh: echo "/data/temp/$(basename {{.FILE}}).rioted"
     cmds:
       - cp {{.FILE}} {{.TEMP_FILE}}
-      - riot --syntax=TURTLE --output=TURTLE {{.TEMP_FILE}} > {{.FILE}}
+      - riot --nocheck --syntax=TURTLE --output=TURTLE {{.TEMP_FILE}} > {{.FILE}}
       - rm -f {{.TEMP_FILE}}
 
   _run-task-according-to-interval:
