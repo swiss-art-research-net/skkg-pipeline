@@ -513,6 +513,23 @@
                                 <instance_generator name="URIorUUID">
                                     <arg name="text" type="xpath">concat("https://data.skkg.ch/statement/",replace(text(),' ',''))</arg>
                                 </instance_generator>
+                                <additional>
+                                    <relationship>crm:P2_has_type</relationship>
+                                    <entity>
+                                        <type>crm:E55_Type</type>
+                                        <instance_info>
+                                            <constant/>
+                                        </instance_info>
+                                        <instance_generator name="URIwithTypeAndId">
+                                            <arg name="type" type="constant">type</arg>
+                                            <arg name="id" type="constant">availabilityStatement</arg>
+                                        </instance_generator>
+                                        <label_generator name="Literal">
+                                            <arg name="text" type="constant">availability statement</arg>
+                                            <arg name="language" type="constant">en</arg>
+                                        </label_generator>
+                                    </entity>
+                                </additional>
                             </entity>
                             <relationship>crm:P190_has_symbolic_content</relationship>
                         </target_relation>
