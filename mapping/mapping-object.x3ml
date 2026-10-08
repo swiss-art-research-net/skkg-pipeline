@@ -1021,7 +1021,7 @@
                                     <arg name="id" type="xpath">if (../../dataField[@name='_UserObj4487Boo']/value/text() = 'true') then ('privateIndividual') else (@uuid)</arg>
                                 </instance_generator>
                                 <label_generator name="Literal">
-                                    <arg name="text" type="xpath">if (formattedValue/text()) then (formattedValue/text()) else ("Anonymous")</arg>
+                                    <arg name="text" type="xpath">if (../../dataField[@name='_UserObj4487Boo']/value/text() = 'true') then ('Anonymous') else (formattedValue/text())</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
                             </entity>
