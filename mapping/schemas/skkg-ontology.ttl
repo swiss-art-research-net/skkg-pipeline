@@ -86,6 +86,10 @@ address:privateIndividual rdf:type skkg:Address ;
     rdfs:label "Private Individual"@en, "Privatperson"@de ;
     skos:prefLabel "Private Individual"@en, "Privatperson"@de .
 
+person:privateIndividual rdf:type skkg:Person ;
+    rdfs:label "Private Individual"@en, "Privatperson"@de ;
+    skos:prefLabel "Private Individual"@en, "Privatperson"@de .
+
 type:catalogueno rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Kat. Nr."@de ;
     skos:prefLabel "Katalognummer"@de .
