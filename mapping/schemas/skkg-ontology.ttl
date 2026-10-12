@@ -130,12 +130,12 @@ type:pageref rdf:type skkg:Type, skos:Concept ;
 
 type:timespanBegin rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Beginn des Zeitraums"@de, "Timespan Begin"@en ;
-    skos:prefLabel "Beginn des Zeitraums"@de, "Timespan Begin"@en .
+    skos:prefLabel "Beginn des Zeitraums"@de, "Timespan Begin"@en ;
     crm:P127_has_broader_term aat:300443981 .
 
 type:timespanEnd rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Ende des Zeitraums"@de, "Timespan End"@en ;
-    skos:prefLabel "Ende des Zeitraums"@de, "Timespan End"@en .
+    skos:prefLabel "Ende des Zeitraums"@de, "Timespan End"@en ;
     crm:P127_has_broader_term aat:300443981 .
 
 type:sortlnu rdf:type skkg:Type, skos:Concept ;
