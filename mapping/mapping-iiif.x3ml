@@ -32,7 +32,7 @@
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
             <namespace prefix="owl" uri="http://www.w3.org/2002/07/owl#"/>
             <namespace prefix="gndo" uri="https://d-nb.info/standards/elementset/gnd#"/>
-            <namespace prefix="iiif" uri="https://iiif.digital.skkg.ch/iiif/2/"/>
+            <namespace prefix="iiif" uri="https://iiif.digital.skkg.ch/iiif/3/"/>
         </namespaces>
         <mappings>
             <mapping>
