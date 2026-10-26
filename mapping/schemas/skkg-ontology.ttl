@@ -6,6 +6,7 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix person: <https://data.skkg.ch/person/> .
 @prefix skkg: <https://ontology.skkg.ch/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix type: <https://data.skkg.ch/type/> .
@@ -126,6 +127,16 @@ type:pageref rdf:type skkg:Type, skos:Concept ;
     rdfs:label "Erwähnung S."@de ;
     skos:prefLabel "Erwähnung Seite"@de ;
     crm:P127_has_broader_term aat:300445022 .
+
+type:timespanBegin rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Beginn des Zeitraums"@de, "Timespan Begin"@en ;
+    skos:prefLabel "Beginn des Zeitraums"@de, "Timespan Begin"@en ;
+    crm:P127_has_broader_term aat:300443981 .
+
+type:timespanEnd rdf:type skkg:Type, skos:Concept ;
+    rdfs:label "Ende des Zeitraums"@de, "Timespan End"@en ;
+    skos:prefLabel "Ende des Zeitraums"@de, "Timespan End"@en ;
+    crm:P127_has_broader_term aat:300443981 .
 
 type:sortlnu rdf:type skkg:Type, skos:Concept ;
     rdfs:label "SortLnu", "Sortierung"@de ;
