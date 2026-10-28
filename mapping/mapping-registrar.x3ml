@@ -3,6 +3,7 @@
             <namespace prefix="resource" uri="https://data.skkg.ch/"/>
             <namespace prefix="aat" uri="http://vocab.getty.edu/aat/"/>
             <namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
+            <namespace prefix="crmaaa" uri="https://takin.solutions/ontologies/crmaaa/"/>
             <namespace prefix="crmdig" uri="http://www.ics.forth.gr/isl/CRMdig/"/>
             <namespace prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
             <namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
@@ -28,6 +29,8 @@
             <namespace prefix="timespan" uri="https://data.skkg.ch/timespan/"/>
             <namespace prefix="multimedia" uri="https://data.skkg.ch/multimedia/"/>
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
+            <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
+            <namespace prefix="objectgroup" uri="https://data.skkg.ch/objectgroup/"/>
         </namespaces>
         <mappings>
             <mapping>
@@ -129,6 +132,50 @@
                                     <arg name="text" type="xpath">formattedValue/text()</arg>
                                     <arg name="language" type="xpath">formattedValue/@language</arg>
                                 </label_generator>
+                            </entity>
+                        </target_node>
+                    </range>
+                </link>
+            </mapping>
+            <mapping>
+                <domain>
+                    <source_node>/application/modules/module/moduleItem</source_node>
+                    <target_node>
+                        <entity variable="registrar">
+                            <type>crm:E7_Activity</type>
+                            <type>skkg:Registrar</type>
+                            <instance_generator name="URIwithTypeAndId">
+                                <arg name="type" type="constant">registrar</arg>
+                                <arg name="id" type="xpath">@uuid</arg>
+                            </instance_generator>
+                            <label_generator name="Literal">
+                                <arg name="text" type="xpath">concat('Registrar activity related to exhibition ', virtualField[@name='RegExhibitionVrt']/value/text())</arg>
+                                <arg name="language" type="constant">en</arg>
+                            </label_generator>
+                        </entity>
+                    </target_node>
+                </domain>
+                <link>
+                    <path>
+                        <source_relation>
+                            <relation>moduleReference/moduleReferenceItem</relation>
+                        </source_relation>
+                        <target_relation>
+                            <if>
+                                <equals value="RegExhibitionRef">../@name</equals>
+                            </if>
+                            <relationship>crm:P15i_influenced</relationship>
+                        </target_relation>
+                    </path>
+                    <range>
+                        <source_node>moduleReference/moduleReferenceItem</source_node>
+                        <target_node>
+                            <entity variable="exhibition">
+                                <type>crm:E7_Activity</type>
+                                <instance_generator name="URIwithTypeAndId">
+                                    <arg name="type" type="constant">exhibition</arg>
+                                    <arg name="id" type="xpath">@uuid</arg>
+                                </instance_generator>
                             </entity>
                         </target_node>
                     </range>
