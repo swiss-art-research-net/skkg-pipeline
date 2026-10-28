@@ -10,6 +10,14 @@ tasks:
       - |
         curl -X POST -H "Accept: text/csv" --data-urlencode "query=$(cat "{{.CLI_ARGS}}")" {{.BLAZEGRAPH_ENDPOINT}}
 
+  safely-*:
+    desc: Run a task only if no other task is currently running.
+    vars:
+      TASK: "{{index .MATCH 0}}"
+    cmds:
+      - '[ $(pgrep -cx "task") -gt 1 ] && echo "Another task is currently being executed." && exit 1 || echo "Running task {{.TASK}}..." && exit 0'
+      - task: "{{.TASK}}"
+
   _clean_turtle_file_from_extra_prefixes:
     desc: Removes additional prefix statements in a Turtle file
     internal: true
