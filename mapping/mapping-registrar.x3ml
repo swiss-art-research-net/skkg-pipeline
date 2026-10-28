@@ -31,6 +31,7 @@
             <namespace prefix="person" uri="https://data.skkg.ch/person/"/>
             <namespace prefix="exhibition" uri="https://data.skkg.ch/exhibition/"/>
             <namespace prefix="objectgroup" uri="https://data.skkg.ch/objectgroup/"/>
+            <namespace prefix="registrar" uri="https://data.skkg.ch/registrar/"/>
         </namespaces>
         <mappings>
             <mapping>
