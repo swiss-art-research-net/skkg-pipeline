@@ -9,6 +9,7 @@ moduleQueryAdditions = {
                     <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="25578"/>
                     <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="177046"/>
                     <notEqualsVocNodeExcludingHierarchy fieldPath="ExhStatusVoc" operand="148975"/>
+                    <isNotNull fieldPath="ExhStatusVoc"/>
                 </and>
             </expert>
         </search>
