@@ -1,5 +1,12 @@
 # Define query additions for specific modules as a MuseumPlus search query
 moduleQueryAdditions = {
+    'Address': '''
+        <search>
+            <expert>
+                <equalsVocNodeExcludingHierarchy fieldPath="AdrUsageVoc" operand="334966"/>
+            </expert>
+        </search>
+        ''',
     'Exhibition': '''
         <search>
             <expert>
